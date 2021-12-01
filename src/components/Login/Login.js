@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { setToken } from "../../variables/auth";
 // reactstrap components
 import {
   Button,
@@ -14,18 +15,32 @@ import {
   Col,
 } from "reactstrap";
 import api from "api";
-
+import { Store, UpdateStore } from "StoreContext";
+import { Redirect } from "react-router-dom";
 const Login = () => {
   const [login, setLogin] = useState({
     email: "",
     password: "",
   });
+  const { authorization } = Store();
 
+  const updateStore = UpdateStore();
   const handleSubmit = async () => {
     let result = await api("post", "admins/login", login);
-    console.log(result.data);
+    console.log(result.data, typeof result.status);
+    const token = result.data.token;
+    const admin = result.data.admin;
+    if (token && result.status === 200) {
+      setToken(token);
+      updateStore({
+        token: token,
+        authorization: true,
+        user: admin,
+      });
+      console.log("Authorized");
+    }
   };
-
+  if (authorization) return <Redirect push to="/admin" />;
   return (
     <>
       <Col lg="5" md="7">

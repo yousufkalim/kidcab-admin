@@ -10,7 +10,6 @@ const api = async (method = "get", uri, body) => {
     axios.defaults.withCredentials = true;
     axios.defaults.baseURL = "https://kidcab.falconit.com.pk/";
   }
-  console.log(process.env.REACT_APP_BASE_URL + uri, body);
 
   // API Call
   const url = "api/" + uri;

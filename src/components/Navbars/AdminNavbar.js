@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
-// reactstrap components
+import api from "api";
+import { Store } from "StoreContext";
+import { getToken, removeToken } from "../../variables/auth";
 import {
   DropdownMenu,
   DropdownItem,
@@ -18,6 +20,17 @@ import {
 } from "reactstrap";
 
 const AdminNavbar = (props) => {
+  const { user } = Store();
+  const handleLogout = async () => {
+    const res = await api("post", "admins/logout", {
+      token: getToken(),
+      user: user,
+    });
+    if (res.status === 200) {
+      removeToken();
+      window.location = "/login";
+    }
+  };
   return (
     <>
       <Navbar className="navbar-top navbar-dark" expand="md" id="navbar-main">
@@ -44,7 +57,7 @@ const AdminNavbar = (props) => {
             <UncontrolledDropdown nav>
               <DropdownToggle className="pr-0" nav>
                 <Media className="align-items-center">
-                  <span className="avatar avatar-sm rounded-circle">
+                  {/* <span className="avatar avatar-sm rounded-circle">
                     <img
                       alt="..."
                       src={
@@ -52,11 +65,9 @@ const AdminNavbar = (props) => {
                           .default
                       }
                     />
-                  </span>
+                  </span> */}
                   <Media className="ml-2 d-none d-lg-block">
-                    <span className="mb-0 text-sm font-weight-bold">
-                      Jessica Jones
-                    </span>
+                    <span className="mb-0 text-sm font-weight-bold">Admin</span>
                   </Media>
                 </Media>
               </DropdownToggle>
@@ -64,25 +75,18 @@ const AdminNavbar = (props) => {
                 <DropdownItem className="noti-title" header tag="div">
                   <h6 className="text-overflow m-0">Welcome!</h6>
                 </DropdownItem>
-                <DropdownItem to="/admin/user-profile" tag={Link}>
-                  <i className="ni ni-single-02" />
+                <DropdownItem to="/admin/admin-profile" tag={Link}>
+                  <i className="ni ni-satisfied text-primary" />
+                  <span>Welcome</span>
+                </DropdownItem>
+                <DropdownItem to="/admin/admin-profile" tag={Link}>
+                  <i className="ni ni-single-02 text-success" />
                   <span>My profile</span>
                 </DropdownItem>
-                <DropdownItem to="/admin/user-profile" tag={Link}>
-                  <i className="ni ni-settings-gear-65" />
-                  <span>Settings</span>
-                </DropdownItem>
-                <DropdownItem to="/admin/user-profile" tag={Link}>
-                  <i className="ni ni-calendar-grid-58" />
-                  <span>Activity</span>
-                </DropdownItem>
-                <DropdownItem to="/admin/user-profile" tag={Link}>
-                  <i className="ni ni-support-16" />
-                  <span>Support</span>
-                </DropdownItem>
+
                 <DropdownItem divider />
-                <DropdownItem href="#pablo" onClick={(e) => e.preventDefault()}>
-                  <i className="ni ni-user-run" />
+                <DropdownItem onClick={handleLogout}>
+                  <i className="ni ni-user-run text-danger" />
                   <span>Logout</span>
                 </DropdownItem>
               </DropdownMenu>

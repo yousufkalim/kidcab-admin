@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useLocation, Route, Switch, Redirect } from "react-router-dom";
 // reactstrap components
 import { Container } from "reactstrap";
@@ -6,14 +6,24 @@ import { Container } from "reactstrap";
 import AdminNavbar from "components/Navbars/AdminNavbar.js";
 import AdminFooter from "components/Footers/AdminFooter.js";
 import Sidebar from "components/Sidebar/Sidebar.js";
+import { getToken, SetAuthToken } from "../variables/auth";
 
 import routes from "routes.js";
 
 const Admin = (props) => {
-  const mainContent = React.useRef(null);
+  const mainContent = useRef(null);
   const location = useLocation();
+  const [token, setToken] = useState("");
+  useEffect(() => {
+    setToken(getToken());
+    if (getToken()) {
+      SetAuthToken(token);
+    } else {
+      window.location.replace("/auth/login");
+    }
+  }, [token]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     document.documentElement.scrollTop = 0;
     document.scrollingElement.scrollTop = 0;
     mainContent.current.scrollTop = 0;
