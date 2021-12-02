@@ -1,224 +1,249 @@
-// reactstrap components
+import { useState, useEffect } from "react";
+import { toast } from "react-toastify";
+import api from "../../api";
 import {
+  Modal,
+  ModalBody,
+  ModalHeader,
+  ModalFooter,
   Button,
-  Card,
-  CardHeader,
-  CardBody,
   FormGroup,
   Form,
   Input,
-  Container,
   Row,
   Col,
+  Label,
 } from "reactstrap";
 // core components
-import UserHeader from "components/Headers/UserHeader.js";
 
-const PassengerForm = () => {
+const PassengerForm = ({ openModal, handleModal, editUser, isEditing }) => {
+  const [user, setUser] = useState({
+    image: "",
+    firstName: "",
+    lastName: "",
+    client: "",
+    relationship: "",
+  });
+
+  const [clients, setClients] = useState();
+
+  useEffect(() => {
+    api("get", "users").then((res) => setClients(res.data.users));
+    if (isEditing) {
+      setUser({
+        firstName: editUser.first_name,
+        lastName: editUser.last_name,
+        password: editUser.password,
+        phone: editUser.phone_number,
+      });
+    }
+  }, []);
+
+  const handleFileChange = (e) => {
+    setUser({ ...user, image: e.target.files[0] });
+  };
+
+  const handleInputChange = (e) => {
+    console.log(e.target.value);
+    setUser({ ...user, [e.target.name]: e.target.value });
+    console.log(clients);
+  };
+
+  const handleDelete = () => {
+    let method = "delete";
+    let uri = "passengers";
+    if (editUser) {
+      method = "delete";
+      uri = uri + `/${editUser._id}`;
+    }
+    api(method, uri).then((res) => {
+      if (res.status == 200) {
+        toast.success("Delete Successfully");
+        handleModal();
+      } else {
+        toast.error("Delete Error", res.data.message);
+      }
+    });
+  };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    let method = "post";
+    let uri = "passengers";
+
+    const formData = new FormData();
+    if (user.image) formData.append("image", user.image, user.image.name);
+    formData.append("first_name", user.firstName);
+    formData.append("last_name", user.lastName);
+    formData.append("client", user.client);
+    formData.append("relationship", user.relationship);
+
+    if (editUser) {
+      method = "put";
+      uri = uri + `/${editUser._id}`;
+    }
+    api(method, uri, formData).then((res) => {
+      if (res.status === 200) {
+        toast.success("Saved Successfully");
+        handleModal();
+      } else {
+        toast.error("Save Error", res);
+      }
+    });
+  };
+
   return (
     <>
-      <UserHeader />
-      {/* Page content */}
-      <Container className="mt--7" fluid>
-        <Row>
-          <Col className="order-xl-2 mb-5 mb-xl-0" xl="4"></Col>
-          <Col className="order-xl-1" xl="8">
-            <Card className="bg-secondary shadow">
-              <CardHeader className="bg-white border-0">
-                <Row className="align-items-center">
-                  <Col xs="8">
-                    <h3 className="mb-0">My account</h3>
-                  </Col>
-                  <Col className="text-right" xs="4">
-                    <Button
-                      color="primary"
-                      href="#pablo"
-                      onClick={(e) => e.preventDefault()}
-                      size="sm"
-                    >
-                      Settings
-                    </Button>
-                  </Col>
-                </Row>
-              </CardHeader>
-              <CardBody>
-                <Form>
-                  <h6 className="heading-small text-muted mb-4">
-                    User information
-                  </h6>
-                  <div className="pl-lg-4">
-                    <Row>
-                      <Col lg="6">
-                        <FormGroup>
-                          <label
-                            className="form-control-label"
-                            htmlFor="input-username"
-                          >
-                            Username
-                          </label>
-                          <Input
-                            className="form-control-alternative"
-                            defaultValue="lucky.jesse"
-                            id="input-username"
-                            placeholder="Username"
-                            type="text"
-                          />
-                        </FormGroup>
-                      </Col>
-                      <Col lg="6">
-                        <FormGroup>
-                          <label
-                            className="form-control-label"
-                            htmlFor="input-email"
-                          >
-                            Email address
-                          </label>
-                          <Input
-                            className="form-control-alternative"
-                            id="input-email"
-                            placeholder="jesse@example.com"
-                            type="email"
-                          />
-                        </FormGroup>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col lg="6">
-                        <FormGroup>
-                          <label
-                            className="form-control-label"
-                            htmlFor="input-first-name"
-                          >
-                            First name
-                          </label>
-                          <Input
-                            className="form-control-alternative"
-                            defaultValue="Lucky"
-                            id="input-first-name"
-                            placeholder="First name"
-                            type="text"
-                          />
-                        </FormGroup>
-                      </Col>
-                      <Col lg="6">
-                        <FormGroup>
-                          <label
-                            className="form-control-label"
-                            htmlFor="input-last-name"
-                          >
-                            Last name
-                          </label>
-                          <Input
-                            className="form-control-alternative"
-                            defaultValue="Jesse"
-                            id="input-last-name"
-                            placeholder="Last name"
-                            type="text"
-                          />
-                        </FormGroup>
-                      </Col>
-                    </Row>
-                  </div>
-                  <hr className="my-4" />
-                  {/* Address */}
-                  <h6 className="heading-small text-muted mb-4">
-                    Contact information
-                  </h6>
-                  <div className="pl-lg-4">
-                    <Row>
-                      <Col md="12">
-                        <FormGroup>
-                          <label
-                            className="form-control-label"
-                            htmlFor="input-address"
-                          >
-                            Address
-                          </label>
-                          <Input
-                            className="form-control-alternative"
-                            defaultValue="Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09"
-                            id="input-address"
-                            placeholder="Home Address"
-                            type="text"
-                          />
-                        </FormGroup>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col lg="4">
-                        <FormGroup>
-                          <label
-                            className="form-control-label"
-                            htmlFor="input-city"
-                          >
-                            City
-                          </label>
-                          <Input
-                            className="form-control-alternative"
-                            defaultValue="New York"
-                            id="input-city"
-                            placeholder="City"
-                            type="text"
-                          />
-                        </FormGroup>
-                      </Col>
-                      <Col lg="4">
-                        <FormGroup>
-                          <label
-                            className="form-control-label"
-                            htmlFor="input-country"
-                          >
-                            Country
-                          </label>
-                          <Input
-                            className="form-control-alternative"
-                            defaultValue="United States"
-                            id="input-country"
-                            placeholder="Country"
-                            type="text"
-                          />
-                        </FormGroup>
-                      </Col>
-                      <Col lg="4">
-                        <FormGroup>
-                          <label
-                            className="form-control-label"
-                            htmlFor="input-country"
-                          >
-                            Postal code
-                          </label>
-                          <Input
-                            className="form-control-alternative"
-                            id="input-postal-code"
-                            placeholder="Postal code"
-                            type="number"
-                          />
-                        </FormGroup>
-                      </Col>
-                    </Row>
-                  </div>
-                  <hr className="my-4" />
-                  {/* Description */}
-                  <h6 className="heading-small text-muted mb-4">About me</h6>
-                  <div className="pl-lg-4">
-                    <FormGroup>
-                      <label>About Me</label>
-                      <Input
-                        className="form-control-alternative"
-                        placeholder="A few words about you ..."
-                        rows="4"
-                        defaultValue="A beautiful Dashboard for Bootstrap 4. It is Free and
-                          Open Source."
-                        type="textarea"
-                      />
-                    </FormGroup>
-                  </div>
-                </Form>
-              </CardBody>
-            </Card>
-          </Col>
-        </Row>
-      </Container>
+      <Modal isOpen={openModal} size="xl" centered>
+        <ModalHeader charCode="Y" toggle={handleModal}>
+          Add Passenger
+        </ModalHeader>
+        <ModalBody>
+          <Row>
+            <Col>
+              <Form>
+                <h6 className="heading-small text-muted mb-4">
+                  Passenger information
+                </h6>
+                <div className="pl-lg-4">
+                  <Row>
+                    <Col lg="12">
+                      <FormGroup>
+                        <label
+                          className="form-control-label"
+                          htmlFor="input-image"
+                        >
+                          Add Profile Picture <i className="ni ni-album-2" />
+                        </label>
+                        <Input
+                          className="form-control-file form"
+                          id="input-image"
+                          type="file"
+                          onChange={handleFileChange}
+                        />
+                      </FormGroup>
+                    </Col>
+                  </Row>
+                </div>
+
+                <div className="pl-lg-4">
+                  <Row>
+                    <Col lg="6">
+                      <FormGroup>
+                        <label
+                          className="form-control-label"
+                          htmlFor="input-fname"
+                        >
+                          First Name
+                        </label>
+                        <Input
+                          className="form-control-alternative"
+                          id="input-fname"
+                          required={true}
+                          placeholder="First Name"
+                          type="text"
+                          value={user.firstName}
+                          name="firstName"
+                          onChange={handleInputChange}
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col lg="6">
+                      <FormGroup>
+                        <label
+                          className="form-control-label"
+                          htmlFor="input-lname"
+                        >
+                          Last Name
+                        </label>
+                        <Input
+                          className="form-control-alternative"
+                          id="input-lname"
+                          placeholder="Doe"
+                          type="text"
+                          value={user.lastName}
+                          name="lastName"
+                          onChange={handleInputChange}
+                        />
+                      </FormGroup>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col lg="6">
+                      <FormGroup>
+                        <Label
+                          for="exampleSelect"
+                          className="form-control-label"
+                        >
+                          Select Client
+                        </Label>
+                        <Input
+                          id="exampleSelect"
+                          name="client"
+                          value={user.client}
+                          onChange={handleInputChange}
+                          className="form-control-alternative"
+                          type="select"
+                        >
+                          <option disabled>Select One Client</option>
+                          {clients ? (
+                            clients.map((client) => (
+                              <option key={client._id} value={client._id}>
+                                {client.first_name + " " + client.last_name}
+                              </option>
+                            ))
+                          ) : (
+                            <option disabled>There is no Client</option>
+                          )}
+                        </Input>
+                      </FormGroup>
+                    </Col>
+                    <Col lg="6">
+                      <FormGroup>
+                        <Label
+                          for="exampleSelect"
+                          className="form-control-label"
+                        >
+                          Relationship
+                        </Label>
+                        <Input
+                          id="exampleSelect"
+                          name="relationship"
+                          className="form-control-alternative"
+                          type="select"
+                          value={user.relationship}
+                          onChange={handleInputChange}
+                        >
+                          <option value="self">Self</option>
+                          <option value="son">Son</option>
+                          <option value="daughter">Daughter</option>
+                          <option value="brother">Brother</option>
+                          <option value="sister">Sister</option>
+                          <option value="father">Father</option>
+                          <option value="mother">Mother</option>
+                          <option value="uncle">Uncle</option>
+                          <option value="aunt">Aunt</option>
+                          <option value="other">other</option>
+                        </Input>
+                      </FormGroup>
+                    </Col>
+                  </Row>
+                </div>
+              </Form>
+            </Col>
+          </Row>
+        </ModalBody>
+        <ModalFooter>
+          <Button color="primary" onClick={handleSubmit}>
+            Save
+          </Button>{" "}
+          {isEditing && (
+            <Button color="danger" onClick={handleDelete}>
+              Delete
+            </Button>
+          )}{" "}
+          <Button onClick={handleModal}>Cancel</Button>
+        </ModalFooter>
+      </Modal>
     </>
   );
 };

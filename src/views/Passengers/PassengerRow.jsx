@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Badge,
   DropdownMenu,
@@ -7,10 +7,16 @@ import {
   DropdownToggle,
   Media,
   Progress,
-  UncontrolledTooltip,
 } from "reactstrap";
+import ClientAvatar from "./ClientAvatar";
+import PassengerForm from "./PassengerForm";
 
-const PassengerRow = () => {
+const PassengerRow = ({ user }) => {
+  const [openModal, setOpenModal] = useState();
+  const handleModal = () => {
+    setOpenModal((open) => !open);
+    return openModal;
+  };
   return (
     <tr>
       <th scope="row">
@@ -20,92 +26,47 @@ const PassengerRow = () => {
             href="#pablo"
             onClick={(e) => e.preventDefault()}
           >
-            <img
-              alt="..."
-              src={require("../../assets/img/theme/bootstrap.jpg").default}
-            />
+            {user.profile_pic ? (
+              <img
+                className="rounded-circle"
+                style={{ width: "100%", height: "100%" }}
+                alt={`${user.first_name} profile pic`}
+                src={process.env.REACT_APP_BASE_URL + user?.profile_pic}
+              />
+            ) : (
+              <i className="ni ni-circle-08" />
+            )}
           </a>
           <Media>
-            <span className="mb-0 text-sm">Argon Design System</span>
+            <span className="mb-0 text-sm">
+              {user.first_name + " " + user.last_name}
+            </span>
           </Media>
         </Media>
       </th>
-      <td>$2,500 USD</td>
+      <td>{user.email}</td>
       <td>
         <Badge color="" className="badge-dot mr-4">
-          <i className="bg-warning" />
-          pending
+          {/* <i className="bg-warning" /> */}
+          {user.phone_number}
         </Badge>
       </td>
       <td>
-        <div className="avatar-group">
-          <a
-            className="avatar avatar-sm"
-            href="#pablo"
-            id="tooltip742438047"
-            onClick={(e) => e.preventDefault()}
-          >
-            <img
-              alt="..."
-              className="rounded-circle"
-              src={require("../../assets/img/theme/team-1-800x800.jpg").default}
-            />
-          </a>
-          <UncontrolledTooltip delay={0} target="tooltip742438047">
-            Ryan Tompson
-          </UncontrolledTooltip>
-          <a
-            className="avatar avatar-sm"
-            href="#pablo"
-            id="tooltip941738690"
-            onClick={(e) => e.preventDefault()}
-          >
-            <img
-              alt="..."
-              className="rounded-circle"
-              src={require("../../assets/img/theme/team-2-800x800.jpg").default}
-            />
-          </a>
-          <UncontrolledTooltip delay={0} target="tooltip941738690">
-            Romina Hadid
-          </UncontrolledTooltip>
-          <a
-            className="avatar avatar-sm"
-            href="#pablo"
-            id="tooltip804044742"
-            onClick={(e) => e.preventDefault()}
-          >
-            <img
-              alt="..."
-              className="rounded-circle"
-              src={require("../../assets/img/theme/team-3-800x800.jpg").default}
-            />
-          </a>
-          <UncontrolledTooltip delay={0} target="tooltip804044742">
-            Alexander Smith
-          </UncontrolledTooltip>
-          <a
-            className="avatar avatar-sm"
-            href="#pablo"
-            id="tooltip996637554"
-            onClick={(e) => e.preventDefault()}
-          >
-            <img
-              alt="..."
-              className="rounded-circle"
-              src={require("../../assets/img/theme/team-4-800x800.jpg").default}
-            />
-          </a>
-          <UncontrolledTooltip delay={0} target="tooltip996637554">
-            Jessica Doe
-          </UncontrolledTooltip>
-        </div>
+        {user.client ? (
+          <div className="avatar-group">
+            <ClientAvatar user={user.client} />
+          </div>
+        ) : (
+          <p className="mb-0 text-sm" href="#pablo">
+            No Client is added.
+          </p>
+        )}
       </td>
       <td>
         <div className="d-flex align-items-center">
           <span className="mr-2">60%</span>
           <div>
-            <Progress max="100" value="60" barClassName="bg-danger" />
+            <Progress max="100" value="60" barClassName="bg-success" />
           </div>
         </div>
       </td>
@@ -122,7 +83,7 @@ const PassengerRow = () => {
             <i className="fas fa-ellipsis-v" />
           </DropdownToggle>
           <DropdownMenu className="dropdown-menu-arrow" right>
-            <DropdownItem href="#pablo" onClick={(e) => e.preventDefault()}>
+            <DropdownItem href="#pablo" onClick={handleModal}>
               Edit Profile
             </DropdownItem>
             <DropdownItem href="#pablo" onClick={(e) => e.preventDefault()}>
@@ -134,6 +95,12 @@ const PassengerRow = () => {
           </DropdownMenu>
         </UncontrolledDropdown>
       </td>
+      <PassengerForm
+        openModal={openModal}
+        handleModal={handleModal}
+        editUser={user}
+        isEditing={true}
+      />
     </tr>
   );
 };

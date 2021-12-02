@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Badge,
   DropdownMenu,
@@ -9,8 +9,14 @@ import {
   Progress,
 } from "reactstrap";
 import PassengerAvatar from "./PassengerAvatar";
+import ClientForm from "./ClientForm";
 
 const ClientRow = ({ user }) => {
+  const [openModal, setOpenModal] = useState();
+  const handleModal = () => {
+    setOpenModal((open) => !open);
+    return openModal;
+  };
   return (
     <tr>
       <th scope="row">
@@ -41,7 +47,7 @@ const ClientRow = ({ user }) => {
       <td>{user.email}</td>
       <td>
         <Badge color="" className="badge-dot mr-4">
-          <i className="bg-warning" />
+          {/* <i className="bg-warning" /> */}
           {user.phone_number}
         </Badge>
       </td>
@@ -79,8 +85,7 @@ const ClientRow = ({ user }) => {
             <i className="fas fa-ellipsis-v" />
           </DropdownToggle>
           <DropdownMenu className="dropdown-menu-arrow" right>
-            <DropdownItem href="#pablo" onClick={(e) => e.preventDefault()}>
-              <i className="ni ni-edit"></i>
+            <DropdownItem href="#pablo" onClick={handleModal}>
               Edit Profile
             </DropdownItem>
             <DropdownItem href="#pablo" onClick={(e) => e.preventDefault()}>
@@ -92,6 +97,12 @@ const ClientRow = ({ user }) => {
           </DropdownMenu>
         </UncontrolledDropdown>
       </td>
+      <ClientForm
+        openModal={openModal}
+        handleModal={handleModal}
+        editUser={user}
+        isEditing={true}
+      />
     </tr>
   );
 };

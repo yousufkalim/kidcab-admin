@@ -19,7 +19,7 @@ import { useEffect } from "react";
 import api from "../../api/index";
 
 const ClientList = () => {
-  const [openModal, setOpenModal] = useState();
+  const [openModal, setOpenModal] = useState(false);
   const [users, setUsers] = useState();
   const handleModal = () => {
     setOpenModal((open) => !open);
@@ -28,7 +28,7 @@ const ClientList = () => {
 
   useEffect(() => {
     api("get", "users").then((res) => setUsers(res.data.users));
-  }, []);
+  }, [openModal]);
   return (
     <>
       <Container className="mt--7" fluid>
@@ -67,7 +67,9 @@ const ClientList = () => {
                       <ClientRow key={user._id} user={user} />
                     ))
                   ) : (
-                    <tr className="h1 mx-lg-auto text-center">No User Found</tr>
+                    <tr className="h1 mx-lg-auto text-center">
+                      <td>No User Found</td>
+                    </tr>
                   )}
                 </tbody>
               </Table>
@@ -126,7 +128,14 @@ const ClientList = () => {
             </Card>
           </div>
         </Row>
-        <ClientForm openModal={openModal} handleModal={handleModal} />
+        {openModal && (
+          <ClientForm
+            openModal={openModal}
+            handleModal={handleModal}
+            user={undefined}
+            isEditing={false}
+          />
+        )}
       </Container>
     </>
   );
