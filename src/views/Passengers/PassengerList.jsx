@@ -12,8 +12,26 @@ import {
   Row,
   Button,
 } from "reactstrap";
-import ClientRow from "./PassengerRow";
+import PassengerForm from "./PassengerForm";
+import PassengerRow from "./PassengerRow";
+import { useState } from "react";
+import { useEffect } from "react";
+import api from "../../api/index";
+
 const PassengerList = () => {
+  const [openModal, setOpenModal] = useState(false);
+  const [users, setUsers] = useState();
+  const handleModal = () => {
+    setOpenModal((open) => !open);
+    return openModal;
+  };
+
+  useEffect(() => {
+    api("get", "passengers").then((res) => {
+      setUsers(res.data.passengers);
+      console.log(res.data.passengers);
+    });
+  }, []);
   return (
     <>
       <Container className="mt--7" fluid>
@@ -25,11 +43,12 @@ const PassengerList = () => {
                 <div className="d-flex justify-content-between ">
                   <h3 className="mb-0">Passenger List</h3>
                   <Button
-                    color="default"
+                    color="primary"
                     href="#pablo"
-                    onClick={(e) => e.preventDefault()}
+                    onClick={handleModal}
                     size="md"
                   >
+                    <i className="ni ni-fat-add"></i>
                     Add Passenger
                   </Button>
                 </div>
@@ -40,19 +59,23 @@ const PassengerList = () => {
                     <th scope="col">Name</th>
                     <th scope="col">Email</th>
                     <th scope="col">Phone Number</th>
-                    <th scope="col">Client</th>
+                    <th scope="col">Clients</th>
                     <th scope="col">No. of Trips</th>
                     <th scope="col" />
                   </tr>
                 </thead>
                 <tbody>
-                  <ClientRow />
-                  <ClientRow />
-                  <ClientRow />
-                  <ClientRow />
-                  <ClientRow />
-                  <ClientRow />
-                  <ClientRow />z
+                  {users ? (
+                    users.map((user) => (
+                      <PassengerRow key={user._id} user={user} />
+                    ))
+                  ) : (
+                    <tr className="h1 mx-lg-auto text-center">
+                      <td>
+                        <p>No Passenger Found</p>
+                      </td>
+                    </tr>
+                  )}
                 </tbody>
               </Table>
               <CardFooter className="py-4">
@@ -110,6 +133,14 @@ const PassengerList = () => {
             </Card>
           </div>
         </Row>
+        {openModal && (
+          <PassengerForm
+            openModal={openModal}
+            handleModal={handleModal}
+            user={undefined}
+            isEditing={false}
+          />
+        )}
       </Container>
     </>
   );

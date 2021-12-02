@@ -5,7 +5,6 @@ import Tables from "views/examples/Tables.js";
 import Clients from "./views/Clients";
 import Passengers from "./views/Passengers/Passengers";
 import Drivers from "./views/Drivers/Drivers";
-import AdminProfile from "views/AdminProfile";
 import Invoices from "./views/Invoice/Invoices";
 
 var routes = [

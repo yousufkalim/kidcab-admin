@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { toast } from "react-toastify";
 import api from "../../api";
 import {
   Modal,
@@ -14,13 +15,13 @@ import {
 } from "reactstrap";
 // core components
 
-const ClientForm = ({ openModal, handleModal }) => {
+const ClientForm = ({ openModal, handleModal, editUser, isEditing }) => {
   const [user, setUser] = useState({
     image: "",
     firstName: "",
-    password: "",
     lastName: "",
     email: "",
+    password: "",
     phone: "",
     address: "",
     cnic: "",
@@ -32,16 +33,54 @@ const ClientForm = ({ openModal, handleModal }) => {
     gender: "",
   });
 
+  useEffect(() => {
+    if (isEditing) {
+      setUser({
+        firstName: editUser.first_name,
+        lastName: editUser.last_name,
+        password: editUser.password,
+        email: editUser.email,
+        phone: editUser.phone_number,
+        gender: editUser.gender,
+        address: editUser.address,
+        cnic: editUser.cnic,
+        siret: editUser.siret_number,
+        intraCommunityNo: editUser.intra_community,
+        bankAccountNo: editUser.bank_info.account_number,
+        bankName: editUser.bank_info.bankName,
+        iban: editUser.bank_info.iban,
+      });
+    }
+  }, []);
+
   const handleFileChange = (e) => {
     setUser({ ...user, image: e.target.files[0] });
   };
 
   const handleInputChange = (e) => {
     setUser({ ...user, [e.target.name]: e.target.value });
-    console.log(user);
+  };
+
+  const handleDelete = () => {
+    let method = "delete";
+    let uri = "users";
+    if (editUser) {
+      method = "delete";
+      uri = uri + `/${editUser._id}`;
+    }
+    api(method, uri).then((res) => {
+      if (res.status == 200) {
+        toast.success("Delete Successfully");
+        handleModal();
+      } else {
+        toast.error("Delete Error", res.data.message);
+      }
+    });
   };
   const handleSubmit = (e) => {
     e.preventDefault();
+    let method = "post";
+    let uri = "users";
 
     const bankInfo = {
       account_number: user.bankAccountNo,
@@ -63,7 +102,18 @@ const ClientForm = ({ openModal, handleModal }) => {
     formData.append("intra_community", user.intraCommunityNo);
     formData.append("bank_info", JSON.stringify(bankInfo));
 
-    api("post", "users", formData).then((res) => res.data);
+    if (editUser) {
+      method = "put";
+      uri = uri + `/${editUser._id}`;
+    }
+    api(method, uri, formData).then((res) => {
+      if (res.status == 200) {
+        toast.success("Saved Successfully");
+        handleModal();
+      } else {
+        toast.error("Save Error", res);
+      }
+    });
   };
 
   return (
@@ -166,13 +216,13 @@ const ClientForm = ({ openModal, handleModal }) => {
                       <FormGroup>
                         <label
                           className="form-control-label"
-                          htmlFor="input-phone"
+                          htmlFor="input-password"
                         >
                           Password
                         </label>
                         <Input
                           className="form-control-alternative"
-                          id="input-phone"
+                          id="input-password"
                           placeholder="Password"
                           type="password"
                           value={user.password}
@@ -198,6 +248,7 @@ const ClientForm = ({ openModal, handleModal }) => {
                           className="form-control-lg"
                           id="input-male"
                           required={true}
+                          checked={user.gender === "male"}
                           placeholder="Username"
                           type="radio"
                           name="gender"
@@ -219,6 +270,7 @@ const ClientForm = ({ openModal, handleModal }) => {
                           id="input-female"
                           required={true}
                           placeholder="Username"
+                          checked={user.gender === "female"}
                           type="radio"
                           name="gender"
                           value="female"
@@ -241,6 +293,7 @@ const ClientForm = ({ openModal, handleModal }) => {
                           placeholder="Username"
                           type="radio"
                           name="gender"
+                          checked={user.gender === "other"}
                           value="other"
                           onChange={handleInputChange}
                         />
@@ -265,7 +318,6 @@ const ClientForm = ({ openModal, handleModal }) => {
                         </label>
                         <Input
                           className="form-control-alternative"
-                          defaultValue="Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09"
                           id="input-address"
                           placeholder="Home Address"
                           type="text"
@@ -308,7 +360,7 @@ const ClientForm = ({ openModal, handleModal }) => {
                           className="form-control-alternative"
                           id="input-cnic"
                           placeholder="XXXXX-XXXXXXX-X"
-                          type="text"
+                          type="number"
                           value={user.cnic}
                           name="cnic"
                           onChange={handleInputChange}
@@ -425,8 +477,13 @@ const ClientForm = ({ openModal, handleModal }) => {
         </ModalBody>
         <ModalFooter>
           <Button color="primary" onClick={handleSubmit}>
-            Add
+            Save
           </Button>{" "}
+          {isEditing && (
+            <Button color="danger" onClick={handleDelete}>
+              Delete
+            </Button>
+          )}{" "}
           <Button onClick={handleModal}>Cancel</Button>
         </ModalFooter>
       </Modal>
