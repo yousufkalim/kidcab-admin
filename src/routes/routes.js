@@ -1,11 +1,12 @@
-import Index from "views/Index.js";
-import Register from "views/examples/Register.js";
-import Login from "components/Login/Login";
-import Tables from "views/examples/Tables.js";
-import Clients from "./views/Clients";
-import Passengers from "./views/Passengers/Passengers";
-import Drivers from "./views/Drivers/Drivers";
-import Invoices from "./views/Invoice/Invoices";
+import Index from "../views/Index.js";
+import Register from "../views/examples/Register.js";
+import Login from "../components/Login/Login";
+import Tables from "../views/examples/Tables.js";
+import Clients from "../views/Clients";
+import Passengers from "../views/Passengers/Passengers";
+import Drivers from "../views/Drivers/Drivers";
+import Invoices from "../views/Invoice/Invoices";
+import Quotes from "../views/Quotes/Quotes";
 
 var routes = [
   {
@@ -30,6 +31,13 @@ var routes = [
     layout: "/admin",
   },
   {
+    path: "/quotes",
+    name: "Quotes",
+    icon: "ni ni-ruler-pencil text-info",
+    component: Quotes,
+    layout: "/admin",
+  },
+  {
     path: "/driver",
     name: "Driver",
     icon: "ni ni-single-02 text-orange",
@@ -46,20 +54,20 @@ var routes = [
   {
     path: "/tables",
     name: "Companies",
-    icon: "ni ni-bullet-list-67 text-red",
+    icon: "ni ni-building text-red",
     component: Tables,
     layout: "/admin",
   },
   {
     path: "/tables",
     name: "Vehicles",
-    icon: "ni ni-bullet-list-67 text-red",
+    icon: "ni ni-delivery-fast text-red",
     component: Tables,
     layout: "/admin",
   },
   {
     path: "/login",
-    name: "Quotes",
+    name: "Login",
     icon: "ni ni-key-25 text-info",
     component: Login,
     layout: "/auth",

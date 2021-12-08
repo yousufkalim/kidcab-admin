@@ -71,9 +71,7 @@ const PassengerList = () => {
                     ))
                   ) : (
                     <tr className="h1 mx-lg-auto text-center">
-                      <td>
-                        <p>No Passenger Found</p>
-                      </td>
+                      <td>No Passenger Found</td>
                     </tr>
                   )}
                 </tbody>
