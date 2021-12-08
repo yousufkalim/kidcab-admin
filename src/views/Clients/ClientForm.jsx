@@ -51,6 +51,7 @@ const ClientForm = ({ openModal, handleModal, editUser, isEditing }) => {
         iban: editUser.bank_info.iban,
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleFileChange = (e) => {
@@ -69,6 +70,7 @@ const ClientForm = ({ openModal, handleModal, editUser, isEditing }) => {
       uri = uri + `/${editUser._id}`;
     }
     api(method, uri).then((res) => {
+      // eslint-disable-next-line eqeqeq
       if (res.status == 200) {
         toast.success("Delete Successfully");
         handleModal();
@@ -107,6 +109,7 @@ const ClientForm = ({ openModal, handleModal, editUser, isEditing }) => {
       uri = uri + `/${editUser._id}`;
     }
     api(method, uri, formData).then((res) => {
+      // eslint-disable-next-line eqeqeq
       if (res.status == 200) {
         toast.success("Saved Successfully");
         handleModal();

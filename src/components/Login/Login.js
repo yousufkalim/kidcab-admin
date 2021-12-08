@@ -27,7 +27,6 @@ const Login = () => {
   const updateStore = UpdateStore();
   const handleSubmit = async () => {
     let result = await api("post", "admins/login", login);
-    console.log(result.data, typeof result.status);
     const token = result.data.token;
     const admin = result.data.admin;
     if (token && result.status === 200) {

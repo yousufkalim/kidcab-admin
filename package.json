@@ -1,16 +1,16 @@
 {
-  "name": "argon-dashboard-react",
+  "name": "kidcab-admin-panel",
   "version": "1.2.1",
-  "description": "React version of Argon Dashboard by Creative Tim",
+  "description": "Dashboard built in react for kidcab by FalconConsulting.fr",
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/creativetimofficial/argon-dashboard-react.git"
+    "url": "git+https://github.com/falconitconsultant/Kidcab-Admin.git"
   },
   "author": "Usman Haider",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/creativetimofficial/argon-dashboard-react/issues"
+    "url": "https://github.com/falconitconsultant/Kidcab-Admin/issues"
   },
   "scripts": {
     "start": "react-scripts start",

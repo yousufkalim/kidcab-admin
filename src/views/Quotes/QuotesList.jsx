@@ -18,16 +18,16 @@ import api from "../../api/index";
 
 const QuotesList = () => {
   const [openModal, setOpenModal] = useState(false);
-  const [users, setUsers] = useState();
+  const [quotes, setQuotes] = useState();
   const handleModal = () => {
     setOpenModal((open) => !open);
     return openModal;
   };
 
   useEffect(() => {
-    api("get", "passengers").then((res) => {
-      setUsers(res.data.passengers);
-      console.log(res.data.passengers);
+    api("get", "quotes").then((res) => {
+      setQuotes(res.data.quotes);
+      console.log(res.data.quotes);
     });
   }, []);
   return (
@@ -59,13 +59,15 @@ const QuotesList = () => {
                     <th scope="col">Passenger</th>
                     <th scope="col">Clients</th>
                     <th scope="col">No. of Trips</th>
-                    <th scope="col" />
+                    <th scope="col">Start Date</th>
+                    <th scope="col">End Date</th>
+                    <th scope="col">Actions </th>
                   </tr>
                 </thead>
                 <tbody>
-                  {users ? (
-                    users.map((user) => (
-                      <PassengerRow key={user._id} user={user} />
+                  {quotes ? (
+                    quotes.map((quote) => (
+                      <PassengerRow key={quote._id} quote={quote} />
                     ))
                   ) : (
                     <tr className="h1 mx-lg-auto text-center">

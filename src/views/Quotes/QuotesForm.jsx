@@ -16,45 +16,77 @@ import {
 } from "reactstrap";
 // core components
 import Select from "react-select";
-const QuotesForm = ({ openModal, handleModal, editUser, isEditing }) => {
-  const [user, setUser] = useState({
+const QuotesForm = ({ openModal, handleModal, editQuote, isEditing }) => {
+  const [quote, setQuote] = useState({
     title: "",
     quoteNumber: "",
     client: "",
-    passenger: "",
+    passengers: [],
     status: "",
     issueDate: "",
     totalTrips: "",
+    totalPassengers: "",
+    totalPrice: "",
+    vat: "",
+    startDate: "",
+    endDate: "",
+    startAddress: "",
+    endAddress: "",
+    docuSignLink: "",
   });
 
   const [clients, setClients] = useState();
+  const [passengers, setPassengers] = useState();
 
   useEffect(() => {
     api("get", "users").then((res) => setClients(res.data.users));
+    api("get", "passengers").then((res) => setPassengers(res.data.passengers));
     if (isEditing) {
-      setUser({
-        firstName: editUser.first_name,
-        lastName: editUser.last_name,
-        password: editUser.password,
-        phone: editUser.phone_number,
+      setQuote({
+        title: editQuote.quote_title,
+        quoteNumber: editQuote.quote_number,
+        client: editQuote.client,
+        passengers: editQuote.passengers,
+        status: editQuote.status,
+        issueDate: editQuote.issue_date,
+        totalTrips: editQuote.trip_info.total_trips,
+        totalPassengers: editQuote.trip_info.total_passengers,
+        totalPrice: editQuote.total_price,
+        vat: editQuote.vat,
+        startDate: editQuote.trip_info.start_date,
+        endDate: editQuote.trip_info.end_date,
+        startAddress: editQuote.trip_info.start_address,
+        endAddress: editQuote.trip_info.end_address,
+        docuSignLink: editQuote.docu_sign_link,
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleInputChange = (e) => {
-    console.log(e.target.value);
-    setUser({ ...user, [e.target.name]: e.target.value });
-    console.log(clients);
+    setQuote((quote) => ({ ...quote, [e.target.name]: e.target.value }));
+  };
+
+  const handleClientChange = (e) => {
+    setQuote((quote) => ({ ...quote, client: e.value }));
+  };
+
+  const handlePassengerChange = (e) => {
+    setQuote((quote) => ({
+      ...quote,
+      passengers: e.map((passenger) => passenger.value),
+    }));
   };
 
   const handleDelete = () => {
     let method = "delete";
-    let uri = "passengers";
-    if (editUser) {
+    let uri = "quotes";
+    if (editQuote) {
       method = "delete";
-      uri = uri + `/${editUser._id}`;
+      uri = uri + `/${editQuote._id}`;
     }
     api(method, uri).then((res) => {
+      // eslint-disable-next-line eqeqeq
       if (res.status == 200) {
         toast.success("Delete Successfully");
         handleModal();
@@ -66,18 +98,29 @@ const QuotesForm = ({ openModal, handleModal, editUser, isEditing }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     let method = "post";
-    let uri = "passengers";
-
-    const formData = new FormData();
-    if (user.image) formData.append("image", user.image, user.image.name);
-    formData.append("first_name", user.firstName);
-    formData.append("last_name", user.lastName);
-    formData.append("client", user.client);
-    formData.append("relationship", user.relationship);
-
-    if (editUser) {
+    let uri = "quotes";
+    const tripInfo = {
+      total_trips: quote.totalTrips,
+      total_passengers: quote.totalPassengers,
+      start_date: quote.startDate,
+      end_date: quote.endDate,
+      start_address: quote.startAddress,
+      end_address: quote.endAddress,
+    };
+    const formData = {};
+    formData["quote_title"] = quote.title;
+    formData["passengers"] = quote.passengers;
+    formData["client"] = quote.client;
+    formData["quote_number"] = quote.quoteNumber;
+    formData["issue_date"] = quote.issueDate;
+    formData["total_price"] = quote.totalPrice;
+    formData["vat"] = quote.vat;
+    formData["status"] = quote.status;
+    formData["trip_info"] = JSON.stringify(tripInfo);
+    formData["docu_sign_link"] = quote.docuSignLink;
+    if (editQuote) {
       method = "put";
-      uri = uri + `/${editUser._id}`;
+      uri = uri + `/${editQuote._id}`;
     }
     api(method, uri, formData).then((res) => {
       if (res.status === 200) {
@@ -109,18 +152,18 @@ const QuotesForm = ({ openModal, handleModal, editUser, isEditing }) => {
                       <FormGroup>
                         <label
                           className="form-control-label"
-                          htmlFor="input-fname"
+                          htmlFor="input-title"
                         >
                           Quote Title
                         </label>
                         <Input
                           className="form-control-alternative"
-                          id="input-fname"
+                          id="input-title"
                           required={true}
                           placeholder="Quote Title"
                           type="text"
-                          value={user.firstName}
-                          name="firstName"
+                          value={quote.title}
+                          name="title"
                           onChange={handleInputChange}
                         />
                       </FormGroup>
@@ -129,17 +172,17 @@ const QuotesForm = ({ openModal, handleModal, editUser, isEditing }) => {
                       <FormGroup>
                         <label
                           className="form-control-label"
-                          htmlFor="input-lname"
+                          htmlFor="input-qnumber"
                         >
                           Quote Number
                         </label>
                         <Input
                           className="form-control-alternative"
-                          id="input-lname"
+                          id="input-qnumber"
                           placeholder="Quote Number"
-                          type="text"
-                          value={user.lastName}
-                          name="lastName"
+                          type="number"
+                          value={quote.quoteNumber}
+                          name="quoteNumber"
                           onChange={handleInputChange}
                         />
                       </FormGroup>
@@ -156,8 +199,12 @@ const QuotesForm = ({ openModal, handleModal, editUser, isEditing }) => {
                         </Label>
                         {clients && (
                           <Select
-                            onChange={(e) => console.log(e.target.value)}
-                            name="passengers"
+                            onChange={handleClientChange}
+                            name="client"
+                            defaultValue={{
+                              value: clients[0]._id,
+                              label: `${clients[0].first_name} ${clients[0].last_name}`,
+                            }}
                             className="form-control-alternative"
                             options={clients.map((client) => ({
                               value: client._id,
@@ -175,15 +222,19 @@ const QuotesForm = ({ openModal, handleModal, editUser, isEditing }) => {
                         >
                           Select Passengers
                         </Label>
-                        {clients && (
+                        {passengers && (
                           <Select
-                            onChange={(e) => console.log(e.map((v) => v.value))}
+                            onChange={handlePassengerChange}
                             isMulti
+                            defaultValue={quote.passengers.map((passenger) => ({
+                              value: passenger._id,
+                              label: `${passenger.first_name} ${passenger.last_name}`,
+                            }))}
                             name="passengers"
                             className="form-control-alternative"
-                            options={clients.map((client) => ({
-                              value: client._id,
-                              label: `${client.first_name} ${client.last_name}`,
+                            options={passengers.map((passenger) => ({
+                              value: passenger._id,
+                              label: `${passenger.first_name} ${passenger.last_name}`,
                             }))}
                           />
                         )}
@@ -201,10 +252,10 @@ const QuotesForm = ({ openModal, handleModal, editUser, isEditing }) => {
                         </Label>
                         <Input
                           id="exampleSelect"
-                          name="relationship"
+                          name="status"
                           className="form-control-alternative"
                           type="select"
-                          value={user.relationship}
+                          value={quote.status}
                           onChange={handleInputChange}
                         >
                           <option value="pending">Pending</option>
@@ -226,8 +277,8 @@ const QuotesForm = ({ openModal, handleModal, editUser, isEditing }) => {
                           id="input-lname"
                           placeholder="Quote Number"
                           type="date"
-                          value={user.lastName}
-                          name="lastName"
+                          value={quote.issueDate}
+                          name="issueDate"
                           onChange={handleInputChange}
                         />
                       </FormGroup>
@@ -254,8 +305,8 @@ const QuotesForm = ({ openModal, handleModal, editUser, isEditing }) => {
                           required={true}
                           placeholder="Total Trips"
                           type="number"
-                          value={user.firstName}
-                          name="firstName"
+                          value={quote.totalTrips}
+                          name="totalTrips"
                           onChange={handleInputChange}
                         />
                       </FormGroup>
@@ -273,8 +324,8 @@ const QuotesForm = ({ openModal, handleModal, editUser, isEditing }) => {
                           id="input-lname"
                           placeholder="Total Passengers"
                           type="number"
-                          value={user.lastName}
-                          name="lastName"
+                          value={quote.totalPassengers}
+                          name="totalPassengers"
                           onChange={handleInputChange}
                         />
                       </FormGroup>
@@ -295,8 +346,8 @@ const QuotesForm = ({ openModal, handleModal, editUser, isEditing }) => {
                           required={true}
                           placeholder="Total Trips"
                           type="number"
-                          value={user.firstName}
-                          name="firstName"
+                          value={quote.totalPrice}
+                          name="totalPrice"
                           onChange={handleInputChange}
                         />
                       </FormGroup>
@@ -314,8 +365,8 @@ const QuotesForm = ({ openModal, handleModal, editUser, isEditing }) => {
                           id="input-lname"
                           placeholder="Total Passengers"
                           type="number"
-                          value={user.lastName}
-                          name="lastName"
+                          value={quote.vat}
+                          name="vat"
                           onChange={handleInputChange}
                         />
                       </FormGroup>
@@ -335,8 +386,8 @@ const QuotesForm = ({ openModal, handleModal, editUser, isEditing }) => {
                           id="input-lname"
                           placeholder="Quote Number"
                           type="date"
-                          value={user.lastName}
-                          name="lastName"
+                          value={quote.startDate}
+                          name="startDate"
                           onChange={handleInputChange}
                         />
                       </FormGroup>
@@ -354,8 +405,8 @@ const QuotesForm = ({ openModal, handleModal, editUser, isEditing }) => {
                           id="input-lname"
                           placeholder="Quote Number"
                           type="date"
-                          value={user.lastName}
-                          name="lastName"
+                          value={quote.endDate}
+                          name="endDate"
                           onChange={handleInputChange}
                         />
                       </FormGroup>
@@ -376,8 +427,8 @@ const QuotesForm = ({ openModal, handleModal, editUser, isEditing }) => {
                           required={true}
                           placeholder="Start Address"
                           type="text"
-                          value={user.firstName}
-                          name="firstName"
+                          value={quote.startAddress}
+                          name="startAddress"
                           onChange={handleInputChange}
                         />
                       </FormGroup>
@@ -395,8 +446,8 @@ const QuotesForm = ({ openModal, handleModal, editUser, isEditing }) => {
                           id="input-lname"
                           placeholder="End Address"
                           type="text"
-                          value={user.lastName}
-                          name="lastName"
+                          value={quote.endAddress}
+                          name="endAddress"
                           onChange={handleInputChange}
                         />
                       </FormGroup>
@@ -416,8 +467,8 @@ const QuotesForm = ({ openModal, handleModal, editUser, isEditing }) => {
                           id="input-lname"
                           placeholder="DocuSign link (https://www.docusign.net/MEMBER/PowerFormSigning.aspx?PowerFormId=123e332) "
                           type="text"
-                          value={user.lastName}
-                          name="lastName"
+                          value={quote.docuSignLink}
+                          name="docuSignLink"
                           onChange={handleInputChange}
                         />
                       </FormGroup>
@@ -431,7 +482,7 @@ const QuotesForm = ({ openModal, handleModal, editUser, isEditing }) => {
         <ModalFooter>
           <Button color="primary" onClick={handleSubmit}>
             Save
-          </Button>{" "}
+          </Button>
           {isEditing && (
             <Button color="danger" onClick={handleDelete}>
               Delete

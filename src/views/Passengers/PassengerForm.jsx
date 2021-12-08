@@ -37,6 +37,7 @@ const PassengerForm = ({ openModal, handleModal, editUser, isEditing }) => {
         phone: editUser.phone_number,
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleFileChange = (e) => {
@@ -44,9 +45,7 @@ const PassengerForm = ({ openModal, handleModal, editUser, isEditing }) => {
   };
 
   const handleInputChange = (e) => {
-    console.log(e.target.value);
     setUser({ ...user, [e.target.name]: e.target.value });
-    console.log(clients);
   };
 
   const handleDelete = () => {
@@ -57,6 +56,7 @@ const PassengerForm = ({ openModal, handleModal, editUser, isEditing }) => {
       uri = uri + `/${editUser._id}`;
     }
     api(method, uri).then((res) => {
+      // eslint-disable-next-line eqeqeq
       if (res.status == 200) {
         toast.success("Delete Successfully");
         handleModal();

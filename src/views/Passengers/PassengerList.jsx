@@ -29,7 +29,6 @@ const PassengerList = () => {
   useEffect(() => {
     api("get", "passengers").then((res) => {
       setUsers(res.data.passengers);
-      console.log(res.data.passengers);
     });
   }, []);
   return (

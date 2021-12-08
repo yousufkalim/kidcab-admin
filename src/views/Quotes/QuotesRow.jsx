@@ -1,44 +1,52 @@
 import React, { useState } from "react";
-import {
-  Badge,
-  DropdownMenu,
-  DropdownItem,
-  UncontrolledDropdown,
-  DropdownToggle,
-  Media,
-  Progress,
-} from "reactstrap";
+import { Badge, UncontrolledDropdown, DropdownToggle, Media } from "reactstrap";
 import ClientAvatar from "./ClientAvatar";
-import PassengerForm from "./QuotesForm";
+import QuotesForm from "./QuotesForm";
 
-const QuotesRow = ({ user }) => {
+const QuotesRow = ({ quote }) => {
   const [openModal, setOpenModal] = useState();
   const handleModal = () => {
     setOpenModal((open) => !open);
     return openModal;
   };
+
   return (
     <tr>
       <th scope="row">
         <Media className="align-items-center">
           <Media>
-            <span className="mb-0 text-sm">
-              {user.first_name + " " + user.last_name}
-            </span>
+            <span className="mb-0 text-sm">{quote.quote_title}</span>
           </Media>
         </Media>
       </th>
-      <td>{user.email}</td>
       <td>
         <Badge color="" className="badge-dot mr-4">
-          {/* <i className="bg-warning" /> */}
-          {user.phone_number}
+          {quote.status === "accepted" ? (
+            <i className="bg-success" />
+          ) : (
+            <i className="bg-warning" />
+          )}
+          {quote.status}
         </Badge>
       </td>
+
       <td>
-        {user.client ? (
+        <div className="avatar-group">
+          {quote.passengers ? (
+            quote.passengers.map((passenger) => (
+              <ClientAvatar key={passenger._id} user={passenger} />
+            ))
+          ) : (
+            <p className="mb-0 text-sm" href="#pablo">
+              No Client is added.
+            </p>
+          )}
+        </div>
+      </td>
+      <td>
+        {quote.client ? (
           <div className="avatar-group">
-            <ClientAvatar user={user.client} />
+            <ClientAvatar user={quote.client} />
           </div>
         ) : (
           <p className="mb-0 text-sm" href="#pablo">
@@ -46,43 +54,36 @@ const QuotesRow = ({ user }) => {
           </p>
         )}
       </td>
+      <td>{quote?.trip_info && quote?.trip_info?.total_trips}</td>
       <td>
         <div className="d-flex align-items-center">
-          <span className="mr-2">60%</span>
-          <div>
-            <Progress max="100" value="60" barClassName="bg-success" />
-          </div>
+          {quote?.trip_info &&
+            new Date(quote?.trip_info?.start_date).toLocaleDateString()}
         </div>
       </td>
-      <td className="text-right">
+      <td>
+        <div className="d-flex align-items-center">
+          {quote?.trip_info &&
+            new Date(quote?.trip_info?.end_date).toLocaleDateString()}
+        </div>
+      </td>
+      <td>
         <UncontrolledDropdown>
           <DropdownToggle
-            className="btn-icon-only text-light"
-            href="#pablo"
+            className="btn-icon-only text-dark"
             role="button"
             size="sm"
             color=""
-            onClick={(e) => e.preventDefault()}
+            onClick={handleModal}
           >
-            <i className="fas fa-ellipsis-v" />
+            <i className="fas fa-edit" />
           </DropdownToggle>
-          <DropdownMenu className="dropdown-menu-arrow" right>
-            <DropdownItem href="#pablo" onClick={handleModal}>
-              Edit Profile
-            </DropdownItem>
-            <DropdownItem href="#pablo" onClick={(e) => e.preventDefault()}>
-              Add Passenger
-            </DropdownItem>
-            <DropdownItem href="#pablo" onClick={(e) => e.preventDefault()}>
-              Add Trips
-            </DropdownItem>
-          </DropdownMenu>
         </UncontrolledDropdown>
       </td>
-      <PassengerForm
+      <QuotesForm
         openModal={openModal}
         handleModal={handleModal}
-        editUser={user}
+        editQuote={quote}
         isEditing={true}
       />
     </tr>

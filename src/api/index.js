@@ -25,7 +25,6 @@ const api = async (method = "get", uri, body) => {
           toast.warning("Token is expired Please Login Again");
           window.location = "/login";
         } else {
-          // console.log("API Error --------> ", err.response.status);
           toast.error(err?.response?.data ? err.response.data : err?.message);
           reject(err);
         }
