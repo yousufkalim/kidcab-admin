@@ -8,7 +8,6 @@ const api = async (method = "get", uri, body) => {
   if (window.location.hostname === "localhost") {
     axios.defaults.baseURL = "http://localhost:5000/";
   } else {
-    axios.defaults.withCredentials = true;
     axios.defaults.baseURL = "https://kidcab.falconit.com.pk/";
   }
 
@@ -25,6 +24,7 @@ const api = async (method = "get", uri, body) => {
           toast.warning("Token is expired Please Login Again");
           window.location = "/login";
         } else {
+          console.log("API Error --------> ", err?.response?.status);
           toast.error(err?.response?.data ? err.response.data : err?.message);
           reject(err);
         }
