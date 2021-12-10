@@ -135,7 +135,7 @@ const QuotesForm = ({ openModal, handleModal, editQuote, isEditing }) => {
   return (
     <>
       <Modal isOpen={openModal} size="xl" centered>
-        <ModalHeader charCode="Y" toggle={handleModal}>
+        <ModalHeader charCode="X" toggle={handleModal}>
           Add A Quote
         </ModalHeader>
         <ModalBody>

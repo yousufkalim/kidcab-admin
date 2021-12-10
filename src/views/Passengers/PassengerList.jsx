@@ -56,10 +56,10 @@ const PassengerList = () => {
                 <thead className="thead-light">
                   <tr>
                     <th scope="col">Name</th>
-                    <th scope="col">Email</th>
-                    <th scope="col">Phone Number</th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
                     <th scope="col">Clients</th>
-                    <th scope="col">No. of Trips</th>
+                    <th scope="col"></th>
                     <th scope="col" />
                   </tr>
                 </thead>
