@@ -30,7 +30,7 @@ const PassengerList = () => {
     api("get", "passengers").then((res) => {
       setUsers(res.data.passengers);
     });
-  }, []);
+  }, [openModal]);
   return (
     <>
       <Container className="mt--7" fluid>

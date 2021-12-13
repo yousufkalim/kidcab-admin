@@ -180,11 +180,14 @@ const PassengerForm = ({ openModal, handleModal, editUser, isEditing }) => {
                           id="exampleSelect"
                           name="client"
                           value={user.client}
+                          defaultValue={clients && clients[0]._id}
                           onChange={handleInputChange}
                           className="form-control-alternative"
                           type="select"
                         >
-                          <option disabled>Select One Client</option>
+                          <option disabled selected>
+                            Select One Client
+                          </option>
                           {clients ? (
                             clients.map((client) => (
                               <option key={client._id} value={client._id}>
@@ -213,7 +216,9 @@ const PassengerForm = ({ openModal, handleModal, editUser, isEditing }) => {
                           value={user.relationship}
                           onChange={handleInputChange}
                         >
-                          <option value="self">Self</option>
+                          <option value="self" selected>
+                            Self
+                          </option>
                           <option value="son">Son</option>
                           <option value="daughter">Daughter</option>
                           <option value="brother">Brother</option>

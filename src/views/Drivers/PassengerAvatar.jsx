@@ -11,7 +11,12 @@ const PassengerAvatar = ({ passenger }) => {
         onClick={(e) => e.preventDefault()}
       >
         {passenger.photo ? (
-          <img alt="..." className="rounded-circle" src={passenger.photo} />
+          <img
+            alt="..."
+            className="rounded-circle"
+            style={{ height: "100%", width: "100%" }}
+            src={passenger.photo}
+          />
         ) : (
           <i className="ni ni-circle-08" />
         )}

@@ -38,10 +38,17 @@ const DriverForm = ({ openModal, handleModal, editUser, isEditing }) => {
     bankName: "",
     iban: "",
     role: "",
+    vehicles: [],
   });
+  const [vehicles, setVehicles] = useState();
 
   useEffect(() => {
-    console.log(editUser);
+    api("get", "vehicles").then((res) => {
+      setVehicles(res.data.vehicles);
+    });
+  }, []);
+
+  useEffect(() => {
     if (isEditing) {
       setUser({
         firstName: editUser.first_name,
@@ -54,6 +61,7 @@ const DriverForm = ({ openModal, handleModal, editUser, isEditing }) => {
         bankAccountNo: editUser.bank_info.account_number,
         bankName: editUser.bank_info.bank_name,
         iban: editUser.bank_info.iban,
+        vehicles: editUser.vehicles,
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -65,6 +73,10 @@ const DriverForm = ({ openModal, handleModal, editUser, isEditing }) => {
 
   const handleInputChange = (e) => {
     setUser({ ...user, [e.target.name]: e.target.value });
+  };
+
+  const handleVehicleChange = (e) => {
+    setUser((user) => ({ ...user, vehicles: e.value }));
   };
 
   const handleDelete = () => {
@@ -103,6 +115,7 @@ const DriverForm = ({ openModal, handleModal, editUser, isEditing }) => {
     formData.append("role", user.role);
     formData.append("phone_number", user.phone);
     formData.append("address", user.address);
+    formData.append("vehicles", user.vehicles);
     formData.append("bank_info", JSON.stringify(bankInfo));
     if (user.profile_pic)
       formData.append("profile_pic", user.profile_pic, user.profile_pic?.name);
@@ -299,11 +312,21 @@ const DriverForm = ({ openModal, handleModal, editUser, isEditing }) => {
                           Select Vehicle
                         </Label>
 
-                        <Select
-                          onChange={handleInputChange}
-                          name="passengers"
-                          className="form-control-alternative"
-                        />
+                        {vehicles && (
+                          <Select
+                            onChange={handleVehicleChange}
+                            name="vehicles"
+                            defaultValue={{
+                              value: vehicles[0]?._id,
+                              label: `${vehicles[0]?.vehicle_name}`,
+                            }}
+                            className="form-control-alternative"
+                            options={vehicles.map((vehicle) => ({
+                              value: vehicle?._id,
+                              label: `${vehicle?.vehicle_name}`,
+                            }))}
+                          />
+                        )}
                       </FormGroup>
                     </Col>
                   </Row>

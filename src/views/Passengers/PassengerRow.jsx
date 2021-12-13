@@ -6,7 +6,6 @@ import {
   UncontrolledDropdown,
   DropdownToggle,
   Media,
-  Progress,
 } from "reactstrap";
 import ClientAvatar from "./ClientAvatar";
 import PassengerForm from "./PassengerForm";

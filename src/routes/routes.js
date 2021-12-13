@@ -7,7 +7,7 @@ import Passengers from "../views/Passengers/Passengers";
 import Drivers from "../views/Drivers/Drivers";
 import Invoices from "../views/Invoice/Invoices";
 import Quotes from "../views/Quotes/Quotes";
-
+import Vehicles from "../views/Vehicles";
 var routes = [
   {
     path: "/index",
@@ -52,6 +52,13 @@ var routes = [
     layout: "/admin",
   },
   {
+    path: "/vehicles",
+    name: "Vehicles",
+    icon: "fa fa-taxi text-red",
+    component: Vehicles,
+    layout: "/admin",
+  },
+  {
     path: "/register",
     name: "Rides",
     icon: "fa fa-calendar text-pink",
@@ -66,13 +73,6 @@ var routes = [
     layout: "/admin",
   },
 
-  {
-    path: "/tables",
-    name: "Vehicles",
-    icon: "fa fa-taxi text-red",
-    component: Tables,
-    layout: "/admin",
-  },
   {
     path: "/login",
     name: "Login",
