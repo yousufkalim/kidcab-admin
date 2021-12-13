@@ -15,6 +15,7 @@ import {
 } from "reactstrap";
 
 const AdminNavbar = () => {
+  // eslint-disable-next-line no-unused-vars
   const [token, setToken] = useState(() => getToken());
   return (
     <>

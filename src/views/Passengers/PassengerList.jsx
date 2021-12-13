@@ -29,7 +29,6 @@ const PassengerList = () => {
   useEffect(() => {
     api("get", "passengers").then((res) => {
       setUsers(res.data.passengers);
-      console.log(res.data.passengers);
     });
   }, []);
   return (
@@ -71,9 +70,7 @@ const PassengerList = () => {
                     ))
                   ) : (
                     <tr className="h1 mx-lg-auto text-center">
-                      <td>
-                        <p>No Passenger Found</p>
-                      </td>
+                      <td>No Passenger Found</td>
                     </tr>
                   )}
                 </tbody>
