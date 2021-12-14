@@ -1,7 +1,14 @@
 import React from "react";
+import CompanyHeader from "./CompanyHeader";
+import CompanyList from "./CompanyList";
 
 const Companies = () => {
-  return <div>Companies</div>;
+  return (
+    <>
+      <CompanyHeader />
+      <CompanyList />
+    </>
+  );
 };
 
 export default Companies;

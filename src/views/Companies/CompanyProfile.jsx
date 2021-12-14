@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, Card, CardHeader, CardBody, Row, Col } from "reactstrap";
 
-const PassengerProfile = () => {
+const CompanyProfile = () => {
   return (
     <Card className="card-profile shadow">
       <Row className="justify-content-center">
@@ -91,4 +91,4 @@ const PassengerProfile = () => {
   );
 };
 
-export default PassengerProfile;
+export default CompanyProfile;

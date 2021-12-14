@@ -1,12 +1,11 @@
 import { Card, CardBody, CardTitle, Container, Row, Col } from "reactstrap";
 
-const PassengerHeader = () => {
+const CompanyHeader = () => {
   return (
     <>
-      <div className="header  bg-gradient-default pb-8 pt-5 pt-md-8">
+      <div className="header  bg-gradient-success pb-8 pt-5 pt-md-8">
         <Container fluid>
           <div className="header-body">
-            {/* Card stats */}
             <Row>
               <Col lg="6" xl="3">
                 <Card className="card-stats mb-4 mb-xl-0">
@@ -17,7 +16,7 @@ const PassengerHeader = () => {
                           tag="h5"
                           className="text-uppercase text-muted mb-0"
                         >
-                          Total User
+                          Total Companies
                         </CardTitle>
                         <span className="h2 font-weight-bold mb-0">350</span>
                       </div>
@@ -45,7 +44,7 @@ const PassengerHeader = () => {
                           tag="h5"
                           className="text-uppercase text-muted mb-0"
                         >
-                          New users
+                          Total Drivers
                         </CardTitle>
                         <span className="h2 font-weight-bold mb-0">2,356</span>
                       </div>
@@ -73,7 +72,7 @@ const PassengerHeader = () => {
                           tag="h5"
                           className="text-uppercase text-muted mb-0"
                         >
-                          Passengers
+                          Total Cars
                         </CardTitle>
                         <span className="h2 font-weight-bold mb-0">924</span>
                       </div>
@@ -128,4 +127,4 @@ const PassengerHeader = () => {
   );
 };
 
-export default PassengerHeader;
+export default CompanyHeader;
