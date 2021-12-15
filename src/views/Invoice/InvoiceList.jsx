@@ -12,23 +12,23 @@ import {
   Row,
   Button,
 } from "reactstrap";
-import PassengerForm from "./InvoiceForm";
-import PassengerRow from "./InvoiceRow";
+import InvoiceForm from "./InvoiceForm";
+import InvoiceRow from "./InvoiceRow";
 import { useState } from "react";
 import { useEffect } from "react";
 import api from "../../api/index";
 
 const InvoiceList = () => {
   const [openModal, setOpenModal] = useState(false);
-  const [users, setUsers] = useState();
+  const [invoices, setInvoices] = useState();
   const handleModal = () => {
     setOpenModal((open) => !open);
     return openModal;
   };
 
   useEffect(() => {
-    api("get", "passengers").then((res) => {
-      setUsers(res.data.passengers);
+    api("get", "invoices").then((res) => {
+      setInvoices(res.data.invoices);
     });
   }, [openModal]);
   return (
@@ -59,19 +59,20 @@ const InvoiceList = () => {
                     <th scope="col">Issue Date</th>
                     <th scope="col">Status</th>
                     <th scope="col">Total Price</th>
-                    <th scope="col">Driver</th>
                     <th scope="col">Client</th>
-                    <th scope="col" />
+                    <th scope="col" className="text-right">
+                      Actions
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
-                  {users ? (
-                    users.map((user) => (
-                      <PassengerRow key={user._id} user={user} />
+                  {invoices ? (
+                    invoices.map((invoice) => (
+                      <InvoiceRow key={invoice._id} invoice={invoice} />
                     ))
                   ) : (
                     <tr className="h1 mx-lg-auto text-center">
-                      <td>No Passenger Found</td>
+                      <td>No Invoice Found</td>
                     </tr>
                   )}
                 </tbody>
@@ -132,7 +133,7 @@ const InvoiceList = () => {
           </div>
         </Row>
         {openModal && (
-          <PassengerForm
+          <InvoiceForm
             openModal={openModal}
             handleModal={handleModal}
             user={undefined}

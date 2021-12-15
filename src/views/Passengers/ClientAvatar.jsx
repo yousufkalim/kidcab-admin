@@ -7,7 +7,7 @@ const ClientAvatar = ({ user }) => {
       <a
         className="avatar avatar-sm"
         href="#pablo"
-        id={user.first_name}
+        id={user.first_name.toLowerCase()}
         onClick={(e) => e.preventDefault()}
       >
         {user.profile_pic ? (
@@ -21,7 +21,7 @@ const ClientAvatar = ({ user }) => {
           <i className="ni ni-circle-08" />
         )}
       </a>
-      <UncontrolledTooltip delay={0} target={user.first_name}>
+      <UncontrolledTooltip delay={0} target={user.first_name.toLowerCase()}>
         {user.first_name + " " + user.last_name}
       </UncontrolledTooltip>
     </>

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import api from "../../api";
+import Select from "react-select";
 import {
   Modal,
   ModalBody,
@@ -18,31 +19,30 @@ import {
 
 const InvoiceForm = ({ openModal, handleModal, editUser, isEditing }) => {
   const [user, setUser] = useState({
-    image: "",
-    firstName: "",
-    lastName: "",
-    client: "",
-    relationship: "",
+    invoice_title: "",
+    issue_date: "",
+    total_price: "",
+    status: "",
+    trip: "",
   });
 
-  const [clients, setClients] = useState();
+  const [trips, setTrips] = useState();
 
   useEffect(() => {
-    api("get", "users").then((res) => setClients(res.data.users));
+    api("get", "trips").then((res) => {
+      setTrips(res.data.trips);
+    });
     if (isEditing) {
       setUser({
-        firstName: editUser.first_name,
-        lastName: editUser.last_name,
-        password: editUser.password,
-        phone: editUser.phone_number,
+        invoice_title: editUser.invoice_title,
+        issue_date: editUser.issue_date,
+        total_price: editUser.total_price,
+        status: editUser.status,
+        trip: editUser.trip,
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  const handleFileChange = (e) => {
-    setUser({ ...user, image: e.target.files[0] });
-  };
 
   const handleInputChange = (e) => {
     setUser({ ...user, [e.target.name]: e.target.value });
@@ -50,7 +50,7 @@ const InvoiceForm = ({ openModal, handleModal, editUser, isEditing }) => {
 
   const handleDelete = () => {
     let method = "delete";
-    let uri = "passengers";
+    let uri = "invoices";
     if (editUser) {
       method = "delete";
       uri = uri + `/${editUser._id}`;
@@ -68,20 +68,13 @@ const InvoiceForm = ({ openModal, handleModal, editUser, isEditing }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     let method = "post";
-    let uri = "passengers";
-
-    const formData = new FormData();
-    if (user.image) formData.append("image", user.image, user.image.name);
-    formData.append("first_name", user.firstName);
-    formData.append("last_name", user.lastName);
-    formData.append("client", user.client);
-    formData.append("relationship", user.relationship);
+    let uri = "invoices";
 
     if (editUser) {
       method = "put";
       uri = uri + `/${editUser._id}`;
     }
-    api(method, uri, formData).then((res) => {
+    api(method, uri, user).then((res) => {
       if (res.status === 200) {
         toast.success("Saved Successfully");
         handleModal();
@@ -95,35 +88,15 @@ const InvoiceForm = ({ openModal, handleModal, editUser, isEditing }) => {
     <>
       <Modal isOpen={openModal} size="xl" centered>
         <ModalHeader charCode="X" toggle={handleModal}>
-          Add Passenger
+          Add Invoice
         </ModalHeader>
         <ModalBody>
           <Row>
             <Col>
               <Form>
                 <h6 className="heading-small text-muted mb-4">
-                  Passenger information
+                  Invoice information
                 </h6>
-                <div className="pl-lg-4">
-                  <Row>
-                    <Col lg="12">
-                      <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-image"
-                        >
-                          Add Profile Picture <i className="ni ni-album-2" />
-                        </label>
-                        <Input
-                          className="form-control-file form"
-                          id="input-image"
-                          type="file"
-                          onChange={handleFileChange}
-                        />
-                      </FormGroup>
-                    </Col>
-                  </Row>
-                </div>
 
                 <div className="pl-lg-4">
                   <Row>
@@ -133,16 +106,16 @@ const InvoiceForm = ({ openModal, handleModal, editUser, isEditing }) => {
                           className="form-control-label"
                           htmlFor="input-fname"
                         >
-                          First Name
+                          Invoice Title
                         </label>
                         <Input
-                          className="form-control-alternative"
+                          className="form-control"
                           id="input-fname"
                           required={true}
-                          placeholder="First Name"
+                          placeholder="Enter Invoice Title"
                           type="text"
-                          value={user.firstName}
-                          name="firstName"
+                          value={user.invoice_title}
+                          name="invoice_title"
                           onChange={handleInputChange}
                         />
                       </FormGroup>
@@ -153,15 +126,14 @@ const InvoiceForm = ({ openModal, handleModal, editUser, isEditing }) => {
                           className="form-control-label"
                           htmlFor="input-lname"
                         >
-                          Last Name
+                          Issue Date
                         </label>
                         <Input
-                          className="form-control-alternative"
+                          className="form-control"
                           id="input-lname"
-                          placeholder="Doe"
-                          type="text"
-                          value={user.lastName}
-                          name="lastName"
+                          type="date"
+                          value={user.issue_date}
+                          name="issue_date"
                           onChange={handleInputChange}
                         />
                       </FormGroup>
@@ -174,29 +146,20 @@ const InvoiceForm = ({ openModal, handleModal, editUser, isEditing }) => {
                           for="exampleSelect"
                           className="form-control-label"
                         >
-                          Select Client
+                          Status
                         </Label>
                         <Input
                           id="exampleSelect"
-                          name="client"
-                          value={user.client}
-                          defaultValue={clients && clients[0]._id}
+                          name="status"
+                          value={user.status}
                           onChange={handleInputChange}
-                          className="form-control-alternative"
+                          className="form-control"
                           type="select"
                         >
-                          <option disabled selected>
-                            Select One Client
-                          </option>
-                          {clients ? (
-                            clients.map((client) => (
-                              <option key={client._id} value={client._id}>
-                                {client.first_name + " " + client.last_name}
-                              </option>
-                            ))
-                          ) : (
-                            <option disabled>There is no Client</option>
-                          )}
+                          <option value="pending">Pending</option>
+                          <option value="paid">Paid</option>
+                          <option value="late">Late</option>
+                          <option value="canceled">Canceled</option>
                         </Input>
                       </FormGroup>
                     </Col>
@@ -206,29 +169,45 @@ const InvoiceForm = ({ openModal, handleModal, editUser, isEditing }) => {
                           for="exampleSelect"
                           className="form-control-label"
                         >
-                          Relationship
+                          Total Price
                         </Label>
                         <Input
                           id="exampleSelect"
-                          name="relationship"
-                          className="form-control-alternative"
-                          type="select"
-                          value={user.relationship}
+                          name="total_price"
+                          className="form-control"
+                          placeholder="Enter Total Price"
+                          type="number"
+                          value={user.total_price}
                           onChange={handleInputChange}
+                        />
+                      </FormGroup>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col lg="6">
+                      <FormGroup>
+                        <label
+                          className="form-control-label"
+                          htmlFor="input-fname"
                         >
-                          <option value="self" selected>
-                            Self
-                          </option>
-                          <option value="son">Son</option>
-                          <option value="daughter">Daughter</option>
-                          <option value="brother">Brother</option>
-                          <option value="sister">Sister</option>
-                          <option value="father">Father</option>
-                          <option value="mother">Mother</option>
-                          <option value="uncle">Uncle</option>
-                          <option value="aunt">Aunt</option>
-                          <option value="other">other</option>
-                        </Input>
+                          Assigned Drivers
+                        </label>
+                        {trips && (
+                          <Select
+                            onChange={(e) =>
+                              setUser((trip) => ({
+                                ...user,
+                                trip: e.value,
+                              }))
+                            }
+                            name="assignedDrivers"
+                            className="form-control-alternative"
+                            options={trips.map((trip) => ({
+                              value: trip?._id,
+                              label: `${trip?.quote?.quote_title}`,
+                            }))}
+                          />
+                        )}
                       </FormGroup>
                     </Col>
                   </Row>

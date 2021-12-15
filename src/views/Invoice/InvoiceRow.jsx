@@ -5,55 +5,39 @@ import {
   DropdownItem,
   UncontrolledDropdown,
   DropdownToggle,
-  Media,
 } from "reactstrap";
 import ClientAvatar from "./ClientAvatar";
 import InvoiceForm from "./InvoiceForm";
 
-const InvoiceRow = ({ user }) => {
+const InvoiceRow = ({ invoice }) => {
   const [openModal, setOpenModal] = useState();
+  console.log("client", invoice);
   const handleModal = () => {
     setOpenModal((open) => !open);
     return openModal;
   };
   return (
     <tr>
-      <th scope="row">
-        <Media className="align-items-center">
-          <a
-            className="avatar rounded-circle mr-3"
-            href="#pablo"
-            onClick={(e) => e.preventDefault()}
-          >
-            {user.profile_pic ? (
-              <img
-                className="rounded-circle"
-                style={{ width: "100%", height: "100%" }}
-                alt={`${user.first_name} profile pic`}
-                src={process.env.REACT_APP_BASE_URL + user?.profile_pic}
-              />
-            ) : (
-              <i className="ni ni-circle-08" />
-            )}
-          </a>
-          <Media>
-            <span className="mb-0 text-sm">
-              {user.first_name + " " + user.last_name}
-            </span>
-          </Media>
-        </Media>
-      </th>
-      <td>{user.email}</td>
+      <th scope="row">{invoice.invoice_title}</th>
+      <td>{new Date(invoice.issue_date).toLocaleDateString()}</td>
       <td>
         <Badge color="" className="badge-dot mr-4">
-          {/* <i className="bg-warning" /> */}
-          {user.phone_number}
+          {invoice.status === "canceled" ? (
+            <i className="bg-warning" />
+          ) : (
+            <i className="bg-success" />
+          )}
+          {invoice.status}
         </Badge>
       </td>
+
+      <td>
+        <div className="d-flex align-items-center">{invoice.total_price}</div>
+      </td>
       <td className="text-left">
-        {user.client ? (
+        {invoice?.trip?.client ? (
           <div className="avatar-group">
-            <ClientAvatar user={user.client} />
+            <ClientAvatar user={invoice.trip.client} />
           </div>
         ) : (
           <p className="mb-0 text-sm" href="#pablo">
@@ -61,9 +45,7 @@ const InvoiceRow = ({ user }) => {
           </p>
         )}
       </td>
-      <td>
-        <div className="d-flex align-items-center"></div>
-      </td>
+
       <td className="text-right">
         <UncontrolledDropdown>
           <DropdownToggle
@@ -80,19 +62,13 @@ const InvoiceRow = ({ user }) => {
             <DropdownItem href="#pablo" onClick={handleModal}>
               Edit Profile
             </DropdownItem>
-            <DropdownItem href="#pablo" onClick={(e) => e.preventDefault()}>
-              Add Passenger
-            </DropdownItem>
-            <DropdownItem href="#pablo" onClick={(e) => e.preventDefault()}>
-              Add Trips
-            </DropdownItem>
           </DropdownMenu>
         </UncontrolledDropdown>
       </td>
       <InvoiceForm
         openModal={openModal}
         handleModal={handleModal}
-        editUser={user}
+        editUser={invoice}
         isEditing={true}
       />
     </tr>
