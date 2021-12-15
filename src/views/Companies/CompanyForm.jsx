@@ -195,6 +195,7 @@ const CompanyForm = ({ openModal, handleModal, editUser, isEditing }) => {
                         {drivers && (
                           <Select
                             onChange={handleVehicleChange}
+                            hideSelectedOptions
                             name="vehicles"
                             defaultValue={{
                               value: drivers[0]?._id,

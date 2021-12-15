@@ -7,7 +7,7 @@ const ManagerAvatar = ({ manager }) => {
       <a
         className="avatar avatar-sm"
         href="#pablo"
-        id="tooltip742438047"
+        id={manager.first_name}
         onClick={(e) => e.preventDefault()}
       >
         {manager.profile_pic ? (
@@ -21,7 +21,7 @@ const ManagerAvatar = ({ manager }) => {
           <i className="ni ni-circle-08" />
         )}
       </a>
-      <UncontrolledTooltip delay={0} target="tooltip742438047">
+      <UncontrolledTooltip delay={0} target={manager.first_name}>
         {manager.first_name + " " + manager.last_name}
       </UncontrolledTooltip>
     </>
