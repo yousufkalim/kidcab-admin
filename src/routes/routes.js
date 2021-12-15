@@ -1,13 +1,14 @@
 import Index from "../views/Index.js";
-import Register from "../views/examples/Register.js";
 import Login from "../components/Login/Login";
-import Tables from "../views/examples/Tables.js";
 import Clients from "../views/Clients";
 import Passengers from "../views/Passengers/Passengers";
 import Drivers from "../views/Drivers/Drivers";
 import Invoices from "../views/Invoice/Invoices";
 import Quotes from "../views/Quotes/Quotes";
 import Vehicles from "../views/Vehicles";
+import Companies from "../views/Companies/";
+import Trips from "../views/Trips/Trips";
+
 var routes = [
   {
     path: "/index",
@@ -38,10 +39,10 @@ var routes = [
     layout: "/admin",
   },
   {
-    path: "/tables",
+    path: "/companies",
     name: "Companies",
     icon: "ni ni-building text-red",
-    component: Tables,
+    component: Companies,
     layout: "/admin",
   },
   {
@@ -54,16 +55,16 @@ var routes = [
   {
     path: "/vehicles",
     name: "Vehicles",
-    icon: "fa fa-taxi text-red",
+    icon: "fa fa-taxi text-green",
     component: Vehicles,
     layout: "/admin",
   },
   {
-    path: "/register",
-    name: "Rides",
+    path: "/trips",
+    name: "Trips",
     icon: "fa fa-calendar text-pink",
-    component: Register,
-    layout: "/auth",
+    component: Trips,
+    layout: "/admin",
   },
   {
     path: "/invoice",

@@ -12,47 +12,72 @@ import {
   Row,
   Button,
 } from "reactstrap";
-import ClientRow from "./PassengerRow";
-const PassengerList = () => {
+import CompanyForm from "./CompanyForm";
+import CompanyRow from "./CompanyRow";
+import { useState } from "react";
+import { useEffect } from "react";
+import api from "../../api/index";
+
+const CompanyList = () => {
+  const [openModal, setOpenModal] = useState(false);
+  const [users, setUsers] = useState();
+  const handleModal = () => {
+    setOpenModal((open) => !open);
+    return openModal;
+  };
+
+  useEffect(() => {
+    api("get", "companies").then((res) => setUsers(res.data.companies));
+  }, [openModal]);
+
   return (
     <>
       <Container className="mt--7" fluid>
-        {/* Table */}
         <Row>
           <div className="col">
             <Card className="shadow">
               <CardHeader className="border-0">
                 <div className="d-flex justify-content-between ">
-                  <h3 className="mb-0">Passenger List</h3>
+                  <h3 className="mb-0">Company List</h3>
                   <Button
-                    color="default"
+                    color="primary"
                     href="#pablo"
-                    onClick={(e) => e.preventDefault()}
+                    onClick={handleModal}
                     size="md"
                   >
-                    Add Passenger
+                    <i className="ni ni-fat-add"></i>
+                    Add Company
                   </Button>
                 </div>
               </CardHeader>
-              <Table className="align-items-center table-flush" responsive>
+              <Table className="align-items-center table-flush my-3" responsive>
                 <thead className="thead-light">
                   <tr>
-                    <th scope="col">Name</th>
-                    <th scope="col">Email</th>
-                    <th scope="col">Phone Number</th>
-                    <th scope="col">Client</th>
-                    <th scope="col">No. of Trips</th>
-                    <th scope="col" />
+                    <th scope="col">Company Name</th>
+                    <th scope="col" className="text-center">
+                      Company Manager
+                    </th>
+                    <th scope="col" className="text-center">
+                      Location / City
+                    </th>
+                    <th scope="col" className="text-center">
+                      No. of Vehicles
+                    </th>
+                    <th scope="col" className="text-right">
+                      Actions
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
-                  <ClientRow />
-                  <ClientRow />
-                  <ClientRow />
-                  <ClientRow />
-                  <ClientRow />
-                  <ClientRow />
-                  <ClientRow />z
+                  {users ? (
+                    users.map((user) => (
+                      <CompanyRow key={user._id} user={user} />
+                    ))
+                  ) : (
+                    <tr className="h1 mx-lg-auto text-center">
+                      <td>No Company Found</td>
+                    </tr>
+                  )}
                 </tbody>
               </Table>
               <CardFooter className="py-4">
@@ -110,9 +135,17 @@ const PassengerList = () => {
             </Card>
           </div>
         </Row>
+        {openModal && (
+          <CompanyForm
+            openModal={openModal}
+            handleModal={handleModal}
+            user={undefined}
+            isEditing={false}
+          />
+        )}
       </Container>
     </>
   );
 };
 
-export default PassengerList;
+export default CompanyList;
