@@ -12,47 +12,64 @@ import {
   Row,
   Button,
 } from "reactstrap";
-import ClientRow from "./DriverRow";
+import DriverForm from "./DriverForm";
+import DriverRow from "./DriverRow";
+import { useState } from "react";
+import { useEffect } from "react";
+import api from "../../api/index";
+
 const DriverList = () => {
+  const [openModal, setOpenModal] = useState(false);
+  const [users, setUsers] = useState();
+  const handleModal = () => {
+    setOpenModal((open) => !open);
+    return openModal;
+  };
+
+  useEffect(() => {
+    api("get", "drivers").then((res) => setUsers(res.data.drivers));
+  }, [openModal]);
   return (
     <>
       <Container className="mt--7" fluid>
-        {/* Table */}
         <Row>
           <div className="col">
             <Card className="shadow">
               <CardHeader className="border-0">
                 <div className="d-flex justify-content-between ">
-                  <h3 className="mb-0">Driver List</h3>
+                  <h3 className="mb-0">Drivers List</h3>
                   <Button
-                    color="default"
+                    color="primary"
                     href="#pablo"
-                    onClick={(e) => e.preventDefault()}
+                    onClick={handleModal}
                     size="md"
                   >
+                    <i className="ni ni-fat-add"></i>
                     Add Driver
                   </Button>
                 </div>
               </CardHeader>
-              <Table className="align-items-center table-flush" responsive>
+              <Table className="align-items-center table-flush my-3" responsive>
                 <thead className="thead-light">
                   <tr>
                     <th scope="col">Name</th>
+                    <th scope="col">Role</th>
                     <th scope="col">Email</th>
                     <th scope="col">Phone Number</th>
-                    <th scope="col">Client</th>
-                    <th scope="col">No. of Trips</th>
+                    <th scope="col">No. of Vehicles</th>
                     <th scope="col" />
                   </tr>
                 </thead>
                 <tbody>
-                  <ClientRow />
-                  <ClientRow />
-                  <ClientRow />
-                  <ClientRow />
-                  <ClientRow />
-                  <ClientRow />
-                  <ClientRow />
+                  {users ? (
+                    users.map((user) => (
+                      <DriverRow key={user._id} user={user} />
+                    ))
+                  ) : (
+                    <tr className="h1 mx-lg-auto text-center">
+                      <td>No Driver Found</td>
+                    </tr>
+                  )}
                 </tbody>
               </Table>
               <CardFooter className="py-4">
@@ -110,6 +127,14 @@ const DriverList = () => {
             </Card>
           </div>
         </Row>
+        {openModal && (
+          <DriverForm
+            openModal={openModal}
+            handleModal={handleModal}
+            user={undefined}
+            isEditing={false}
+          />
+        )}
       </Container>
     </>
   );

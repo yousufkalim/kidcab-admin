@@ -7,7 +7,7 @@ import Passengers from "../views/Passengers/Passengers";
 import Drivers from "../views/Drivers/Drivers";
 import Invoices from "../views/Invoice/Invoices";
 import Quotes from "../views/Quotes/Quotes";
-
+import Vehicles from "../views/Vehicles";
 var routes = [
   {
     path: "/index",
@@ -19,14 +19,14 @@ var routes = [
   {
     path: "/clients",
     name: "Clients",
-    icon: "ni ni-single-02 text-blue",
+    icon: "fa fa-address-book text-blue",
     component: Clients,
     layout: "/admin",
   },
   {
     path: "/passengers",
     name: "Passengers",
-    icon: "ni ni-single-02 text-pink",
+    icon: "fa fa-users text-pink",
     component: Passengers,
     layout: "/admin",
   },
@@ -38,20 +38,6 @@ var routes = [
     layout: "/admin",
   },
   {
-    path: "/driver",
-    name: "Driver",
-    icon: "ni ni-single-02 text-orange",
-    component: Drivers,
-    layout: "/admin",
-  },
-  {
-    path: "/invoice",
-    name: "Invoice",
-    icon: "ni ni-single-02 text-yellow",
-    component: Invoices,
-    layout: "/admin",
-  },
-  {
     path: "/tables",
     name: "Companies",
     icon: "ni ni-building text-red",
@@ -59,24 +45,39 @@ var routes = [
     layout: "/admin",
   },
   {
-    path: "/tables",
-    name: "Vehicles",
-    icon: "ni ni-delivery-fast text-red",
-    component: Tables,
+    path: "/driver",
+    name: "Driver",
+    icon: "fa fa-id-card text-black",
+    component: Drivers,
     layout: "/admin",
   },
+  {
+    path: "/vehicles",
+    name: "Vehicles",
+    icon: "fa fa-taxi text-red",
+    component: Vehicles,
+    layout: "/admin",
+  },
+  {
+    path: "/register",
+    name: "Rides",
+    icon: "fa fa-calendar text-pink",
+    component: Register,
+    layout: "/auth",
+  },
+  {
+    path: "/invoice",
+    name: "Invoice",
+    icon: "fa fa-calendar-check text-yellow",
+    component: Invoices,
+    layout: "/admin",
+  },
+
   {
     path: "/login",
     name: "Login",
     icon: "ni ni-key-25 text-info",
     component: Login,
-    layout: "/auth",
-  },
-  {
-    path: "/register",
-    name: "Rides",
-    icon: "ni ni-circle-08 text-pink",
-    component: Register,
     layout: "/auth",
   },
 ];

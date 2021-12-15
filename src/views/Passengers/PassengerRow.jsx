@@ -6,7 +6,6 @@ import {
   UncontrolledDropdown,
   DropdownToggle,
   Media,
-  Progress,
 } from "reactstrap";
 import ClientAvatar from "./ClientAvatar";
 import PassengerForm from "./PassengerForm";
@@ -51,7 +50,7 @@ const PassengerRow = ({ user }) => {
           {user.phone_number}
         </Badge>
       </td>
-      <td>
+      <td className="text-left">
         {user.client ? (
           <div className="avatar-group">
             <ClientAvatar user={user.client} />
@@ -63,12 +62,7 @@ const PassengerRow = ({ user }) => {
         )}
       </td>
       <td>
-        <div className="d-flex align-items-center">
-          <span className="mr-2">60%</span>
-          <div>
-            <Progress max="100" value="60" barClassName="bg-success" />
-          </div>
-        </div>
+        <div className="d-flex align-items-center"></div>
       </td>
       <td className="text-right">
         <UncontrolledDropdown>

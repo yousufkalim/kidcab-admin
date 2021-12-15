@@ -29,7 +29,7 @@ const QuotesList = () => {
       setQuotes(res.data.quotes);
       console.log(res.data.quotes);
     });
-  }, []);
+  }, [openModal]);
   return (
     <>
       <Container className="mt--7" fluid>

@@ -4,10 +4,10 @@ import DriverList from "./DriverList";
 
 const Drivers = () => {
   return (
-    <div>
+    <>
       <DriverHeader />
       <DriverList />
-    </div>
+    </>
   );
 };
 

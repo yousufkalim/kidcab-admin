@@ -122,7 +122,7 @@ const ClientForm = ({ openModal, handleModal, editUser, isEditing }) => {
   return (
     <>
       <Modal isOpen={openModal} size="xl" centered>
-        <ModalHeader charCode="Y" toggle={handleModal}>
+        <ModalHeader charCode="X" toggle={handleModal}>
           Add Client
         </ModalHeader>
         <ModalBody>
