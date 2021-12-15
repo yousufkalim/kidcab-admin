@@ -80,12 +80,6 @@ const PassengerRow = ({ user }) => {
             <DropdownItem href="#pablo" onClick={handleModal}>
               Edit Profile
             </DropdownItem>
-            <DropdownItem href="#pablo" onClick={(e) => e.preventDefault()}>
-              Add Passenger
-            </DropdownItem>
-            <DropdownItem href="#pablo" onClick={(e) => e.preventDefault()}>
-              Add Trips
-            </DropdownItem>
           </DropdownMenu>
         </UncontrolledDropdown>
       </td>

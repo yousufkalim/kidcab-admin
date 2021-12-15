@@ -26,7 +26,7 @@ const CompanyForm = ({ openModal, handleModal, editUser, isEditing }) => {
     social_capital: "",
     vat_number: "",
     city_of_rcs: "",
-    manager: "",
+    manager: null,
   });
   const [drivers, setDrivers] = useState();
 
@@ -35,6 +35,7 @@ const CompanyForm = ({ openModal, handleModal, editUser, isEditing }) => {
       const fleetManagers = res.data.drivers.filter((driver) => {
         return driver.role === "fleet_manager";
       });
+      console.log(fleetManagers);
       setDrivers(fleetManagers);
     });
   }, []);
@@ -195,12 +196,7 @@ const CompanyForm = ({ openModal, handleModal, editUser, isEditing }) => {
                         {drivers && (
                           <Select
                             onChange={handleVehicleChange}
-                            hideSelectedOptions
                             name="vehicles"
-                            defaultValue={{
-                              value: drivers[0]?._id,
-                              label: `${drivers[0]?.first_name} ${drivers[0]?.last_name}`,
-                            }}
                             className="form-control-alternative"
                             options={drivers.map((driver) => ({
                               value: driver?._id,
