@@ -1,6 +1,6 @@
 import React from "react";
-import TripHeader from "./CompanyHeader";
-import TripList from "./CompanyList";
+import TripHeader from "./TripHeader";
+import TripList from "./TripList";
 
 const Trips = () => {
   return (

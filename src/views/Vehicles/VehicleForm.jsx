@@ -173,6 +173,7 @@ const VehicleForm = ({
                           <Select
                             onChange={handleDriverChange}
                             name="client"
+                            hideSelectedOptions
                             defaultValue={{
                               value: drivers && drivers[0]?._id,
                               label: `${drivers[0]?.first_name} ${drivers[0]?.last_name}`,

@@ -1,16 +1,16 @@
 import React, { useState } from "react";
 import {
+  Badge,
   DropdownMenu,
   DropdownItem,
   UncontrolledDropdown,
   DropdownToggle,
   Media,
 } from "reactstrap";
+import ClientAvatar from "./ClientAvatar";
+import InvoiceForm from "./InvoiceForm";
 
-import CompanyForm from "./CompanyForm";
-import ManagerAvatar from "./ManagerAvatar";
-
-const DriverRow = ({ user: company }) => {
+const InvoiceRow = ({ user }) => {
   const [openModal, setOpenModal] = useState();
   const handleModal = () => {
     setOpenModal((open) => !open);
@@ -25,30 +25,45 @@ const DriverRow = ({ user: company }) => {
             href="#pablo"
             onClick={(e) => e.preventDefault()}
           >
-            {company.logo ? (
+            {user.profile_pic ? (
               <img
                 className="rounded-circle"
                 style={{ width: "100%", height: "100%" }}
-                alt={`${company.company_name} profile pic`}
-                src={process.env.REACT_APP_BASE_URL + company?.logo}
+                alt={`${user.first_name} profile pic`}
+                src={process.env.REACT_APP_BASE_URL + user?.profile_pic}
               />
             ) : (
               <i className="ni ni-circle-08" />
             )}
           </a>
           <Media>
-            <span className="mb-0 text-sm">{company.company_name}</span>
+            <span className="mb-0 text-sm">
+              {user.first_name + " " + user.last_name}
+            </span>
           </Media>
         </Media>
       </th>
-      <td className="text-center">
-        <ManagerAvatar manager={company?.manager} />
+      <td>{user.email}</td>
+      <td>
+        <Badge color="" className="badge-dot mr-4">
+          {/* <i className="bg-warning" /> */}
+          {user.phone_number}
+        </Badge>
       </td>
-      <td className="text-center">{company.city_of_rcs}</td>
-      <td className="text-center">
-        {company.vehicles ? company.vehicles.length : <p>0</p>}
+      <td className="text-left">
+        {user.client ? (
+          <div className="avatar-group">
+            <ClientAvatar user={user.client} />
+          </div>
+        ) : (
+          <p className="mb-0 text-sm" href="#pablo">
+            No Client is added.
+          </p>
+        )}
       </td>
-
+      <td>
+        <div className="d-flex align-items-center"></div>
+      </td>
       <td className="text-right">
         <UncontrolledDropdown>
           <DropdownToggle
@@ -63,19 +78,25 @@ const DriverRow = ({ user: company }) => {
           </DropdownToggle>
           <DropdownMenu className="dropdown-menu-arrow" right>
             <DropdownItem href="#pablo" onClick={handleModal}>
-              Edit Company
+              Edit Profile
+            </DropdownItem>
+            <DropdownItem href="#pablo" onClick={(e) => e.preventDefault()}>
+              Add Passenger
+            </DropdownItem>
+            <DropdownItem href="#pablo" onClick={(e) => e.preventDefault()}>
+              Add Trips
             </DropdownItem>
           </DropdownMenu>
         </UncontrolledDropdown>
       </td>
-      <CompanyForm
+      <InvoiceForm
         openModal={openModal}
         handleModal={handleModal}
-        editUser={company}
+        editUser={user}
         isEditing={true}
       />
     </tr>
   );
 };
 
-export default DriverRow;
+export default InvoiceRow;

@@ -12,13 +12,13 @@ import {
   Row,
   Button,
 } from "reactstrap";
-import CompanyForm from "./CompanyForm";
-import CompanyRow from "./CompanyRow";
+import PassengerForm from "./InvoiceForm";
+import PassengerRow from "./InvoiceRow";
 import { useState } from "react";
 import { useEffect } from "react";
 import api from "../../api/index";
 
-const CompanyList = () => {
+const InvoiceList = () => {
   const [openModal, setOpenModal] = useState(false);
   const [users, setUsers] = useState();
   const handleModal = () => {
@@ -27,18 +27,20 @@ const CompanyList = () => {
   };
 
   useEffect(() => {
-    api("get", "companies").then((res) => setUsers(res.data.companies));
+    api("get", "passengers").then((res) => {
+      setUsers(res.data.passengers);
+    });
   }, [openModal]);
-
   return (
     <>
       <Container className="mt--7" fluid>
+        {/* Table */}
         <Row>
           <div className="col">
             <Card className="shadow">
               <CardHeader className="border-0">
                 <div className="d-flex justify-content-between ">
-                  <h3 className="mb-0">Company List</h3>
+                  <h3 className="mb-0">Invoice List</h3>
                   <Button
                     color="primary"
                     href="#pablo"
@@ -46,36 +48,30 @@ const CompanyList = () => {
                     size="md"
                   >
                     <i className="ni ni-fat-add"></i>
-                    Add Company
+                    Add Invoice
                   </Button>
                 </div>
               </CardHeader>
-              <Table className="align-items-center table-flush my-3" responsive>
+              <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
                   <tr>
-                    <th scope="col">Company Name</th>
-                    <th scope="col" className="text-center">
-                      Company Manager
-                    </th>
-                    <th scope="col" className="text-center">
-                      Location / City
-                    </th>
-                    <th scope="col" className="text-center">
-                      No. of Vehicles
-                    </th>
-                    <th scope="col" className="text-right">
-                      Actions
-                    </th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Issue Date</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Total Price</th>
+                    <th scope="col">Driver</th>
+                    <th scope="col">Client</th>
+                    <th scope="col" />
                   </tr>
                 </thead>
                 <tbody>
                   {users ? (
                     users.map((user) => (
-                      <CompanyRow key={user._id} user={user} />
+                      <PassengerRow key={user._id} user={user} />
                     ))
                   ) : (
                     <tr className="h1 mx-lg-auto text-center">
-                      <td>No Company Found</td>
+                      <td>No Passenger Found</td>
                     </tr>
                   )}
                 </tbody>
@@ -136,7 +132,7 @@ const CompanyList = () => {
           </div>
         </Row>
         {openModal && (
-          <CompanyForm
+          <PassengerForm
             openModal={openModal}
             handleModal={handleModal}
             user={undefined}
@@ -148,4 +144,4 @@ const CompanyList = () => {
   );
 };
 
-export default CompanyList;
+export default InvoiceList;

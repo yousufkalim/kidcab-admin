@@ -7,7 +7,7 @@ const DriverAvatar = ({ user }) => {
       <a
         className="avatar avatar-sm"
         href="#pablo"
-        id="tooltip742438047"
+        id={user.first_name}
         onClick={(e) => e.preventDefault()}
       >
         {user.profile_pic ? (
@@ -21,7 +21,7 @@ const DriverAvatar = ({ user }) => {
           <i className="ni ni-circle-08" />
         )}
       </a>
-      <UncontrolledTooltip delay={0} target="tooltip742438047">
+      <UncontrolledTooltip delay={0} target={user.first_name}>
         {user.first_name + " " + user.last_name}
       </UncontrolledTooltip>
     </>

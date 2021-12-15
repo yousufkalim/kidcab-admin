@@ -201,6 +201,7 @@ const QuotesForm = ({ openModal, handleModal, editQuote, isEditing }) => {
                           <Select
                             onChange={handleClientChange}
                             name="client"
+                            hideSelectedOptions
                             defaultValue={{
                               value: clients[0]._id,
                               label: `${clients[0].first_name} ${clients[0].last_name}`,
@@ -226,6 +227,7 @@ const QuotesForm = ({ openModal, handleModal, editQuote, isEditing }) => {
                           <Select
                             onChange={handlePassengerChange}
                             isMulti
+                            hideSelectedOptions
                             defaultValue={quote.passengers.map((passenger) => ({
                               value: passenger._id,
                               label: `${passenger.first_name} ${passenger.last_name}`,

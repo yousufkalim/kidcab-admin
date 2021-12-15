@@ -299,6 +299,7 @@ const DriverForm = ({ openModal, handleModal, editUser, isEditing }) => {
                         <Select
                           onChange={handleInputChange}
                           name="client"
+                          hideSelectedOptions
                           className="form-control-alternative"
                         />
                       </FormGroup>
@@ -316,6 +317,7 @@ const DriverForm = ({ openModal, handleModal, editUser, isEditing }) => {
                           <Select
                             onChange={handleVehicleChange}
                             name="vehicles"
+                            hideSelectedOptions
                             defaultValue={{
                               value: vehicles[0]?._id,
                               label: `${vehicles[0]?.vehicle_name}`,
