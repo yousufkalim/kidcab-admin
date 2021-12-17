@@ -25,10 +25,18 @@ const ClientList = () => {
     setOpenModal((open) => !open);
     return openModal;
   };
+  const autoRefresh=()=>{api("get", "users").then((res) => 
+  setUsers(res.data.users)
+ 
+  );
+
+}
 
   useEffect(() => {
-    api("get", "users").then((res) => setUsers(res.data.users));
+    // api("get", "users").then((res) => setUsers(res.data.users));
+    autoRefresh()
   }, [openModal]);
+  
   return (
     <>
       <Container className="mt--7" fluid>
@@ -57,14 +65,13 @@ const ClientList = () => {
                     <th scope="col">Email</th>
                     <th scope="col">Phone Number</th>
                     <th scope="col">Passengers</th>
-                    <th scope="col">No. of Trips</th>
                     <th scope="col" />
                   </tr>
                 </thead>
                 <tbody>
                   {users ? (
                     users.map((user) => (
-                      <ClientRow key={user._id} user={user} />
+                      <ClientRow key={user._id} user={user} autoRefresh={autoRefresh} />
                     ))
                   ) : (
                     <tr className="h1 mx-lg-auto text-center">
@@ -134,6 +141,7 @@ const ClientList = () => {
             handleModal={handleModal}
             user={undefined}
             isEditing={false}
+            autoRefresh={autoRefresh}
           />
         )}
       </Container>
