@@ -17,7 +17,7 @@ import {
 
 const ClientForm = ({ openModal, handleModal, editUser, isEditing, autoRefresh }) => {
   const [user, setUser] = useState({
-    image: "",
+    
     firstName: "",
     lastName: "",
     email: "",
@@ -54,10 +54,7 @@ const ClientForm = ({ openModal, handleModal, editUser, isEditing, autoRefresh }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleFileChange = (e) => {
-    setUser({ ...user, image: e.target.files[0] });
-  };
-
+ 
   const handleInputChange = (e) => {
     setUser({ ...user, [e.target.name]: e.target.value });
   };
@@ -94,7 +91,7 @@ const ClientForm = ({ openModal, handleModal, editUser, isEditing, autoRefresh }
     };
 
     const formData = new FormData();
-    if (user.image) formData.append("image", user.image, user.image.name);
+    
     formData.append("first_name", user.firstName);
     formData.append("last_name", user.lastName);
     formData.append("email", user.email);
@@ -138,26 +135,7 @@ const ClientForm = ({ openModal, handleModal, editUser, isEditing, autoRefresh }
                 <h6 className="heading-small text-muted mb-4">
                   User information
                 </h6>
-                <div className="pl-lg-4">
-                  <Row>
-                    <Col lg="12">
-                      <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-image"
-                        >
-                          Add Profile Picture <i className="ni ni-album-2" />
-                        </label>
-                        <Input
-                          className="form-control-file form"
-                          id="input-image"
-                          type="file"
-                          onChange={handleFileChange}
-                        />
-                      </FormGroup>
-                    </Col>
-                  </Row>
-                </div>
+               
 
                 <div className="pl-lg-4">
                   <Row>
