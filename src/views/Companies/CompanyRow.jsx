@@ -10,7 +10,7 @@ import {
 import CompanyForm from "./CompanyForm";
 import ManagerAvatar from "./ManagerAvatar";
 
-const DriverRow = ({ user: company }) => {
+const DriverRow = ({ user: company, autoRefresh }) => {
   const [openModal, setOpenModal] = useState();
   const handleModal = () => {
     setOpenModal((open) => !open);
@@ -73,6 +73,7 @@ const DriverRow = ({ user: company }) => {
         handleModal={handleModal}
         editUser={company}
         isEditing={true}
+        autoRefresh={autoRefresh}
       />
     </tr>
   );

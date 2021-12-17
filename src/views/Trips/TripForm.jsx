@@ -21,6 +21,7 @@ const TripForm = ({
   handleModal,
   editUser: editTrip,
   isEditing,
+  autoRefresh
 }) => {
   const [trip, setTrip] = useState({
     date: "",
@@ -91,6 +92,7 @@ const TripForm = ({
         if (res.status == 200) {
           toast.success("Delete Successfully");
           handleModal();
+          autoRefresh()
         } else {
           toast.error("Delete Error", res.data.message);
         }
@@ -116,6 +118,7 @@ const TripForm = ({
         if (res.status == 200) {
           toast.success("Saved Successfully");
           handleModal();
+          autoRefresh()
         } else {
           toast.error("Save Error", res);
         }

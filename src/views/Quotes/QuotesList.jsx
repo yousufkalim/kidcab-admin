@@ -23,12 +23,12 @@ const QuotesList = () => {
     setOpenModal((open) => !open);
     return openModal;
   };
-
+  const autoRefresh=()=>{ api("get", "quotes").then((res) => {
+    setQuotes(res.data.quotes);
+    console.log(res.data.quotes);
+  });}
   useEffect(() => {
-    api("get", "quotes").then((res) => {
-      setQuotes(res.data.quotes);
-      console.log(res.data.quotes);
-    });
+    autoRefresh()
   }, [openModal]);
   return (
     <>
@@ -67,7 +67,7 @@ const QuotesList = () => {
                 <tbody>
                   {quotes ? (
                     quotes.map((quote) => (
-                      <PassengerRow key={quote._id} quote={quote} />
+                      <PassengerRow key={quote._id} quote={quote} autoRefresh={autoRefresh} />
                     ))
                   ) : (
                     <tr className="h1 mx-lg-auto text-center">
@@ -137,6 +137,7 @@ const QuotesList = () => {
             handleModal={handleModal}
             user={undefined}
             isEditing={false}
+            autoRefresh={autoRefresh}
           />
         )}
       </Container>

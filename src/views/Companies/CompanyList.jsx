@@ -25,9 +25,9 @@ const CompanyList = () => {
     setOpenModal((open) => !open);
     return openModal;
   };
-
+const autoRefresh=()=>{api("get", "companies").then((res) => setUsers(res.data.companies))}
   useEffect(() => {
-    api("get", "companies").then((res) => setUsers(res.data.companies));
+    autoRefresh();
   }, [openModal]);
 
   return (
@@ -71,7 +71,7 @@ const CompanyList = () => {
                 <tbody>
                   {users ? (
                     users.map((user) => (
-                      <CompanyRow key={user._id} user={user} />
+                      <CompanyRow key={user._id} user={user} autoRefresh={autoRefresh}/>
                     ))
                   ) : (
                     <tr className="h1 mx-lg-auto text-center">
@@ -141,6 +141,7 @@ const CompanyList = () => {
             handleModal={handleModal}
             user={undefined}
             isEditing={false}
+            autoRefresh={autoRefresh}
           />
         )}
       </Container>

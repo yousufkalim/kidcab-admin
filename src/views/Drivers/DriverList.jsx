@@ -25,10 +25,10 @@ const DriverList = () => {
     setOpenModal((open) => !open);
     return openModal;
   };
-
+  const autoRefresh=()=>{api("get", "drivers").then((res) => setUsers(res.data.drivers));
+}
   useEffect(() => {
-    api("get", "drivers").then((res) => setUsers(res.data.drivers));
-  }, [openModal]);
+    autoRefresh()} , [openModal]);
   return (
     <>
       <Container className="mt--7" fluid>
@@ -63,7 +63,7 @@ const DriverList = () => {
                 <tbody>
                   {users ? (
                     users.map((user) => (
-                      <DriverRow key={user._id} user={user} />
+                      <DriverRow key={user._id} user={user} autoRefresh={autoRefresh} />
                     ))
                   ) : (
                     <tr className="h1 mx-lg-auto text-center">
@@ -133,6 +133,7 @@ const DriverList = () => {
             handleModal={handleModal}
             user={undefined}
             isEditing={false}
+            autoRefresh={autoRefresh}
           />
         )}
       </Container>

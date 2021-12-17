@@ -10,7 +10,7 @@ import {
 
 import ClientForm from "./DriverForm";
 
-const DriverRow = ({ user }) => {
+const DriverRow = ({ user ,autoRefresh}) => {
   const [openModal, setOpenModal] = useState();
   const handleModal = () => {
     setOpenModal((open) => !open);
@@ -84,6 +84,7 @@ const DriverRow = ({ user }) => {
         handleModal={handleModal}
         editUser={user}
         isEditing={true}
+        autoRefresh={autoRefresh}
       />
     </tr>
   );

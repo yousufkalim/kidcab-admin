@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+
 import {
   Badge,
   DropdownMenu,
@@ -8,35 +9,26 @@ import {
   Media,
   Progress,
 } from "reactstrap";
-import PassengerAvatar from "./PassengerAvatar";
 import ClientForm from "./ClientForm";
+import PassengerForm from '../Passengers/PassengerForm';
 
-const ClientRow = ({ user }) => {
+const ClientRow = ({ user,passenger, autoRefresh }) => {
   const [openModal, setOpenModal] = useState();
   const handleModal = () => {
     setOpenModal((open) => !open);
     return openModal;
   };
+  const [openPassengerModal, setOpenPassengerModal] = useState();
+  const handlePassengerModal = () => {
+    setOpenPassengerModal((open) => !open);
+    return openPassengerModal;
+  };
+  
   return (
     <tr>
       <th scope="row">
         <Media className="align-items-center">
-          <a
-            className="avatar rounded-circle mr-3"
-            href="#pablo"
-            onClick={(e) => e.preventDefault()}
-          >
-            {user.profile_pic ? (
-              <img
-                className="rounded-circle"
-                style={{ width: "100%", height: "100%" }}
-                alt={`${user.first_name} profile pic`}
-                src={process.env.REACT_APP_BASE_URL + user?.profile_pic}
-              />
-            ) : (
-              <i className="ni ni-circle-08" />
-            )}
-          </a>
+        
           <Media>
             <span className="mb-0 text-sm">
               {user.first_name + " " + user.last_name}
@@ -52,26 +44,9 @@ const ClientRow = ({ user }) => {
         </Badge>
       </td>
       <td>
-        <div className="avatar-group">
-          {user.passengers ? (
-            user.passengers.map((passenger) => (
-              <PassengerAvatar passenger={passenger} />
-            ))
-          ) : (
-            <a className="avatar avatar-sm" href="#pablo">
-              No Passenger is added.
-            </a>
-          )}
-        </div>
+      
       </td>
-      <td>
-        <div className="d-flex align-items-center">
-          <span className="mr-2">60%</span>
-          <div>
-            <Progress max="100" value="60" barClassName="bg-success" />
-          </div>
-        </div>
-      </td>
+     
       <td className="text-right">
         <UncontrolledDropdown>
           <DropdownToggle
@@ -88,12 +63,10 @@ const ClientRow = ({ user }) => {
             <DropdownItem href="#pablo" onClick={handleModal}>
               Edit Profile
             </DropdownItem>
-            <DropdownItem href="#pablo" onClick={(e) => e.preventDefault()}>
+            <DropdownItem href="#pablo" onClick={ handlePassengerModal}>
               Add Passenger
             </DropdownItem>
-            <DropdownItem href="#pablo" onClick={(e) => e.preventDefault()}>
-              Add Trips
-            </DropdownItem>
+           
           </DropdownMenu>
         </UncontrolledDropdown>
       </td>
@@ -102,7 +75,14 @@ const ClientRow = ({ user }) => {
         handleModal={handleModal}
         editUser={user}
         isEditing={true}
+        autoRefresh={autoRefresh}
       />
+      <PassengerForm
+    openModal={openPassengerModal}
+    handleModal={handlePassengerModal}
+    editUser={user}
+    isEditing={true}
+  />
     </tr>
   );
 };

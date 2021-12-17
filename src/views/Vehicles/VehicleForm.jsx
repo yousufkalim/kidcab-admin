@@ -22,6 +22,7 @@ const VehicleForm = ({
   handleModal,
   editUser: editVehicle,
   isEditing,
+  autoRefresh
 }) => {
   const [drivers, setDrivers] = useState();
   const [vehicle, setVehicle] = useState({
@@ -75,6 +76,7 @@ const VehicleForm = ({
         if (res.status == 200) {
           toast.success("Delete Successfully");
           handleModal();
+          autoRefresh()
         } else {
           console.log("error");
           toast.error(res.data);
@@ -97,6 +99,7 @@ const VehicleForm = ({
         if (res.status === 200) {
           toast.success("Saved Successfully");
           handleModal();
+          autoRefresh()
         } else {
           toast.error("Save Error", res);
         }

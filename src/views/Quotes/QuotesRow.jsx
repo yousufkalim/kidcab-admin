@@ -3,7 +3,7 @@ import { Badge, UncontrolledDropdown, DropdownToggle, Media } from "reactstrap";
 import ClientAvatar from "./ClientAvatar";
 import QuotesForm from "./QuotesForm";
 
-const QuotesRow = ({ quote }) => {
+const QuotesRow = ({ quote,autoRefresh }) => {
   const [openModal, setOpenModal] = useState();
   const handleModal = () => {
     setOpenModal((open) => !open);
@@ -85,6 +85,7 @@ const QuotesRow = ({ quote }) => {
         handleModal={handleModal}
         editQuote={quote}
         isEditing={true}
+        autoRefresh={autoRefresh}
       />
     </tr>
   );

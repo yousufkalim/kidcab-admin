@@ -9,7 +9,7 @@ import {
 import ClientAvatar from "./DriverAvatar";
 import PassengerForm from "./VehicleForm";
 
-const VehicleRow = ({ user: vehicle }) => {
+const VehicleRow = ({ user: vehicle ,autoRefresh}) => {
   const [openModal, setOpenModal] = useState();
 
   const handleModal = () => {
@@ -66,6 +66,7 @@ const VehicleRow = ({ user: vehicle }) => {
         handleModal={handleModal}
         editUser={vehicle}
         isEditing={true}
+        autoRefresh={autoRefresh}
       />
     </tr>
   );
