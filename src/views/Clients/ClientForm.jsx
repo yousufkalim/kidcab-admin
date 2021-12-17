@@ -15,7 +15,7 @@ import {
 } from "reactstrap";
 // core components
 
-const ClientForm = ({ openModal, handleModal, editUser, isEditing }) => {
+const ClientForm = ({ openModal, handleModal, editUser, isEditing, autoRefresh }) => {
   const [user, setUser] = useState({
     image: "",
     firstName: "",
@@ -74,12 +74,15 @@ const ClientForm = ({ openModal, handleModal, editUser, isEditing }) => {
       if (res.status == 200) {
         toast.success("Delete Successfully");
         handleModal();
+        autoRefresh();
       } else {
         toast.error("Delete Error", res.data.message);
       }
     });
   };
+ 
   const handleSubmit = (e) => {
+   
     e.preventDefault();
     let method = "post";
     let uri = "users";
@@ -112,11 +115,14 @@ const ClientForm = ({ openModal, handleModal, editUser, isEditing }) => {
       // eslint-disable-next-line eqeqeq
       if (res.status == 200) {
         toast.success("Saved Successfully");
+        autoRefresh();
         handleModal();
       } else {
         toast.error("Save Error", res);
       }
     });
+    //window.location.reload();
+
   };
 
   return (
