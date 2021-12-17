@@ -17,7 +17,7 @@ import {
 // core components
 import Select from "react-select";
 
-const CompanyForm = ({ openModal, handleModal, editUser, isEditing }) => {
+const CompanyForm = ({ openModal, handleModal, editUser, isEditing, autoRefresh }) => {
   const [user, setUser] = useState({
     company_name: "",
     logo: "",
@@ -68,6 +68,35 @@ const CompanyForm = ({ openModal, handleModal, editUser, isEditing }) => {
     setUser((user) => ({ ...user, manager: e.value }));
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    let method = "post";
+    let uri = "companies";
+    const formData = new FormData();
+
+    for (const property in user) {
+      formData.append(property, user[property])
+    }
+
+
+    if (editUser) {
+      method = "put";
+      uri = uri + `/${editUser._id}`;
+    }
+    console.log(formData);
+    api(method, uri, formData)
+      .then((res) => {
+        // eslint-disable-next-line eqeqeq
+        if (res.status == 200) {
+          toast.success("Saved Successfully");
+          handleModal();
+          autoRefresh();
+        } else {
+          toast.error("Save Error", res);
+        }
+      })
+      .catch((error) => toast.error(error.message));
+  };
   const handleDelete = () => {
     let method = "delete";
     let uri = "companies";
@@ -81,6 +110,7 @@ const CompanyForm = ({ openModal, handleModal, editUser, isEditing }) => {
         if (res.status == 200) {
           toast.success("Delete Successfully");
           handleModal();
+          autoRefresh();
         } else {
           toast.error("Delete Error", res.data.message);
         }
@@ -89,38 +119,6 @@ const CompanyForm = ({ openModal, handleModal, editUser, isEditing }) => {
         console.log(error);
         toast.error(error.message);
       });
-  };
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    let method = "post";
-    let uri = "companies";
-
-    const formData = new FormData();
-    formData.append("company_name", user.company_name);
-    formData.append("siret_number", user.siret_number);
-    formData.append("legal_info", user.legal_info);
-    formData.append("social_capital", user.social_capital);
-    formData.append("vat_number", user.vat_number);
-    formData.append("city_of_rcs", user.city_of_rcs);
-    formData.append("manager", user.manager);
-    if (user.logo) formData.append("logo", user.logo, user.logo?.name);
-
-    if (editUser) {
-      method = "put";
-      uri = uri + `/${editUser._id}`;
-    }
-    console.log(formData);
-    api(method, uri, formData)
-      .then((res) => {
-        // eslint-disable-next-line eqeqeq
-        if (res.status == 200) {
-          toast.success("Saved Successfully");
-          handleModal();
-        } else {
-          toast.error("Save Error", res);
-        }
-      })
-      .catch((error) => toast.error(error.message));
   };
 
   return (

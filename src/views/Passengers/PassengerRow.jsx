@@ -10,7 +10,7 @@ import {
 import ClientAvatar from "./ClientAvatar";
 import PassengerForm from "./PassengerForm";
 
-const PassengerRow = ({ user }) => {
+const PassengerRow = ({ user,autoRefresh }) => {
   const [openModal, setOpenModal] = useState();
   const handleModal = () => {
     setOpenModal((open) => !open);
@@ -88,6 +88,7 @@ const PassengerRow = ({ user }) => {
         handleModal={handleModal}
         editUser={user}
         isEditing={true}
+        autoRefresh={autoRefresh}
       />
     </tr>
   );

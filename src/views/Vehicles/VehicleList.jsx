@@ -25,11 +25,11 @@ const VehicleList = () => {
     setOpenModal((open) => !open);
     return openModal;
   };
-
+  const autoRefresh=()=>{ api("get", "vehicles").then((res) => {
+    setVehicles(res.data.vehicles);
+  });}
   useEffect(() => {
-    api("get", "vehicles").then((res) => {
-      setVehicles(res.data.vehicles);
-    });
+    autoRefresh()
   }, [openModal]);
   return (
     <>
@@ -66,7 +66,7 @@ const VehicleList = () => {
                 <tbody>
                   {vehicles ? (
                     vehicles.map((user) => (
-                      <PassengerRow key={user._id} user={user} />
+                      <PassengerRow key={user._id} user={user} autoRefresh={autoRefresh}/>
                     ))
                   ) : (
                     <tr className="h1 mx-lg-auto text-center">
@@ -136,6 +136,7 @@ const VehicleList = () => {
             handleModal={handleModal}
             user={undefined}
             isEditing={false}
+            autoRefresh={autoRefresh}
           />
         )}
       </Container>

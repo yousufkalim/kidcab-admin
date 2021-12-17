@@ -25,11 +25,11 @@ const InvoiceList = () => {
     setOpenModal((open) => !open);
     return openModal;
   };
-
+  const autoRefresh=()=>{ api("get", "invoices").then((res) => {
+    setInvoices(res.data.invoices);
+  });}
   useEffect(() => {
-    api("get", "invoices").then((res) => {
-      setInvoices(res.data.invoices);
-    });
+    autoRefresh()
   }, [openModal]);
   return (
     <>
@@ -68,7 +68,7 @@ const InvoiceList = () => {
                 <tbody>
                   {invoices ? (
                     invoices.map((invoice) => (
-                      <InvoiceRow key={invoice._id} invoice={invoice} />
+                      <InvoiceRow key={invoice._id} invoice={invoice} autoRefresh={autoRefresh}/>
                     ))
                   ) : (
                     <tr className="h1 mx-lg-auto text-center">
@@ -138,6 +138,7 @@ const InvoiceList = () => {
             handleModal={handleModal}
             user={undefined}
             isEditing={false}
+            autoRefresh={autoRefresh}
           />
         )}
       </Container>

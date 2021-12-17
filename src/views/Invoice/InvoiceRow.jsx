@@ -9,7 +9,7 @@ import {
 import ClientAvatar from "./ClientAvatar";
 import InvoiceForm from "./InvoiceForm";
 
-const InvoiceRow = ({ invoice }) => {
+const InvoiceRow = ({ invoice,autoRefresh }) => {
   const [openModal, setOpenModal] = useState();
   console.log("client", invoice);
   const handleModal = () => {
@@ -70,6 +70,7 @@ const InvoiceRow = ({ invoice }) => {
         handleModal={handleModal}
         editUser={invoice}
         isEditing={true}
+        autoRefresh={autoRefresh}
       />
     </tr>
   );

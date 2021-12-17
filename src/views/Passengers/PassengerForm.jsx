@@ -16,7 +16,7 @@ import {
 } from "reactstrap";
 // core components
 
-const PassengerForm = ({ openModal, handleModal, editUser, isEditing }) => {
+const PassengerForm = ({ openModal, handleModal, editUser, isEditing,autoRefresh }) => {
   const [user, setUser] = useState({
     image: "",
     firstName: "",
@@ -60,6 +60,7 @@ const PassengerForm = ({ openModal, handleModal, editUser, isEditing }) => {
       if (res.status == 200) {
         toast.success("Delete Successfully");
         handleModal();
+        autoRefresh();
       } else {
         toast.error("Delete Error", res.data.message);
       }
@@ -85,6 +86,7 @@ const PassengerForm = ({ openModal, handleModal, editUser, isEditing }) => {
       if (res.status === 200) {
         toast.success("Saved Successfully");
         handleModal();
+        autoRefresh();
       } else {
         toast.error("Save Error", res);
       }

@@ -17,7 +17,7 @@ import {
 // core components
 import Select from "react-select";
 
-const DriverForm = ({ openModal, handleModal, editUser, isEditing }) => {
+const DriverForm = ({ openModal, handleModal, editUser, isEditing,autoRefresh }) => {
   const [user, setUser] = useState({
     profile_pic: "",
     id_front: "",
@@ -91,6 +91,7 @@ const DriverForm = ({ openModal, handleModal, editUser, isEditing }) => {
       if (res.status == 200) {
         toast.success("Delete Successfully");
         handleModal();
+        autoRefresh();
       } else {
         toast.error("Delete Error", res.data.message);
       }
@@ -161,6 +162,7 @@ const DriverForm = ({ openModal, handleModal, editUser, isEditing }) => {
       if (res.status == 200) {
         toast.success("Saved Successfully");
         handleModal();
+        autoRefresh();
       } else {
         toast.error("Save Error", res);
       }

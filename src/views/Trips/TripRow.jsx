@@ -10,7 +10,7 @@ import {
 import CompanyForm from "./TripForm";
 import ManagerAvatar from "./ManagerAvatar";
 
-const TripRow = ({ trip }) => {
+const TripRow = ({ trip,autoRefresh }) => {
   console.log("trip", trip);
   const [openModal, setOpenModal] = useState();
   const handleModal = () => {
@@ -78,6 +78,7 @@ const TripRow = ({ trip }) => {
         handleModal={handleModal}
         editUser={trip}
         isEditing={true}
+        autoRefresh={autoRefresh}
       />
     </tr>
   );

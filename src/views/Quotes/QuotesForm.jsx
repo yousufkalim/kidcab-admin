@@ -16,7 +16,7 @@ import {
 } from "reactstrap";
 // core components
 import Select from "react-select";
-const QuotesForm = ({ openModal, handleModal, editQuote, isEditing }) => {
+const QuotesForm = ({ openModal, handleModal, editQuote, isEditing,autoRefresh }) => {
   const [quote, setQuote] = useState({
     title: "",
     quoteNumber: "",
@@ -90,6 +90,7 @@ const QuotesForm = ({ openModal, handleModal, editQuote, isEditing }) => {
       if (res.status == 200) {
         toast.success("Delete Successfully");
         handleModal();
+        autoRefresh();
       } else {
         toast.error("Delete Error", res.data.message);
       }
@@ -126,6 +127,7 @@ const QuotesForm = ({ openModal, handleModal, editQuote, isEditing }) => {
       if (res.status === 200) {
         toast.success("Saved Successfully");
         handleModal();
+        autoRefresh();
       } else {
         toast.error("Save Error", res);
       }

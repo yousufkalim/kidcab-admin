@@ -25,12 +25,12 @@ const TripList = () => {
     setOpenModal((open) => !open);
     return openModal;
   };
-
+  const autoRefresh=()=>{ api("get", "trips").then((res) => {
+    console.log("response --------", res.data.trips);
+    setTrips(res.data.trips);
+  });}
   useEffect(() => {
-    api("get", "trips").then((res) => {
-      console.log("response --------", res.data.trips);
-      setTrips(res.data.trips);
-    });
+    autoRefresh()
   }, [openModal]);
 
   return (
@@ -79,7 +79,7 @@ const TripList = () => {
                 </thead>
                 <tbody>
                   {trips ? (
-                    trips.map((trip) => <TripRow key={trip._id} trip={trip} />)
+                    trips.map((trip) => <TripRow key={trip._id} trip={trip} autoRefresh={autoRefresh} />)
                   ) : (
                     <tr className="h1 mx-lg-auto text-center">
                       <td>No Trip Found</td>
@@ -148,6 +148,7 @@ const TripList = () => {
             handleModal={handleModal}
             user={undefined}
             isEditing={false}
+            autoRefresh={autoRefresh}
           />
         )}
       </Container>

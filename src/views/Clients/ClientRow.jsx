@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+
 import {
   Badge,
   DropdownMenu,
@@ -10,13 +11,20 @@ import {
 } from "reactstrap";
 import PassengerAvatar from "./PassengerAvatar";
 import ClientForm from "./ClientForm";
+import PassengerForm from '../Passengers/PassengerForm';
 
-const ClientRow = ({ user }) => {
+const ClientRow = ({ user,passenger, autoRefresh }) => {
   const [openModal, setOpenModal] = useState();
   const handleModal = () => {
     setOpenModal((open) => !open);
     return openModal;
   };
+  const [openPassengerModal, setOpenPassengerModal] = useState();
+  const handlePassengerModal = () => {
+    setOpenPassengerModal((open) => !open);
+    return openPassengerModal;
+  };
+  
   return (
     <tr>
       <th scope="row">
@@ -64,14 +72,7 @@ const ClientRow = ({ user }) => {
           )}
         </div>
       </td>
-      <td>
-        <div className="d-flex align-items-center">
-          <span className="mr-2">60%</span>
-          <div>
-            <Progress max="100" value="60" barClassName="bg-success" />
-          </div>
-        </div>
-      </td>
+     
       <td className="text-right">
         <UncontrolledDropdown>
           <DropdownToggle
@@ -88,12 +89,10 @@ const ClientRow = ({ user }) => {
             <DropdownItem href="#pablo" onClick={handleModal}>
               Edit Profile
             </DropdownItem>
-            <DropdownItem href="#pablo" onClick={(e) => e.preventDefault()}>
+            <DropdownItem href="#pablo" onClick={ handlePassengerModal}>
               Add Passenger
             </DropdownItem>
-            <DropdownItem href="#pablo" onClick={(e) => e.preventDefault()}>
-              Add Trips
-            </DropdownItem>
+           
           </DropdownMenu>
         </UncontrolledDropdown>
       </td>
@@ -102,7 +101,14 @@ const ClientRow = ({ user }) => {
         handleModal={handleModal}
         editUser={user}
         isEditing={true}
+        autoRefresh={autoRefresh}
       />
+      <PassengerForm
+    openModal={openPassengerModal}
+    handleModal={handlePassengerModal}
+    editUser={user}
+    isEditing={true}
+  />
     </tr>
   );
 };
