@@ -16,16 +16,21 @@ import {
 } from "reactstrap";
 // core components
 
-const PassengerForm = ({ openModal, handleModal, editUser, isEditing,autoRefresh }) => {
+const PassengerForm = ({
+  openModal,
+  handleModal,
+  editUser,
+  isEditing,
+  autoRefresh,
+}) => {
   const [user, setUser] = useState({
-    
     firstName: "",
     lastName: "",
     client: "",
     relationship: "",
   });
 
-  const [clients, setClients] = useState();
+  const [clients, setClients] = useState([]);
 
   useEffect(() => {
     api("get", "users").then((res) => setClients(res.data.users));
@@ -33,14 +38,12 @@ const PassengerForm = ({ openModal, handleModal, editUser, isEditing,autoRefresh
       setUser({
         firstName: editUser.first_name,
         lastName: editUser.last_name,
-        password: editUser.password,
-        phone: editUser.phone_number,
+        client: editUser.client._id,
+        relationship: editUser.relationship,
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
- 
 
   const handleInputChange = (e) => {
     setUser({ ...user, [e.target.name]: e.target.value });
@@ -70,7 +73,7 @@ const PassengerForm = ({ openModal, handleModal, editUser, isEditing,autoRefresh
     let uri = "passengers";
 
     const formData = new FormData();
-    
+
     formData.append("first_name", user.firstName);
     formData.append("last_name", user.lastName);
     formData.append("client", user.client);
@@ -104,7 +107,6 @@ const PassengerForm = ({ openModal, handleModal, editUser, isEditing,autoRefresh
                 <h6 className="heading-small text-muted mb-4">
                   Passenger information
                 </h6>
-              
 
                 <div className="pl-lg-4">
                   <Row>
@@ -161,7 +163,12 @@ const PassengerForm = ({ openModal, handleModal, editUser, isEditing,autoRefresh
                           id="exampleSelect"
                           name="client"
                           value={user.client}
-                          defaultValue={clients && clients[0]._id}
+                          defaultValue={
+                            user.client
+                              ? clients?.filter((a) => a._id === user.client)[0]
+                                  ?._id
+                              : clients[0]?._id
+                          }
                           onChange={handleInputChange}
                           className="form-control-alternative"
                           type="select"
