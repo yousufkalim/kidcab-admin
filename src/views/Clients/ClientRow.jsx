@@ -10,10 +10,10 @@ import {
   Progress,
 } from "reactstrap";
 import ClientForm from "./ClientForm";
-import PassengerForm from '../Passengers/PassengerForm';
+import PassengerForm from "../Passengers/PassengerForm";
 
-const ClientRow = ({ user,passenger, autoRefresh }) => {
-  const [openModal, setOpenModal] = useState();
+const ClientRow = ({ user, passenger, autoRefresh }) => {
+  const [openModal, setOpenModal] = useState(false);
   const handleModal = () => {
     setOpenModal((open) => !open);
     return openModal;
@@ -23,12 +23,11 @@ const ClientRow = ({ user,passenger, autoRefresh }) => {
     setOpenPassengerModal((open) => !open);
     return openPassengerModal;
   };
-  
+
   return (
     <tr>
       <th scope="row">
         <Media className="align-items-center">
-        
           <Media>
             <span className="mb-0 text-sm">
               {user.first_name + " " + user.last_name}
@@ -43,10 +42,8 @@ const ClientRow = ({ user,passenger, autoRefresh }) => {
           {user.phone_number}
         </Badge>
       </td>
-      <td>
-      
-      </td>
-     
+      <td></td>
+
       <td className="text-right">
         <UncontrolledDropdown>
           <DropdownToggle
@@ -63,26 +60,27 @@ const ClientRow = ({ user,passenger, autoRefresh }) => {
             <DropdownItem href="#pablo" onClick={handleModal}>
               Edit Profile
             </DropdownItem>
-            <DropdownItem href="#pablo" onClick={ handlePassengerModal}>
+            <DropdownItem href="#pablo" onClick={handlePassengerModal}>
               Add Passenger
             </DropdownItem>
-           
           </DropdownMenu>
         </UncontrolledDropdown>
       </td>
-      <ClientForm
-        openModal={openModal}
-        handleModal={handleModal}
+      {openModal && (
+        <ClientForm
+          openModal={openModal}
+          handleModal={handleModal}
+          editUser={user}
+          isEditing={true}
+          autoRefresh={autoRefresh}
+        />
+      )}
+      <PassengerForm
+        openModal={openPassengerModal}
+        handleModal={handlePassengerModal}
         editUser={user}
         isEditing={true}
-        autoRefresh={autoRefresh}
       />
-      <PassengerForm
-    openModal={openPassengerModal}
-    handleModal={handlePassengerModal}
-    editUser={user}
-    isEditing={true}
-  />
     </tr>
   );
 };

@@ -1,9 +1,7 @@
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
-import axios from "axios";
+import AddressInput from "components/Form/AddressInput";
 import api from "../../api";
-import Autocomplete from "react-autocomplete";
-import { SetAuthToken } from "variables/auth";
 import {
   Modal,
   ModalBody,
@@ -31,7 +29,6 @@ const ClientForm = ({
     email: "",
     password: "",
     phone: "",
-    address: "",
     cnic: "",
     siret: "",
     intraCommunityNo: "",
@@ -40,7 +37,6 @@ const ClientForm = ({
     iban: "",
     gender: "",
   });
-  let [addresses, setAddresses] = useState([]);
   let [address, setAddress] = useState({});
 
   useEffect(() => {
@@ -52,7 +48,6 @@ const ClientForm = ({
         email: editUser.email,
         phone: editUser.phone_number,
         gender: editUser.gender,
-        address: editUser.address.label,
         cnic: editUser.cnic,
         siret: editUser.siret_number,
         intraCommunityNo: editUser.intra_community,
@@ -60,6 +55,7 @@ const ClientForm = ({
         bankName: editUser.bank_info.bankName,
         iban: editUser.bank_info.iban,
       });
+      setAddress(JSON.parse(editUser.address));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -85,78 +81,6 @@ const ClientForm = ({
         toast.error("Delete Error", res.data.message);
       }
     });
-  };
-
-  // Get All Address in drop down List from API
-  const getAllAddress = async (e) => {
-    setUser({ ...user, address: e.target.value });
-
-    delete axios.defaults.headers.common["Authorization"];
-
-    let res = await axios.get(
-      "https://api-adresse.data.gouv.fr/search/?q=" +
-        e.target.value +
-        "&type=housenumber&autocomplete=1"
-    );
-
-    if (localStorage.Authorization) {
-      SetAuthToken(localStorage.Authorization);
-    }
-
-    var addressToSet = []; // //debugger;
-    for (var i = 0; i < res?.data?.features?.length; i++) {
-      addressToSet.push({
-        id: i,
-        label: res?.data?.features[i].properties.label,
-        label2: `${
-          res?.data?.features[i].properties.label +
-          "," +
-          res?.data?.features[i].properties.context
-        }`,
-        city: res?.data?.features[i].properties.city,
-        PostalCode: res?.data?.features[i].properties.postcode,
-        lat: res?.data?.features[0].geometry.coordinates[1],
-        lng: res?.data?.features[0].geometry.coordinates[0],
-      });
-    }
-    if (addressToSet.length === res?.data?.features.length) {
-      setAddresses(addressToSet);
-    }
-  };
-
-  // Set Address in  setAddressValue State
-  const handleAddressSelect = async (item) => {
-    if (item) {
-      for (var i = 0; i < addresses.length; i++) {
-        if (addresses[i].label2 === item) {
-          console.log("Address found ---> ", addresses[i]);
-          var postal_code = addresses[i].PostalCode;
-          var lat = addresses[i].lat;
-          var lng = addresses[i].lng;
-          const city = addresses[i].city;
-          setAddress({
-            ...address,
-            label: addresses[i].label,
-            label2: addresses[i].label2,
-            postal_code,
-            lat,
-            lng,
-            city,
-          });
-          setUser({ ...user, address: addresses[i].label });
-        }
-      }
-    } else {
-      setAddress({
-        ...address,
-        address: "",
-        zip_code: "",
-        lat: "",
-        long: "",
-        city: "",
-      });
-      setUser({ ...user, address: addresses[i].label });
-    }
   };
 
   const handleSubmit = (e) => {
@@ -374,56 +298,9 @@ const ClientForm = ({
                   <Row>
                     <Col md="6">
                       <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-address"
-                        >
-                          Address
-                        </label>
-
-                        {/* Semi automated field for address */}
-                        <Autocomplete
-                          getItemValue={(item) => item.label2}
-                          items={addresses}
-                          value={user.address}
-                          onChange={getAllAddress}
-                          onSelect={handleAddressSelect}
-                          // Custom styling
-                          wrapperStyle={{ display: "block" }}
-                          renderInput={(props) => {
-                            return (
-                              <input
-                                className="form-control form-control-alternative"
-                                placeholder="Address"
-                                {...props}
-                              />
-                            );
-                          }}
-                          renderMenu={function (items, value, style) {
-                            return (
-                              <div
-                                style={{
-                                  ...style,
-                                  ...this.menuStyle,
-                                  zIndex: 1,
-                                  marginTop: "5px",
-                                }}
-                                children={items}
-                              />
-                            );
-                          }}
-                          renderItem={(item, isHighlighted) => (
-                            <div
-                              style={{
-                                background: isHighlighted
-                                  ? "lightgray"
-                                  : "white",
-                                padding: "10px",
-                              }}
-                            >
-                              {item.label}
-                            </div>
-                          )}
+                        <AddressInput
+                          address={address}
+                          setAddress={setAddress}
                         />
                       </FormGroup>
                     </Col>

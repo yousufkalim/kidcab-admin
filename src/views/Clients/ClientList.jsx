@@ -25,18 +25,15 @@ const ClientList = () => {
     setOpenModal((open) => !open);
     return openModal;
   };
-  const autoRefresh=()=>{api("get", "users").then((res) => 
-  setUsers(res.data.users)
- 
-  );
-
-}
+  const autoRefresh = () => {
+    api("get", "users").then((res) => setUsers(res.data.users));
+  };
 
   useEffect(() => {
     // api("get", "users").then((res) => setUsers(res.data.users));
-    autoRefresh()
+    autoRefresh();
   }, [openModal]);
-  
+
   return (
     <>
       <Container className="mt--7" fluid>
@@ -71,7 +68,11 @@ const ClientList = () => {
                 <tbody>
                   {users ? (
                     users.map((user) => (
-                      <ClientRow key={user._id} user={user} autoRefresh={autoRefresh} />
+                      <ClientRow
+                        key={user._id}
+                        user={user}
+                        autoRefresh={autoRefresh}
+                      />
                     ))
                   ) : (
                     <tr className="h1 mx-lg-auto text-center">
