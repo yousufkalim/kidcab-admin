@@ -10,7 +10,7 @@ import {
 
 import PassengerForm from "./PassengerForm";
 
-const PassengerRow = ({ user,autoRefresh }) => {
+const PassengerRow = ({ user, autoRefresh }) => {
   const [openModal, setOpenModal] = useState();
   const handleModal = () => {
     setOpenModal((open) => !open);
@@ -20,7 +20,6 @@ const PassengerRow = ({ user,autoRefresh }) => {
     <tr>
       <th scope="row">
         <Media className="align-items-center">
-     
           <Media>
             <span className="mb-0 text-sm">
               {user.first_name + " " + user.last_name}
@@ -28,17 +27,10 @@ const PassengerRow = ({ user,autoRefresh }) => {
           </Media>
         </Media>
       </th>
-      <td>{user.email}</td>
-      <td>
-        <Badge color="" className="badge-dot mr-4">
-          {/* <i className="bg-warning" /> */}
-          {user.phone_number}
-        </Badge>
-      </td>
-    
-      <td>
-        <div className="d-flex align-items-center"></div>
-      </td>
+      <td>{user.relationship}</td>
+      <td>{user.client.first_name + " " + user.client.last_name}</td>
+
+      <td>{user.client.email}</td>
       <td className="text-right">
         <UncontrolledDropdown>
           <DropdownToggle
@@ -53,7 +45,7 @@ const PassengerRow = ({ user,autoRefresh }) => {
           </DropdownToggle>
           <DropdownMenu className="dropdown-menu-arrow" right>
             <DropdownItem href="#pablo" onClick={handleModal}>
-              Edit Profile
+              Edit Passenger
             </DropdownItem>
           </DropdownMenu>
         </UncontrolledDropdown>
