@@ -6,7 +6,6 @@ import Drivers from "../views/Drivers/Drivers";
 import Invoices from "../views/Invoice/Invoices";
 import Quotes from "../views/Quotes/Quotes";
 import Vehicles from "../views/Vehicles";
-import Companies from "../views/Companies/";
 import Trips from "../views/Trips/Trips";
 
 var routes = [
@@ -36,13 +35,6 @@ var routes = [
     name: "Quotes",
     icon: "ni ni-ruler-pencil text-info",
     component: Quotes,
-    layout: "/admin",
-  },
-  {
-    path: "/companies",
-    name: "Companies",
-    icon: "ni ni-building text-red",
-    component: Companies,
     layout: "/admin",
   },
   {
