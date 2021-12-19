@@ -87,6 +87,7 @@ const ClientRow = ({ user, passenger, autoRefresh }) => {
           openModal={openPassengerModal}
           handleModal={handlePassengerModal}
           clientId={clientId}
+          autoRefresh={autoRefresh}
         />
       )}
     </tr>

@@ -16,7 +16,7 @@ import {
 } from "reactstrap";
 // core components
 
-const PassengerForm = ({ openModal, handleModal, clientId }) => {
+const PassengerForm = ({ openModal, handleModal, clientId, autoRefresh }) => {
   const [user, setUser] = useState({
     firstName: "",
     lastName: "",
@@ -44,6 +44,7 @@ const PassengerForm = ({ openModal, handleModal, clientId }) => {
       if (res.status === 200) {
         toast.success("Saved Successfully");
         handleModal();
+        autoRefresh();
       } else {
         toast.error("Save Error", res);
       }
