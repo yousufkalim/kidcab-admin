@@ -67,6 +67,8 @@ const DriverForm = ({
       setUser({
         firstName: editUser.first_name,
         lastName: editUser.last_name,
+        password: editUser.password,
+        email: editUser.email,
         phone: editUser.phone_number,
         role: editUser.role,
         services: editUser.services,

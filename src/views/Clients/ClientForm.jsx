@@ -180,46 +180,48 @@ const ClientForm = ({
                       </FormGroup>
                     </Col>
                   </Row>
-                  <Row>
-                    <Col lg="6">
-                      <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-email"
-                        >
-                          Email Address
-                        </label>
-                        <Input
-                          className="form-control-alternative"
-                          id="input-email"
-                          placeholder="johndoe@example.com"
-                          type="text"
-                          value={user.email}
-                          name="email"
-                          onChange={handleInputChange}
-                        />
-                      </FormGroup>
-                    </Col>
-                    <Col lg="6">
-                      <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-password"
-                        >
-                          Password
-                        </label>
-                        <Input
-                          className="form-control-alternative"
-                          id="input-password"
-                          placeholder="Password"
-                          type="password"
-                          value={user.password}
-                          name="password"
-                          onChange={handleInputChange}
-                        />
-                      </FormGroup>
-                    </Col>
-                  </Row>
+                  {!isEditing && (
+                    <Row>
+                      <Col lg="6">
+                        <FormGroup>
+                          <label
+                            className="form-control-label"
+                            htmlFor="input-email"
+                          >
+                            Email Address
+                          </label>
+                          <Input
+                            className="form-control-alternative"
+                            id="input-email"
+                            placeholder="johndoe@example.com"
+                            type="text"
+                            value={user.email}
+                            name="email"
+                            onChange={handleInputChange}
+                          />
+                        </FormGroup>
+                      </Col>
+                      <Col lg="6">
+                        <FormGroup>
+                          <label
+                            className="form-control-label"
+                            htmlFor="input-password"
+                          >
+                            Password
+                          </label>
+                          <Input
+                            className="form-control-alternative"
+                            id="input-password"
+                            placeholder="Password"
+                            type="password"
+                            value={user.password}
+                            name="password"
+                            onChange={handleInputChange}
+                          />
+                        </FormGroup>
+                      </Col>
+                    </Row>
+                  )}
                 </div>
                 <div className="pl-lg-4">
                   <h6 className="heading-small text-muted mb-4">Gender</h6>
