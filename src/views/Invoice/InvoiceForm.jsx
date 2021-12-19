@@ -17,7 +17,13 @@ import {
 } from "reactstrap";
 // core components
 
-const InvoiceForm = ({ openModal, handleModal, editUser, isEditing,autoRefresh }) => {
+const InvoiceForm = ({
+  openModal,
+  handleModal,
+  editUser,
+  isEditing,
+  autoRefresh,
+}) => {
   const [user, setUser] = useState({
     invoice_title: "",
     issue_date: "",
@@ -26,12 +32,13 @@ const InvoiceForm = ({ openModal, handleModal, editUser, isEditing,autoRefresh }
     trip: "",
   });
 
-  const [trips, setTrips] = useState();
+  const [trips, setTrips] = useState([]);
 
   useEffect(() => {
     api("get", "trips").then((res) => {
       setTrips(res.data.trips);
     });
+
     if (isEditing) {
       setUser({
         invoice_title: editUser.invoice_title,
@@ -48,6 +55,10 @@ const InvoiceForm = ({ openModal, handleModal, editUser, isEditing,autoRefresh }
     setUser({ ...user, [e.target.name]: e.target.value });
   };
 
+  const handleTripChange = (e) => {
+    setUser({ ...user, trip: e.value });
+  };
+
   const handleDelete = () => {
     let method = "delete";
     let uri = "invoices";
@@ -60,7 +71,7 @@ const InvoiceForm = ({ openModal, handleModal, editUser, isEditing,autoRefresh }
       if (res.status == 200) {
         toast.success("Delete Successfully");
         handleModal();
-        autoRefresh()
+        autoRefresh();
       } else {
         toast.error("Delete Error", res.data.message);
       }
@@ -79,7 +90,7 @@ const InvoiceForm = ({ openModal, handleModal, editUser, isEditing,autoRefresh }
       if (res.status === 200) {
         toast.success("Saved Successfully");
         handleModal();
-        autoRefresh()
+        autoRefresh();
       } else {
         toast.error("Save Error", res);
       }
@@ -142,7 +153,34 @@ const InvoiceForm = ({ openModal, handleModal, editUser, isEditing,autoRefresh }
                     </Col>
                   </Row>
                   <Row>
-                    <Col lg="6">
+                    <Col lg="4">
+                      <FormGroup>
+                        <Label
+                          for="exampleSelect"
+                          className="form-control-label"
+                        >
+                          Select Trip
+                        </Label>
+                        {console.log(trips[0])}
+                        {trips && (
+                          <Select
+                            onChange={handleTripChange}
+                            name="trip"
+                            hideSelectedOptions
+                            defaultValue={{
+                              value: trips[0]?._id,
+                              label: `${trips[0]?.client?.first_name} - ${trips[0]?.quote?.quote_title}`,
+                            }}
+                            className="form-control-alternative"
+                            options={trips.map((trip) => ({
+                              value: trip._id,
+                              label: `${trip.client?.first_name} - ${trip.quote?.quote_title}`,
+                            }))}
+                          />
+                        )}
+                      </FormGroup>
+                    </Col>
+                    <Col lg="4">
                       <FormGroup>
                         <Label
                           for="exampleSelect"
@@ -165,7 +203,7 @@ const InvoiceForm = ({ openModal, handleModal, editUser, isEditing,autoRefresh }
                         </Input>
                       </FormGroup>
                     </Col>
-                    <Col lg="6">
+                    <Col lg="4">
                       <FormGroup>
                         <Label
                           for="exampleSelect"
@@ -182,34 +220,6 @@ const InvoiceForm = ({ openModal, handleModal, editUser, isEditing,autoRefresh }
                           value={user.total_price}
                           onChange={handleInputChange}
                         />
-                      </FormGroup>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col lg="6">
-                      <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-fname"
-                        >
-                          Assigned Drivers
-                        </label>
-                        {trips && (
-                          <Select
-                            onChange={(e) =>
-                              setUser((trip) => ({
-                                ...user,
-                                trip: e.value,
-                              }))
-                            }
-                            name="assignedDrivers"
-                            className="form-control-alternative"
-                            options={trips.map((trip) => ({
-                              value: trip?._id,
-                              label: `${trip?.quote?.quote_title}`,
-                            }))}
-                          />
-                        )}
                       </FormGroup>
                     </Col>
                   </Row>

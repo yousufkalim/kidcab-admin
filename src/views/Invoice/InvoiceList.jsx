@@ -61,7 +61,7 @@ const InvoiceList = () => {
                     <th scope="col">Issue Date</th>
                     <th scope="col">Status</th>
                     <th scope="col">Total Price</th>
-                    <th scope="col">Client</th>
+                    <th scope="col">Trip</th>
                     <th scope="col" className="text-right">
                       Actions
                     </th>

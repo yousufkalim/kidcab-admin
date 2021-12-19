@@ -9,7 +9,7 @@ import {
 import ClientAvatar from "./ClientAvatar";
 import InvoiceForm from "./InvoiceForm";
 
-const InvoiceRow = ({ invoice,autoRefresh }) => {
+const InvoiceRow = ({ invoice, autoRefresh }) => {
   const [openModal, setOpenModal] = useState();
   console.log("client", invoice);
   const handleModal = () => {
@@ -35,15 +35,8 @@ const InvoiceRow = ({ invoice,autoRefresh }) => {
         <div className="d-flex align-items-center">{invoice.total_price}</div>
       </td>
       <td className="text-left">
-        {invoice?.trip?.client ? (
-          <div className="avatar-group">
-            <ClientAvatar user={invoice.trip.client} />
-          </div>
-        ) : (
-          <p className="mb-0 text-sm" href="#pablo">
-            No Client is added.
-          </p>
-        )}
+        {invoice?.trip?.client?.first_name} -{" "}
+        {invoice?.trip?.quote?.quote_title}
       </td>
 
       <td className="text-right">
