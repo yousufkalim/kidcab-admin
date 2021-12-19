@@ -299,6 +299,7 @@ const ClientForm = ({
                     <Col md="6">
                       <FormGroup>
                         <AddressInput
+                          label="Address"
                           address={address}
                           setAddress={setAddress}
                         />
