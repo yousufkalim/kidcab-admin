@@ -10,7 +10,7 @@ import {
   Progress,
 } from "reactstrap";
 import ClientForm from "./ClientForm";
-import PassengerForm from "../Passengers/PassengerForm";
+import PassengerForm from "./AddPassenger";
 
 const ClientRow = ({ user, passenger, autoRefresh }) => {
   const [openModal, setOpenModal] = useState(false);
@@ -18,8 +18,12 @@ const ClientRow = ({ user, passenger, autoRefresh }) => {
     setOpenModal((open) => !open);
     return openModal;
   };
-  const [openPassengerModal, setOpenPassengerModal] = useState();
-  const handlePassengerModal = () => {
+
+  let [clientId, setClientId] = useState("");
+  const [openPassengerModal, setOpenPassengerModal] = useState(false);
+
+  const handlePassengerModal = (id) => {
+    setClientId(id || clientId);
     setOpenPassengerModal((open) => !open);
     return openPassengerModal;
   };
@@ -60,7 +64,10 @@ const ClientRow = ({ user, passenger, autoRefresh }) => {
             <DropdownItem href="#pablo" onClick={handleModal}>
               Edit Profile
             </DropdownItem>
-            <DropdownItem href="#pablo" onClick={handlePassengerModal}>
+            <DropdownItem
+              href="#pablo"
+              onClick={() => handlePassengerModal(user._id)}
+            >
               Add Passenger
             </DropdownItem>
           </DropdownMenu>
@@ -75,12 +82,13 @@ const ClientRow = ({ user, passenger, autoRefresh }) => {
           autoRefresh={autoRefresh}
         />
       )}
-      <PassengerForm
-        openModal={openPassengerModal}
-        handleModal={handlePassengerModal}
-        editUser={user}
-        isEditing={true}
-      />
+      {openPassengerModal && (
+        <PassengerForm
+          openModal={openPassengerModal}
+          handleModal={handlePassengerModal}
+          clientId={clientId}
+        />
+      )}
     </tr>
   );
 };
