@@ -3,8 +3,8 @@ import { Badge, UncontrolledDropdown, DropdownToggle, Media } from "reactstrap";
 import ClientAvatar from "./ClientAvatar";
 import QuotesForm from "./QuotesForm";
 
-const QuotesRow = ({ quote,autoRefresh }) => {
-  const [openModal, setOpenModal] = useState();
+const QuotesRow = ({ quote, autoRefresh }) => {
+  const [openModal, setOpenModal] = useState(false);
   const handleModal = () => {
     setOpenModal((open) => !open);
     return openModal;
@@ -80,13 +80,15 @@ const QuotesRow = ({ quote,autoRefresh }) => {
           </DropdownToggle>
         </UncontrolledDropdown>
       </td>
-      <QuotesForm
-        openModal={openModal}
-        handleModal={handleModal}
-        editQuote={quote}
-        isEditing={true}
-        autoRefresh={autoRefresh}
-      />
+      {openModal && (
+        <QuotesForm
+          openModal={openModal}
+          handleModal={handleModal}
+          editQuote={quote}
+          isEditing={true}
+          autoRefresh={autoRefresh}
+        />
+      )}
     </tr>
   );
 };

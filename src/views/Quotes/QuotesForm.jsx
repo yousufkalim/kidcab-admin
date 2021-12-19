@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import api from "../../api";
+import AddressInput from "components/Form/AddressInput";
 import {
   Modal,
   ModalBody,
@@ -16,7 +17,13 @@ import {
 } from "reactstrap";
 // core components
 import Select from "react-select";
-const QuotesForm = ({ openModal, handleModal, editQuote, isEditing,autoRefresh }) => {
+const QuotesForm = ({
+  openModal,
+  handleModal,
+  editQuote,
+  isEditing,
+  autoRefresh,
+}) => {
   const [quote, setQuote] = useState({
     title: "",
     quoteNumber: "",
@@ -30,10 +37,10 @@ const QuotesForm = ({ openModal, handleModal, editQuote, isEditing,autoRefresh }
     vat: "",
     startDate: "",
     endDate: "",
-    startAddress: "",
-    endAddress: "",
     docuSignLink: "",
   });
+  let [startAddress, setStartAddress] = useState({});
+  let [endAddress, setEndAddress] = useState({});
 
   const [clients, setClients] = useState();
   const [passengers, setPassengers] = useState();
@@ -55,10 +62,11 @@ const QuotesForm = ({ openModal, handleModal, editQuote, isEditing,autoRefresh }
         vat: editQuote.vat,
         startDate: editQuote.trip_info.start_date,
         endDate: editQuote.trip_info.end_date,
-        startAddress: editQuote.trip_info.start_address,
-        endAddress: editQuote.trip_info.end_address,
         docuSignLink: editQuote.docu_sign_link,
       });
+
+      setStartAddress(editQuote.trip_info.start_address);
+      setEndAddress(editQuote.trip_info.end_address);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -105,9 +113,10 @@ const QuotesForm = ({ openModal, handleModal, editQuote, isEditing,autoRefresh }
       total_passengers: quote.totalPassengers,
       start_date: quote.startDate,
       end_date: quote.endDate,
-      start_address: quote.startAddress,
-      end_address: quote.endAddress,
+      start_address: startAddress,
+      end_address: endAddress,
     };
+
     const formData = {};
     formData["quote_title"] = quote.title;
     formData["passengers"] = quote.passengers;
@@ -119,10 +128,12 @@ const QuotesForm = ({ openModal, handleModal, editQuote, isEditing,autoRefresh }
     formData["status"] = quote.status;
     formData["trip_info"] = JSON.stringify(tripInfo);
     formData["docu_sign_link"] = quote.docuSignLink;
+
     if (editQuote) {
       method = "put";
       uri = uri + `/${editQuote._id}`;
     }
+
     api(method, uri, formData).then((res) => {
       if (res.status === 200) {
         toast.success("Saved Successfully");
@@ -419,40 +430,19 @@ const QuotesForm = ({ openModal, handleModal, editQuote, isEditing,autoRefresh }
                   <Row>
                     <Col lg="6">
                       <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-fname"
-                        >
-                          Start Address
-                        </label>
-                        <Input
-                          className="form-control-alternative"
-                          id="input-fname"
-                          required={true}
-                          placeholder="Start Address"
-                          type="text"
-                          value={quote.startAddress}
-                          name="startAddress"
-                          onChange={handleInputChange}
+                        <AddressInput
+                          label="Start Address"
+                          address={startAddress}
+                          setAddress={setStartAddress}
                         />
                       </FormGroup>
                     </Col>
                     <Col lg="6">
                       <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-lname"
-                        >
-                          End Address
-                        </label>
-                        <Input
-                          className="form-control-alternative"
-                          id="input-lname"
-                          placeholder="End Address"
-                          type="text"
-                          value={quote.endAddress}
-                          name="endAddress"
-                          onChange={handleInputChange}
+                        <AddressInput
+                          label="End Address"
+                          address={endAddress}
+                          setAddress={setEndAddress}
                         />
                       </FormGroup>
                     </Col>
