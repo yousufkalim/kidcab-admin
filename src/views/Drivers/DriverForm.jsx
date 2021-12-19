@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import api from "../../api";
+import AddressInput from "components/Form/AddressInput";
 import {
   Modal,
   ModalBody,
@@ -17,7 +18,13 @@ import {
 // core components
 import Select from "react-select";
 
-const DriverForm = ({ openModal, handleModal, editUser, isEditing,autoRefresh }) => {
+const DriverForm = ({
+  openModal,
+  handleModal,
+  editUser,
+  isEditing,
+  autoRefresh,
+}) => {
   const [user, setUser] = useState({
     profile_pic: "",
     id_front: "",
@@ -33,13 +40,13 @@ const DriverForm = ({ openModal, handleModal, editUser, isEditing,autoRefresh })
     email: "",
     password: "",
     phone: "",
-    address: "",
     bankAccountNo: "",
     bankName: "",
     iban: "",
     role: "",
     vehicles: [],
   });
+  const [address, setAddress] = useState({});
   const [vehicles, setVehicles] = useState();
 
   useEffect(() => {
@@ -57,12 +64,12 @@ const DriverForm = ({ openModal, handleModal, editUser, isEditing,autoRefresh })
         email: editUser.email,
         phone: editUser.phone_number,
         role: editUser.role,
-        address: editUser.address,
         bankAccountNo: editUser.bank_info.account_number,
         bankName: editUser.bank_info.bank_name,
         iban: editUser.bank_info.iban,
         vehicles: editUser.vehicles,
       });
+      setAddress(editUser.address);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -115,7 +122,7 @@ const DriverForm = ({ openModal, handleModal, editUser, isEditing,autoRefresh })
     formData.append("password", user.password);
     formData.append("role", user.role);
     formData.append("phone_number", user.phone);
-    formData.append("address", user.address);
+    formData.append("address", JSON.stringify(address));
     formData.append("vehicles", user.vehicles);
     formData.append("bank_info", JSON.stringify(bankInfo));
     if (user.profile_pic)
@@ -389,20 +396,10 @@ const DriverForm = ({ openModal, handleModal, editUser, isEditing,autoRefresh })
                   <Row>
                     <Col md="6">
                       <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-address"
-                        >
-                          Address
-                        </label>
-                        <Input
-                          className="form-control-alternative"
-                          id="input-address"
-                          placeholder="Home Address"
-                          type="text"
-                          value={user.address}
-                          name="address"
-                          onChange={handleInputChange}
+                        <AddressInput
+                          label="Address"
+                          address={address}
+                          setAddress={setAddress}
                         />
                       </FormGroup>
                     </Col>

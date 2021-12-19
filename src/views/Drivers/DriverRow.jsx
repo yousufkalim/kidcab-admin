@@ -8,10 +8,10 @@ import {
   Media,
 } from "reactstrap";
 
-import ClientForm from "./DriverForm";
+import DriverForm from "./DriverForm";
 
-const DriverRow = ({ user ,autoRefresh}) => {
-  const [openModal, setOpenModal] = useState();
+const DriverRow = ({ user, autoRefresh }) => {
+  const [openModal, setOpenModal] = useState(false);
   const handleModal = () => {
     setOpenModal((open) => !open);
     return openModal;
@@ -79,13 +79,16 @@ const DriverRow = ({ user ,autoRefresh}) => {
           </DropdownMenu>
         </UncontrolledDropdown>
       </td>
-      <ClientForm
-        openModal={openModal}
-        handleModal={handleModal}
-        editUser={user}
-        isEditing={true}
-        autoRefresh={autoRefresh}
-      />
+
+      {openModal && (
+        <DriverForm
+          openModal={openModal}
+          handleModal={handleModal}
+          editUser={user}
+          isEditing={true}
+          autoRefresh={autoRefresh}
+        />
+      )}
     </tr>
   );
 };
