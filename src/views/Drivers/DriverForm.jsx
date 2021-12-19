@@ -44,6 +44,7 @@ const DriverForm = ({
     bankName: "",
     iban: "",
     role: "individual",
+    services: "monthly",
     vehicles: [],
     company_name: "",
     siret_number: "",
@@ -70,6 +71,7 @@ const DriverForm = ({
         email: editUser.email,
         phone: editUser.phone_number,
         role: editUser.role,
+        services: editUser.services,
         bankAccountNo: editUser.bank_info.account_number,
         bankName: editUser.bank_info.bank_name,
         iban: editUser.bank_info.iban,
@@ -100,6 +102,10 @@ const DriverForm = ({
 
   const handleRoleChange = (e) => {
     setUser((user) => ({ ...user, role: e.value }));
+  };
+
+  const handleServiceChange = (e) => {
+    setUser((user) => ({ ...user, services: e.value }));
   };
 
   const handleDelete = () => {
@@ -137,6 +143,7 @@ const DriverForm = ({
     formData.append("email", user.email);
     formData.append("password", user.password);
     formData.append("role", user.role);
+    formData.append("services", user.services);
     formData.append("phone_number", user.phone);
     formData.append("address", JSON.stringify(address));
     formData.append("vehicles", user.vehicles);
@@ -325,7 +332,7 @@ const DriverForm = ({
                 </div>
                 <div className="pl-lg-4">
                   <Row>
-                    <Col lg="6">
+                    <Col lg="4">
                       <FormGroup>
                         <Label
                           for="exampleSelect"
@@ -352,7 +359,7 @@ const DriverForm = ({
                         )}
                       </FormGroup>
                     </Col>
-                    <Col lg="6">
+                    <Col lg="4">
                       <FormGroup>
                         <Label
                           for="exampleSelect"
@@ -378,6 +385,37 @@ const DriverForm = ({
                             {
                               value: "fleet_manager",
                               label: "fleet_manager",
+                            },
+                          ]}
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col lg="4">
+                      <FormGroup>
+                        <Label
+                          for="exampleSelect"
+                          className="form-control-label"
+                        >
+                          Select Service
+                        </Label>
+
+                        <Select
+                          onChange={handleServiceChange}
+                          name="services"
+                          hideSelectedOptions
+                          defaultValue={{
+                            value: user.services,
+                            label: user.services,
+                          }}
+                          className="form-control-alternative"
+                          options={[
+                            {
+                              value: "monthly",
+                              label: "monthly",
+                            },
+                            {
+                              value: "per_ride",
+                              label: "per_ride",
                             },
                           ]}
                         />
