@@ -43,8 +43,14 @@ const DriverForm = ({
     bankAccountNo: "",
     bankName: "",
     iban: "",
-    role: "",
+    role: "individual",
     vehicles: [],
+    company_name: "",
+    siret_number: "",
+    legal_info: "",
+    social_capital: "",
+    vat_number: "",
+    city_of_rcs: "",
   });
   const [address, setAddress] = useState({});
   const [vehicles, setVehicles] = useState();
@@ -68,6 +74,12 @@ const DriverForm = ({
         bankName: editUser.bank_info.bank_name,
         iban: editUser.bank_info.iban,
         vehicles: editUser.vehicles,
+        company_name: editUser.company?.company_name,
+        siret_number: editUser.company?.siret_number,
+        legal_info: editUser.company?.legal_info,
+        social_capital: editUser.company?.social_capital,
+        vat_number: editUser.company?.vat_number,
+        city_of_rcs: editUser.company?.city_of_rcs,
       });
       setAddress(editUser.address);
     }
@@ -84,6 +96,10 @@ const DriverForm = ({
 
   const handleVehicleChange = (e) => {
     setUser((user) => ({ ...user, vehicles: e.value }));
+  };
+
+  const handleRoleChange = (e) => {
+    setUser((user) => ({ ...user, role: e.value }));
   };
 
   const handleDelete = () => {
@@ -125,6 +141,19 @@ const DriverForm = ({
     formData.append("address", JSON.stringify(address));
     formData.append("vehicles", user.vehicles);
     formData.append("bank_info", JSON.stringify(bankInfo));
+    if (user.role === "fleet_manager") {
+      formData.append(
+        "company",
+        JSON.stringify({
+          company_name: user.company_name,
+          siret_number: user.siret_number,
+          legal_info: user.legal_info,
+          social_capital: user.social_capital,
+          vat_number: user.vat_number,
+          city_of_rcs: user.city_of_rcs,
+        })
+      );
+    }
     if (user.profile_pic)
       formData.append("profile_pic", user.profile_pic, user.profile_pic?.name);
     if (user.id_front)
@@ -302,23 +331,6 @@ const DriverForm = ({
                           for="exampleSelect"
                           className="form-control-label"
                         >
-                          Select Company
-                        </Label>
-
-                        <Select
-                          onChange={handleInputChange}
-                          name="client"
-                          hideSelectedOptions
-                          className="form-control-alternative"
-                        />
-                      </FormGroup>
-                    </Col>
-                    <Col lg="6">
-                      <FormGroup>
-                        <Label
-                          for="exampleSelect"
-                          className="form-control-label"
-                        >
                           Select Vehicle
                         </Label>
 
@@ -340,53 +352,178 @@ const DriverForm = ({
                         )}
                       </FormGroup>
                     </Col>
-                  </Row>
-                </div>
-                <div className="pl-lg-4">
-                  <h6 className="heading-small text-muted mb-4">Role</h6>
-                  <Row>
-                    <Col lg="5">
+                    <Col lg="6">
                       <FormGroup>
-                        <label
+                        <Label
+                          for="exampleSelect"
                           className="form-control-label"
-                          htmlFor="input-male"
                         >
-                          Individual
-                        </label>
-                        <Input
-                          className="form-control-lg"
-                          id="input-male"
-                          required={true}
-                          checked={user.role === "individual"}
-                          type="radio"
+                          Select Role
+                        </Label>
+
+                        <Select
+                          onChange={handleRoleChange}
                           name="role"
-                          value="individual"
-                          onChange={handleInputChange}
-                        />
-                      </FormGroup>
-                    </Col>
-                    <Col lg="5">
-                      <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-female"
-                        >
-                          FleetManager
-                        </label>
-                        <Input
-                          className="form-control-lg"
-                          id="input-female"
-                          required={true}
-                          checked={user.role === "fleet_manager"}
-                          type="radio"
-                          name="role"
-                          value="fleet_manager"
-                          onChange={handleInputChange}
+                          hideSelectedOptions
+                          defaultValue={{
+                            value: user.role,
+                            label: user.role,
+                          }}
+                          className="form-control-alternative"
+                          options={[
+                            {
+                              value: "individual",
+                              label: "individual",
+                            },
+                            {
+                              value: "fleet_manager",
+                              label: "fleet_manager",
+                            },
+                          ]}
                         />
                       </FormGroup>
                     </Col>
                   </Row>
                 </div>
+
+                {user.role === "fleet_manager" && (
+                  <>
+                    <hr className="my-4" />
+
+                    {/* Contact Information */}
+                    <h6 className="heading-small text-muted mb-4">
+                      Company information
+                    </h6>
+
+                    <div className="pl-lg-4">
+                      <Row>
+                        <Col lg="6">
+                          <FormGroup>
+                            <label
+                              className="form-control-label"
+                              htmlFor="input-fname"
+                            >
+                              Company Name
+                            </label>
+                            <Input
+                              className="form-control-alternative"
+                              id="input-fname"
+                              required={true}
+                              placeholder="Enter Company Name"
+                              type="text"
+                              value={user.company_name}
+                              name="company_name"
+                              onChange={handleInputChange}
+                            />
+                          </FormGroup>
+                        </Col>
+
+                        <Col md="6">
+                          <FormGroup>
+                            <label
+                              className="form-control-label"
+                              htmlFor="input-address"
+                            >
+                              City of RCS
+                            </label>
+                            <Input
+                              className="form-control-alternative"
+                              id="input-address"
+                              placeholder="City of RCS"
+                              type="text"
+                              value={user.city_of_rcs}
+                              name="city_of_rcs"
+                              onChange={handleInputChange}
+                            />
+                          </FormGroup>
+                        </Col>
+                      </Row>
+                    </div>
+                    <div className="pl-lg-4">
+                      <Row>
+                        <Col lg="6">
+                          <FormGroup>
+                            <label
+                              className="form-control-label"
+                              htmlFor="input-email"
+                            >
+                              SIRET Number
+                            </label>
+                            <Input
+                              className="form-control-alternative"
+                              id="input-email"
+                              placeholder="123456789"
+                              type="text"
+                              value={user.siret_number}
+                              name="siret_number"
+                              onChange={handleInputChange}
+                            />
+                          </FormGroup>
+                        </Col>
+                        <Col lg="6">
+                          <FormGroup>
+                            <label
+                              className="form-control-label"
+                              htmlFor="input-vat"
+                            >
+                              VAT Number
+                            </label>
+                            <Input
+                              className="form-control-alternative"
+                              id="input-vat"
+                              placeholder="VAT Number"
+                              type="text"
+                              value={user.vat_number}
+                              name="vat_number"
+                              onChange={handleInputChange}
+                            />
+                          </FormGroup>
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col lg="6">
+                          <FormGroup>
+                            <label
+                              className="form-control-label"
+                              htmlFor="input-account"
+                            >
+                              Enter Social Capital
+                            </label>
+                            <Input
+                              className="form-control-alternative"
+                              id="input-account"
+                              placeholder="XXXXX-XXXXXXX-X"
+                              type="text"
+                              value={user.social_capital}
+                              name="social_capital"
+                              onChange={handleInputChange}
+                            />
+                          </FormGroup>
+                        </Col>
+                        <Col lg="6">
+                          <FormGroup>
+                            <label
+                              className="form-control-label"
+                              htmlFor="input-bankName"
+                            >
+                              Enter Legal Information
+                            </label>
+                            <Input
+                              className="form-control-alternative"
+                              id="input-bankName"
+                              placeholder="Legal Information here..."
+                              type="text"
+                              value={user.legal_info}
+                              name="legal_info"
+                              onChange={handleInputChange}
+                            />
+                          </FormGroup>
+                        </Col>
+                      </Row>
+                    </div>
+                  </>
+                )}
+
                 <hr className="my-4" />
                 {/* Contact Information */}
                 <h6 className="heading-small text-muted mb-4">
