@@ -29,7 +29,7 @@ const QuotesForm = ({
     quoteNumber: "",
     client: "",
     passengers: [],
-    status: "",
+    status: "pending",
     issueDate: "",
     totalTrips: "",
     totalPassengers: "",

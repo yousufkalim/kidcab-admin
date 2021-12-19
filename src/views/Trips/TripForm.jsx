@@ -51,7 +51,7 @@ const TripForm = ({
       setClients(res.data.users);
     });
     api("get", "quotes").then((res) => {
-      setQuotes(res.data.quotes);
+      setQuotes(res.data.quotes?.filter((a) => a.status === "accepted"));
     });
   }, []);
 
