@@ -55,7 +55,7 @@ const ClientForm = ({
         bankName: editUser.bank_info.bankName,
         iban: editUser.bank_info.iban,
       });
-      setAddress(JSON.parse(editUser.address));
+      setAddress(editUser.address);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
