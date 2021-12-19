@@ -286,6 +286,40 @@ const TripForm = ({
                           className="form-control-label"
                           htmlFor="input-fname"
                         >
+                          Invite Drivers
+                        </label>
+                        {drivers && (
+                          <Select
+                            onChange={(e) =>
+                              setTrip((user) => ({
+                                ...user,
+                                invited_drivers: e.map(
+                                  (driver) => driver.value
+                                ),
+                              }))
+                            }
+                            isDisabled={
+                              trip?.required_drivers <= 0 ||
+                              trip?.required_drivers ===
+                                trip?.assigned_drivers?.length
+                            }
+                            name="drivers"
+                            isMulti
+                            className="form-control-alternative"
+                            options={drivers.map((driver) => ({
+                              value: driver?._id,
+                              label: `${driver?.first_name} ${driver?.last_name}`,
+                            }))}
+                          />
+                        )}
+                      </FormGroup>
+                    </Col>
+                    {/* <Col lg="6">
+                      <FormGroup>
+                        <label
+                          className="form-control-label"
+                          htmlFor="input-fname"
+                        >
                           Assigned Drivers
                         </label>
                         {drivers && (
@@ -311,40 +345,7 @@ const TripForm = ({
                           />
                         )}
                       </FormGroup>
-                    </Col>
-                  </Row>
-                </div>
-                <div className="pl-lg-4">
-                  <Row>
-                    <Col lg="12">
-                      <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-fname"
-                        >
-                          Invite Drivers
-                        </label>
-                        {drivers && (
-                          <Select
-                            onChange={(e) =>
-                              setTrip((user) => ({
-                                ...user,
-                                invited_drivers: e.map(
-                                  (driver) => driver.value
-                                ),
-                              }))
-                            }
-                            name="drivers"
-                            isMulti
-                            className="form-control-alternative"
-                            options={drivers.map((driver) => ({
-                              value: driver?._id,
-                              label: `${driver?.first_name} ${driver?.last_name}`,
-                            }))}
-                          />
-                        )}
-                      </FormGroup>
-                    </Col>
+                    </Col> */}
                   </Row>
                 </div>
                 <div className="pl-lg-4">
