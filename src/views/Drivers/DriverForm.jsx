@@ -40,7 +40,6 @@ const DriverForm = ({
     email: "",
     password: "",
     phone: "",
-    bankAccountNo: "",
     bankName: "",
     iban: "",
     role: "individual",
@@ -72,7 +71,6 @@ const DriverForm = ({
         phone: editUser.phone_number,
         role: editUser.role,
         services: editUser.services,
-        bankAccountNo: editUser.bank_info.account_number,
         bankName: editUser.bank_info.bank_name,
         iban: editUser.bank_info.iban,
         vehicles: editUser.vehicles,
@@ -132,7 +130,6 @@ const DriverForm = ({
     let uri = "drivers";
 
     const bankInfo = {
-      account_number: user.bankAccountNo,
       bank_name: user.bankName,
       iban: user.iban,
     };
@@ -646,25 +643,6 @@ const DriverForm = ({
                       <FormGroup>
                         <label
                           className="form-control-label"
-                          htmlFor="input-account"
-                        >
-                          Account No.
-                        </label>
-                        <Input
-                          className="form-control-alternative"
-                          id="input-account"
-                          placeholder="XXXXX-XXXXXXX-X"
-                          type="text"
-                          value={user.bankAccountNo}
-                          name="bankAccountNo"
-                          onChange={handleInputChange}
-                        />
-                      </FormGroup>
-                    </Col>
-                    <Col lg="4">
-                      <FormGroup>
-                        <label
-                          className="form-control-label"
                           htmlFor="input-bankName"
                         >
                           Bank Name
@@ -680,7 +658,7 @@ const DriverForm = ({
                         />
                       </FormGroup>
                     </Col>
-                    <Col lg="4">
+                    <Col lg="8">
                       <FormGroup>
                         <label
                           className="form-control-label"
@@ -691,7 +669,7 @@ const DriverForm = ({
                         <Input
                           className="form-control-alternative"
                           id="input-iban"
-                          placeholder="123456789"
+                          placeholder="Example Bank Ltd"
                           type="number"
                           value={user.iban}
                           name="iban"

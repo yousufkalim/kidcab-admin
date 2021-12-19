@@ -29,10 +29,8 @@ const ClientForm = ({
     email: "",
     password: "",
     phone: "",
-    cnic: "",
     siret: "",
     intraCommunityNo: "",
-    bankAccountNo: "",
     bankName: "",
     iban: "",
     gender: "",
@@ -48,10 +46,8 @@ const ClientForm = ({
         email: editUser.email,
         phone: editUser.phone_number,
         gender: editUser.gender,
-        cnic: editUser.cnic,
         siret: editUser.siret_number,
         intraCommunityNo: editUser.intra_community,
-        bankAccountNo: editUser.bank_info.account_number,
         bankName: editUser.bank_info.bankName,
         iban: editUser.bank_info.iban,
       });
@@ -89,7 +85,6 @@ const ClientForm = ({
     let uri = "users";
 
     const bankInfo = {
-      account_number: user.bankAccountNo,
       bank_name: user.bankName,
       iban: user.bankName,
     };
@@ -103,7 +98,6 @@ const ClientForm = ({
     formData.append("gender", user.gender);
     formData.append("phone_number", user.phone);
     formData.append("address", JSON.stringify(address));
-    formData.append("cnic", user.cnic);
     formData.append("siret_number", user.siret);
     formData.append("intra_community", user.intraCommunityNo);
     formData.append("bank_info", JSON.stringify(bankInfo));
@@ -298,7 +292,7 @@ const ClientForm = ({
                 </h6>
                 <div className="pl-lg-4">
                   <Row>
-                    <Col md="6">
+                    <Col md="12">
                       <FormGroup>
                         <AddressInput
                           label="Address"
@@ -307,7 +301,9 @@ const ClientForm = ({
                         />
                       </FormGroup>
                     </Col>
-                    <Col lg="6">
+                  </Row>
+                  <Row>
+                    <Col lg="4">
                       <FormGroup>
                         <label
                           className="form-control-label"
@@ -322,27 +318,6 @@ const ClientForm = ({
                           type="text"
                           value={user.phone}
                           name="phone"
-                          onChange={handleInputChange}
-                        />
-                      </FormGroup>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col lg="4">
-                      <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-cnic"
-                        >
-                          CNIC No.
-                        </label>
-                        <Input
-                          className="form-control-alternative"
-                          id="input-cnic"
-                          placeholder="XXXXX-XXXXXXX-X"
-                          type="number"
-                          value={user.cnic}
-                          name="cnic"
                           onChange={handleInputChange}
                         />
                       </FormGroup>
@@ -396,25 +371,6 @@ const ClientForm = ({
                       <FormGroup>
                         <label
                           className="form-control-label"
-                          htmlFor="input-account"
-                        >
-                          Account No.
-                        </label>
-                        <Input
-                          className="form-control-alternative"
-                          id="input-account"
-                          placeholder="XXXXX-XXXXXXX-X"
-                          type="text"
-                          value={user.bankAccountNo}
-                          name="bankAccountNo"
-                          onChange={handleInputChange}
-                        />
-                      </FormGroup>
-                    </Col>
-                    <Col lg="4">
-                      <FormGroup>
-                        <label
-                          className="form-control-label"
                           htmlFor="input-bankName"
                         >
                           Bank Name
@@ -422,7 +378,7 @@ const ClientForm = ({
                         <Input
                           className="form-control-alternative"
                           id="input-bankName"
-                          placeholder="79465211500013"
+                          placeholder="Example Bank Ltd"
                           type="text"
                           value={user.bankName}
                           name="bankName"
@@ -430,7 +386,7 @@ const ClientForm = ({
                         />
                       </FormGroup>
                     </Col>
-                    <Col lg="4">
+                    <Col lg="8">
                       <FormGroup>
                         <label
                           className="form-control-label"

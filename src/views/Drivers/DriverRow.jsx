@@ -68,13 +68,7 @@ const DriverRow = ({ user, autoRefresh }) => {
           </DropdownToggle>
           <DropdownMenu className="dropdown-menu-arrow" right>
             <DropdownItem href="#pablo" onClick={handleModal}>
-              Edit Profile
-            </DropdownItem>
-            <DropdownItem href="#pablo" onClick={(e) => e.preventDefault()}>
-              Add Passenger
-            </DropdownItem>
-            <DropdownItem href="#pablo" onClick={(e) => e.preventDefault()}>
-              Add Trips
+              Edit Driver
             </DropdownItem>
           </DropdownMenu>
         </UncontrolledDropdown>
