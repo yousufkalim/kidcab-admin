@@ -97,7 +97,7 @@ const DriverForm = ({
   };
 
   const handleVehicleChange = (e) => {
-    setUser((user) => ({ ...user, vehicles: e.value }));
+    setUser((user) => ({ ...user, vehicles: [e.value] }));
   };
 
   const handleRoleChange = (e) => {
@@ -116,7 +116,7 @@ const DriverForm = ({
       uri = uri + `/${editUser._id}`;
     }
     api(method, uri).then((res) => {
-      // eslint-disable-next-line eqeqeq
+      // eslint-disable-next-line
       if (res.status == 200) {
         toast.success("Delete Successfully");
         handleModal();
@@ -146,7 +146,7 @@ const DriverForm = ({
     formData.append("services", user.services);
     formData.append("phone_number", user.phone);
     formData.append("address", JSON.stringify(address));
-    formData.append("vehicles", user.vehicles);
+    formData.append("vehicles", JSON.stringify(user.vehicles));
     formData.append("bank_info", JSON.stringify(bankInfo));
     if (user.role === "fleet_manager") {
       formData.append(
@@ -338,33 +338,6 @@ const DriverForm = ({
                           for="exampleSelect"
                           className="form-control-label"
                         >
-                          Select Vehicle
-                        </Label>
-
-                        {vehicles && (
-                          <Select
-                            onChange={handleVehicleChange}
-                            name="vehicles"
-                            hideSelectedOptions
-                            defaultValue={{
-                              value: vehicles[0]?._id,
-                              label: `${vehicles[0]?.vehicle_name}`,
-                            }}
-                            className="form-control-alternative"
-                            options={vehicles.map((vehicle) => ({
-                              value: vehicle?._id,
-                              label: `${vehicle?.vehicle_name}`,
-                            }))}
-                          />
-                        )}
-                      </FormGroup>
-                    </Col>
-                    <Col lg="4">
-                      <FormGroup>
-                        <Label
-                          for="exampleSelect"
-                          className="form-control-label"
-                        >
                           Select Role
                         </Label>
 
@@ -390,6 +363,69 @@ const DriverForm = ({
                         />
                       </FormGroup>
                     </Col>
+                    {user.role === "individual" ? (
+                      <Col lg="4">
+                        <FormGroup>
+                          <Label
+                            for="exampleSelect"
+                            className="form-control-label"
+                          >
+                            Select Vehicle
+                          </Label>
+
+                          {vehicles && (
+                            <Select
+                              onChange={handleVehicleChange}
+                              name="vehicles"
+                              hideSelectedOptions
+                              defaultValue={{
+                                value: vehicles[0]?._id,
+                                label: `${vehicles[0]?.vehicle_name}`,
+                              }}
+                              className="form-control-alternative"
+                              options={vehicles.map((vehicle) => ({
+                                value: vehicle?._id,
+                                label: `${vehicle?.vehicle_name}`,
+                              }))}
+                            />
+                          )}
+                        </FormGroup>
+                      </Col>
+                    ) : (
+                      <Col lg="4">
+                        <FormGroup>
+                          <label
+                            className="form-control-label"
+                            htmlFor="input-fname"
+                          >
+                            Select Vehicles
+                          </label>
+
+                          {vehicles && (
+                            <Select
+                              onChange={(e) =>
+                                setUser((user) => ({
+                                  ...user,
+                                  vehicles: e.map((driver) => driver.value),
+                                }))
+                              }
+                              name="vehicles"
+                              isMulti
+                              className="form-control-alternative"
+                              defaultValue={user.vehicles.map((id) => ({
+                                value: id,
+                                label: vehicles.filter((a) => a._id === id)[0]
+                                  ?.vehicle_name,
+                              }))}
+                              options={vehicles.map((vehicle) => ({
+                                value: vehicle?._id,
+                                label: `${vehicle?.vehicle_name}`,
+                              }))}
+                            />
+                          )}
+                        </FormGroup>
+                      </Col>
+                    )}
                     <Col lg="4">
                       <FormGroup>
                         <Label
