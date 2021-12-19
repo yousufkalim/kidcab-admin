@@ -7,12 +7,11 @@ import {
   Badge,
 } from "reactstrap";
 
-import CompanyForm from "./TripForm";
+import TripForm from "./TripForm";
 import ManagerAvatar from "./ManagerAvatar";
 
-const TripRow = ({ trip,autoRefresh }) => {
-  console.log("trip", trip);
-  const [openModal, setOpenModal] = useState();
+const TripRow = ({ trip, autoRefresh }) => {
+  const [openModal, setOpenModal] = useState(false);
   const handleModal = () => {
     setOpenModal((open) => !open);
     return openModal;
@@ -73,13 +72,15 @@ const TripRow = ({ trip,autoRefresh }) => {
           </DropdownMenu>
         </UncontrolledDropdown>
       </td>
-      <CompanyForm
-        openModal={openModal}
-        handleModal={handleModal}
-        editUser={trip}
-        isEditing={true}
-        autoRefresh={autoRefresh}
-      />
+      {openModal && (
+        <TripForm
+          openModal={openModal}
+          handleModal={handleModal}
+          editUser={trip}
+          isEditing={true}
+          autoRefresh={autoRefresh}
+        />
+      )}
     </tr>
   );
 };

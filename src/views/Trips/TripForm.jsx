@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import api from "../../api";
+import AddressInput from "components/Form/AddressInput";
 import {
   Modal,
   ModalBody,
@@ -21,13 +22,11 @@ const TripForm = ({
   handleModal,
   editUser: editTrip,
   isEditing,
-  autoRefresh
+  autoRefresh,
 }) => {
   const [trip, setTrip] = useState({
     date: "",
     status: "pending",
-    start_address: "",
-    end_address: "",
     addresses: null,
     client_price: "",
     driver_price: "",
@@ -38,6 +37,8 @@ const TripForm = ({
     client: "",
     quote: "",
   });
+  let [startAddress, setStartAddress] = useState({});
+  let [endAddress, setEndAddress] = useState({});
   const [drivers, setDrivers] = useState();
   const [clients, setClients] = useState();
   const [quotes, setQuotes] = useState();
@@ -59,8 +60,6 @@ const TripForm = ({
       setTrip({
         date: new Date(editTrip.date),
         status: editTrip.status,
-        start_address: editTrip.start_address.street_address,
-        end_address: editTrip.end_address.street_address,
         addresses: editTrip.addresses,
         client_price: editTrip.client_price,
         driver_price: editTrip.driver_price,
@@ -71,6 +70,8 @@ const TripForm = ({
         client: editTrip.client,
         quote: editTrip.quote,
       });
+      setStartAddress(editTrip.start_address);
+      setEndAddress(editTrip.end_address);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -92,7 +93,7 @@ const TripForm = ({
         if (res.status == 200) {
           toast.success("Delete Successfully");
           handleModal();
-          autoRefresh()
+          autoRefresh();
         } else {
           toast.error("Delete Error", res.data.message);
         }
@@ -112,13 +113,17 @@ const TripForm = ({
       uri = uri + `/${editTrip._id}`;
     }
 
-    api(method, uri, trip)
+    api(method, uri, {
+      ...trip,
+      start_address: startAddress,
+      end_address: endAddress,
+    })
       .then((res) => {
         // eslint-disable-next-line eqeqeq
         if (res.status == 200) {
           toast.success("Saved Successfully");
           handleModal();
-          autoRefresh()
+          autoRefresh();
         } else {
           toast.error("Save Error", res);
         }
@@ -143,41 +148,19 @@ const TripForm = ({
                   <Row>
                     <Col lg="6">
                       <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-fname"
-                        >
-                          Start Address
-                        </label>
-                        <Input
-                          className="form-control-alternative"
-                          id="input-fname"
-                          required={true}
-                          placeholder="Enter Start Address"
-                          type="text"
-                          value={trip.start_address}
-                          name="start_address"
-                          onChange={handleInputChange}
+                        <AddressInput
+                          label="Start Address"
+                          address={startAddress}
+                          setAddress={setStartAddress}
                         />
                       </FormGroup>
                     </Col>
                     <Col lg="6">
                       <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-lname"
-                        >
-                          End Address
-                        </label>
-                        <Input
-                          className="form-control-alternative"
-                          id="input-fname"
-                          required={true}
-                          placeholder="Enter End Address"
-                          type=""
-                          value={trip.end_address}
-                          name="end_address"
-                          onChange={handleInputChange}
+                        <AddressInput
+                          label="End Address"
+                          address={endAddress}
+                          setAddress={setEndAddress}
                         />
                       </FormGroup>
                     </Col>
