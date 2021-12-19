@@ -25,11 +25,13 @@ const InvoiceList = () => {
     setOpenModal((open) => !open);
     return openModal;
   };
-  const autoRefresh=()=>{ api("get", "invoices").then((res) => {
-    setInvoices(res.data.invoices);
-  });}
+  const autoRefresh = () => {
+    api("get", "invoices").then((res) => {
+      setInvoices(res.data.invoices);
+    });
+  };
   useEffect(() => {
-    autoRefresh()
+    autoRefresh();
   }, [openModal]);
   return (
     <>
@@ -68,7 +70,11 @@ const InvoiceList = () => {
                 <tbody>
                   {invoices ? (
                     invoices.map((invoice) => (
-                      <InvoiceRow key={invoice._id} invoice={invoice} autoRefresh={autoRefresh}/>
+                      <InvoiceRow
+                        key={invoice._id}
+                        invoice={invoice}
+                        autoRefresh={autoRefresh}
+                      />
                     ))
                   ) : (
                     <tr className="h1 mx-lg-auto text-center">
@@ -77,7 +83,7 @@ const InvoiceList = () => {
                   )}
                 </tbody>
               </Table>
-              <CardFooter className="py-4">
+              {/* <CardFooter className="py-4">
                 <nav aria-label="...">
                   <Pagination
                     className="pagination justify-content-end mb-0"
@@ -128,7 +134,7 @@ const InvoiceList = () => {
                     </PaginationItem>
                   </Pagination>
                 </nav>
-              </CardFooter>
+              </CardFooter> */}
             </Card>
           </div>
         </Row>

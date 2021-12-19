@@ -25,12 +25,14 @@ const TripList = () => {
     setOpenModal((open) => !open);
     return openModal;
   };
-  const autoRefresh=()=>{ api("get", "trips").then((res) => {
-    console.log("response --------", res.data.trips);
-    setTrips(res.data.trips);
-  });}
+  const autoRefresh = () => {
+    api("get", "trips").then((res) => {
+      console.log("response --------", res.data.trips);
+      setTrips(res.data.trips);
+    });
+  };
   useEffect(() => {
-    autoRefresh()
+    autoRefresh();
   }, [openModal]);
 
   return (
@@ -79,7 +81,13 @@ const TripList = () => {
                 </thead>
                 <tbody>
                   {trips ? (
-                    trips.map((trip) => <TripRow key={trip._id} trip={trip} autoRefresh={autoRefresh} />)
+                    trips.map((trip) => (
+                      <TripRow
+                        key={trip._id}
+                        trip={trip}
+                        autoRefresh={autoRefresh}
+                      />
+                    ))
                   ) : (
                     <tr className="h1 mx-lg-auto text-center">
                       <td>No Trip Found</td>
@@ -87,7 +95,7 @@ const TripList = () => {
                   )}
                 </tbody>
               </Table>
-              <CardFooter className="py-4">
+              {/* <CardFooter className="py-4">
                 <nav aria-label="...">
                   <Pagination
                     className="pagination justify-content-end mb-0"
@@ -138,7 +146,7 @@ const TripList = () => {
                     </PaginationItem>
                   </Pagination>
                 </nav>
-              </CardFooter>
+              </CardFooter> */}
             </Card>
           </div>
         </Row>

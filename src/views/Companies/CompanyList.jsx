@@ -25,7 +25,9 @@ const CompanyList = () => {
     setOpenModal((open) => !open);
     return openModal;
   };
-const autoRefresh=()=>{api("get", "companies").then((res) => setUsers(res.data.companies))}
+  const autoRefresh = () => {
+    api("get", "companies").then((res) => setUsers(res.data.companies));
+  };
   useEffect(() => {
     autoRefresh();
   }, [openModal]);
@@ -71,7 +73,11 @@ const autoRefresh=()=>{api("get", "companies").then((res) => setUsers(res.data.c
                 <tbody>
                   {users ? (
                     users.map((user) => (
-                      <CompanyRow key={user._id} user={user} autoRefresh={autoRefresh}/>
+                      <CompanyRow
+                        key={user._id}
+                        user={user}
+                        autoRefresh={autoRefresh}
+                      />
                     ))
                   ) : (
                     <tr className="h1 mx-lg-auto text-center">
@@ -80,7 +86,7 @@ const autoRefresh=()=>{api("get", "companies").then((res) => setUsers(res.data.c
                   )}
                 </tbody>
               </Table>
-              <CardFooter className="py-4">
+              {/* <CardFooter className="py-4">
                 <nav aria-label="...">
                   <Pagination
                     className="pagination justify-content-end mb-0"
@@ -131,7 +137,7 @@ const autoRefresh=()=>{api("get", "companies").then((res) => setUsers(res.data.c
                     </PaginationItem>
                   </Pagination>
                 </nav>
-              </CardFooter>
+              </CardFooter> */}
             </Card>
           </div>
         </Row>

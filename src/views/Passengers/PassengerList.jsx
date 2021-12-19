@@ -80,7 +80,7 @@ const PassengerList = () => {
                   )}
                 </tbody>
               </Table>
-              <CardFooter className="py-4">
+              {/* <CardFooter className="py-4">
                 <nav aria-label="...">
                   <Pagination
                     className="pagination justify-content-end mb-0"
@@ -131,7 +131,7 @@ const PassengerList = () => {
                     </PaginationItem>
                   </Pagination>
                 </nav>
-              </CardFooter>
+              </CardFooter> */}
             </Card>
           </div>
         </Row>

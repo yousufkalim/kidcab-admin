@@ -23,12 +23,14 @@ const QuotesList = () => {
     setOpenModal((open) => !open);
     return openModal;
   };
-  const autoRefresh=()=>{ api("get", "quotes").then((res) => {
-    setQuotes(res.data.quotes);
-    console.log(res.data.quotes);
-  });}
+  const autoRefresh = () => {
+    api("get", "quotes").then((res) => {
+      setQuotes(res.data.quotes);
+      console.log(res.data.quotes);
+    });
+  };
   useEffect(() => {
-    autoRefresh()
+    autoRefresh();
   }, [openModal]);
   return (
     <>
@@ -67,7 +69,11 @@ const QuotesList = () => {
                 <tbody>
                   {quotes ? (
                     quotes.map((quote) => (
-                      <PassengerRow key={quote._id} quote={quote} autoRefresh={autoRefresh} />
+                      <PassengerRow
+                        key={quote._id}
+                        quote={quote}
+                        autoRefresh={autoRefresh}
+                      />
                     ))
                   ) : (
                     <tr className="h1 mx-lg-auto text-center">
@@ -76,7 +82,7 @@ const QuotesList = () => {
                   )}
                 </tbody>
               </Table>
-              <CardFooter className="py-4">
+              {/* <CardFooter className="py-4">
                 <nav aria-label="...">
                   <Pagination
                     className="pagination justify-content-end mb-0"
@@ -127,7 +133,7 @@ const QuotesList = () => {
                     </PaginationItem>
                   </Pagination>
                 </nav>
-              </CardFooter>
+              </CardFooter> */}
             </Card>
           </div>
         </Row>
