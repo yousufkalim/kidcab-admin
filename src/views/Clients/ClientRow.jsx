@@ -46,7 +46,7 @@ const ClientRow = ({ user, passenger, autoRefresh }) => {
           {user.phone_number}
         </Badge>
       </td>
-      <td></td>
+      <td>{user.passengers?.length}</td>
 
       <td className="text-right">
         <UncontrolledDropdown>
