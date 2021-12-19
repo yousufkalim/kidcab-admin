@@ -25,11 +25,13 @@ const PassengerList = () => {
     setOpenModal((open) => !open);
     return openModal;
   };
-  const autoRefresh=()=>{  api("get", "passengers").then((res) => {
-    setUsers(res.data.passengers);
-  });}
+  const autoRefresh = () => {
+    api("get", "passengers").then((res) => {
+      setUsers(res.data.passengers);
+    });
+  };
   useEffect(() => {
-    autoRefresh()
+    autoRefresh();
   }, [openModal]);
   return (
     <>
@@ -59,14 +61,17 @@ const PassengerList = () => {
                     <th scope="col"></th>
                     <th scope="col"></th>
                     <th scope="col">Clients</th>
-                    <th scope="col"></th>
                     <th scope="col" />
                   </tr>
                 </thead>
                 <tbody>
                   {users ? (
                     users.map((user) => (
-                      <PassengerRow key={user._id} user={user} autoRefresh={autoRefresh}/>
+                      <PassengerRow
+                        key={user._id}
+                        user={user}
+                        autoRefresh={autoRefresh}
+                      />
                     ))
                   ) : (
                     <tr className="h1 mx-lg-auto text-center">
