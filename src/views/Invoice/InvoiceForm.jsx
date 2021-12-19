@@ -29,6 +29,7 @@ const InvoiceForm = ({
     issue_date: "",
     total_price: "",
     status: "",
+    comments: "",
     trip: "",
   });
 
@@ -46,6 +47,7 @@ const InvoiceForm = ({
         total_price: editUser.total_price,
         status: editUser.status,
         trip: editUser.trip,
+        comments: editUser.comments,
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -218,6 +220,27 @@ const InvoiceForm = ({
                           placeholder="Enter Total Price"
                           type="number"
                           value={user.total_price}
+                          onChange={handleInputChange}
+                        />
+                      </FormGroup>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col lg="12">
+                      <FormGroup>
+                        <Label
+                          for="exampleSelect"
+                          className="form-control-label"
+                        >
+                          Comment
+                        </Label>
+                        <Input
+                          id="exampleSelect"
+                          name="comments"
+                          className="form-control"
+                          placeholder="Enter comment here"
+                          type="textarea"
+                          value={user.comments}
                           onChange={handleInputChange}
                         />
                       </FormGroup>
