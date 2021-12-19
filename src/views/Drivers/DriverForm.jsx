@@ -67,8 +67,6 @@ const DriverForm = ({
       setUser({
         firstName: editUser.first_name,
         lastName: editUser.last_name,
-        password: editUser.password,
-        email: editUser.email,
         phone: editUser.phone_number,
         role: editUser.role,
         services: editUser.services,
@@ -289,46 +287,48 @@ const DriverForm = ({
                       </FormGroup>
                     </Col>
                   </Row>
-                  <Row>
-                    <Col lg="6">
-                      <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-email"
-                        >
-                          Email Address
-                        </label>
-                        <Input
-                          className="form-control-alternative"
-                          id="input-email"
-                          placeholder="johndoe@example.com"
-                          type="text"
-                          value={user.email}
-                          name="email"
-                          onChange={handleInputChange}
-                        />
-                      </FormGroup>
-                    </Col>
-                    <Col lg="6">
-                      <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-password"
-                        >
-                          Password
-                        </label>
-                        <Input
-                          className="form-control-alternative"
-                          id="input-password"
-                          placeholder="Password"
-                          type="password"
-                          value={user.password}
-                          name="password"
-                          onChange={handleInputChange}
-                        />
-                      </FormGroup>
-                    </Col>
-                  </Row>
+                  {!isEditing && (
+                    <Row>
+                      <Col lg="6">
+                        <FormGroup>
+                          <label
+                            className="form-control-label"
+                            htmlFor="input-email"
+                          >
+                            Email Address
+                          </label>
+                          <Input
+                            className="form-control-alternative"
+                            id="input-email"
+                            placeholder="johndoe@example.com"
+                            type="text"
+                            value={user.email}
+                            name="email"
+                            onChange={handleInputChange}
+                          />
+                        </FormGroup>
+                      </Col>
+                      <Col lg="6">
+                        <FormGroup>
+                          <label
+                            className="form-control-label"
+                            htmlFor="input-password"
+                          >
+                            Password
+                          </label>
+                          <Input
+                            className="form-control-alternative"
+                            id="input-password"
+                            placeholder="Password"
+                            type="password"
+                            value={user.password}
+                            name="password"
+                            onChange={handleInputChange}
+                          />
+                        </FormGroup>
+                      </Col>
+                    </Row>
+                  )}
                 </div>
                 <div className="pl-lg-4">
                   <Row>

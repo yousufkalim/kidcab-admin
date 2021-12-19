@@ -89,7 +89,7 @@ function AddressInput({ label, address, setAddress }) {
       <Autocomplete
         getItemValue={(item) => item.label2}
         items={addresses}
-        value={address.label}
+        value={address?.label}
         onChange={getAllAddress}
         onSelect={handleAddressSelect}
         // Custom styling
