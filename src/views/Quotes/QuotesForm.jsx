@@ -32,7 +32,6 @@ const QuotesForm = ({
     status: "pending",
     issueDate: "",
     totalTrips: "",
-    totalPassengers: "",
     totalPrice: "",
     vat: "",
     startDate: "",
@@ -57,7 +56,6 @@ const QuotesForm = ({
         status: editQuote.status,
         issueDate: editQuote.issue_date,
         totalTrips: editQuote.trip_info.total_trips,
-        totalPassengers: editQuote.trip_info.total_passengers,
         totalPrice: editQuote.total_price,
         vat: editQuote.vat,
         startDate: editQuote.trip_info.start_date,
@@ -110,7 +108,6 @@ const QuotesForm = ({
     let uri = "quotes";
     const tripInfo = {
       total_trips: quote.totalTrips,
-      total_passengers: quote.totalPassengers,
       start_date: quote.startDate,
       end_date: quote.endDate,
       start_address: startAddress,
@@ -306,7 +303,7 @@ const QuotesForm = ({
                 </h6>
                 <div className="pl-lg-4">
                   <Row>
-                    <Col lg="6">
+                    <Col lg="4">
                       <FormGroup>
                         <label
                           className="form-control-label"
@@ -326,28 +323,7 @@ const QuotesForm = ({
                         />
                       </FormGroup>
                     </Col>
-                    <Col lg="6">
-                      <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-lname"
-                        >
-                          Total Passengers
-                        </label>
-                        <Input
-                          className="form-control-alternative"
-                          id="input-lname"
-                          placeholder="Total Passengers"
-                          type="number"
-                          value={quote.totalPassengers}
-                          name="totalPassengers"
-                          onChange={handleInputChange}
-                        />
-                      </FormGroup>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col lg="6">
+                    <Col lg="4">
                       <FormGroup>
                         <label
                           className="form-control-label"
@@ -367,7 +343,7 @@ const QuotesForm = ({
                         />
                       </FormGroup>
                     </Col>
-                    <Col lg="6">
+                    <Col lg="4">
                       <FormGroup>
                         <label
                           className="form-control-label"
