@@ -79,6 +79,21 @@ const PassengerForm = ({
     formData.append("client", user.client);
     formData.append("relationship", user.relationship);
 
+//validations
+if (user.firstName == "") {
+      return toast.error("Please enter your first name");
+    }
+    if (user.lastName == "") {
+      return toast.error("Please enter your last name");
+    }
+    if (user.client == "") {
+      return toast.error("Please enter client name");
+    }
+    if (user.relationship == "") {
+      return toast.error("Please enter passenger's relationship with client");
+    }
+
+
     if (editUser) {
       method = "put";
       uri = uri + `/${editUser._id}`;

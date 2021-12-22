@@ -28,7 +28,7 @@ const ClientForm = ({
     lastName: "",
     email: "",
     password: "",
-    phone: "",
+    phone_number: "",
     siret: "",
     intraCommunityNo: "",
     bankName: "",
@@ -44,7 +44,7 @@ const ClientForm = ({
         lastName: editUser.last_name,
         password: editUser.password,
         email: editUser.email,
-        phone: editUser.phone_number,
+        phone_number: editUser.phone_number,
         gender: editUser.gender,
         siret: editUser.siret_number,
         intraCommunityNo: editUser.intra_community,
@@ -96,12 +96,39 @@ const ClientForm = ({
     formData.append("email", user.email);
     formData.append("password", user.password);
     formData.append("gender", user.gender);
-    formData.append("phone_number", user.phone);
+    formData.append("phone_number", user.phone_number);
     formData.append("address", JSON.stringify(address));
     formData.append("siret_number", user.siret);
     formData.append("intra_community", user.intraCommunityNo);
     formData.append("bank_info", JSON.stringify(bankInfo));
 
+    if (user.firstName == "") {
+      return toast.error("Please enter your first name");
+    }
+    if (user.lastName == "") {
+      return toast.error("Please enter your last name");
+    }
+    if (user.email == "") {
+      return toast.error("Please enter email");
+    }
+    if (!((user.email.includes(".")) &&(user.email.includes("@")))){
+      return toast.error("Please enter a valid email");
+    }
+    
+    if (user.password == "") {
+      return toast.error("Password is required");
+    }
+    if (user.password.length <8) {
+      return toast.error("Passwords should be of atleast 8 letters");
+    }
+    if (user.password == "") {
+      return toast.error("Password is required");
+    }
+    if (user.phone_number == "") {
+      return toast.error("Please enter phone number");
+    }
+    
+   
     if (editUser) {
       method = "put";
       uri = uri + `/${editUser._id}`;
@@ -166,7 +193,7 @@ const ClientForm = ({
                           className="form-control-alternative"
                           id="input-lname"
                           placeholder="Doe"
-                          type="email"
+                          type="lastName"
                           value={user.lastName}
                           name="lastName"
                           onChange={handleInputChange}
@@ -185,12 +212,12 @@ const ClientForm = ({
                             Email Address
                           </label>
                           <Input
+                            type="email"
+                            name="email"
                             className="form-control-alternative"
                             id="input-email"
                             placeholder="johndoe@example.com"
-                            type="text"
                             value={user.email}
-                            name="email"
                             onChange={handleInputChange}
                           />
                         </FormGroup>
@@ -316,9 +343,10 @@ const ClientForm = ({
                           id="input-phone"
                           placeholder="+33123456789"
                           type="text"
-                          value={user.phone}
-                          name="phone"
+                          value={user.phone_number}
+                          name="phone_number"
                           onChange={handleInputChange}
+                          maxLength="11"
                         />
                       </FormGroup>
                     </Col>
@@ -353,7 +381,7 @@ const ClientForm = ({
                           className="form-control-alternative"
                           id="input-intra"
                           placeholder="123456789"
-                          type="number"
+                          type="text"
                           value={user.intraCommunityNo}
                           name="intraCommunityNo"
                           onChange={handleInputChange}
@@ -398,7 +426,7 @@ const ClientForm = ({
                           className="form-control-alternative"
                           id="input-iban"
                           placeholder="123456789"
-                          type="number"
+                          type="text"
                           value={user.iban}
                           name="iban"
                           onChange={handleInputChange}
