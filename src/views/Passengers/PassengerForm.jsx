@@ -79,8 +79,8 @@ const PassengerForm = ({
     formData.append("client", user.client);
     formData.append("relationship", user.relationship);
 
-//validations
-if (user.firstName == "") {
+    //validations
+    if (user.firstName == "") {
       return toast.error("Please enter your first name");
     }
     if (user.lastName == "") {
@@ -92,7 +92,6 @@ if (user.firstName == "") {
     if (user.relationship == "") {
       return toast.error("Please enter passenger's relationship with client");
     }
-
 
     if (editUser) {
       method = "put";
@@ -178,17 +177,11 @@ if (user.firstName == "") {
                           id="exampleSelect"
                           name="client"
                           value={user.client}
-                          defaultValue={
-                            user.client
-                              ? clients?.filter((a) => a._id === user.client)[0]
-                                  ?._id
-                              : clients[0]?._id
-                          }
                           onChange={handleInputChange}
                           className="form-control-alternative"
                           type="select"
                         >
-                          <option disabled selected>
+                          <option value="client" selected>
                             Select One Client
                           </option>
                           {clients ? (

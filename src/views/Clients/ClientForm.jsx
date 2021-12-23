@@ -86,7 +86,7 @@ const ClientForm = ({
 
     const bankInfo = {
       bank_name: user.bankName,
-      iban: user.bankName,
+      iban: user.iban,
     };
 
     const formData = new FormData();
@@ -111,14 +111,14 @@ const ClientForm = ({
     if (user.email == "") {
       return toast.error("Please enter email");
     }
-    if (!((user.email.includes(".")) &&(user.email.includes("@")))){
+    if (!(user.email.includes(".") && user.email.includes("@"))) {
       return toast.error("Please enter a valid email");
     }
-    
+
     if (user.password == "") {
       return toast.error("Password is required");
     }
-    if (user.password.length <8) {
+    if (user.password.length < 8) {
       return toast.error("Passwords should be of atleast 8 letters");
     }
     if (user.password == "") {
@@ -127,8 +127,7 @@ const ClientForm = ({
     if (user.phone_number == "") {
       return toast.error("Please enter phone number");
     }
-    
-   
+
     if (editUser) {
       method = "put";
       uri = uri + `/${editUser._id}`;

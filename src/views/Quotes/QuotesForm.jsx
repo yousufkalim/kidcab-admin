@@ -29,7 +29,7 @@ const QuotesForm = ({
     quoteNumber: "",
     client: "",
     passengers: [],
-    status: "pending",
+    status: "",
     issueDate: "",
     totalTrips: "",
     totalPassengers: "",
@@ -129,6 +129,51 @@ const QuotesForm = ({
     formData["trip_info"] = JSON.stringify(tripInfo);
     formData["docu_sign_link"] = quote.docuSignLink;
 
+    //validations
+    if (quote.title == "") {
+      return toast.error("Please enter quote title");
+    }
+    if (quote.quoteNumber == "") {
+      return toast.error("Please enter quote number");
+    }
+    if (quote.client == "") {
+      return toast.error("Please enter client name");
+    }
+    if (quote.passengers == "") {
+      return toast.error("Please enter passanger's name");
+    }
+    if (quote.status == "") {
+      return toast.error("Please enter quote status");
+    }
+    if (quote.issueDate == "") {
+      return toast.error("Please enter issue date");
+    }
+    if (tripInfo.total_trips == "") {
+      return toast.error("Please enter total number of trips");
+    }
+    if (tripInfo.total_passengers == "") {
+      return toast.error("Please enter total number of passengers");
+    }
+    if (quote.totalPrice == "") {
+      return toast.error("Please enter quote price");
+    }
+    if (quote.vat == "") {
+      return toast.error("Please enter vat");
+    }
+
+    if (tripInfo.start_date == "") {
+      return toast.error("Please enter start date");
+    }
+    if (tripInfo.end_date == "") {
+      return toast.error("Please enter end date");
+    }
+    if (tripInfo.start_address == "") {
+      return toast.error("Please enter start address");
+    }
+    if (tripInfo.end_address == "") {
+      return toast.error("Please enter end address");
+    }
+
     if (editQuote) {
       method = "put";
       uri = uri + `/${editQuote._id}`;
@@ -215,10 +260,6 @@ const QuotesForm = ({
                             onChange={handleClientChange}
                             name="client"
                             hideSelectedOptions
-                            defaultValue={{
-                              value: clients[0]._id,
-                              label: `${clients[0].first_name} ${clients[0].last_name}`,
-                            }}
                             className="form-control-alternative"
                             options={clients.map((client) => ({
                               value: client._id,
@@ -267,6 +308,7 @@ const QuotesForm = ({
                         </Label>
                         <Input
                           id="exampleSelect"
+                          placeholder="status"
                           name="status"
                           className="form-control-alternative"
                           type="select"
@@ -360,7 +402,7 @@ const QuotesForm = ({
                           id="input-fname"
                           required={true}
                           placeholder="Total Trips"
-                          type="number"
+                          type="text"
                           value={quote.totalPrice}
                           name="totalPrice"
                           onChange={handleInputChange}
@@ -378,8 +420,8 @@ const QuotesForm = ({
                         <Input
                           className="form-control-alternative"
                           id="input-lname"
-                          placeholder="Total Passengers"
-                          type="number"
+                          placeholder="VAT"
+                          type="text"
                           value={quote.vat}
                           name="vat"
                           onChange={handleInputChange}
