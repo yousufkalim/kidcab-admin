@@ -121,9 +121,6 @@ const ClientForm = ({
     if (user.password.length < 8) {
       return toast.error("Passwords should be of atleast 8 letters");
     }
-    if (user.password == "") {
-      return toast.error("Password is required");
-    }
     if (user.phone_number == "") {
       return toast.error("Please enter phone number");
     }

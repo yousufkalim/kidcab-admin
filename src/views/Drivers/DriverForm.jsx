@@ -42,8 +42,8 @@ const DriverForm = ({
     phone: "",
     bankName: "",
     iban: "",
-    role: "individual",
-    services: "monthly",
+    role: "",
+    services: "",
     vehicles: [],
     company_name: "",
     siret_number: "",
@@ -135,6 +135,8 @@ const DriverForm = ({
     };
 
     const formData = new FormData();
+    if (user.profile_pic)
+      formData.append("profile_pic", user.profile_pic, user.profile_pic?.name);
     formData.append("first_name", user.firstName);
     formData.append("last_name", user.lastName);
     formData.append("email", user.email);
@@ -158,8 +160,7 @@ const DriverForm = ({
         })
       );
     }
-    if (user.profile_pic)
-      formData.append("profile_pic", user.profile_pic, user.profile_pic?.name);
+
     if (user.id_front)
       formData.append("id_card_front", user.id_front, user.id_front?.name);
     if (user.id_back)
@@ -192,6 +193,46 @@ const DriverForm = ({
         user.license_back,
         user.license_back?.name
       );
+
+    if (user.profile_pic == "") {
+      return toast.error("Please attach profile picture");
+    }
+    if (user.firstName == "") {
+      return toast.error("Please enter your first name");
+    }
+    if (user.lastName == "") {
+      return toast.error("Please enter your last name");
+    }
+    if (user.email == "") {
+      return toast.error("Please enter email");
+    }
+    if (!(user.email.includes(".") && user.email.includes("@"))) {
+      return toast.error("Please enter a valid email");
+    }
+    if (user.password == "") {
+      return toast.error("Password is required");
+    }
+    if (user.password.length < 8) {
+      return toast.error("Passwords should be of atleast 8 letters");
+    }
+
+    if (user.role == "") {
+      return toast.error("Please select your role");
+    }
+
+    if (user.services == "") {
+      return toast.error("Please enter services");
+    }
+    if (Object.keys(address)?.length < 6) {
+      return toast.error("Please select your addres");
+    }
+
+    if (user.phone == "") {
+      return toast.error("Please enter phone number");
+    }
+    if ((bankInfo.bank_name && bankInfo.iban) == "") {
+      return toast.error("Please enter bank info ");
+    }
 
     if (editUser) {
       method = "put";
@@ -344,10 +385,10 @@ const DriverForm = ({
                           onChange={handleRoleChange}
                           name="role"
                           hideSelectedOptions
-                          defaultValue={{
-                            value: user.role,
-                            label: user.role,
-                          }}
+                          // defaultValue={{
+                          //   value: user.role,
+                          //   label: user.role,
+                          // }}
                           className="form-control-alternative"
                           options={[
                             {
@@ -377,10 +418,10 @@ const DriverForm = ({
                               onChange={handleVehicleChange}
                               name="vehicles"
                               hideSelectedOptions
-                              defaultValue={{
-                                value: vehicles[0]?._id,
-                                label: `${vehicles[0]?.vehicle_name}`,
-                              }}
+                              // defaultValue={{
+                              //   value: vehicles[0]?._id,
+                              //   label: `${vehicles[0]?.vehicle_name}`,
+                              // }}
                               className="form-control-alternative"
                               options={vehicles.map((vehicle) => ({
                                 value: vehicle?._id,
@@ -438,10 +479,10 @@ const DriverForm = ({
                           onChange={handleServiceChange}
                           name="services"
                           hideSelectedOptions
-                          defaultValue={{
-                            value: user.services,
-                            label: user.services,
-                          }}
+                          // defaultValue={{
+                          //   value: user.services,
+                          //   label: user.services,
+                          // }}
                           className="form-control-alternative"
                           options={[
                             {
@@ -670,7 +711,7 @@ const DriverForm = ({
                           className="form-control-alternative"
                           id="input-iban"
                           placeholder="Example Bank Ltd"
-                          type="number"
+                          type="text"
                           value={user.iban}
                           name="iban"
                           onChange={handleInputChange}

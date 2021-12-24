@@ -22,7 +22,7 @@ const VehicleForm = ({
   handleModal,
   editUser: editVehicle,
   isEditing,
-  autoRefresh
+  autoRefresh,
 }) => {
   const [drivers, setDrivers] = useState();
   const [vehicle, setVehicle] = useState({
@@ -76,7 +76,7 @@ const VehicleForm = ({
         if (res.status == 200) {
           toast.success("Delete Successfully");
           handleModal();
-          autoRefresh()
+          autoRefresh();
         } else {
           console.log("error");
           toast.error(res.data);
@@ -89,6 +89,33 @@ const VehicleForm = ({
     e.preventDefault();
     let method = "post";
     let uri = "vehicles";
+    if (vehicle.vehicle_name == "") {
+      return toast.error("Please enter vehicle name");
+    }
+    if (vehicle.number_plate == "") {
+      return toast.error("Please enter car registeration number");
+    }
+    if (vehicle.brand == "") {
+      return toast.error("Please enter brand name");
+    }
+    // if (vehicle.driver == "") {
+    //   return toast.error("Please select driver");
+    // }
+    if (vehicle.model == "") {
+      return toast.error("Please enter your car model");
+    }
+    if (vehicle.color == "") {
+      return toast.error("Please enter your car color");
+    }
+    if (vehicle.engine_type == "") {
+      return toast.error("Please enter your engine type");
+    }
+    if (vehicle.gray_card == "") {
+      return toast.error("Please enter grey card");
+    }
+    if (vehicle.inspection_info == "") {
+      return toast.error("Please enter inspection info");
+    }
 
     if (editVehicle) {
       method = "put";
@@ -99,7 +126,7 @@ const VehicleForm = ({
         if (res.status === 200) {
           toast.success("Saved Successfully");
           handleModal();
-          autoRefresh()
+          autoRefresh();
         } else {
           toast.error("Save Error", res);
         }
@@ -177,10 +204,10 @@ const VehicleForm = ({
                             onChange={handleDriverChange}
                             name="client"
                             hideSelectedOptions
-                            defaultValue={{
-                              value: drivers && drivers[0]?._id,
-                              label: `${drivers[0]?.first_name} ${drivers[0]?.last_name}`,
-                            }}
+                            // defaultValue={{
+                            //   value: drivers && drivers[0]?._id,
+                            //   label: `${drivers[0]?.first_name} ${drivers[0]?.last_name}`,
+                            // }}
                             className="form-control-alternative"
                             options={drivers.map((driver) => ({
                               value: driver._id,
