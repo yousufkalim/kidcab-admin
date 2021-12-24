@@ -25,7 +25,11 @@ const api = async (method = "get", uri, body) => {
           window.location = "/login";
         } else {
           console.log("API Error --------> ", err?.response?.status);
-          toast.error(err?.response?.data ? err.response.data : err?.message);
+
+          toast.error(
+            err?.response?.data ? err.response.data.message : err?.message
+          );
+
           reject(err);
         }
       });
