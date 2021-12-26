@@ -331,7 +331,7 @@ const QuotesForm = ({
                           id="input-lname"
                           placeholder="Quote Number"
                           type="date"
-                          value={quote.issueDate}
+                          value={quote.issueDate?.split("T")[0]}
                           name="issueDate"
                           onChange={handleInputChange}
                         />
@@ -419,7 +419,7 @@ const QuotesForm = ({
                           id="input-lname"
                           placeholder="Quote Number"
                           type="date"
-                          value={quote.startDate}
+                          value={quote.startDate?.split("T")[0]}
                           name="startDate"
                           onChange={handleInputChange}
                         />
@@ -438,7 +438,7 @@ const QuotesForm = ({
                           id="input-lname"
                           placeholder="Quote Number"
                           type="date"
-                          value={quote.endDate}
+                          value={quote.endDate?.split("T")[0]}
                           name="endDate"
                           onChange={handleInputChange}
                         />

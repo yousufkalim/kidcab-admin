@@ -206,7 +206,7 @@ const TripForm = ({
                           required={true}
                           placeholder="Enter Company Name"
                           type="date"
-                          value={trip.date}
+                          value={trip.date?.split("T")[0]}
                           name="date"
                           onChange={handleInputChange}
                         />

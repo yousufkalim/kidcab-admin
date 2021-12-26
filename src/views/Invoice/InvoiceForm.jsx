@@ -147,7 +147,7 @@ const InvoiceForm = ({
                           className="form-control"
                           id="input-lname"
                           type="date"
-                          value={user.issue_date}
+                          value={user.issue_date?.split("T")[0]}
                           name="issue_date"
                           onChange={handleInputChange}
                         />
