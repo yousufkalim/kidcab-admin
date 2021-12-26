@@ -385,10 +385,12 @@ const DriverForm = ({
                           onChange={handleRoleChange}
                           name="role"
                           hideSelectedOptions
-                          // defaultValue={{
-                          //   value: user.role,
-                          //   label: user.role,
-                          // }}
+                          defaultValue={
+                            user?.role && {
+                              value: user.role,
+                              label: user.role,
+                            }
+                          }
                           className="form-control-alternative"
                           options={[
                             {
@@ -418,10 +420,12 @@ const DriverForm = ({
                               onChange={handleVehicleChange}
                               name="vehicles"
                               hideSelectedOptions
-                              // defaultValue={{
-                              //   value: vehicles[0]?._id,
-                              //   label: `${vehicles[0]?.vehicle_name}`,
-                              // }}
+                              defaultValue={
+                                user?.vehicles?.length > 0 && {
+                                  value: user?.vehicles[0]?._id,
+                                  label: user?.vehicles[0]?.vehicle_name,
+                                }
+                              }
                               className="form-control-alternative"
                               options={vehicles.map((vehicle) => ({
                                 value: vehicle?._id,
@@ -452,11 +456,13 @@ const DriverForm = ({
                               name="vehicles"
                               isMulti
                               className="form-control-alternative"
-                              defaultValue={user.vehicles.map((id) => ({
-                                value: id,
-                                label: vehicles.filter((a) => a._id === id)[0]
-                                  ?.vehicle_name,
-                              }))}
+                              defaultValue={
+                                user?.vehicles?.length > 0 &&
+                                user?.vehicles?.map((vehicle) => ({
+                                  value: vehicle._id,
+                                  label: vehicle.vehicle_name,
+                                }))
+                              }
                               options={vehicles.map((vehicle) => ({
                                 value: vehicle?._id,
                                 label: `${vehicle?.vehicle_name}`,
@@ -479,10 +485,12 @@ const DriverForm = ({
                           onChange={handleServiceChange}
                           name="services"
                           hideSelectedOptions
-                          // defaultValue={{
-                          //   value: user.services,
-                          //   label: user.services,
-                          // }}
+                          defaultValue={
+                            user?.services && {
+                              value: user.services,
+                              label: user.services,
+                            }
+                          }
                           className="form-control-alternative"
                           options={[
                             {
