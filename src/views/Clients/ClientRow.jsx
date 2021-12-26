@@ -64,12 +64,12 @@ const ClientRow = ({ user, passenger, autoRefresh }) => {
             <DropdownItem href="#pablo" onClick={handleModal}>
               Edit Profile
             </DropdownItem>
-            <DropdownItem
+            {/* <DropdownItem
               href="#pablo"
               onClick={() => handlePassengerModal(user._id)}
             >
               Add Passenger
-            </DropdownItem>
+            </DropdownItem> */}
           </DropdownMenu>
         </UncontrolledDropdown>
       </td>

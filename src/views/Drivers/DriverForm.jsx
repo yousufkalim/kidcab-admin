@@ -254,7 +254,7 @@ const DriverForm = ({
     <>
       <Modal isOpen={openModal} size="xl" centered>
         <ModalHeader charCode="X" toggle={handleModal}>
-          Add Driver
+          {isEditing ? "Edit" : "Add"} Driver
         </ModalHeader>
         <ModalBody>
           <Row>

@@ -39,7 +39,7 @@ var routes = [
   },
   {
     path: "/driver",
-    name: "Driver",
+    name: "Drivers",
     icon: "fa fa-id-card text-black",
     component: Drivers,
     layout: "/admin",
@@ -60,7 +60,7 @@ var routes = [
   },
   {
     path: "/invoice",
-    name: "Invoice",
+    name: "Invoices",
     icon: "fa fa-calendar-check text-yellow",
     component: Invoices,
     layout: "/admin",

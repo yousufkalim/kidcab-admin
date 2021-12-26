@@ -146,14 +146,14 @@ const ClientForm = ({
     <>
       <Modal isOpen={openModal} size="xl" centered>
         <ModalHeader charCode="X" toggle={handleModal}>
-          Add Client
+          {isEditing ? "Edit" : "Add"} Client
         </ModalHeader>
         <ModalBody>
           <Row>
             <Col>
               <Form>
                 <h6 className="heading-small text-muted mb-4">
-                  User information
+                  Client information
                 </h6>
                 <div className="pl-lg-4">
                   <Row>
@@ -169,7 +169,7 @@ const ClientForm = ({
                           className="form-control-alternative"
                           id="input-fname"
                           required={true}
-                          placeholder="First Name"
+                          placeholder="John"
                           type="text"
                           value={user.firstName}
                           name="firstName"
@@ -189,7 +189,7 @@ const ClientForm = ({
                           className="form-control-alternative"
                           id="input-lname"
                           placeholder="Doe"
-                          type="lastName"
+                          type="text"
                           value={user.lastName}
                           name="lastName"
                           onChange={handleInputChange}

@@ -103,7 +103,7 @@ const InvoiceForm = ({
     <>
       <Modal isOpen={openModal} size="xl" centered>
         <ModalHeader charCode="X" toggle={handleModal}>
-          Add Invoice
+          {isEditing ? "Edit" : "Add"} Invoice
         </ModalHeader>
         <ModalBody>
           <Row>

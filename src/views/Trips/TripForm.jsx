@@ -135,7 +135,7 @@ const TripForm = ({
     <>
       <Modal isOpen={openModal} size="xl" centered>
         <ModalHeader charCode="X" toggle={handleModal}>
-          Add Trip
+          {isEditing ? "Edit" : "Add"} Trip
         </ModalHeader>
         <ModalBody>
           <Row>
