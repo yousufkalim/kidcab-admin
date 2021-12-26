@@ -42,11 +42,11 @@ const QuotesForm = ({
   let [endAddress, setEndAddress] = useState({});
 
   const [clients, setClients] = useState();
-  const [passengers, setPassengers] = useState();
+  const [passengers, setPassengers] = useState([]);
 
   useEffect(() => {
     api("get", "users").then((res) => setClients(res.data.users));
-    api("get", "passengers").then((res) => setPassengers(res.data.passengers));
+    // api("get", "passengers").then((res) => setPassengers(res.data.passengers));
     if (isEditing) {
       setQuote({
         title: editQuote.quote_title,
@@ -75,6 +75,7 @@ const QuotesForm = ({
 
   const handleClientChange = (e) => {
     setQuote((quote) => ({ ...quote, client: e.value }));
+    setPassengers(clients.filter((a) => a._id === e.value)[0]?.passengers);
   };
 
   const handlePassengerChange = (e) => {
@@ -258,6 +259,12 @@ const QuotesForm = ({
                             name="client"
                             hideSelectedOptions
                             className="form-control-alternative"
+                            defaultValue={
+                              quote?.client && {
+                                value: quote.client?._id,
+                                label: `${quote.client?.first_name} ${quote.client?.last_name}`,
+                              }
+                            }
                             options={clients.map((client) => ({
                               value: client._id,
                               label: `${client.first_name} ${client.last_name}`,

@@ -30,7 +30,7 @@ const QuotesRow = ({ quote, autoRefresh }) => {
         </Badge>
       </td>
 
-      <td>{quote?.client?.first_name + quote?.client?.last_name}</td>
+      <td>{quote?.client?.first_name + " " + quote?.client?.last_name}</td>
       <td>{quote?.passengers?.length}</td>
       <td>{quote?.trip_info && quote?.trip_info?.total_trips}</td>
       <td>
