@@ -48,7 +48,7 @@ const ClientForm = ({
         gender: editUser.gender,
         siret: editUser.siret_number,
         intraCommunityNo: editUser.intra_community,
-        bankName: editUser.bank_info.bankName,
+        bankName: editUser.bank_info.bank_name,
         iban: editUser.bank_info.iban,
       });
       setAddress(editUser.address);
