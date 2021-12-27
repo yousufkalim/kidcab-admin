@@ -38,8 +38,22 @@ const QuotesForm = ({
     endDate: "",
     docuSignLink: "",
   });
-  let [startAddress, setStartAddress] = useState({});
-  let [endAddress, setEndAddress] = useState({});
+  let [startAddress, setStartAddress] = useState({
+    lat: "",
+    lng: "",
+    label: "",
+    label2: "",
+    city: "",
+    postal_code: "",
+  });
+  let [endAddress, setEndAddress] = useState({
+    lat: "",
+    lng: "",
+    label: "",
+    label2: "",
+    city: "",
+    postal_code: "",
+  });
 
   const [clients, setClients] = useState();
   const [passengers, setPassengers] = useState([]);
@@ -162,10 +176,10 @@ const QuotesForm = ({
     if (tripInfo.end_date == "") {
       return toast.error("Please enter end date");
     }
-    if (tripInfo.start_address == "") {
+    if (tripInfo.start_address.lat == "") {
       return toast.error("Please enter start address");
     }
-    if (tripInfo.end_address == "") {
+    if (tripInfo.end_address.lat == "") {
       return toast.error("Please enter end address");
     }
 
