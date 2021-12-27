@@ -26,7 +26,7 @@ const TripForm = ({
 }) => {
   const [trip, setTrip] = useState({
     date: "",
-    status: "pending",
+    status: "",
     addresses: null,
     client_price: "",
     driver_price: "",
@@ -108,6 +108,20 @@ const TripForm = ({
     let method = "post";
     let uri = "trips";
 
+    if (trip.status == "") {
+      return toast.error("Please enter quote status");
+    }
+    if (trip.date == "") {
+      return toast.error("Please enter trip date");
+    }
+
+    if (trip.client_price == "") {
+      return toast.error("Please enter client price");
+    }
+    if (trip.driver_price == "") {
+      return toast.error("Please enter drive price");
+    }
+
     if (editTrip) {
       method = "put";
       uri = uri + `/${editTrip._id}`;
@@ -117,18 +131,17 @@ const TripForm = ({
       ...trip,
       start_address: startAddress,
       end_address: endAddress,
-    })
-      .then((res) => {
-        // eslint-disable-next-line eqeqeq
-        if (res.status == 200) {
-          toast.success("Saved Successfully");
-          handleModal();
-          autoRefresh();
-        } else {
-          toast.error("Save Error", res);
-        }
-      })
-      .catch((error) => toast.error(error.message));
+    }).then((res) => {
+      // eslint-disable-next-line eqeqeq
+      if (res.status == 200) {
+        toast.success("Saved Successfully");
+        handleModal();
+        autoRefresh();
+      } else {
+        toast.error("Save Error", res);
+      }
+    });
+    // .catch((error) => toast.error(error.message));
   };
 
   return (
@@ -206,7 +219,7 @@ const TripForm = ({
                           required={true}
                           placeholder="Enter Company Name"
                           type="date"
-                          value={trip.date?.split("T")[0]}
+                          // value={trip.date?.split("")[0]}
                           name="date"
                           onChange={handleInputChange}
                         />

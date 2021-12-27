@@ -28,6 +28,7 @@ const ClientForm = ({
     lastName: "",
     email: "",
     password: "",
+    address: {},
     phone_number: "",
     siret: "",
     intraCommunityNo: "",

@@ -169,10 +169,10 @@ const InvoiceForm = ({
                             onChange={handleTripChange}
                             name="trip"
                             hideSelectedOptions
-                            defaultValue={{
-                              value: trips[0]?._id,
-                              label: `${trips[0]?.client?.first_name} - ${trips[0]?.quote?.quote_title}`,
-                            }}
+                            // defaultValue={{
+                            //   value: trips[0]?._id,
+                            //   label: `${trips[0]?.client?.first_name} - ${trips[0]?.quote?.quote_title}`,
+                            // }}
                             className="form-control-alternative"
                             options={trips.map((trip) => ({
                               value: trip._id,

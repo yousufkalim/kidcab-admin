@@ -52,7 +52,14 @@ const DriverForm = ({
     vat_number: "",
     city_of_rcs: "",
   });
-  const [address, setAddress] = useState({});
+  const [address, setAddress] = useState({
+    lat: "",
+    lng: "",
+    label: "",
+    label2: "",
+    city: "",
+    postal_code: "",
+  });
   const [vehicles, setVehicles] = useState();
 
   useEffect(() => {
@@ -197,6 +204,7 @@ const DriverForm = ({
     if (user.profile_pic == "") {
       return toast.error("Please attach profile picture");
     }
+
     if (user.firstName == "") {
       return toast.error("Please enter your first name");
     }
@@ -223,7 +231,19 @@ const DriverForm = ({
     if (user.services == "") {
       return toast.error("Please enter services");
     }
-    if (Object.keys(address)?.length < 6) {
+    // if (Object.keys(address)?.length < 6) {
+    //   return toast.error("Please select your addres");
+    // }
+    if (
+      !(
+        address.lat ||
+        address.lng ||
+        address.city ||
+        address.label ||
+        address.label ||
+        address.label2
+      )
+    ) {
       return toast.error("Please select your addres");
     }
 
@@ -232,6 +252,30 @@ const DriverForm = ({
     }
     if ((bankInfo.bank_name && bankInfo.iban) == "") {
       return toast.error("Please enter bank info ");
+    }
+    if (user.id_front == "") {
+      return toast.error("Please attach ID card front picture");
+    }
+    if (user.id_back == "") {
+      return toast.error("Please attach ID card back picture");
+    }
+    if (user.vtc_front == "") {
+      return toast.error("Please attach vtc card front picture");
+    }
+    if (user.vtc_back == "") {
+      return toast.error("Please attach vtc card back picture");
+    }
+    if (user.green_front == "") {
+      return toast.error("Please attach green card front picture");
+    }
+    if (user.green_back == "") {
+      return toast.error("Please attach green card back picture");
+    }
+    if (user.license_front == "") {
+      return toast.error("Please attach license front picture");
+    }
+    if (user.license_back == "") {
+      return toast.error("Please attach license back picture");
     }
 
     if (editUser) {
@@ -678,6 +722,7 @@ const DriverForm = ({
                           value={user.phone}
                           name="phone"
                           onChange={handleInputChange}
+                          max={10}
                         />
                       </FormGroup>
                     </Col>
