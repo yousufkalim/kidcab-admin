@@ -197,6 +197,7 @@ const DriverForm = ({
     if (user.profile_pic == "") {
       return toast.error("Please attach profile picture");
     }
+
     if (user.firstName == "") {
       return toast.error("Please enter your first name");
     }
@@ -227,12 +228,36 @@ const DriverForm = ({
       return toast.error("Please select your addres");
     }
 
-    if (user.phone == "") {
-      return toast.error("Please enter phone number");
-    }
-    if ((bankInfo.bank_name && bankInfo.iban) == "") {
-      return toast.error("Please enter bank info ");
-    }
+    // if (user.phone == "") {
+    //   return toast.error("Please enter phone number");
+    // }
+    // if ((bankInfo.bank_name && bankInfo.iban) == "") {
+    //   return toast.error("Please enter bank info ");
+    // }
+    // if (user.id_front == "") {
+    //   return toast.error("Please attach ID card front picture");
+    // }
+    // if (user.id_back == "") {
+    //   return toast.error("Please attach ID card back picture");
+    // }
+    // if (user.vtc_front == "") {
+    //   return toast.error("Please attach vtc card front picture");
+    // }
+    // if (user.vtc_back == "") {
+    //   return toast.error("Please attach vtc card back picture");
+    // }
+    // if (user.green_front == "") {
+    //   return toast.error("Please attach green card front picture");
+    // }
+    // if (user.green_back == "") {
+    //   return toast.error("Please attach green card back picture");
+    // }
+    // if (user.license_front == "") {
+    //   return toast.error("Please attach license front picture");
+    // }
+    // if (user.license_back == "") {
+    //   return toast.error("Please attach license back picture");
+    // }
 
     if (editUser) {
       method = "put";
