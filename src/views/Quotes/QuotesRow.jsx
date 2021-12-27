@@ -30,30 +30,8 @@ const QuotesRow = ({ quote, autoRefresh }) => {
         </Badge>
       </td>
 
-      <td>
-        <div className="avatar-group">
-          {quote.passengers ? (
-            quote.passengers.map((passenger) => (
-              <ClientAvatar key={passenger._id} user={passenger} />
-            ))
-          ) : (
-            <p className="mb-0 text-sm" href="#pablo">
-              No Client is added.
-            </p>
-          )}
-        </div>
-      </td>
-      <td>
-        {quote.client ? (
-          <div className="avatar-group">
-            <ClientAvatar user={quote.client} />
-          </div>
-        ) : (
-          <p className="mb-0 text-sm" href="#pablo">
-            No Client is added.
-          </p>
-        )}
-      </td>
+      <td>{quote?.client?.first_name + " " + quote?.client?.last_name}</td>
+      <td>{quote?.passengers?.length}</td>
       <td>{quote?.trip_info && quote?.trip_info?.total_trips}</td>
       <td>
         <div className="d-flex align-items-center">

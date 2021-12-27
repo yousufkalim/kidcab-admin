@@ -32,7 +32,6 @@ const QuotesForm = ({
     status: "",
     issueDate: "",
     totalTrips: "",
-    totalPassengers: "",
     totalPrice: "",
     vat: "",
     startDate: "",
@@ -43,11 +42,11 @@ const QuotesForm = ({
   let [endAddress, setEndAddress] = useState({});
 
   const [clients, setClients] = useState();
-  const [passengers, setPassengers] = useState();
+  const [passengers, setPassengers] = useState([]);
 
   useEffect(() => {
     api("get", "users").then((res) => setClients(res.data.users));
-    api("get", "passengers").then((res) => setPassengers(res.data.passengers));
+    // api("get", "passengers").then((res) => setPassengers(res.data.passengers));
     if (isEditing) {
       setQuote({
         title: editQuote.quote_title,
@@ -57,7 +56,6 @@ const QuotesForm = ({
         status: editQuote.status,
         issueDate: editQuote.issue_date,
         totalTrips: editQuote.trip_info.total_trips,
-        totalPassengers: editQuote.trip_info.total_passengers,
         totalPrice: editQuote.total_price,
         vat: editQuote.vat,
         startDate: editQuote.trip_info.start_date,
@@ -77,6 +75,7 @@ const QuotesForm = ({
 
   const handleClientChange = (e) => {
     setQuote((quote) => ({ ...quote, client: e.value }));
+    setPassengers(clients.filter((a) => a._id === e.value)[0]?.passengers);
   };
 
   const handlePassengerChange = (e) => {
@@ -110,7 +109,6 @@ const QuotesForm = ({
     let uri = "quotes";
     const tripInfo = {
       total_trips: quote.totalTrips,
-      total_passengers: quote.totalPassengers,
       start_date: quote.startDate,
       end_date: quote.endDate,
       start_address: startAddress,
@@ -150,9 +148,6 @@ const QuotesForm = ({
     }
     if (tripInfo.total_trips == "") {
       return toast.error("Please enter total number of trips");
-    }
-    if (tripInfo.total_passengers == "") {
-      return toast.error("Please enter total number of passengers");
     }
     if (quote.totalPrice == "") {
       return toast.error("Please enter quote price");
@@ -194,7 +189,7 @@ const QuotesForm = ({
     <>
       <Modal isOpen={openModal} size="xl" centered>
         <ModalHeader charCode="X" toggle={handleModal}>
-          Add A Quote
+          {isEditing ? "Edit" : "Add"} A Quote
         </ModalHeader>
         <ModalBody>
           <Row>
@@ -261,6 +256,12 @@ const QuotesForm = ({
                             name="client"
                             hideSelectedOptions
                             className="form-control-alternative"
+                            defaultValue={
+                              quote?.client && {
+                                value: quote.client?._id,
+                                label: `${quote.client?.first_name} ${quote.client?.last_name}`,
+                              }
+                            }
                             options={clients.map((client) => ({
                               value: client._id,
                               label: `${client.first_name} ${client.last_name}`,
@@ -334,7 +335,7 @@ const QuotesForm = ({
                           id="input-lname"
                           placeholder="Quote Number"
                           type="date"
-                          value={quote.issueDate}
+                          value={quote.issueDate?.split("T")[0]}
                           name="issueDate"
                           onChange={handleInputChange}
                         />
@@ -348,7 +349,7 @@ const QuotesForm = ({
                 </h6>
                 <div className="pl-lg-4">
                   <Row>
-                    <Col lg="6">
+                    <Col lg="4">
                       <FormGroup>
                         <label
                           className="form-control-label"
@@ -368,28 +369,7 @@ const QuotesForm = ({
                         />
                       </FormGroup>
                     </Col>
-                    <Col lg="6">
-                      <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-lname"
-                        >
-                          Total Passengers
-                        </label>
-                        <Input
-                          className="form-control-alternative"
-                          id="input-lname"
-                          placeholder="Total Passengers"
-                          type="number"
-                          value={quote.totalPassengers}
-                          name="totalPassengers"
-                          onChange={handleInputChange}
-                        />
-                      </FormGroup>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col lg="6">
+                    <Col lg="4">
                       <FormGroup>
                         <label
                           className="form-control-label"
@@ -409,7 +389,7 @@ const QuotesForm = ({
                         />
                       </FormGroup>
                     </Col>
-                    <Col lg="6">
+                    <Col lg="4">
                       <FormGroup>
                         <label
                           className="form-control-label"
@@ -443,7 +423,7 @@ const QuotesForm = ({
                           id="input-lname"
                           placeholder="Quote Number"
                           type="date"
-                          value={quote.startDate}
+                          value={quote.startDate?.split("T")[0]}
                           name="startDate"
                           onChange={handleInputChange}
                         />
@@ -462,7 +442,7 @@ const QuotesForm = ({
                           id="input-lname"
                           placeholder="Quote Number"
                           type="date"
-                          value={quote.endDate}
+                          value={quote.endDate?.split("T")[0]}
                           name="endDate"
                           onChange={handleInputChange}
                         />

@@ -158,7 +158,7 @@ const Index = (props) => {
                 </thead>
                 <tbody>
                   <tr>
-                    <th scope="row">/argon/</th>
+                    <th scope="row">/kidcab/</th>
                     <td>4,569</td>
                     <td>340</td>
                     <td>
@@ -166,7 +166,7 @@ const Index = (props) => {
                     </td>
                   </tr>
                   <tr>
-                    <th scope="row">/argon/index.html</th>
+                    <th scope="row">/kidcab/users</th>
                     <td>3,985</td>
                     <td>319</td>
                     <td>
@@ -175,7 +175,7 @@ const Index = (props) => {
                     </td>
                   </tr>
                   <tr>
-                    <th scope="row">/argon/charts.html</th>
+                    <th scope="row">/kidcab/quotes</th>
                     <td>3,513</td>
                     <td>294</td>
                     <td>
@@ -184,7 +184,7 @@ const Index = (props) => {
                     </td>
                   </tr>
                   <tr>
-                    <th scope="row">/argon/tables.html</th>
+                    <th scope="row">/kidcab/trips</th>
                     <td>2,050</td>
                     <td>147</td>
                     <td>
@@ -192,7 +192,7 @@ const Index = (props) => {
                     </td>
                   </tr>
                   <tr>
-                    <th scope="row">/argon/profile.html</th>
+                    <th scope="row">/kidcab/drivers</th>
                     <td>1,795</td>
                     <td>190</td>
                     <td>

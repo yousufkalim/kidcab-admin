@@ -43,7 +43,7 @@ const ClientList = () => {
             <Card className="shadow">
               <CardHeader className="border-0">
                 <div className="d-flex justify-content-between ">
-                  <h3 className="mb-0">Client List</h3>
+                  <h3 className="mb-0">Clients List</h3>
                   <Button
                     color="primary"
                     href="#pablo"

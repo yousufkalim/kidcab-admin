@@ -112,7 +112,7 @@ const PassengerForm = ({
     <>
       <Modal isOpen={openModal} size="xl" centered>
         <ModalHeader charCode="X" toggle={handleModal}>
-          Add Passenger
+          {isEditing ? "Edit" : "Add"} Passenger
         </ModalHeader>
         <ModalBody>
           <Row>

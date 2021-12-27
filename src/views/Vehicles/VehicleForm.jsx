@@ -24,7 +24,7 @@ const VehicleForm = ({
   isEditing,
   autoRefresh,
 }) => {
-  const [drivers, setDrivers] = useState();
+  const [drivers, setDrivers] = useState([]);
   const [vehicle, setVehicle] = useState({
     vehicle_name: "",
     number_plate: "",
@@ -138,7 +138,7 @@ const VehicleForm = ({
     <>
       <Modal isOpen={openModal} size="xl" centered>
         <ModalHeader charCode="X" toggle={handleModal}>
-          Add Vehicle
+          {isEditing ? "Edit" : "Add"} Vehicle
         </ModalHeader>
         <ModalBody>
           <Row>
@@ -204,10 +204,12 @@ const VehicleForm = ({
                             onChange={handleDriverChange}
                             name="client"
                             hideSelectedOptions
-                            // defaultValue={{
-                            //   value: drivers && drivers[0]?._id,
-                            //   label: `${drivers[0]?.first_name} ${drivers[0]?.last_name}`,
-                            // }}
+                            defaultValue={
+                              vehicle?.driver && {
+                                value: vehicle?.driver?._id,
+                                label: `${vehicle?.driver?.first_name} ${vehicle?.driver?.last_name}`,
+                              }
+                            }
                             className="form-control-alternative"
                             options={drivers.map((driver) => ({
                               value: driver._id,

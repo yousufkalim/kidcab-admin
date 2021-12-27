@@ -58,8 +58,8 @@ const QuotesList = () => {
                   <tr>
                     <th scope="col">Quote Title</th>
                     <th scope="col">Status</th>
-                    <th scope="col">Passenger</th>
-                    <th scope="col">Clients</th>
+                    <th scope="col">Client</th>
+                    <th scope="col">Passengers</th>
                     <th scope="col">No. of Trips</th>
                     <th scope="col">Start Date</th>
                     <th scope="col">End Date</th>
