@@ -28,7 +28,7 @@ const InvoiceForm = ({
     invoice_title: "",
     issue_date: "",
     total_price: "",
-    status: "",
+    status: "pending",
     comments: "",
     trip: "",
   });
@@ -163,16 +163,17 @@ const InvoiceForm = ({
                         >
                           Select Trip
                         </Label>
-                        {console.log(trips[0])}
                         {trips && (
                           <Select
                             onChange={handleTripChange}
                             name="trip"
                             hideSelectedOptions
-                            // defaultValue={{
-                            //   value: trips[0]?._id,
-                            //   label: `${trips[0]?.client?.first_name} - ${trips[0]?.quote?.quote_title}`,
-                            // }}
+                            defaultValue={
+                              user?.trip?._id && {
+                                value: user?.trip?._id,
+                                label: `${user?.trip?.client?.first_name} - ${user?.trip?.quote?.quote_title}`,
+                              }
+                            }
                             className="form-control-alternative"
                             options={trips.map((trip) => ({
                               value: trip._id,
