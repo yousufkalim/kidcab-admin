@@ -59,7 +59,7 @@ const TripForm = ({
   useEffect(() => {
     if (isEditing) {
       setTrip({
-        date: new Date(editTrip.date),
+        date: editTrip.date,
         status: editTrip.status,
         addresses: editTrip.addresses,
         client_price: editTrip.client_price,
@@ -220,13 +220,14 @@ const TripForm = ({
                         >
                           Trip Date
                         </label>
+                        {console.log("Date ---> ", trip.date)}
                         <Input
                           className="form-control-alternative"
                           id="input-date"
                           required={true}
                           placeholder="Enter Company Name"
                           type="date"
-                          // value={trip?.date?.split("T")[0]}
+                          value={trip?.date?.split("T")[0]}
                           name="date"
                           onChange={handleInputChange}
                         />
