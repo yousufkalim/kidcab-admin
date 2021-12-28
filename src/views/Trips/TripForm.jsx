@@ -35,13 +35,14 @@ const TripForm = ({
     invited_drivers: [],
     rides: null,
     client: "",
-    quote: "",
+    quote: {},
   });
   let [startAddress, setStartAddress] = useState({});
   let [endAddress, setEndAddress] = useState({});
   const [drivers, setDrivers] = useState();
   const [clients, setClients] = useState();
-  const [quotes, setQuotes] = useState();
+  const [allQuotes, setAllQuotes] = useState([]);
+  const [quotes, setQuotes] = useState([]);
 
   useEffect(() => {
     api("get", "drivers").then((res) => {
@@ -51,14 +52,14 @@ const TripForm = ({
       setClients(res.data.users);
     });
     api("get", "quotes").then((res) => {
-      setQuotes(res.data.quotes?.filter((a) => a.status === "accepted"));
+      setAllQuotes(res.data.quotes?.filter((a) => a.status === "accepted"));
     });
   }, []);
 
   useEffect(() => {
     if (isEditing) {
       setTrip({
-        date: new Date(editTrip.date),
+        date: editTrip.date,
         status: editTrip.status,
         addresses: editTrip.addresses,
         client_price: editTrip.client_price,
@@ -78,6 +79,12 @@ const TripForm = ({
 
   const handleInputChange = (e) => {
     setTrip({ ...trip, [e.target.name]: e.target.value });
+  };
+
+  const handleClientChange = (e) => {
+    setTrip((user) => ({ ...user, client: e.value }));
+    setQuotes(allQuotes.filter((a) => a.client?._id === e.value));
+    // setPassengers(clients.filter((a) => a._id === e.value)[0]?.passengers);
   };
 
   const handleDelete = () => {
@@ -213,13 +220,14 @@ const TripForm = ({
                         >
                           Trip Date
                         </label>
+                        {console.log("Date ---> ", trip.date)}
                         <Input
                           className="form-control-alternative"
                           id="input-date"
                           required={true}
                           placeholder="Enter Company Name"
                           type="date"
-                          // value={trip.date?.split("")[0]}
+                          value={trip?.date?.split("T")[0]}
                           name="date"
                           onChange={handleInputChange}
                         />
@@ -373,14 +381,14 @@ const TripForm = ({
                         </label>
                         {clients && (
                           <Select
-                            onChange={(e) =>
-                              setTrip((user) => ({ ...user, client: e.value }))
-                            }
+                            onChange={handleClientChange}
                             name="clients"
-                            defaultValue={{
-                              value: clients[0]?._id,
-                              label: `${clients[0]?.first_name} ${clients[0]?.last_name}`,
-                            }}
+                            defaultValue={
+                              trip?.client?._id && {
+                                value: trip?.client?._id,
+                                label: `${trip?.client?.first_name} ${trip?.client?.last_name}`,
+                              }
+                            }
                             className="form-control-alternative"
                             options={clients.map((client) => ({
                               value: client?._id,
@@ -404,10 +412,12 @@ const TripForm = ({
                               setTrip((user) => ({ ...user, quote: e.value }))
                             }
                             name="quotes"
-                            defaultValue={{
-                              value: quotes[0]?._id,
-                              label: `${quotes[0]?.quote_title}`,
-                            }}
+                            defaultValue={
+                              trip.quote?._id && {
+                                value: trip?.quote?._id,
+                                label: `${trip?.quote?.quote_title}`,
+                              }
+                            }
                             className="form-control-alternative"
                             options={quotes.map((quote) => ({
                               value: quote?._id,
