@@ -783,7 +783,7 @@ const DriverForm = ({
                           className="form-control-label"
                           htmlFor="input-id-front"
                         >
-                          Add Identity Card Front Side{" "}
+                          Add Identity Card/Passport/Residence Permit Front Side{" "}
                           <i className="fa fa-id-card" />
                         </label>
                         <Input
@@ -801,7 +801,7 @@ const DriverForm = ({
                           className="form-control-label"
                           htmlFor="input-id-back"
                         >
-                          Add Identity Card Back Side{" "}
+                          Add Identity Card/Passport/Residence Permit Back Side{" "}
                           <i className="fa fa-id-card" />
                         </label>
 
@@ -853,7 +853,7 @@ const DriverForm = ({
                       </FormGroup>
                     </Col>
                   </Row>
-                  <Row>
+                  {/* <Row>
                     <Col lg="6">
                       <FormGroup>
                         <label
@@ -891,7 +891,7 @@ const DriverForm = ({
                         />
                       </FormGroup>
                     </Col>
-                  </Row>
+                  </Row> */}
                   <Row>
                     <Col lg="6">
                       <FormGroup>
