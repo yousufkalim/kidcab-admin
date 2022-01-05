@@ -418,7 +418,7 @@ const DriverForm = ({
                 </div>
                 <div className="pl-lg-4">
                   <Row>
-                    <Col lg="4">
+                    <Col lg="6">
                       <FormGroup>
                         <Label
                           for="exampleSelect"
@@ -482,7 +482,7 @@ const DriverForm = ({
                         </FormGroup>
                       </Col>
                     ) : (
-                      <Col lg="4">
+                      <Col lg="6">
                         <FormGroup>
                           <label
                             className="form-control-label"
@@ -518,39 +518,6 @@ const DriverForm = ({
                         </FormGroup>
                       </Col>
                     )}
-                    <Col lg="4">
-                      <FormGroup>
-                        <Label
-                          for="exampleSelect"
-                          className="form-control-label"
-                        >
-                          Select Service
-                        </Label>
-
-                        <Select
-                          onChange={handleServiceChange}
-                          name="services"
-                          hideSelectedOptions
-                          defaultValue={
-                            user?.services && {
-                              value: user.services,
-                              label: user.services,
-                            }
-                          }
-                          className="form-control-alternative"
-                          options={[
-                            {
-                              value: "monthly",
-                              label: "monthly",
-                            },
-                            {
-                              value: "per_ride",
-                              label: "per_ride",
-                            },
-                          ]}
-                        />
-                      </FormGroup>
-                    </Col>
                   </Row>
                 </div>
 
