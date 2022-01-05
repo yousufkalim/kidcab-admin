@@ -250,9 +250,7 @@ const DriverForm = ({
     if (user.phone == "") {
       return toast.error("Please enter phone number");
     }
-    if ((bankInfo.bank_name && bankInfo.iban) == "") {
-      return toast.error("Please enter bank info ");
-    }
+
     if (user.id_front == "") {
       return toast.error("Please attach ID card front picture");
     }
