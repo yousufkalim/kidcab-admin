@@ -140,6 +140,10 @@ const DriverForm = ({
       bank_name: user.bankName,
       iban: user.iban,
     };
+    // const criminal_record = {
+    //   url: user.url,
+    //   date: user.date,
+    // };
 
     const formData = new FormData();
     if (user.profile_pic)
@@ -853,45 +857,6 @@ const DriverForm = ({
                       </FormGroup>
                     </Col>
                   </Row>
-                  {/* <Row>
-                    <Col lg="6">
-                      <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-green-front"
-                        >
-                          Add Green VTC Card Front Side{" "}
-                          <i className="fa fa-id-card" />
-                        </label>
-                        <Input
-                          className="form-control-file form"
-                          id="input-green-front"
-                          name="green_front"
-                          type="file"
-                          onChange={handleFileChange}
-                        />
-                      </FormGroup>
-                    </Col>
-                    <Col lg="6">
-                      <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-green-back"
-                        >
-                          Add Green VTC Card Back Side{" "}
-                          <i className="fa fa-id-card" />
-                        </label>
-
-                        <Input
-                          className="form-control-file form"
-                          id="input-green-back"
-                          name="green_back"
-                          type="file"
-                          onChange={handleFileChange}
-                        />
-                      </FormGroup>
-                    </Col>
-                  </Row> */}
                   <Row>
                     <Col lg="6">
                       <FormGroup>
@@ -930,6 +895,172 @@ const DriverForm = ({
                         />
                       </FormGroup>
                     </Col>
+                  </Row>
+                  <Row>
+                    <Col lg="6">
+                      <FormGroup>
+                        <label
+                          className="form-control-label"
+                          htmlFor="input-criminal-record"
+                        >
+                          Add Criminal Record <i className="fa fa-id-card" />
+                        </label>
+                        <Input
+                          className="form-control-file form"
+                          id="input-criminal-record"
+                          name="criminal-record"
+                          type="file"
+                          onChange={handleFileChange}
+                        />
+                      </FormGroup>
+                    </Col>
+                    {/* <Col lg="6">
+                      <FormGroup>
+                        <label
+                          className="form-control-label"
+                          htmlFor="input-date"
+                        >
+                          Expiry Date
+                        </label>
+                        {console.log("Date ---> ", trip.date)}
+                        <Input
+                          className="form-control-alternative"
+                          id="input-date"
+                          required={true}
+                          placeholder="Enter Company Name"
+                          type="date"
+                          value={trip?.date?.split("T")[0]}
+                          name="date"
+                          onChange={handleInputChange}
+                        />
+                      </FormGroup>
+                    </Col> */}
+                  </Row>
+                  <Row>
+                    <Col lg="6">
+                      <FormGroup>
+                        <label
+                          className="form-control-label"
+                          htmlFor="input-restricted-information-statement"
+                        >
+                          Add Restricted Information Statement{" "}
+                          <i className="fa fa-id-card" />
+                        </label>
+
+                        <Input
+                          className="form-control-file form"
+                          id="input-restricted-information-statement"
+                          name="restricted-information-statement"
+                          type="file"
+                          onChange={handleFileChange}
+                        />
+                      </FormGroup>
+                    </Col>
+                    {/* <Col lg="6">
+                      <FormGroup>
+                        <label
+                          className="form-control-label"
+                          htmlFor="input-date"
+                        >
+                          Trip Date
+                        </label>
+                        {console.log("Date ---> ", trip.date)}
+                        <Input
+                          className="form-control-alternative"
+                          id="input-date"
+                          required={true}
+                          placeholder="Enter Company Name"
+                          type="date"
+                          value={trip?.date?.split("T")[0]}
+                          name="date"
+                          onChange={handleInputChange}
+                        />
+                      </FormGroup>
+                    </Col> */}
+                  </Row>
+                  <Row>
+                    <Col lg="6">
+                      <FormGroup>
+                        <label
+                          className="form-control-label"
+                          htmlFor="input-kbis"
+                        >
+                          Add Kbis <i className="fa fa-id-card" />
+                        </label>
+
+                        <Input
+                          className="form-control-file form"
+                          id="input-kbis"
+                          name="kbis"
+                          type="file"
+                          onChange={handleFileChange}
+                        />
+                      </FormGroup>
+                    </Col>
+
+                    {/* <Col lg="6">
+                      <FormGroup>
+                        <label
+                          className="form-control-label"
+                          htmlFor="input-date"
+                        >
+                          Trip Date
+                        </label>
+                        {console.log("Date ---> ", trip.date)}
+                        <Input
+                          className="form-control-alternative"
+                          id="input-date"
+                          required={true}
+                          placeholder="Enter Company Name"
+                          type="date"
+                          value={trip?.date?.split("T")[0]}
+                          name="date"
+                          onChange={handleInputChange}
+                        />
+                      </FormGroup>
+                    </Col> */}
+                  </Row>
+                  <Row>
+                    <Col lg="6">
+                      <FormGroup>
+                        <label
+                          className="form-control-label"
+                          htmlFor="input-pro_rc_insurance_certificate"
+                        >
+                          Add Pro RC Insurance Certificate{" "}
+                          <i className="fa fa-id-card" />
+                        </label>
+
+                        <Input
+                          className="form-control-file form"
+                          id="input-pro_rc_insurance_certificate"
+                          name="pro_rc_insurance_certificate"
+                          type="file"
+                          onChange={handleFileChange}
+                        />
+                      </FormGroup>
+                    </Col>
+                    {/* <Col lg="6">
+                      <FormGroup>
+                        <label
+                          className="form-control-label"
+                          htmlFor="input-date"
+                        >
+                          Trip Date
+                        </label>
+                        {console.log("Date ---> ", trip.date)}
+                        <Input
+                          className="form-control-alternative"
+                          id="input-date"
+                          required={true}
+                          placeholder="Enter Company Name"
+                          type="date"
+                          value={trip?.date?.split("T")[0]}
+                          name="date"
+                          onChange={handleInputChange}
+                        />
+                      </FormGroup>
+                    </Col> */}
                   </Row>
                 </div>
               </Form>
