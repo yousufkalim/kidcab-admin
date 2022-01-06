@@ -31,8 +31,14 @@ const DriverForm = ({
     id_back: "",
     vtc_front: "",
     vtc_back: "",
-    green_front: "",
-    green_back: "",
+    criminalRecord_image: "",
+    criminalRecord_date: "",
+    restrictedInfoStatement_image: "",
+    restrictedInfoStatement_date: "",
+    kbis_image: "",
+    kbis_date: "",
+    proRC_Certificate_image: "",
+    proRC_Certificate_date: "",
     license_front: "",
     license_back: "",
     firstName: "",
@@ -43,7 +49,6 @@ const DriverForm = ({
     bankName: "",
     iban: "",
     role: "",
-    services: "",
     vehicles: [],
     company_name: "",
     siret_number: "",
@@ -77,7 +82,7 @@ const DriverForm = ({
         email: editUser.email,
         phone: editUser.phone_number,
         role: editUser.role,
-        services: editUser.services,
+
         bankName: editUser.bank_info.bank_name,
         iban: editUser.bank_info.iban,
         vehicles: editUser.vehicles,
@@ -109,10 +114,6 @@ const DriverForm = ({
     setUser((user) => ({ ...user, role: e.value }));
   };
 
-  const handleServiceChange = (e) => {
-    setUser((user) => ({ ...user, services: e.value }));
-  };
-
   const handleDelete = () => {
     let method = "delete";
     let uri = "drivers";
@@ -140,10 +141,6 @@ const DriverForm = ({
       bank_name: user.bankName,
       iban: user.iban,
     };
-    // const criminal_record = {
-    //   url: user.url,
-    //   date: user.date,
-    // };
 
     const formData = new FormData();
     if (user.profile_pic)
@@ -153,11 +150,12 @@ const DriverForm = ({
     formData.append("email", user.email);
     formData.append("password", user.password);
     formData.append("role", user.role);
-    formData.append("services", user.services);
+
     formData.append("phone_number", user.phone);
     formData.append("address", JSON.stringify(address));
     formData.append("vehicles", JSON.stringify(user.vehicles));
     formData.append("bank_info", JSON.stringify(bankInfo));
+
     if (user.role === "fleet_manager") {
       formData.append(
         "company",
@@ -172,8 +170,19 @@ const DriverForm = ({
       );
     }
 
-    if (user.id_front)
-      formData.append("id_card_front", user.id_front, user.id_front?.name);
+    if (user.criminalRecord_image)
+      formData.append(
+        "criminalRecord_image",
+        user.criminalRecord_image,
+        user.criminalRecord_image?.name
+      );
+
+    if (user.criminalRecord_image)
+      formData.append(
+        "criminalRecord_image",
+        user.criminalRecord_image,
+        user.criminalRecord_image?.name
+      );
     if (user.id_back)
       formData.append("id_card_back", user.id_back, user.id_back?.name);
     if (user.vtc_front)
@@ -192,6 +201,8 @@ const DriverForm = ({
         user.green_back,
         user.green_back?.name
       );
+    if (user.id_front)
+      formData.append("id_card_front", user.id_front, user.id_front?.name);
     if (user.license_front)
       formData.append(
         "license_card_front",
@@ -232,9 +243,6 @@ const DriverForm = ({
       return toast.error("Please select your role");
     }
 
-    if (user.services == "") {
-      return toast.error("Please enter services");
-    }
     // if (Object.keys(address)?.length < 6) {
     //   return toast.error("Please select your addres");
     // }
@@ -266,12 +274,6 @@ const DriverForm = ({
     }
     if (user.vtc_back == "") {
       return toast.error("Please attach vtc card back picture");
-    }
-    if (user.green_front == "") {
-      return toast.error("Please attach green card front picture");
-    }
-    if (user.green_back == "") {
-      return toast.error("Please attach green card back picture");
     }
     if (user.license_front == "") {
       return toast.error("Please attach license front picture");
@@ -452,7 +454,7 @@ const DriverForm = ({
                       </FormGroup>
                     </Col>
                     {user.role === "individual" ? (
-                      <Col lg="4">
+                      <Col lg="6">
                         <FormGroup>
                           <Label
                             for="exampleSelect"
@@ -881,27 +883,27 @@ const DriverForm = ({
                         />
                       </FormGroup>
                     </Col>
-                    {/* <Col lg="6">
+                    <Col lg="6">
                       <FormGroup>
                         <label
                           className="form-control-label"
                           htmlFor="input-date"
                         >
-                          Expiry Date
+                          Valid Till
                         </label>
-                        {console.log("Date ---> ", trip.date)}
+
                         <Input
                           className="form-control-alternative"
                           id="input-date"
                           required={true}
                           placeholder="Enter Company Name"
                           type="date"
-                          value={trip?.date?.split("T")[0]}
+                          value={user?.date?.split("T")[0]}
                           name="date"
                           onChange={handleInputChange}
                         />
                       </FormGroup>
-                    </Col> */}
+                    </Col>
                   </Row>
                   <Row>
                     <Col lg="6">
@@ -923,27 +925,26 @@ const DriverForm = ({
                         />
                       </FormGroup>
                     </Col>
-                    {/* <Col lg="6">
+                    <Col lg="6">
                       <FormGroup>
                         <label
                           className="form-control-label"
                           htmlFor="input-date"
                         >
-                          Trip Date
+                          Valid Till
                         </label>
-                        {console.log("Date ---> ", trip.date)}
                         <Input
                           className="form-control-alternative"
                           id="input-date"
                           required={true}
                           placeholder="Enter Company Name"
                           type="date"
-                          value={trip?.date?.split("T")[0]}
+                          value={user?.date?.split("T")[0]}
                           name="date"
                           onChange={handleInputChange}
                         />
                       </FormGroup>
-                    </Col> */}
+                    </Col>
                   </Row>
                   <Row>
                     <Col lg="6">
@@ -965,27 +966,27 @@ const DriverForm = ({
                       </FormGroup>
                     </Col>
 
-                    {/* <Col lg="6">
+                    <Col lg="6">
                       <FormGroup>
                         <label
                           className="form-control-label"
                           htmlFor="input-date"
                         >
-                          Trip Date
+                          Valid Till
                         </label>
-                        {console.log("Date ---> ", trip.date)}
+
                         <Input
                           className="form-control-alternative"
                           id="input-date"
                           required={true}
                           placeholder="Enter Company Name"
                           type="date"
-                          value={trip?.date?.split("T")[0]}
+                          value={user?.date?.split("T")[0]}
                           name="date"
                           onChange={handleInputChange}
                         />
                       </FormGroup>
-                    </Col> */}
+                    </Col>
                   </Row>
                   <Row>
                     <Col lg="6">
@@ -1007,27 +1008,27 @@ const DriverForm = ({
                         />
                       </FormGroup>
                     </Col>
-                    {/* <Col lg="6">
+                    <Col lg="6">
                       <FormGroup>
                         <label
                           className="form-control-label"
                           htmlFor="input-date"
                         >
-                          Trip Date
+                          Valid Till
                         </label>
-                        {console.log("Date ---> ", trip.date)}
+                        // {console.log("Date ---> ", user.date)}
                         <Input
                           className="form-control-alternative"
                           id="input-date"
                           required={true}
                           placeholder="Enter Company Name"
                           type="date"
-                          value={trip?.date?.split("T")[0]}
+                          value={user?.date?.split("T")[0]}
                           name="date"
                           onChange={handleInputChange}
                         />
                       </FormGroup>
-                    </Col> */}
+                    </Col>
                   </Row>
                 </div>
               </Form>
