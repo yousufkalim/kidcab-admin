@@ -177,12 +177,12 @@ const DriverForm = ({
         user.criminalRecord_image?.name
       );
 
-    if (user.criminalRecord_image)
-      formData.append(
-        "criminalRecord_image",
-        user.criminalRecord_image,
-        user.criminalRecord_image?.name
-      );
+    // if (user.criminalRecord_image)
+    //   formData.append(
+    //     "criminalRecord_image",
+    //     user.criminalRecord_image,
+    //     user.criminalRecord_image?.name
+    //   );
     if (user.id_back)
       formData.append("id_card_back", user.id_back, user.id_back?.name);
     if (user.vtc_front)
@@ -877,7 +877,7 @@ const DriverForm = ({
                         <Input
                           className="form-control-file form"
                           id="input-criminal-record"
-                          name="criminal-record"
+                          name="criminalRecord_image"
                           type="file"
                           onChange={handleFileChange}
                         />

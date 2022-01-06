@@ -28,12 +28,15 @@ const VehicleForm = ({
   const [vehicle, setVehicle] = useState({
     vehicle_name: "",
     number_plate: "",
+    insurance_certificate: "",
+    insurance_date: "",
     brand: "",
     model: "",
     color: "",
     engine_type: "",
     gray_card: "",
     inspection_info: "",
+    inspection_date: "",
     driver: "",
   });
 
@@ -42,7 +45,6 @@ const VehicleForm = ({
     if (isEditing) {
       setVehicle({
         vehicle_name: editVehicle.vehicle_name,
-        number_plate: editVehicle.number_plate,
         brand: editVehicle.brand,
         model: editVehicle.model,
         color: editVehicle.color,
@@ -54,6 +56,9 @@ const VehicleForm = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  const handleFileChange = (e) => {
+    setVehicle({ ...vehicle, [e.target.name]: e.target.files[0] });
+  };
 
   const handleInputChange = (e) => {
     setVehicle({ ...vehicle, [e.target.name]: e.target.value });
@@ -89,11 +94,16 @@ const VehicleForm = ({
     e.preventDefault();
     let method = "post";
     let uri = "vehicles";
+
+    const formData = new FormData();
+    if (vehicle.number_plate)
+      formData.append(
+        "number_plate",
+        vehicle.number_plate,
+        vehicle.number_plate?.name
+      );
     if (vehicle.vehicle_name == "") {
       return toast.error("Please enter vehicle name");
-    }
-    if (vehicle.number_plate == "") {
-      return toast.error("Please enter car registeration number");
     }
     if (vehicle.brand == "") {
       return toast.error("Please enter brand name");
@@ -113,8 +123,8 @@ const VehicleForm = ({
     if (vehicle.gray_card == "") {
       return toast.error("Please enter grey card");
     }
-    if (vehicle.inspection_info == "") {
-      return toast.error("Please enter inspection info");
+    if (vehicle.number_plate == "") {
+      return toast.error("Please enter car registeration card");
     }
 
     if (editVehicle) {
@@ -150,7 +160,7 @@ const VehicleForm = ({
 
                 <div className="pl-lg-4">
                   <Row>
-                    <Col lg="6">
+                    <Col lg="4">
                       <FormGroup>
                         <label
                           className="form-control-label"
@@ -170,22 +180,41 @@ const VehicleForm = ({
                         />
                       </FormGroup>
                     </Col>
-                    <Col lg="6">
+                    <Col lg="4">
                       <FormGroup>
-                        <label
+                        <Label
+                          for="exampleSelect"
                           className="form-control-label"
-                          htmlFor="input-lname"
                         >
-                          Registration Number
-                        </label>
+                          Brand
+                        </Label>
                         <Input
-                          className="form-control-alternative"
-                          id="input-lname"
-                          placeholder="Registration Number"
-                          type="text"
-                          value={vehicle.number_plate}
-                          name="number_plate"
+                          id="exampleSelect"
+                          name="brand"
+                          value={vehicle.brand}
                           onChange={handleInputChange}
+                          className="form-control-alternative"
+                          placeholder="Enter Vehicle Brand"
+                          type="text"
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col lg="4">
+                      <FormGroup>
+                        <Label
+                          for="exampleSelect"
+                          className="form-control-label"
+                        >
+                          Model
+                        </Label>
+                        <Input
+                          id="exampleSelect"
+                          name="model"
+                          value={vehicle.model}
+                          onChange={handleInputChange}
+                          className="form-control-alternative"
+                          placeholder="Enter Vehicle Model"
+                          type="text"
                         />
                       </FormGroup>
                     </Col>
@@ -227,44 +256,6 @@ const VehicleForm = ({
                           for="exampleSelect"
                           className="form-control-label"
                         >
-                          Brand
-                        </Label>
-                        <Input
-                          id="exampleSelect"
-                          name="brand"
-                          value={vehicle.brand}
-                          onChange={handleInputChange}
-                          className="form-control-alternative"
-                          placeholder="Enter Vehicle Brand"
-                          type="text"
-                        />
-                      </FormGroup>
-                    </Col>
-                    <Col lg="4">
-                      <FormGroup>
-                        <Label
-                          for="exampleSelect"
-                          className="form-control-label"
-                        >
-                          Model
-                        </Label>
-                        <Input
-                          id="exampleSelect"
-                          name="model"
-                          value={vehicle.model}
-                          onChange={handleInputChange}
-                          className="form-control-alternative"
-                          placeholder="Enter Vehicle Model"
-                          type="text"
-                        />
-                      </FormGroup>
-                    </Col>
-                    <Col lg="4">
-                      <FormGroup>
-                        <Label
-                          for="exampleSelect"
-                          className="form-control-label"
-                        >
                           Color
                         </Label>
                         <Input
@@ -274,27 +265,6 @@ const VehicleForm = ({
                           onChange={handleInputChange}
                           className="form-control-alternative"
                           placeholder="Enter Vehicle Color"
-                          type="text"
-                        />
-                      </FormGroup>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col lg="4">
-                      <FormGroup>
-                        <Label
-                          for="exampleSelect"
-                          className="form-control-label"
-                        >
-                          Engine Type
-                        </Label>
-                        <Input
-                          id="exampleSelect"
-                          name="engine_type"
-                          value={vehicle.engine_type}
-                          onChange={handleInputChange}
-                          className="form-control-alternative"
-                          placeholder="Enter Vehicle Engine Type"
                           type="text"
                         />
                       </FormGroup>
@@ -324,16 +294,116 @@ const VehicleForm = ({
                           for="exampleSelect"
                           className="form-control-label"
                         >
-                          Inspection Information
+                          Engine Type
                         </Label>
                         <Input
                           id="exampleSelect"
-                          name="inspection_info"
-                          value={vehicle.inspection_info}
+                          name="engine_type"
+                          value={vehicle.engine_type}
                           onChange={handleInputChange}
                           className="form-control-alternative"
-                          placeholder="Enter Vehicle Inspection Information"
+                          placeholder="Enter Vehicle Engine Type"
                           type="text"
+                        />
+                      </FormGroup>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col lg="4">
+                      <FormGroup>
+                        <label
+                          className="form-control-label"
+                          htmlFor="input-inspection-info"
+                        >
+                          Add Inspection Card
+                          <i className="fa fa-id-card" />
+                        </label>
+                        <Input
+                          className="form-control-file form"
+                          id="input-inspection-info"
+                          name="inspection-info"
+                          type="file"
+                          onChange={handleFileChange}
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col lg="4">
+                      <FormGroup>
+                        <label
+                          className="form-control-label"
+                          htmlFor="input-date"
+                        >
+                          Inspection Card Valid Till
+                        </label>
+
+                        <Input
+                          className="form-control-alternative"
+                          id="input-date"
+                          required={true}
+                          placeholder="Enter validity date"
+                          type="date"
+                          value={vehicle?.date?.split("T")[0]}
+                          name="inspection-date"
+                          onChange={handleInputChange}
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col lg="4">
+                      <FormGroup>
+                        <label
+                          className="form-control-label"
+                          htmlFor="input-number-plate"
+                        >
+                          Add Registeration Card
+                          <i className="fa fa-id-card" />
+                        </label>
+                        <Input
+                          className="form-control-file form"
+                          id="input-number-plate"
+                          name="number_plate"
+                          type="file"
+                          onChange={handleFileChange}
+                        />
+                      </FormGroup>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col lg="4">
+                      <FormGroup>
+                        <label
+                          className="form-control-label"
+                          htmlFor="input-number-plate"
+                        >
+                          Add vehicle Insurance Certificate
+                          <i className="fa fa-id-card" />
+                        </label>
+                        <Input
+                          className="form-control-file form"
+                          id="input-number-plate"
+                          name="number-plate"
+                          type="file"
+                          onChange={handleFileChange}
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col lg="4">
+                      <FormGroup>
+                        <label
+                          className="form-control-label"
+                          htmlFor="input-date"
+                        >
+                          Insurance Valid Till
+                        </label>
+
+                        <Input
+                          className="form-control-alternative"
+                          id="input-date"
+                          required={true}
+                          placeholder="Enter validity date"
+                          type="date"
+                          value={vehicle?.date?.split("T")[0]}
+                          name="insurance-date"
+                          onChange={handleInputChange}
                         />
                       </FormGroup>
                     </Col>
