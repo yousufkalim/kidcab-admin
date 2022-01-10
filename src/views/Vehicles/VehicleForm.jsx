@@ -29,14 +29,14 @@ const VehicleForm = ({
     vehicle_name: "",
     number_plate: "",
     insurance_certificate: "",
-    insurance_date: "",
+    insurance_expiry_date: "",
     brand: "",
     model: "",
     color: "",
     engine_type: "",
     gray_card: "",
     inspection_info: "",
-    inspection_date: "",
+    inspection_expiry_date: "",
     driver: "",
   });
 
@@ -52,6 +52,8 @@ const VehicleForm = ({
         gray_card: editVehicle.gray_card,
         inspection_info: editVehicle.inspection_info,
         driver: editVehicle.driver,
+        inspection_expiry_date: editVehicle.inspection_expiry_date,
+        insurance_expiry_date: editVehicle.insurance_expiry_date,
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -95,22 +97,12 @@ const VehicleForm = ({
     let method = "post";
     let uri = "vehicles";
 
-    const formData = new FormData();
-    if (vehicle.number_plate)
-      formData.append(
-        "number_plate",
-        vehicle.number_plate,
-        vehicle.number_plate?.name
-      );
     if (vehicle.vehicle_name == "") {
       return toast.error("Please enter vehicle name");
     }
     if (vehicle.brand == "") {
       return toast.error("Please enter brand name");
     }
-    // if (vehicle.driver == "") {
-    //   return toast.error("Please select driver");
-    // }
     if (vehicle.model == "") {
       return toast.error("Please enter your car model");
     }
@@ -123,15 +115,37 @@ const VehicleForm = ({
     if (vehicle.gray_card == "") {
       return toast.error("Please enter grey card");
     }
-    if (vehicle.number_plate == "") {
-      return toast.error("Please enter car registeration card");
+
+    const formData = new FormData();
+
+    formData.append("vehicle_name", vehicle.vehicle_name);
+    formData.append("brand", vehicle.brand);
+    formData.append("model", vehicle.model);
+    formData.append("color", vehicle.color);
+    formData.append("engine_type", vehicle.engine_type);
+    formData.append("gray_card", vehicle.gray_card);
+    formData.append("driver", JSON.stringify(vehicle.driver));
+
+    if (vehicle.insurance_certificate) {
+      formData.append("insurance_certificate", vehicle.insurance_certificate);
+      formData.append("insurance_expiry_date", vehicle.insurance_expiry_date);
+    }
+
+    if (vehicle.inspection_info) {
+      formData.append("inspection_info", vehicle.inspection_info);
+      formData.append("inspection_expiry_date", vehicle.inspection_expiry_date);
+    }
+
+    if (vehicle.registration_card) {
+      formData.append("registration_card", vehicle.registration_card);
     }
 
     if (editVehicle) {
       method = "put";
       uri = uri + `/${editVehicle._id}`;
     }
-    api(method, uri, vehicle)
+
+    api(method, uri, formData)
       .then((res) => {
         if (res.status === 200) {
           toast.success("Saved Successfully");
@@ -321,7 +335,7 @@ const VehicleForm = ({
                         <Input
                           className="form-control-file form"
                           id="input-inspection-info"
-                          name="inspection-info"
+                          name="inspection_info"
                           type="file"
                           onChange={handleFileChange}
                         />
@@ -333,7 +347,7 @@ const VehicleForm = ({
                           className="form-control-label"
                           htmlFor="input-date"
                         >
-                          Inspection Card Valid Till
+                          Inspection Valid Till
                         </label>
 
                         <Input
@@ -342,8 +356,8 @@ const VehicleForm = ({
                           required={true}
                           placeholder="Enter validity date"
                           type="date"
-                          value={vehicle?.date?.split("T")[0]}
-                          name="inspection-date"
+                          value={vehicle?.inspection_expiry_date?.split("T")[0]}
+                          name="inspection_expiry_date"
                           onChange={handleInputChange}
                         />
                       </FormGroup>
@@ -354,13 +368,13 @@ const VehicleForm = ({
                           className="form-control-label"
                           htmlFor="input-number-plate"
                         >
-                          Add Registeration Card
+                          Add Registration Card
                           <i className="fa fa-id-card" />
                         </label>
                         <Input
                           className="form-control-file form"
                           id="input-number-plate"
-                          name="number_plate"
+                          name="registration_card"
                           type="file"
                           onChange={handleFileChange}
                         />
@@ -380,7 +394,7 @@ const VehicleForm = ({
                         <Input
                           className="form-control-file form"
                           id="input-number-plate"
-                          name="number-plate"
+                          name="insurance_certificate"
                           type="file"
                           onChange={handleFileChange}
                         />
@@ -401,8 +415,8 @@ const VehicleForm = ({
                           required={true}
                           placeholder="Enter validity date"
                           type="date"
-                          value={vehicle?.date?.split("T")[0]}
-                          name="insurance-date"
+                          value={vehicle?.insurance_expiry_date?.split("T")[0]}
+                          name="insurance_expiry_date"
                           onChange={handleInputChange}
                         />
                       </FormGroup>

@@ -9,7 +9,7 @@ import {
 import ClientAvatar from "./DriverAvatar";
 import PassengerForm from "./VehicleForm";
 
-const VehicleRow = ({ user: vehicle ,autoRefresh}) => {
+const VehicleRow = ({ user: vehicle, autoRefresh }) => {
   const [openModal, setOpenModal] = useState();
 
   const handleModal = () => {
@@ -21,11 +21,11 @@ const VehicleRow = ({ user: vehicle ,autoRefresh}) => {
       <th scope="row">
         <span className="mb-0 text-sm">{vehicle.vehicle_name}</span>
       </th>
-      <td>{vehicle.email}</td>
+      <td>{vehicle.model}</td>
       <td>
         <Badge color="" className="badge-dot mr-4">
           {/* <i className="bg-warning" /> */}
-          {vehicle.number_plate}
+          {vehicle.color}
         </Badge>
       </td>
       <td className="text-left">
