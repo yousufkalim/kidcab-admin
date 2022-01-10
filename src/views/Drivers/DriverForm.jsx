@@ -31,14 +31,14 @@ const DriverForm = ({
     id_back: "",
     vtc_front: "",
     vtc_back: "",
-    criminalRecord_image: "",
-    criminalRecord_date: "",
-    restrictedInfoStatement_image: "",
-    restrictedInfoStatement_date: "",
+    criminal_record_image: "",
+    criminal_record_date: "",
+    ris_image: "",
+    ris_date: "",
     kbis_image: "",
     kbis_date: "",
-    proRC_Certificate_image: "",
-    proRC_Certificate_date: "",
+    proRc_image: "",
+    proRc_date: "",
     license_front: "",
     license_back: "",
     firstName: "",
@@ -82,7 +82,6 @@ const DriverForm = ({
         email: editUser.email,
         phone: editUser.phone_number,
         role: editUser.role,
-
         bankName: editUser.bank_info.bank_name,
         iban: editUser.bank_info.iban,
         vehicles: editUser.vehicles,
@@ -92,6 +91,10 @@ const DriverForm = ({
         social_capital: editUser.company?.social_capital,
         vat_number: editUser.company?.vat_number,
         city_of_rcs: editUser.company?.city_of_rcs,
+        criminal_record_date: editUser.criminal_record_date,
+        kbis_date: editUser.kbis_date,
+        ris_date: editUser.ris_date,
+        proRc_date: editUser.proRc_date,
       });
       setAddress(editUser.address);
     }
@@ -150,7 +153,6 @@ const DriverForm = ({
     formData.append("email", user.email);
     formData.append("password", user.password);
     formData.append("role", user.role);
-
     formData.append("phone_number", user.phone);
     formData.append("address", JSON.stringify(address));
     formData.append("vehicles", JSON.stringify(user.vehicles));
@@ -170,39 +172,40 @@ const DriverForm = ({
       );
     }
 
-    if (user.criminalRecord_image)
+    if (user.criminal_record_image) {
       formData.append(
-        "criminalRecord_image",
-        user.criminalRecord_image,
-        user.criminalRecord_image?.name
+        "criminal_record_image",
+        user.criminal_record_image,
+        user.criminal_record_image?.name
       );
+      formData.append("criminal_record_date", user.criminal_record_date);
+    }
 
-    // if (user.criminalRecord_image)
-    //   formData.append(
-    //     "criminalRecord_image",
-    //     user.criminalRecord_image,
-    //     user.criminalRecord_image?.name
-    //   );
+    if (user.ris_image) {
+      formData.append("ris_image", user.ris_image, user.ris_image?.name);
+      formData.append("ris_date", user.ris_date);
+    }
+
+    if (user.kbis_image) {
+      formData.append("kbis_image", user.kbis_image, user.kbis_image?.name);
+      formData.append("kbis_date", user.kbis_date);
+    }
+
+    if (user.proRc_image) {
+      formData.append("proRc_image", user.proRc_image, user.proRc_image?.name);
+      formData.append("proRc_date", user.proRc_date);
+    }
+
+    if (user.id_front)
+      formData.append("id_card_front", user.id_front, user.id_front?.name);
     if (user.id_back)
       formData.append("id_card_back", user.id_back, user.id_back?.name);
+
     if (user.vtc_front)
       formData.append("vtc_card_front", user.vtc_front, user.vtc_front?.name);
     if (user.vtc_back)
       formData.append("vtc_card_back", user.vtc_back, user.vtc_back?.name);
-    if (user.green_front)
-      formData.append(
-        "green_card_front",
-        user.green_front,
-        user.green_front?.name
-      );
-    if (user.green_back)
-      formData.append(
-        "green_card_back",
-        user.green_back,
-        user.green_back?.name
-      );
-    if (user.id_front)
-      formData.append("id_card_front", user.id_front, user.id_front?.name);
+
     if (user.license_front)
       formData.append(
         "license_card_front",
@@ -243,9 +246,6 @@ const DriverForm = ({
       return toast.error("Please select your role");
     }
 
-    // if (Object.keys(address)?.length < 6) {
-    //   return toast.error("Please select your addres");
-    // }
     if (
       !(
         address.lat ||
@@ -877,7 +877,7 @@ const DriverForm = ({
                         <Input
                           className="form-control-file form"
                           id="input-criminal-record"
-                          name="criminalRecord_image"
+                          name="criminal_record_image"
                           type="file"
                           onChange={handleFileChange}
                         />
@@ -898,8 +898,8 @@ const DriverForm = ({
                           required={true}
                           placeholder="Enter Company Name"
                           type="date"
-                          value={user?.date?.split("T")[0]}
-                          name="date"
+                          value={user?.criminal_record_date?.split("T")[0]}
+                          name="criminal_record_date"
                           onChange={handleInputChange}
                         />
                       </FormGroup>
@@ -919,7 +919,7 @@ const DriverForm = ({
                         <Input
                           className="form-control-file form"
                           id="input-restricted-information-statement"
-                          name="restricted-information-statement"
+                          name="ris_image"
                           type="file"
                           onChange={handleFileChange}
                         />
@@ -939,8 +939,8 @@ const DriverForm = ({
                           required={true}
                           placeholder="Enter Company Name"
                           type="date"
-                          value={user?.date?.split("T")[0]}
-                          name="date"
+                          value={user?.ris_date?.split("T")[0]}
+                          name="ris_date"
                           onChange={handleInputChange}
                         />
                       </FormGroup>
@@ -953,13 +953,13 @@ const DriverForm = ({
                           className="form-control-label"
                           htmlFor="input-kbis"
                         >
-                          Add Kbis <i className="fa fa-id-card" />
+                          Add KBIS <i className="fa fa-id-card" />
                         </label>
 
                         <Input
                           className="form-control-file form"
                           id="input-kbis"
-                          name="kbis"
+                          name="kbis_image"
                           type="file"
                           onChange={handleFileChange}
                         />
@@ -981,8 +981,8 @@ const DriverForm = ({
                           required={true}
                           placeholder="Enter Company Name"
                           type="date"
-                          value={user?.date?.split("T")[0]}
-                          name="date"
+                          value={user?.kbis_date?.split("T")[0]}
+                          name="kbis_date"
                           onChange={handleInputChange}
                         />
                       </FormGroup>
@@ -1002,7 +1002,7 @@ const DriverForm = ({
                         <Input
                           className="form-control-file form"
                           id="input-pro_rc_insurance_certificate"
-                          name="pro_rc_insurance_certificate"
+                          name="proRc_image"
                           type="file"
                           onChange={handleFileChange}
                         />
@@ -1016,15 +1016,14 @@ const DriverForm = ({
                         >
                           Valid Till
                         </label>
-                        // {console.log("Date ---> ", user.date)}
                         <Input
                           className="form-control-alternative"
                           id="input-date"
                           required={true}
                           placeholder="Enter Company Name"
                           type="date"
-                          value={user?.date?.split("T")[0]}
-                          name="date"
+                          value={user?.proRc_date?.split("T")[0]}
+                          name="proRc_date"
                           onChange={handleInputChange}
                         />
                       </FormGroup>
