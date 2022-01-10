@@ -58,8 +58,8 @@ const VehicleList = () => {
                 <thead className="thead-light">
                   <tr>
                     <th scope="col">Name</th>
-                    <th scope="col"></th>
-                    <th scope="col">Registration Number</th>
+                    <th scope="col">Model</th>
+                    <th scope="col">Color</th>
                     <th scope="col">Driver</th>
                     <th scope="col"></th>
                     <th scope="col" />

@@ -31,8 +31,14 @@ const DriverForm = ({
     id_back: "",
     vtc_front: "",
     vtc_back: "",
-    green_front: "",
-    green_back: "",
+    criminal_record_image: "",
+    criminal_record_date: "",
+    ris_image: "",
+    ris_date: "",
+    kbis_image: "",
+    kbis_date: "",
+    proRc_image: "",
+    proRc_date: "",
     license_front: "",
     license_back: "",
     firstName: "",
@@ -43,7 +49,6 @@ const DriverForm = ({
     bankName: "",
     iban: "",
     role: "",
-    services: "",
     vehicles: [],
     company_name: "",
     siret_number: "",
@@ -77,7 +82,6 @@ const DriverForm = ({
         email: editUser.email,
         phone: editUser.phone_number,
         role: editUser.role,
-        services: editUser.services,
         bankName: editUser.bank_info.bank_name,
         iban: editUser.bank_info.iban,
         vehicles: editUser.vehicles,
@@ -87,6 +91,10 @@ const DriverForm = ({
         social_capital: editUser.company?.social_capital,
         vat_number: editUser.company?.vat_number,
         city_of_rcs: editUser.company?.city_of_rcs,
+        criminal_record_date: editUser.criminal_record_date,
+        kbis_date: editUser.kbis_date,
+        ris_date: editUser.ris_date,
+        proRc_date: editUser.proRc_date,
       });
       setAddress(editUser.address);
     }
@@ -107,10 +115,6 @@ const DriverForm = ({
 
   const handleRoleChange = (e) => {
     setUser((user) => ({ ...user, role: e.value }));
-  };
-
-  const handleServiceChange = (e) => {
-    setUser((user) => ({ ...user, services: e.value }));
   };
 
   const handleDelete = () => {
@@ -149,11 +153,11 @@ const DriverForm = ({
     formData.append("email", user.email);
     formData.append("password", user.password);
     formData.append("role", user.role);
-    formData.append("services", user.services);
     formData.append("phone_number", user.phone);
     formData.append("address", JSON.stringify(address));
     formData.append("vehicles", JSON.stringify(user.vehicles));
     formData.append("bank_info", JSON.stringify(bankInfo));
+
     if (user.role === "fleet_manager") {
       formData.append(
         "company",
@@ -168,26 +172,40 @@ const DriverForm = ({
       );
     }
 
+    if (user.criminal_record_image) {
+      formData.append(
+        "criminal_record_image",
+        user.criminal_record_image,
+        user.criminal_record_image?.name
+      );
+      formData.append("criminal_record_date", user.criminal_record_date);
+    }
+
+    if (user.ris_image) {
+      formData.append("ris_image", user.ris_image, user.ris_image?.name);
+      formData.append("ris_date", user.ris_date);
+    }
+
+    if (user.kbis_image) {
+      formData.append("kbis_image", user.kbis_image, user.kbis_image?.name);
+      formData.append("kbis_date", user.kbis_date);
+    }
+
+    if (user.proRc_image) {
+      formData.append("proRc_image", user.proRc_image, user.proRc_image?.name);
+      formData.append("proRc_date", user.proRc_date);
+    }
+
     if (user.id_front)
       formData.append("id_card_front", user.id_front, user.id_front?.name);
     if (user.id_back)
       formData.append("id_card_back", user.id_back, user.id_back?.name);
+
     if (user.vtc_front)
       formData.append("vtc_card_front", user.vtc_front, user.vtc_front?.name);
     if (user.vtc_back)
       formData.append("vtc_card_back", user.vtc_back, user.vtc_back?.name);
-    if (user.green_front)
-      formData.append(
-        "green_card_front",
-        user.green_front,
-        user.green_front?.name
-      );
-    if (user.green_back)
-      formData.append(
-        "green_card_back",
-        user.green_back,
-        user.green_back?.name
-      );
+
     if (user.license_front)
       formData.append(
         "license_card_front",
@@ -228,12 +246,6 @@ const DriverForm = ({
       return toast.error("Please select your role");
     }
 
-    if (user.services == "") {
-      return toast.error("Please enter services");
-    }
-    // if (Object.keys(address)?.length < 6) {
-    //   return toast.error("Please select your addres");
-    // }
     if (
       !(
         address.lat ||
@@ -250,9 +262,7 @@ const DriverForm = ({
     if (user.phone == "") {
       return toast.error("Please enter phone number");
     }
-    if ((bankInfo.bank_name && bankInfo.iban) == "") {
-      return toast.error("Please enter bank info ");
-    }
+
     if (user.id_front == "") {
       return toast.error("Please attach ID card front picture");
     }
@@ -264,12 +274,6 @@ const DriverForm = ({
     }
     if (user.vtc_back == "") {
       return toast.error("Please attach vtc card back picture");
-    }
-    if (user.green_front == "") {
-      return toast.error("Please attach green card front picture");
-    }
-    if (user.green_back == "") {
-      return toast.error("Please attach green card back picture");
     }
     if (user.license_front == "") {
       return toast.error("Please attach license front picture");
@@ -416,7 +420,7 @@ const DriverForm = ({
                 </div>
                 <div className="pl-lg-4">
                   <Row>
-                    <Col lg="4">
+                    <Col lg="6">
                       <FormGroup>
                         <Label
                           for="exampleSelect"
@@ -450,7 +454,7 @@ const DriverForm = ({
                       </FormGroup>
                     </Col>
                     {user.role === "individual" ? (
-                      <Col lg="4">
+                      <Col lg="6">
                         <FormGroup>
                           <Label
                             for="exampleSelect"
@@ -480,7 +484,7 @@ const DriverForm = ({
                         </FormGroup>
                       </Col>
                     ) : (
-                      <Col lg="4">
+                      <Col lg="6">
                         <FormGroup>
                           <label
                             className="form-control-label"
@@ -516,39 +520,6 @@ const DriverForm = ({
                         </FormGroup>
                       </Col>
                     )}
-                    <Col lg="4">
-                      <FormGroup>
-                        <Label
-                          for="exampleSelect"
-                          className="form-control-label"
-                        >
-                          Select Service
-                        </Label>
-
-                        <Select
-                          onChange={handleServiceChange}
-                          name="services"
-                          hideSelectedOptions
-                          defaultValue={
-                            user?.services && {
-                              value: user.services,
-                              label: user.services,
-                            }
-                          }
-                          className="form-control-alternative"
-                          options={[
-                            {
-                              value: "monthly",
-                              label: "monthly",
-                            },
-                            {
-                              value: "per_ride",
-                              label: "per_ride",
-                            },
-                          ]}
-                        />
-                      </FormGroup>
-                    </Col>
                   </Row>
                 </div>
 
@@ -785,7 +756,7 @@ const DriverForm = ({
                           className="form-control-label"
                           htmlFor="input-id-front"
                         >
-                          Add Identity Card Front Side{" "}
+                          Add Identity Card/Passport/Residence Permit Front Side{" "}
                           <i className="fa fa-id-card" />
                         </label>
                         <Input
@@ -803,7 +774,7 @@ const DriverForm = ({
                           className="form-control-label"
                           htmlFor="input-id-back"
                         >
-                          Add Identity Card Back Side{" "}
+                          Add Identity Card/Passport/Residence Permit Back Side{" "}
                           <i className="fa fa-id-card" />
                         </label>
 
@@ -860,45 +831,6 @@ const DriverForm = ({
                       <FormGroup>
                         <label
                           className="form-control-label"
-                          htmlFor="input-green-front"
-                        >
-                          Add Green VTC Card Front Side{" "}
-                          <i className="fa fa-id-card" />
-                        </label>
-                        <Input
-                          className="form-control-file form"
-                          id="input-green-front"
-                          name="green_front"
-                          type="file"
-                          onChange={handleFileChange}
-                        />
-                      </FormGroup>
-                    </Col>
-                    <Col lg="6">
-                      <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-green-back"
-                        >
-                          Add Green VTC Card Back Side{" "}
-                          <i className="fa fa-id-card" />
-                        </label>
-
-                        <Input
-                          className="form-control-file form"
-                          id="input-green-back"
-                          name="green_back"
-                          type="file"
-                          onChange={handleFileChange}
-                        />
-                      </FormGroup>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col lg="6">
-                      <FormGroup>
-                        <label
-                          className="form-control-label"
                           htmlFor="input-license-front"
                         >
                           Add License Card Front Side{" "}
@@ -929,6 +861,170 @@ const DriverForm = ({
                           name="license_back"
                           type="file"
                           onChange={handleFileChange}
+                        />
+                      </FormGroup>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col lg="6">
+                      <FormGroup>
+                        <label
+                          className="form-control-label"
+                          htmlFor="input-criminal-record"
+                        >
+                          Add Criminal Record <i className="fa fa-id-card" />
+                        </label>
+                        <Input
+                          className="form-control-file form"
+                          id="input-criminal-record"
+                          name="criminal_record_image"
+                          type="file"
+                          onChange={handleFileChange}
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col lg="6">
+                      <FormGroup>
+                        <label
+                          className="form-control-label"
+                          htmlFor="input-date"
+                        >
+                          Valid Till
+                        </label>
+
+                        <Input
+                          className="form-control-alternative"
+                          id="input-date"
+                          required={true}
+                          placeholder="Enter Company Name"
+                          type="date"
+                          value={user?.criminal_record_date?.split("T")[0]}
+                          name="criminal_record_date"
+                          onChange={handleInputChange}
+                        />
+                      </FormGroup>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col lg="6">
+                      <FormGroup>
+                        <label
+                          className="form-control-label"
+                          htmlFor="input-restricted-information-statement"
+                        >
+                          Add Restricted Information Statement{" "}
+                          <i className="fa fa-id-card" />
+                        </label>
+
+                        <Input
+                          className="form-control-file form"
+                          id="input-restricted-information-statement"
+                          name="ris_image"
+                          type="file"
+                          onChange={handleFileChange}
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col lg="6">
+                      <FormGroup>
+                        <label
+                          className="form-control-label"
+                          htmlFor="input-date"
+                        >
+                          Valid Till
+                        </label>
+                        <Input
+                          className="form-control-alternative"
+                          id="input-date"
+                          required={true}
+                          placeholder="Enter Company Name"
+                          type="date"
+                          value={user?.ris_date?.split("T")[0]}
+                          name="ris_date"
+                          onChange={handleInputChange}
+                        />
+                      </FormGroup>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col lg="6">
+                      <FormGroup>
+                        <label
+                          className="form-control-label"
+                          htmlFor="input-kbis"
+                        >
+                          Add KBIS <i className="fa fa-id-card" />
+                        </label>
+
+                        <Input
+                          className="form-control-file form"
+                          id="input-kbis"
+                          name="kbis_image"
+                          type="file"
+                          onChange={handleFileChange}
+                        />
+                      </FormGroup>
+                    </Col>
+
+                    <Col lg="6">
+                      <FormGroup>
+                        <label
+                          className="form-control-label"
+                          htmlFor="input-date"
+                        >
+                          Valid Till
+                        </label>
+
+                        <Input
+                          className="form-control-alternative"
+                          id="input-date"
+                          required={true}
+                          placeholder="Enter Company Name"
+                          type="date"
+                          value={user?.kbis_date?.split("T")[0]}
+                          name="kbis_date"
+                          onChange={handleInputChange}
+                        />
+                      </FormGroup>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col lg="6">
+                      <FormGroup>
+                        <label
+                          className="form-control-label"
+                          htmlFor="input-pro_rc_insurance_certificate"
+                        >
+                          Add Pro RC Insurance Certificate{" "}
+                          <i className="fa fa-id-card" />
+                        </label>
+
+                        <Input
+                          className="form-control-file form"
+                          id="input-pro_rc_insurance_certificate"
+                          name="proRc_image"
+                          type="file"
+                          onChange={handleFileChange}
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col lg="6">
+                      <FormGroup>
+                        <label
+                          className="form-control-label"
+                          htmlFor="input-date"
+                        >
+                          Valid Till
+                        </label>
+                        <Input
+                          className="form-control-alternative"
+                          id="input-date"
+                          required={true}
+                          placeholder="Enter Company Name"
+                          type="date"
+                          value={user?.proRc_date?.split("T")[0]}
+                          name="proRc_date"
+                          onChange={handleInputChange}
                         />
                       </FormGroup>
                     </Col>
