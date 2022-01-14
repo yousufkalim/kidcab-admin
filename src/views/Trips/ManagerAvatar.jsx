@@ -21,7 +21,10 @@ const ManagerAvatar = ({ user }) => {
           <i className="ni ni-circle-08" />
         )}
       </a>
-      <UncontrolledTooltip delay={1} target={user?.first_name}>
+      <UncontrolledTooltip
+        delay={1}
+        target={user?.first_name?.split(" ").join(",")}
+      >
         {user?.first_name + " " + user?.last_name}
       </UncontrolledTooltip>
     </>
