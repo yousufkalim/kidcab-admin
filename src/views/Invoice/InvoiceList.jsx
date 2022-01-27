@@ -32,7 +32,7 @@ const InvoiceList = () => {
     return openModal;
   };
   const autoRefresh = () => {
-    api("get", `trips/status/${dropDownItem}`).then((res) => {
+    api("get", `invoices/status/${dropDownItem}`).then((res) => {
       setInvoices(res.data.invoices);
     });
   };
