@@ -202,7 +202,7 @@ const InvoiceForm = ({
                           <option value="pending">Pending</option>
                           <option value="paid">Paid</option>
                           <option value="late">Late</option>
-                          <option value="canceled">Canceled</option>
+                          <option value="cancelled">Cancelled</option>
                         </Input>
                       </FormGroup>
                     </Col>
