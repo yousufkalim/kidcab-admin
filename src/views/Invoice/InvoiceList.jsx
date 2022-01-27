@@ -10,6 +10,11 @@ import {
   Table,
   Container,
   Row,
+  ButtonDropdown,
+  DropdownToggle,
+  DropdownMenu,
+  UncontrolledDropdown,
+  DropdownItem,
   Button,
 } from "reactstrap";
 import InvoiceForm from "./InvoiceForm";
@@ -21,18 +26,19 @@ import api from "../../api/index";
 const InvoiceList = () => {
   const [openModal, setOpenModal] = useState(false);
   const [invoices, setInvoices] = useState();
+  const [dropDownItem, setDropDownItem] = useState("all");
   const handleModal = () => {
     setOpenModal((open) => !open);
     return openModal;
   };
   const autoRefresh = () => {
-    api("get", "invoices").then((res) => {
+    api("get", `invoices/status/${dropDownItem}`).then((res) => {
       setInvoices(res.data.invoices);
     });
   };
   useEffect(() => {
     autoRefresh();
-  }, [openModal]);
+  }, [openModal, dropDownItem]);
   return (
     <>
       <Container className="mt--7" fluid>
@@ -43,15 +49,79 @@ const InvoiceList = () => {
               <CardHeader className="border-0">
                 <div className="d-flex justify-content-between ">
                   <h3 className="mb-0">Invoice List</h3>
-                  <Button
-                    color="primary"
-                    href="#pablo"
-                    onClick={handleModal}
-                    size="md"
-                  >
-                    <i className="ni ni-fat-add"></i>
-                    Add Invoice
-                  </Button>
+
+                  <div>
+                    {" "}
+                    <UncontrolledDropdown>
+                      <DropdownToggle
+                        color="primary"
+                        name
+                        href="#pablo"
+                        role="button"
+                        caret
+                        style={{ textTransform: "capitalize" }}
+                      >
+                        {dropDownItem}
+                        &nbsp;invoices
+                      </DropdownToggle>
+                      <DropdownMenu>
+                        <DropdownItem
+                          name="all"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            setDropDownItem(e.target.name);
+                          }}
+                        >
+                          All Invoices
+                        </DropdownItem>
+                        <DropdownItem
+                          name="pending"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            setDropDownItem(e.target.name);
+                          }}
+                        >
+                          Pending Invoices
+                        </DropdownItem>
+                        <DropdownItem
+                          name="paid"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            setDropDownItem(e.target.name);
+                          }}
+                        >
+                          Paid Invoices
+                        </DropdownItem>
+                        <DropdownItem
+                          name="late"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            setDropDownItem(e.target.name);
+                          }}
+                        >
+                          Late Invoices
+                        </DropdownItem>
+                        <DropdownItem
+                          name="cancelled"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            setDropDownItem(e.target.name);
+                          }}
+                        >
+                          Cancelled Invoices
+                        </DropdownItem>
+                      </DropdownMenu>
+                    </UncontrolledDropdown>{" "}
+                    <Button
+                      color="primary"
+                      href="#pablo"
+                      onClick={handleModal}
+                      size="md"
+                    >
+                      <i className="ni ni-fat-add"></i>
+                      Add Invoice
+                    </Button>
+                  </div>
                 </div>
               </CardHeader>
               <Table className="align-items-center table-flush" responsive>

@@ -26,7 +26,7 @@ const TripForm = ({
 }) => {
   const [trip, setTrip] = useState({
     date: "",
-    status: "",
+    status: "pending",
     addresses: null,
     client_price: "",
     driver_price: "",
