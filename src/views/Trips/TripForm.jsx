@@ -16,6 +16,8 @@ import {
 } from "reactstrap";
 // core components
 import Select from "react-select";
+import DayPicker, { DateUtils } from 'react-day-picker';
+import 'react-day-picker/lib/style.css';
 
 const TripForm = ({
   openModal,
@@ -43,6 +45,10 @@ const TripForm = ({
   const [clients, setClients] = useState();
   const [allQuotes, setAllQuotes] = useState([]);
   const [quotes, setQuotes] = useState([]);
+
+  const [selectedDays, setSelectedDays] = useState([]);
+  const [selectedDaysfordb, setSelectedDaysfordb] = useState([]);
+  const [flag, setFlag] = useState(false);
 
   useEffect(() => {
     api("get", "drivers").then((res) => {
@@ -151,6 +157,27 @@ const TripForm = ({
     // .catch((error) => toast.error(error.message));
   };
 
+  const handleDayClick=(day, { selected })=> {
+    
+    if(selected){
+      const selectedIndex = selectedDays.findIndex(selectedDay =>
+        DateUtils.isSameDay(selectedDay, day)
+      );
+     let newis=selectedDays.filter((item,i)=>i!=selectedIndex)
+     let newfordb=selectedDaysfordb.filter((item,i)=>i!=selectedIndex)
+      setSelectedDays(newis )
+      setSelectedDaysfordb(newfordb)
+    }else{
+      setSelectedDays([...selectedDays,day])
+      setSelectedDaysfordb([...selectedDaysfordb,{date:day,recurring:false}])
+    }
+  }
+  const handlecheck=(value)=>{
+    let newfordb2=selectedDaysfordb.map((item)=>item.date===value.date?{...item,recurring:!item.recurring}:item)
+    setSelectedDaysfordb(newfordb2) 
+  }
+  {console.log("selectedDaysfordb",selectedDaysfordb)}
+
   return (
     <>
       <Modal isOpen={openModal} size="xl" centered>
@@ -186,6 +213,7 @@ const TripForm = ({
                     </Col>
                   </Row>
                 </div>
+               
 
                 <div className="pl-lg-4">
                   <Row>
@@ -426,6 +454,29 @@ const TripForm = ({
                           />
                         )}
                       </FormGroup>
+                    </Col>
+                  </Row>
+                </div>
+                <div className="pl-lg-4">
+                  <Row>
+                    <Col lg="6">
+                     <p>Recurring Trips</p>
+                     
+                     {flag && selectedDaysfordb.length>=1&&selectedDaysfordb.map(value=>(<>
+                     <div style={{display:"flex",margin:"0 10px 10px 0"}}>
+                     <input type="checkbox" checked={value.recurring} style={{margin:"7px 10px 0 0"}} onChange={()=>handlecheck(value)}/>
+                     <p>{new Date(value.date).toString()}</p>
+                     </div>
+                     
+                     </>))}
+                    </Col>
+                    <Col lg="6">
+                    <p onClick={()=>setFlag(!flag)}>Select Several days</p>
+                    {flag &&<DayPicker
+          selectedDays={selectedDays}
+          onDayClick={handleDayClick}
+        />}
+                    
                     </Col>
                   </Row>
                 </div>
