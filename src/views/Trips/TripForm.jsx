@@ -114,7 +114,15 @@ const TripForm = ({
     e.preventDefault();
     let method = "post";
     let uri = "trips";
-
+    console.log(trip);
+    if (
+      startAddress.lat == endAddress.lat &&
+      startAddress.lng == endAddress.lng &&
+      startAddress.PostalCode == endAddress.PostalCode &&
+      startAddress.city == endAddress.city
+    ) {
+      return toast.error("Start and end address cant be same");
+    }
     if (trip.status == "") {
       return toast.error("Please enter quote status");
     }
