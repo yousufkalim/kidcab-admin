@@ -96,7 +96,8 @@ const VehicleForm = ({
     e.preventDefault();
     let method = "post";
     let uri = "vehicles";
-
+    let d = new Date();
+    console.log();
     if (vehicle.vehicle_name == "") {
       return toast.error("Please enter vehicle name");
     }
@@ -106,6 +107,9 @@ const VehicleForm = ({
     if (vehicle.model == "") {
       return toast.error("Please enter your car model");
     }
+    if (vehicle.driver == "") {
+      return toast.error("Please enter driver name");
+    }
     if (vehicle.color == "") {
       return toast.error("Please enter your car color");
     }
@@ -114,6 +118,12 @@ const VehicleForm = ({
     }
     if (vehicle.gray_card == "") {
       return toast.error("Please enter grey card");
+    }
+    if ((vehicle.insurance_certificate = "")) {
+      return toast.error("Please enter your vehicle's insurance card");
+    }
+    if (vehicle.insurance_expiry_date < d) {
+      return toast.error("Please enter a valid insurance date");
     }
 
     const formData = new FormData();
@@ -139,7 +149,6 @@ const VehicleForm = ({
     if (vehicle.registration_card) {
       formData.append("registration_card", vehicle.registration_card);
     }
-
     if (editVehicle) {
       method = "put";
       uri = uri + `/${editVehicle._id}`;
@@ -157,7 +166,10 @@ const VehicleForm = ({
       })
       .catch((error) => toast.error(error.message));
   };
-
+  console.log(
+    "=================================",
+    vehicle.insurance_expiry_date
+  );
   return (
     <>
       <Modal isOpen={openModal} size="xl" centered>
@@ -180,6 +192,9 @@ const VehicleForm = ({
                           className="form-control-label"
                           htmlFor="input-fname"
                         >
+                          <span style={{ color: "red" }}>
+                            {vehicle.vehicle_name ? "" : "*"}
+                          </span>{" "}
                           Vehicle Name
                         </label>
                         <Input
@@ -200,6 +215,9 @@ const VehicleForm = ({
                           for="exampleSelect"
                           className="form-control-label"
                         >
+                          <span style={{ color: "red" }}>
+                            {vehicle.brand ? "" : "*"}
+                          </span>{" "}
                           Brand
                         </Label>
                         <Input
@@ -219,6 +237,9 @@ const VehicleForm = ({
                           for="exampleSelect"
                           className="form-control-label"
                         >
+                          <span style={{ color: "red" }}>
+                            {vehicle.model ? "" : "*"}
+                          </span>{" "}
                           Model
                         </Label>
                         <Input
@@ -240,6 +261,9 @@ const VehicleForm = ({
                           for="exampleSelect"
                           className="form-control-label"
                         >
+                          <span style={{ color: "red" }}>
+                            {vehicle.driver ? "" : "*"}
+                          </span>{" "}
                           Select Driver
                         </Label>
                         {drivers && (
@@ -270,6 +294,9 @@ const VehicleForm = ({
                           for="exampleSelect"
                           className="form-control-label"
                         >
+                          <span style={{ color: "red" }}>
+                            {vehicle.color ? "" : "*"}
+                          </span>{" "}
                           Color
                         </Label>
                         <Input
@@ -289,6 +316,9 @@ const VehicleForm = ({
                           for="exampleSelect"
                           className="form-control-label"
                         >
+                          <span style={{ color: "red" }}>
+                            {vehicle.gray_card ? "" : "*"}
+                          </span>{" "}
                           Gray Card
                         </Label>
                         <Input
@@ -308,6 +338,9 @@ const VehicleForm = ({
                           for="exampleSelect"
                           className="form-control-label"
                         >
+                          <span style={{ color: "red" }}>
+                            {vehicle.engine_type ? "" : "*"}
+                          </span>{" "}
                           Engine Type
                         </Label>
                         <Input
@@ -329,6 +362,9 @@ const VehicleForm = ({
                           className="form-control-label"
                           htmlFor="input-inspection-info"
                         >
+                          {/* <span style={{ color: "red" }}>
+                            {vehicle.inspection_info ? "" : "*"}
+                          </span>{" "} */}
                           Add Inspection Card
                           <i className="fa fa-id-card" />
                         </label>
@@ -347,6 +383,9 @@ const VehicleForm = ({
                           className="form-control-label"
                           htmlFor="input-date"
                         >
+                          {/* <span style={{ color: "red" }}>
+                            {vehicle.inspection_expiry_date ? "" : "*"}
+                          </span>{" "} */}
                           Inspection Valid Till
                         </label>
 
@@ -388,6 +427,9 @@ const VehicleForm = ({
                           className="form-control-label"
                           htmlFor="input-number-plate"
                         >
+                          <span style={{ color: "red" }}>
+                            {vehicle.insurance_certificate ? "" : "*"}
+                          </span>{" "}
                           Add vehicle Insurance Certificate
                           <i className="fa fa-id-card" />
                         </label>
@@ -406,6 +448,9 @@ const VehicleForm = ({
                           className="form-control-label"
                           htmlFor="input-date"
                         >
+                          <span style={{ color: "red" }}>
+                            {vehicle.insurance_expiry_date ? "" : "*"}
+                          </span>{" "}
                           Insurance Valid Till
                         </label>
 

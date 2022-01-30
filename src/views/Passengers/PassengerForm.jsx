@@ -130,6 +130,9 @@ const PassengerForm = ({
                           className="form-control-label"
                           htmlFor="input-fname"
                         >
+                          <span style={{ color: "red" }}>
+                            {user.firstName ? "" : "*"}
+                          </span>{" "}
                           First Name
                         </label>
                         <Input
@@ -150,6 +153,9 @@ const PassengerForm = ({
                           className="form-control-label"
                           htmlFor="input-lname"
                         >
+                          <span style={{ color: "red" }}>
+                            {user.lastName ? "" : "*"}
+                          </span>{" "}
                           Last Name
                         </label>
                         <Input
@@ -171,6 +177,9 @@ const PassengerForm = ({
                           for="exampleSelect"
                           className="form-control-label"
                         >
+                          <span style={{ color: "red" }}>
+                            {user.client ? "" : "*"}
+                          </span>{" "}
                           Select Client
                         </Label>
                         <Input
@@ -202,6 +211,9 @@ const PassengerForm = ({
                           for="exampleSelect"
                           className="form-control-label"
                         >
+                          <span style={{ color: "red" }}>
+                            {user.relationship ? "" : "*"}
+                          </span>{" "}
                           Relationship
                         </Label>
                         <Input

@@ -221,6 +221,9 @@ const QuotesForm = ({
                           className="form-control-label"
                           htmlFor="input-title"
                         >
+                          <span style={{ color: "red" }}>
+                            {quote.title ? "" : "*"}
+                          </span>{" "}
                           Quote Title
                         </label>
                         <Input
@@ -241,6 +244,9 @@ const QuotesForm = ({
                           className="form-control-label"
                           htmlFor="input-qnumber"
                         >
+                          <span style={{ color: "red" }}>
+                            {quote.quoteNumber ? "" : "*"}
+                          </span>{" "}
                           Quote Number
                         </label>
                         <Input
@@ -262,6 +268,9 @@ const QuotesForm = ({
                           for="exampleSelect"
                           className="form-control-label"
                         >
+                          <span style={{ color: "red" }}>
+                            {quote.client ? "" : "*"}
+                          </span>{" "}
                           Select Client
                         </Label>
                         {clients && (
@@ -290,6 +299,9 @@ const QuotesForm = ({
                           for="exampleSelect"
                           className="form-control-label"
                         >
+                          <span style={{ color: "red" }}>
+                            {quote.passengers[0] ? "" : "*"}
+                          </span>{" "}
                           Select Passengers
                         </Label>
                         {passengers && (
@@ -319,6 +331,9 @@ const QuotesForm = ({
                           for="exampleSelect"
                           className="form-control-label"
                         >
+                          <span style={{ color: "red" }}>
+                            {quote.status ? "" : "*"}
+                          </span>{" "}
                           Status
                         </Label>
                         <Input
@@ -342,6 +357,9 @@ const QuotesForm = ({
                           className="form-control-label"
                           htmlFor="input-lname"
                         >
+                          <span style={{ color: "red" }}>
+                            {quote.issueDate ? "" : "*"}
+                          </span>{" "}
                           Issue Date
                         </label>
                         <Input
@@ -369,6 +387,9 @@ const QuotesForm = ({
                           className="form-control-label"
                           htmlFor="input-fname"
                         >
+                          <span style={{ color: "red" }}>
+                            {quote.totalTrips ? "" : "*"}
+                          </span>{" "}
                           No. of Trips
                         </label>
                         <Input
@@ -389,6 +410,9 @@ const QuotesForm = ({
                           className="form-control-label"
                           htmlFor="input-fname"
                         >
+                          <span style={{ color: "red" }}>
+                            {quote.totalPrice ? "" : "*"}
+                          </span>{" "}
                           Total Price
                         </label>
                         <Input
@@ -409,6 +433,9 @@ const QuotesForm = ({
                           className="form-control-label"
                           htmlFor="input-lname"
                         >
+                          <span style={{ color: "red" }}>
+                            {quote.vat ? "" : "*"}
+                          </span>{" "}
                           VAT
                         </label>
                         <Input
@@ -430,6 +457,9 @@ const QuotesForm = ({
                           className="form-control-label"
                           htmlFor="input-lname"
                         >
+                          <span style={{ color: "red" }}>
+                            {quote.startDate ? "" : "*"}
+                          </span>{" "}
                           Start Date
                         </label>
                         <Input
@@ -449,6 +479,9 @@ const QuotesForm = ({
                           className="form-control-label"
                           htmlFor="input-lname"
                         >
+                          <span style={{ color: "red" }}>
+                            {quote.endDate ? "" : "*"}
+                          </span>{" "}
                           End Date
                         </label>
                         <Input
