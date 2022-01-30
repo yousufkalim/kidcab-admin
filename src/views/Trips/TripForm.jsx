@@ -114,7 +114,7 @@ const TripForm = ({
     e.preventDefault();
     let method = "post";
     let uri = "trips";
-    console.log(trip);
+
     if (
       startAddress.lat == endAddress.lat &&
       startAddress.lng == endAddress.lng &&

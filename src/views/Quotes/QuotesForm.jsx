@@ -142,6 +142,7 @@ const QuotesForm = ({
     formData["docu_sign_link"] = quote.docuSignLink;
 
     //validations
+
     if (quote.title == "") {
       return toast.error("Please enter quote title");
     }
@@ -181,6 +182,14 @@ const QuotesForm = ({
     }
     if (tripInfo.end_address.lat == "") {
       return toast.error("Please enter end address");
+    }
+    if (
+      startAddress.lat == endAddress.lat &&
+      startAddress.lng == endAddress.lng &&
+      startAddress.PostalCode == endAddress.PostalCode &&
+      startAddress.city == endAddress.city
+    ) {
+      return toast.error("Start and end address cant be same");
     }
 
     if (editQuote) {
