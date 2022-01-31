@@ -161,7 +161,11 @@ const ClientForm = ({
                           className="form-control-label"
                           htmlFor="input-fname"
                         >
-                          First Name
+                          <span style={{ color: "red" }}>
+                            {" "}
+                            {user.firstName ? "" : "*"}{" "}
+                          </span>
+                          {""}First Name
                         </label>
                         <Input
                           className="form-control-alternative"
@@ -181,6 +185,10 @@ const ClientForm = ({
                           className="form-control-label"
                           htmlFor="input-lname"
                         >
+                          <span style={{ color: "red" }}>
+                            {user.lastName ? "" : "*"}
+                          </span>{" "}
+                          {""}
                           Last Name
                         </label>
                         <Input
@@ -203,6 +211,9 @@ const ClientForm = ({
                             className="form-control-label"
                             htmlFor="input-email"
                           >
+                            <span style={{ color: "red" }}>
+                              {user.email ? "" : "*"} {""}
+                            </span>
                             Email Address
                           </label>
                           <Input
@@ -222,6 +233,9 @@ const ClientForm = ({
                             className="form-control-label"
                             htmlFor="input-password"
                           >
+                            <span style={{ color: "red" }}>
+                              {user.password ? "" : "*"}{" "}
+                            </span>
                             Password
                           </label>
                           <Input

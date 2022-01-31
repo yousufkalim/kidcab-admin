@@ -17,7 +17,8 @@ import {
 } from "reactstrap";
 // core components
 import Select from "react-select";
-
+import moment from "moment";
+let current = moment();
 const DriverForm = ({
   openModal,
   handleModal,
@@ -319,6 +320,9 @@ const DriverForm = ({
                           className="form-control-label"
                           htmlFor="input-image"
                         >
+                          <span style={{ color: "red" }}>
+                            {user.profile_pic ? "" : "*"}
+                          </span>{" "}
                           Add Profile Picture <i className="ni ni-album-2" />
                         </label>
                         <Input
@@ -341,6 +345,9 @@ const DriverForm = ({
                           className="form-control-label"
                           htmlFor="input-fname"
                         >
+                          <span style={{ color: "red" }}>
+                            {user.firstName ? "" : "*"}
+                          </span>{" "}
                           First Name
                         </label>
                         <Input
@@ -361,6 +368,9 @@ const DriverForm = ({
                           className="form-control-label"
                           htmlFor="input-lname"
                         >
+                          <span style={{ color: "red" }}>
+                            {user.lastName ? "" : "*"}
+                          </span>{" "}
                           Last Name
                         </label>
                         <Input
@@ -383,6 +393,9 @@ const DriverForm = ({
                             className="form-control-label"
                             htmlFor="input-email"
                           >
+                            <span style={{ color: "red" }}>
+                              {user.email ? "" : "*"}
+                            </span>{" "}
                             Email Address
                           </label>
                           <Input
@@ -402,6 +415,9 @@ const DriverForm = ({
                             className="form-control-label"
                             htmlFor="input-password"
                           >
+                            <span style={{ color: "red" }}>
+                              {user.password ? "" : "*"}
+                            </span>{" "}
                             Password
                           </label>
                           <Input
@@ -426,6 +442,9 @@ const DriverForm = ({
                           for="exampleSelect"
                           className="form-control-label"
                         >
+                          <span style={{ color: "red" }}>
+                            {user.role ? "" : "*"}
+                          </span>{" "}
                           Select Role
                         </Label>
 
@@ -460,6 +479,9 @@ const DriverForm = ({
                             for="exampleSelect"
                             className="form-control-label"
                           >
+                            <span style={{ color: "red" }}>
+                              {user.vehicles[0] ? "" : "*"}
+                            </span>{" "}
                             Select Vehicle
                           </Label>
 
@@ -683,6 +705,9 @@ const DriverForm = ({
                           className="form-control-label"
                           htmlFor="input-phone"
                         >
+                          <span style={{ color: "red" }}>
+                            {user.phone ? "" : "*"}
+                          </span>{" "}
                           Phone Number
                         </label>
                         <Input
@@ -693,7 +718,7 @@ const DriverForm = ({
                           value={user.phone}
                           name="phone"
                           onChange={handleInputChange}
-                          max={10}
+                          maxLength={14}
                         />
                       </FormGroup>
                     </Col>
@@ -756,6 +781,9 @@ const DriverForm = ({
                           className="form-control-label"
                           htmlFor="input-id-front"
                         >
+                          <span style={{ color: "red" }}>
+                            {user.id_front ? "" : "*"}
+                          </span>{" "}
                           Add Identity Card/Passport/Residence Permit Front Side{" "}
                           <i className="fa fa-id-card" />
                         </label>
@@ -774,6 +802,9 @@ const DriverForm = ({
                           className="form-control-label"
                           htmlFor="input-id-back"
                         >
+                          <span style={{ color: "red" }}>
+                            {user.id_back ? "" : "*"}
+                          </span>{" "}
                           Add Identity Card/Passport/Residence Permit Back Side{" "}
                           <i className="fa fa-id-card" />
                         </label>
@@ -795,6 +826,9 @@ const DriverForm = ({
                           className="form-control-label"
                           htmlFor="input-vtc-front"
                         >
+                          <span style={{ color: "red" }}>
+                            {user.vtc_back ? "" : "*"}
+                          </span>{" "}
                           Add VTC Card Front Side{" "}
                           <i className="fa fa-id-card" />
                         </label>
@@ -813,6 +847,9 @@ const DriverForm = ({
                           className="form-control-label"
                           htmlFor="input-vtc-back"
                         >
+                          <span style={{ color: "red" }}>
+                            {user.vtc_back ? "" : "*"}
+                          </span>{" "}
                           Add VTC Card Back Side <i className="fa fa-id-card" />
                         </label>
 
@@ -833,6 +870,9 @@ const DriverForm = ({
                           className="form-control-label"
                           htmlFor="input-license-front"
                         >
+                          <span style={{ color: "red" }}>
+                            {user.license_front ? "" : "*"}
+                          </span>{" "}
                           Add License Card Front Side{" "}
                           <i className="fa fa-id-card" />
                         </label>
@@ -851,6 +891,9 @@ const DriverForm = ({
                           className="form-control-label"
                           htmlFor="input-license-back"
                         >
+                          <span style={{ color: "red" }}>
+                            {user.license_back ? "" : "*"}
+                          </span>{" "}
                           Add License Card Back Side{" "}
                           <i className="fa fa-id-card" />
                         </label>
@@ -872,6 +915,9 @@ const DriverForm = ({
                           className="form-control-label"
                           htmlFor="input-criminal-record"
                         >
+                          <span style={{ color: "red" }}>
+                            {user.criminal_record_image ? "" : "*"}
+                          </span>{" "}
                           Add Criminal Record <i className="fa fa-id-card" />
                         </label>
                         <Input
@@ -889,6 +935,9 @@ const DriverForm = ({
                           className="form-control-label"
                           htmlFor="input-date"
                         >
+                          <span style={{ color: "red" }}>
+                            {user.criminal_record_date ? "" : "*"}
+                          </span>{" "}
                           Valid Till
                         </label>
 
@@ -901,6 +950,7 @@ const DriverForm = ({
                           value={user?.criminal_record_date?.split("T")[0]}
                           name="criminal_record_date"
                           onChange={handleInputChange}
+                          min={moment(current).format("YYYY-MM-DD")}
                         />
                       </FormGroup>
                     </Col>
@@ -912,6 +962,9 @@ const DriverForm = ({
                           className="form-control-label"
                           htmlFor="input-restricted-information-statement"
                         >
+                          <span style={{ color: "red" }}>
+                            {user.ris_image ? "" : "*"}
+                          </span>{" "}
                           Add Restricted Information Statement{" "}
                           <i className="fa fa-id-card" />
                         </label>
@@ -931,6 +984,9 @@ const DriverForm = ({
                           className="form-control-label"
                           htmlFor="input-date"
                         >
+                          <span style={{ color: "red" }}>
+                            {user.ris_date ? "" : "*"}
+                          </span>{" "}
                           Valid Till
                         </label>
                         <Input
@@ -942,6 +998,7 @@ const DriverForm = ({
                           value={user?.ris_date?.split("T")[0]}
                           name="ris_date"
                           onChange={handleInputChange}
+                          min={moment(current).format("YYYY-MM-DD")}
                         />
                       </FormGroup>
                     </Col>
@@ -953,6 +1010,9 @@ const DriverForm = ({
                           className="form-control-label"
                           htmlFor="input-kbis"
                         >
+                          <span style={{ color: "red" }}>
+                            {user.kbis_image ? "" : "*"}
+                          </span>{" "}
                           Add KBIS <i className="fa fa-id-card" />
                         </label>
 
@@ -972,6 +1032,9 @@ const DriverForm = ({
                           className="form-control-label"
                           htmlFor="input-date"
                         >
+                          <span style={{ color: "red" }}>
+                            {user.kbis_date ? "" : "*"}
+                          </span>{" "}
                           Valid Till
                         </label>
 
@@ -984,6 +1047,7 @@ const DriverForm = ({
                           value={user?.kbis_date?.split("T")[0]}
                           name="kbis_date"
                           onChange={handleInputChange}
+                          min={moment(current).format("YYYY-MM-DD")}
                         />
                       </FormGroup>
                     </Col>
@@ -995,6 +1059,9 @@ const DriverForm = ({
                           className="form-control-label"
                           htmlFor="input-pro_rc_insurance_certificate"
                         >
+                          <span style={{ color: "red" }}>
+                            {user.proRc_image ? "" : "*"}
+                          </span>{" "}
                           Add Pro RC Insurance Certificate{" "}
                           <i className="fa fa-id-card" />
                         </label>
@@ -1014,6 +1081,9 @@ const DriverForm = ({
                           className="form-control-label"
                           htmlFor="input-date"
                         >
+                          <span style={{ color: "red" }}>
+                            {user.proRc_date ? "" : "*"}
+                          </span>{" "}
                           Valid Till
                         </label>
                         <Input
@@ -1025,6 +1095,7 @@ const DriverForm = ({
                           value={user?.proRc_date?.split("T")[0]}
                           name="proRc_date"
                           onChange={handleInputChange}
+                          min={moment(current).format("YYYY-MM-DD")}
                         />
                       </FormGroup>
                     </Col>

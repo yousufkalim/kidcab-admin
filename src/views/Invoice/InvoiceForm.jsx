@@ -121,6 +121,9 @@ const InvoiceForm = ({
                           className="form-control-label"
                           htmlFor="input-fname"
                         >
+                          <span style={{ color: "red" }}>
+                            {user.invoice_title ? "" : "*"}
+                          </span>{" "}
                           Invoice Title
                         </label>
                         <Input
@@ -141,6 +144,9 @@ const InvoiceForm = ({
                           className="form-control-label"
                           htmlFor="input-lname"
                         >
+                          <span style={{ color: "red" }}>
+                            {user.issue_date ? "" : "*"}
+                          </span>{" "}
                           Issue Date
                         </label>
                         <Input
@@ -161,6 +167,9 @@ const InvoiceForm = ({
                           for="exampleSelect"
                           className="form-control-label"
                         >
+                          {/* <span style={{ color: "red" }}>
+                            {user.trip ? "" : "*"}
+                          </span>{" "} */}
                           Select Trip
                         </Label>
                         {trips && (
@@ -189,6 +198,9 @@ const InvoiceForm = ({
                           for="exampleSelect"
                           className="form-control-label"
                         >
+                          <span style={{ color: "red" }}>
+                            {user.status ? "" : "*"}
+                          </span>{" "}
                           Status
                         </Label>
                         <Input
@@ -212,6 +224,9 @@ const InvoiceForm = ({
                           for="exampleSelect"
                           className="form-control-label"
                         >
+                          <span style={{ color: "red" }}>
+                            {user.total_price ? "" : "*"}
+                          </span>{" "}
                           Total Price
                         </Label>
                         <Input

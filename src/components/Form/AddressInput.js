@@ -82,6 +82,7 @@ function AddressInput({ label, address, setAddress }) {
         className="form-control-label"
         htmlFor={`input-address-${label.split(" ").join("")}`}
       >
+        <span style={{ color: "red" }}>{address?.label ? "" : "*"}</span>{" "}
         {label}
       </label>
 

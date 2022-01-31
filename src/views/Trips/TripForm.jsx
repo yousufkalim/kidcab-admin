@@ -115,6 +115,14 @@ const TripForm = ({
     let method = "post";
     let uri = "trips";
 
+    if (
+      startAddress.lat == endAddress.lat &&
+      startAddress.lng == endAddress.lng &&
+      startAddress.PostalCode == endAddress.PostalCode &&
+      startAddress.city == endAddress.city
+    ) {
+      return toast.error("Start and end address cant be same");
+    }
     if (trip.status == "") {
       return toast.error("Please enter quote status");
     }
@@ -195,6 +203,9 @@ const TripForm = ({
                           className="form-control-label"
                           htmlFor="input-status"
                         >
+                          <span style={{ color: "red" }}>
+                            {trip.status ? "" : "*"}
+                          </span>{" "}
                           Status
                         </label>
                         <Input
@@ -218,6 +229,9 @@ const TripForm = ({
                           className="form-control-label"
                           htmlFor="input-date"
                         >
+                          <span style={{ color: "red" }}>
+                            {trip.date ? "" : "*"}
+                          </span>{" "}
                           Trip Date
                         </label>
                         {console.log("Date ---> ", trip.date)}
@@ -243,6 +257,9 @@ const TripForm = ({
                           className="form-control-label"
                           htmlFor="input-clientPrice"
                         >
+                          <span style={{ color: "red" }}>
+                            {trip.client_price ? "" : "*"}
+                          </span>{" "}
                           Client Price
                         </label>
                         <Input
@@ -263,6 +280,9 @@ const TripForm = ({
                           className="form-control-label"
                           htmlFor="input-driverPrice"
                         >
+                          <span style={{ color: "red" }}>
+                            {trip.driver_price ? "" : "*"}
+                          </span>{" "}
                           Driver Price
                         </label>
                         <Input
@@ -307,7 +327,7 @@ const TripForm = ({
                           className="form-control-label"
                           htmlFor="input-fname"
                         >
-                          Invite Drivers
+                          Invited Drivers
                         </label>
                         {drivers && (
                           <Select
@@ -377,6 +397,9 @@ const TripForm = ({
                           className="form-control-label"
                           htmlFor="input-fname"
                         >
+                          <span style={{ color: "red" }}>
+                            {trip.client ? "" : "*"}
+                          </span>{" "}
                           Client
                         </label>
                         {clients && (
@@ -404,6 +427,9 @@ const TripForm = ({
                           className="form-control-label"
                           htmlFor="input-fname"
                         >
+                          <span style={{ color: "red" }}>
+                            {trip.quote[0] ? "" : "*"}
+                          </span>{" "}
                           Quote
                         </label>
                         {quotes && (
