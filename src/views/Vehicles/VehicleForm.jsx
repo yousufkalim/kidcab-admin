@@ -15,7 +15,9 @@ import {
   Col,
   Label,
 } from "reactstrap";
+import moment from "moment";
 // core components
+let current = moment();
 
 const VehicleForm = ({
   openModal,
@@ -39,7 +41,8 @@ const VehicleForm = ({
     inspection_expiry_date: "",
     driver: "",
   });
-
+  console.log("current", current);
+  console.log("vehicle.insurance_expiry_date", vehicle.insurance_expiry_date);
   useEffect(() => {
     api("get", "drivers").then((res) => setDrivers(res.data.drivers));
     if (isEditing) {
@@ -97,6 +100,7 @@ const VehicleForm = ({
     let method = "post";
     let uri = "vehicles";
     let d = new Date();
+
     console.log();
     if (vehicle.vehicle_name == "") {
       return toast.error("Please enter vehicle name");
@@ -119,10 +123,10 @@ const VehicleForm = ({
     if (vehicle.gray_card == "") {
       return toast.error("Please enter grey card");
     }
-    if ((vehicle.insurance_certificate = "")) {
+    if (vehicle.insurance_certificate) {
       return toast.error("Please enter your vehicle's insurance card");
     }
-    if (vehicle.insurance_expiry_date < d) {
+    if (vehicle.insurance_expiry_date > moment(current)) {
       return toast.error("Please enter a valid insurance date");
     }
 
@@ -398,6 +402,7 @@ const VehicleForm = ({
                           value={vehicle?.inspection_expiry_date?.split("T")[0]}
                           name="inspection_expiry_date"
                           onChange={handleInputChange}
+                          min={moment(current).format("YYYY-MM-DD")}
                         />
                       </FormGroup>
                     </Col>
@@ -463,6 +468,7 @@ const VehicleForm = ({
                           value={vehicle?.insurance_expiry_date?.split("T")[0]}
                           name="insurance_expiry_date"
                           onChange={handleInputChange}
+                          min={moment(current).format("YYYY-MM-DD")}
                         />
                       </FormGroup>
                     </Col>
