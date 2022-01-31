@@ -41,8 +41,7 @@ const VehicleForm = ({
     inspection_expiry_date: "",
     driver: "",
   });
-  console.log("current", current);
-  console.log("vehicle.insurance_expiry_date", vehicle.insurance_expiry_date);
+
   useEffect(() => {
     api("get", "drivers").then((res) => setDrivers(res.data.drivers));
     if (isEditing) {
@@ -123,10 +122,10 @@ const VehicleForm = ({
     if (vehicle.gray_card == "") {
       return toast.error("Please enter grey card");
     }
-    if (vehicle.insurance_certificate) {
+    if (vehicle.insurance_certificate == "") {
       return toast.error("Please enter your vehicle's insurance card");
     }
-    if (vehicle.insurance_expiry_date > moment(current)) {
+    if (vehicle.insurance_expiry_date == "") {
       return toast.error("Please enter a valid insurance date");
     }
 
@@ -170,10 +169,7 @@ const VehicleForm = ({
       })
       .catch((error) => toast.error(error.message));
   };
-  console.log(
-    "=================================",
-    vehicle.insurance_expiry_date
-  );
+
   return (
     <>
       <Modal isOpen={openModal} size="xl" centered>

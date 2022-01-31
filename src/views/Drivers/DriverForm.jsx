@@ -17,7 +17,8 @@ import {
 } from "reactstrap";
 // core components
 import Select from "react-select";
-
+import moment from "moment";
+let current = moment();
 const DriverForm = ({
   openModal,
   handleModal,
@@ -949,6 +950,7 @@ const DriverForm = ({
                           value={user?.criminal_record_date?.split("T")[0]}
                           name="criminal_record_date"
                           onChange={handleInputChange}
+                          min={moment(current).format("YYYY-MM-DD")}
                         />
                       </FormGroup>
                     </Col>
@@ -996,6 +998,7 @@ const DriverForm = ({
                           value={user?.ris_date?.split("T")[0]}
                           name="ris_date"
                           onChange={handleInputChange}
+                          min={moment(current).format("YYYY-MM-DD")}
                         />
                       </FormGroup>
                     </Col>
@@ -1044,6 +1047,7 @@ const DriverForm = ({
                           value={user?.kbis_date?.split("T")[0]}
                           name="kbis_date"
                           onChange={handleInputChange}
+                          min={moment(current).format("YYYY-MM-DD")}
                         />
                       </FormGroup>
                     </Col>
@@ -1091,6 +1095,7 @@ const DriverForm = ({
                           value={user?.proRc_date?.split("T")[0]}
                           name="proRc_date"
                           onChange={handleInputChange}
+                          min={moment(current).format("YYYY-MM-DD")}
                         />
                       </FormGroup>
                     </Col>
