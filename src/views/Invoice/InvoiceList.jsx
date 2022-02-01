@@ -3,14 +3,9 @@
 import {
   Card,
   CardHeader,
-  CardFooter,
-  Pagination,
-  PaginationItem,
-  PaginationLink,
   Table,
   Container,
   Row,
-  ButtonDropdown,
   DropdownToggle,
   DropdownMenu,
   UncontrolledDropdown,
@@ -22,11 +17,12 @@ import InvoiceRow from "./InvoiceRow";
 import { useState } from "react";
 import { useEffect } from "react";
 import api from "../../api/index";
-
 const InvoiceList = () => {
   const [openModal, setOpenModal] = useState(false);
   const [invoices, setInvoices] = useState();
   const [dropDownItem, setDropDownItem] = useState("all");
+  const [exportItem, setExportItem] = useState("");
+
   const handleModal = () => {
     setOpenModal((open) => !open);
     return openModal;
@@ -36,6 +32,7 @@ const InvoiceList = () => {
       setInvoices(res.data.invoices);
     });
   };
+
   useEffect(() => {
     autoRefresh();
   }, [openModal, dropDownItem]);
@@ -51,7 +48,39 @@ const InvoiceList = () => {
                   <h3 className="mb-0">Invoice List</h3>
 
                   <div>
-                    {" "}
+                    <UncontrolledDropdown>
+                      <DropdownToggle
+                        color="success"
+                        name
+                        href="#pablo"
+                        role="button"
+                        e-caret-hide
+                        style={{ textTransform: "capitalize" }}
+                      >
+                        <i className="ni ni-collection"></i> Export&nbsp;
+                        {exportItem}
+                      </DropdownToggle>
+                      <DropdownMenu>
+                        <DropdownItem
+                          name="pdf"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            setExportItem(e.target.name);
+                          }}
+                        >
+                          PDF
+                        </DropdownItem>
+                        <DropdownItem
+                          name="excel"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            setExportItem(e.target.name);
+                          }}
+                        >
+                          Excel
+                        </DropdownItem>
+                      </DropdownMenu>
+                    </UncontrolledDropdown>{" "}
                     <UncontrolledDropdown>
                       <DropdownToggle
                         color="primary"
@@ -153,58 +182,6 @@ const InvoiceList = () => {
                   )}
                 </tbody>
               </Table>
-              {/* <CardFooter className="py-4">
-                <nav aria-label="...">
-                  <Pagination
-                    className="pagination justify-content-end mb-0"
-                    listClassName="justify-content-end mb-0"
-                  >
-                    <PaginationItem className="disabled">
-                      <PaginationLink
-                        href="#pablo"
-                        onClick={(e) => e.preventDefault()}
-                        tabIndex="-1"
-                      >
-                        <i className="fas fa-angle-left" />
-                        <span className="sr-only">Previous</span>
-                      </PaginationLink>
-                    </PaginationItem>
-                    <PaginationItem className="active">
-                      <PaginationLink
-                        href="#pablo"
-                        onClick={(e) => e.preventDefault()}
-                      >
-                        1
-                      </PaginationLink>
-                    </PaginationItem>
-                    <PaginationItem>
-                      <PaginationLink
-                        href="#pablo"
-                        onClick={(e) => e.preventDefault()}
-                      >
-                        2 <span className="sr-only">(current)</span>
-                      </PaginationLink>
-                    </PaginationItem>
-                    <PaginationItem>
-                      <PaginationLink
-                        href="#pablo"
-                        onClick={(e) => e.preventDefault()}
-                      >
-                        3
-                      </PaginationLink>
-                    </PaginationItem>
-                    <PaginationItem>
-                      <PaginationLink
-                        href="#pablo"
-                        onClick={(e) => e.preventDefault()}
-                      >
-                        <i className="fas fa-angle-right" />
-                        <span className="sr-only">Next</span>
-                      </PaginationLink>
-                    </PaginationItem>
-                  </Pagination>
-                </nav>
-              </CardFooter> */}
             </Card>
           </div>
         </Row>
