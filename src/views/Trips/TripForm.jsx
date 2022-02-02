@@ -47,7 +47,6 @@ const TripForm = ({
   const [quotes, setQuotes] = useState([]);
 
   const [selectedDays, setSelectedDays] = useState([]);
-  const [flag, setFlag] = useState(false);
   const [openDateModal, setOpenDateModal] = useState(false);
 
   useEffect(() => {
@@ -61,8 +60,6 @@ const TripForm = ({
       setAllQuotes(res.data.quotes?.filter((a) => a.status === "accepted"));
     });
   }, []);
-  console.log("selectedDays", selectedDays);
-  console.log("edit selectedDays", editTrip?.dates);
   useEffect(() => {
     if (isEditing) {
       setTrip({
