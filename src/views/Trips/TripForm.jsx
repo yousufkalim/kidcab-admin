@@ -16,6 +16,8 @@ import {
 } from "reactstrap";
 // core components
 import Select from "react-select";
+import DayPicker, { DateUtils } from "react-day-picker";
+import "react-day-picker/lib/style.css";
 
 const TripForm = ({
   openModal,
@@ -44,6 +46,9 @@ const TripForm = ({
   const [allQuotes, setAllQuotes] = useState([]);
   const [quotes, setQuotes] = useState([]);
 
+  const [selectedDays, setSelectedDays] = useState([]);
+  const [openDateModal, setOpenDateModal] = useState(false);
+
   useEffect(() => {
     api("get", "drivers").then((res) => {
       setDrivers(res.data.drivers);
@@ -55,7 +60,6 @@ const TripForm = ({
       setAllQuotes(res.data.quotes?.filter((a) => a.status === "accepted"));
     });
   }, []);
-
   useEffect(() => {
     if (isEditing) {
       setTrip({
@@ -126,8 +130,12 @@ const TripForm = ({
     if (trip.status == "") {
       return toast.error("Please enter quote status");
     }
-    if (trip.date == "") {
-      return toast.error("Please enter trip date");
+
+    // if (trip.date == "" ) {
+    //   return toast.error("Please enter trip date");
+    // }
+    if (selectedDays.length == 0 && !isEditing) {
+      return toast.error("Please enter trip dates");
     }
 
     if (trip.client_price == "") {
@@ -136,16 +144,15 @@ const TripForm = ({
     if (trip.driver_price == "") {
       return toast.error("Please enter drive price");
     }
-
     if (editTrip) {
       method = "put";
       uri = uri + `/${editTrip._id}`;
     }
-
     api(method, uri, {
       ...trip,
       start_address: startAddress,
       end_address: endAddress,
+      dates: selectedDays,
     }).then((res) => {
       // eslint-disable-next-line eqeqeq
       if (res.status == 200) {
@@ -159,6 +166,21 @@ const TripForm = ({
     // .catch((error) => toast.error(error.message));
   };
 
+  const handleDayClick = (day, { selected }) => {
+    if (selected) {
+      const selectedIndex = selectedDays.findIndex((selectedDay) =>
+        DateUtils.isSameDay(selectedDay, day)
+      );
+      let newis = selectedDays.filter((item, i) => i != selectedIndex);
+      setSelectedDays(newis);
+    } else {
+      setSelectedDays([...selectedDays, day]);
+    }
+  };
+  const handleDateModal = () => {
+    setOpenDateModal((open) => !open);
+    return openDateModal;
+  };
   return (
     <>
       <Modal isOpen={openModal} size="xl" centered>
@@ -235,16 +257,30 @@ const TripForm = ({
                           Trip Date
                         </label>
                         {console.log("Date ---> ", trip.date)}
-                        <Input
+                        {isEditing ? <Input
                           className="form-control-alternative"
                           id="input-date"
-                          required={true}
-                          placeholder="Enter Company Name"
+                          value={selectedDays?.map((i) => i)}
+                          placeholder={"Select Dates"}
+                          readonly
                           type="date"
                           value={trip?.date?.split("T")[0]}
                           name="date"
                           onChange={handleInputChange}
-                        />
+                        // onClick={() => setOpenDateModal(true)}
+                        /> : <Input
+                          className="form-control-alternative"
+                          id="input-date"
+                          value={selectedDays?.map((i) => i)}
+                          placeholder={"Select Dates"}
+                          readonly
+                          type="text"
+                          // value={trip?.date?.split("T")[0]}
+                          // name="date"
+                          // onChange={handleInputChange}
+                          onClick={() => setOpenDateModal(true)}
+                        />}
+
                       </FormGroup>
                     </Col>
                   </Row>
@@ -342,7 +378,7 @@ const TripForm = ({
                             isDisabled={
                               trip?.required_drivers <= 0 ||
                               trip?.required_drivers ===
-                                trip?.assigned_drivers?.length
+                              trip?.assigned_drivers?.length
                             }
                             name="drivers"
                             isMulti
@@ -470,6 +506,14 @@ const TripForm = ({
           )}{" "}
           <Button onClick={handleModal}>Cancel</Button>
         </ModalFooter>
+      </Modal>
+      <Modal isOpen={openDateModal} size="sm" centered>
+        <ModalHeader charCode="X" toggle={handleDateModal}>
+          {isEditing ? "Edit" : "Select"} Date
+        </ModalHeader>
+        <div style={{ textAlign: "center" }}>
+          <DayPicker selectedDays={selectedDays} onDayClick={handleDayClick} />
+        </div>
       </Modal>
     </>
   );
