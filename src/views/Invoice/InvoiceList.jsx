@@ -17,11 +17,12 @@ import InvoiceRow from "./InvoiceRow";
 import { useState } from "react";
 import { useEffect } from "react";
 import api from "../../api/index";
+import { ExportInvoices } from "../../components/exportInvoices";
+
 const InvoiceList = () => {
   const [openModal, setOpenModal] = useState(false);
   const [invoices, setInvoices] = useState();
   const [dropDownItem, setDropDownItem] = useState("all");
-  const [exportItem, setExportItem] = useState("");
 
   const handleModal = () => {
     setOpenModal((open) => !open);
@@ -48,39 +49,7 @@ const InvoiceList = () => {
                   <h3 className="mb-0">Invoice List</h3>
 
                   <div>
-                    <UncontrolledDropdown>
-                      <DropdownToggle
-                        color="success"
-                        name
-                        href="#pablo"
-                        role="button"
-                        e-caret-hide
-                        style={{ textTransform: "capitalize" }}
-                      >
-                        <i className="ni ni-collection"></i> Export&nbsp;
-                        {exportItem}
-                      </DropdownToggle>
-                      <DropdownMenu>
-                        <DropdownItem
-                          name="pdf"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            setExportItem(e.target.name);
-                          }}
-                        >
-                          PDF
-                        </DropdownItem>
-                        <DropdownItem
-                          name="excel"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            setExportItem(e.target.name);
-                          }}
-                        >
-                          Excel
-                        </DropdownItem>
-                      </DropdownMenu>
-                    </UncontrolledDropdown>{" "}
+                    <ExportInvoices dropDownItem={dropDownItem} />{" "}
                     <UncontrolledDropdown>
                       <DropdownToggle
                         color="primary"
