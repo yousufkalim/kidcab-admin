@@ -3,6 +3,8 @@ import * as FileSaver from "file-saver";
 import * as XLSX from "xlsx";
 import { useState } from "react";
 import api from "../api/index";
+import { jsPDF } from "jspdf";
+import "jspdf-autotable";
 
 import {
   DropdownToggle,
@@ -22,18 +24,18 @@ export const ExportQuotes = () => {
   // Extension
   const fileExtension = ".xlsx";
 
+  const myHeader = [
+    "Quote Title",
+    "Status",
+    "Client",
+    "No of Passengers",
+    "No of Trips",
+    "Start date",
+    "End date",
+  ];
   // Exporting
   const exportToCSV = (csvData, fileName) => {
     // Sorting
-    const myHeader = [
-      "Quote Title",
-      "Status",
-      "Client",
-      "No of Passengers",
-      "No of Trips",
-      "Start date",
-      "End date",
-    ];
 
     const ws = XLSX.utils.json_to_sheet(csvData, { header: myHeader });
 
@@ -45,9 +47,38 @@ export const ExportQuotes = () => {
 
     FileSaver.saveAs(e_data, fileName + fileExtension);
   };
+  //pdf export
 
-  // Filtering invoices by input
-  const handleSubmit = () => {
+  const handleSubmitPdf = () => {
+    api("get", "quotes").then((res) => {
+      let tableRows = res.data.quotes.map((item) => {
+        return [
+          item.quote_title,
+          item.status,
+          item.client.first_name,
+          item.passengers.length,
+          item.trip_info?.total_trips,
+          item.trip_info?.start_date,
+          item.trip_info?.end_date,
+        ];
+      });
+
+      const doc = new jsPDF();
+
+      doc.autoTable(myHeader, tableRows, {
+        startY: 54,
+        theme: "grid",
+        styles: {
+          halign: "center",
+        },
+      });
+
+      doc.save("Quotes.pdf");
+    });
+  };
+
+  // Fexporting excel
+  const handleSubmitExcel = () => {
     api("get", "quotes").then((res) => {
       let updatedQuotes = res.data.quotes.map((item) => {
         return {
@@ -84,6 +115,7 @@ export const ExportQuotes = () => {
           name="pdf"
           onClick={(e) => {
             setExportItem(e.target.name);
+            handleSubmitPdf();
           }}
         >
           PDF
@@ -92,7 +124,7 @@ export const ExportQuotes = () => {
           name="excel"
           onClick={(e) => {
             setExportItem(e.target.name);
-            handleSubmit();
+            handleSubmitExcel();
           }}
         >
           Excel

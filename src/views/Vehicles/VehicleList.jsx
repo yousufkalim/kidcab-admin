@@ -1,17 +1,6 @@
 // reactstrap components
 
-import {
-  Card,
-  CardHeader,
-  CardFooter,
-  Pagination,
-  PaginationItem,
-  PaginationLink,
-  Table,
-  Container,
-  Row,
-  Button,
-} from "reactstrap";
+import { Card, CardHeader, Table, Container, Row, Button } from "reactstrap";
 import PassengerForm from "./VehicleForm";
 import PassengerRow from "./VehicleRow";
 import { useState } from "react";
