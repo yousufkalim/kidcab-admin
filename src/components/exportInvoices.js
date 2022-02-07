@@ -20,19 +20,19 @@ export const ExportInvoices = ({ dropDownItem }) => {
   const fileType =
     "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
 
+  const myHeader = [
+    "Invoice Title",
+    "Issue Date",
+    "Status",
+    "Total price",
+    "Trip",
+  ];
   // Extension
   const fileExtension = ".xlsx";
 
   // Exporting
   const exportToCSV = (csvData, fileName) => {
     // Sorting
-    const myHeader = [
-      "Invoice Title",
-      "Issue Date",
-      "Status",
-      "Total price",
-      "Trip",
-    ];
 
     const ws = XLSX.utils.json_to_sheet(csvData, { header: myHeader });
 
@@ -47,41 +47,20 @@ export const ExportInvoices = ({ dropDownItem }) => {
 
   //exporting pdf
   const handleSubmitPdf = () => {
-    const tableColumn = [
-      "Invoice Title",
-      "Issue Date",
-      "Status",
-      "Total price",
-      "Trip",
-    ];
-    const tableRows = [];
-
     api("get", `invoices/status/${dropDownItem}`).then((res) => {
-      const updatedInvoices = res.data.invoices.map((item) => {
-        return {
-          Invoice_Title: item.invoice_title,
-          Issue_Date: item.issue_date,
-          Status: item.status,
-          Total_price: item.total_price,
-          Trip: item.trip.quote.quote_title,
-        };
-      });
-
-      updatedInvoices?.forEach((invoice) => {
-        const invoiceData = [
-          invoice.Invoice_Title,
-          invoice.Issue_Date,
-          invoice.Status,
-          invoice.Total_price,
-          invoice.Trip,
+      let tableRows = res.data.invoices.map((item) => {
+        return [
+          item.invoice_title,
+          item.issue_date,
+          item.status,
+          item.total_price,
+          item.trip.quote.quote_title,
         ];
-
-        tableRows.push(invoiceData);
       });
 
       const doc = new jsPDF();
 
-      doc.autoTable(tableColumn, tableRows, {
+      doc.autoTable(myHeader, tableRows, {
         startY: 54,
         theme: "grid",
         styles: {

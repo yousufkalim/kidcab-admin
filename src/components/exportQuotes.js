@@ -24,18 +24,18 @@ export const ExportQuotes = () => {
   // Extension
   const fileExtension = ".xlsx";
 
+  const myHeader = [
+    "Quote Title",
+    "Status",
+    "Client",
+    "No of Passengers",
+    "No of Trips",
+    "Start date",
+    "End date",
+  ];
   // Exporting
   const exportToCSV = (csvData, fileName) => {
     // Sorting
-    const myHeader = [
-      "Quote Title",
-      "Status",
-      "Client",
-      "No of Passengers",
-      "No of Trips",
-      "Start date",
-      "End date",
-    ];
 
     const ws = XLSX.utils.json_to_sheet(csvData, { header: myHeader });
 
@@ -50,47 +50,22 @@ export const ExportQuotes = () => {
   //pdf export
 
   const handleSubmitPdf = () => {
-    const tableColumn = [
-      "Quote Title",
-      "Status",
-      "Client",
-      "Passengers",
-      "Trips",
-      "Start_date",
-      "End_date",
-    ];
-    const tableRows = [];
-
     api("get", "quotes").then((res) => {
-      let updatedQuotes = res.data.quotes.map((item) => {
-        return {
-          Quote_Title: item.quote_title,
-          Status: item.status,
-          Client: item.client.first_name,
-          Passengers: item.passengers.length,
-          Trips: item.trip_info?.total_trips,
-          Start_date: item.trip_info?.start_date,
-          End_date: item.trip_info?.end_date,
-        };
-      });
-
-      updatedQuotes?.forEach((quote) => {
-        const quoteData = [
-          quote.Quote_Title,
-          quote.Status,
-          quote.Client,
-          quote.Passengers,
-          quote.Trips,
-          quote.Start_date,
-          quote.End_date,
+      let tableRows = res.data.quotes.map((item) => {
+        return [
+          item.quote_title,
+          item.status,
+          item.client.first_name,
+          item.passengers.length,
+          item.trip_info?.total_trips,
+          item.trip_info?.start_date,
+          item.trip_info?.end_date,
         ];
-
-        tableRows.push(quoteData);
       });
 
       const doc = new jsPDF();
 
-      doc.autoTable(tableColumn, tableRows, {
+      doc.autoTable(myHeader, tableRows, {
         startY: 54,
         theme: "grid",
         styles: {
