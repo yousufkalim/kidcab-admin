@@ -3,7 +3,8 @@ import * as FileSaver from "file-saver";
 import * as XLSX from "xlsx";
 import { useState } from "react";
 import api from "../api/index";
-
+import { jsPDF } from "jspdf";
+import "jspdf-autotable";
 import {
   DropdownToggle,
   DropdownMenu,
@@ -14,6 +15,7 @@ import {
 // Component
 export const ExportInvoices = ({ dropDownItem }) => {
   const [exportItem, setExportItem] = useState("");
+
   // File Type
   const fileType =
     "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
@@ -25,7 +27,7 @@ export const ExportInvoices = ({ dropDownItem }) => {
   const exportToCSV = (csvData, fileName) => {
     // Sorting
     const myHeader = [
-      "Quote Title",
+      "Invoice Title",
       "Issue Date",
       "Status",
       "Total price",
@@ -43,12 +45,60 @@ export const ExportInvoices = ({ dropDownItem }) => {
     FileSaver.saveAs(e_data, fileName + fileExtension);
   };
 
-  // Filtering invoices by input
-  const handleSubmit = (dropDownItem) => {
+  //exporting pdf
+  const handleSubmitPdf = () => {
+    const tableColumn = [
+      "Invoice Title",
+      "Issue Date",
+      "Status",
+      "Total price",
+      "Trip",
+    ];
+    const tableRows = [];
+
+    api("get", `invoices/status/${dropDownItem}`).then((res) => {
+      const updatedInvoices = res.data.invoices.map((item) => {
+        return {
+          Invoice_Title: item.invoice_title,
+          Issue_Date: item.issue_date,
+          Status: item.status,
+          Total_price: item.total_price,
+          Trip: item.trip.quote.quote_title,
+        };
+      });
+
+      updatedInvoices?.forEach((invoice) => {
+        const invoiceData = [
+          invoice.Invoice_Title,
+          invoice.Issue_Date,
+          invoice.Status,
+          invoice.Total_price,
+          invoice.Trip,
+        ];
+
+        tableRows.push(invoiceData);
+      });
+
+      const doc = new jsPDF();
+
+      doc.autoTable(tableColumn, tableRows, {
+        startY: 54,
+        theme: "grid",
+        styles: {
+          halign: "center",
+        },
+      });
+
+      doc.save("Invoices.pdf");
+    });
+  };
+
+  // exporting excel
+  const handleSubmitExcel = (dropDownItem) => {
     api("get", `invoices/status/${dropDownItem}`).then((res) => {
       let updatedInvoices = res.data.invoices.map((item) => {
         return {
-          "Quote Title": item.invoice_title,
+          "Invoice Title": item.invoice_title,
           "Issue Date": item.issue_date,
           Status: item.status,
           "Total price": item.total_price,
@@ -79,7 +129,7 @@ export const ExportInvoices = ({ dropDownItem }) => {
           name="pdf"
           onClick={(e) => {
             setExportItem(e.target.name);
-            handleSubmit(dropDownItem);
+            handleSubmitPdf();
           }}
         >
           PDF
@@ -88,7 +138,7 @@ export const ExportInvoices = ({ dropDownItem }) => {
           name="excel"
           onClick={(e) => {
             setExportItem(e.target.name);
-            handleSubmit(dropDownItem);
+            handleSubmitExcel(dropDownItem);
           }}
         >
           Excel
