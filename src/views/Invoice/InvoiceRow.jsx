@@ -8,16 +8,37 @@ import {
 } from "reactstrap";
 import ClientAvatar from "./ClientAvatar";
 import InvoiceForm from "./InvoiceForm";
+import Form from "bootstrap";
 
 const InvoiceRow = ({ invoice, autoRefresh }) => {
   const [openModal, setOpenModal] = useState();
-  console.log("client", invoice);
+  const [isChecked, setIsChecked] = useState(false);
+
+  const handleOnChange = () => {
+    setIsChecked(!isChecked);
+  };
+
   const handleModal = () => {
     setOpenModal((open) => !open);
     return openModal;
   };
+
   return (
     <tr>
+      <td>
+        <form class="custom-control custom-control-alternative custom-checkbox mb-3">
+          <label class="custom-control-label" for="customCheck6">
+            <input
+              class="custom-control-input"
+              id="customCheck6"
+              type="checkbox"
+              checked={isChecked}
+              onChange={handleOnChange}
+            />
+          </label>
+        </form>
+      </td>
+
       <th scope="row">{invoice.invoice_title}</th>
       <td>{new Date(invoice.issue_date).toLocaleDateString()}</td>
       <td>

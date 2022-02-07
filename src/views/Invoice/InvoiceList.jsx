@@ -125,14 +125,13 @@ const InvoiceList = () => {
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
                   <tr>
+                    <th scope="col">Select</th>
                     <th scope="col">Title</th>
                     <th scope="col">Issue Date</th>
                     <th scope="col">Status</th>
                     <th scope="col">Total Price</th>
                     <th scope="col">Trip</th>
-                    <th scope="col" className="text-right">
-                      Actions
-                    </th>
+                    <th scope="col">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
