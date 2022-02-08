@@ -13,7 +13,7 @@ import {
 } from "reactstrap";
 
 // Component
-export const ExportInvoices = ({ dropDownItem }) => {
+export const ExportInvoices = ({ dropDownItem, invoices }) => {
   const [exportItem, setExportItem] = useState("");
 
   // File Type

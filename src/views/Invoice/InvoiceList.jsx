@@ -23,6 +23,19 @@ const InvoiceList = () => {
   const [openModal, setOpenModal] = useState(false);
   const [invoices, setInvoices] = useState();
   const [dropDownItem, setDropDownItem] = useState("all");
+  const [selectedItems, setSelectedItems] = useState([]);
+
+  const handleSelect = (e) => {
+    const selected = selectedItems.filter((a) => a._id === e.target.value);
+    if (selected.length > 0) {
+      setSelectedItems((prev) => prev.filter((a) => a._id !== e.target.value));
+    } else {
+      setSelectedItems((prev) => [
+        ...prev,
+        invoices.filter((a) => a._id === e.target.value)[0],
+      ]);
+    }
+  };
 
   const handleModal = () => {
     setOpenModal((open) => !open);
@@ -49,7 +62,10 @@ const InvoiceList = () => {
                   <h3 className="mb-0">Invoice List</h3>
 
                   <div>
-                    <ExportInvoices dropDownItem={dropDownItem} />{" "}
+                    <ExportInvoices
+                      dropDownItem={dropDownItem}
+                      invoices={selectedItems}
+                    />{" "}
                     <UncontrolledDropdown>
                       <DropdownToggle
                         color="primary"
@@ -140,6 +156,8 @@ const InvoiceList = () => {
                       <InvoiceRow
                         key={invoice._id}
                         invoice={invoice}
+                        selectedItems={selectedItems}
+                        handleSelect={handleSelect}
                         autoRefresh={autoRefresh}
                       />
                     ))

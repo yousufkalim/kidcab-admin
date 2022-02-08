@@ -10,7 +10,7 @@ import ClientAvatar from "./ClientAvatar";
 import InvoiceForm from "./InvoiceForm";
 import Form from "bootstrap";
 
-const InvoiceRow = ({ invoice, autoRefresh }) => {
+const InvoiceRow = ({ invoice, autoRefresh, handleSelect, selectedItems }) => {
   const [openModal, setOpenModal] = useState();
   const [isChecked, setIsChecked] = useState(false);
 
@@ -25,21 +25,25 @@ const InvoiceRow = ({ invoice, autoRefresh }) => {
 
   return (
     <tr>
-      <td>
-        <form class="custom-control custom-control-alternative custom-checkbox mb-3">
-          <label class="custom-control-label" for="customCheck6">
-            <input
-              class="custom-control-input"
-              id="customCheck6"
-              type="checkbox"
-              checked={isChecked}
-              onChange={handleOnChange}
-            />
-          </label>
-        </form>
+      <td scope="row">
+        <div className="custom-control custom-checkbox mb-3">
+          <input
+            className="custom-control-input"
+            id={`customCheck1${invoice._id}`}
+            type="checkbox"
+            value={invoice._id}
+            checked={
+              selectedItems.filter((a) => a._id === invoice._id).length > 0
+            }
+            onClick={handleSelect}
+          />
+          <label
+            className="custom-control-label"
+            htmlFor={`customCheck1${invoice._id}`}
+          ></label>
+        </div>
       </td>
-
-      <th scope="row">{invoice.invoice_title}</th>
+      <td>{invoice.invoice_title}</td>
       <td>{new Date(invoice.issue_date).toLocaleDateString()}</td>
       <td>
         <Badge color="" className="badge-dot mr-4">
