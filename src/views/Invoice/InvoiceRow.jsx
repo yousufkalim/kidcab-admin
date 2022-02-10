@@ -35,7 +35,7 @@ const InvoiceRow = ({ invoice, autoRefresh, handleSelect, selectedItems }) => {
             checked={
               selectedItems.filter((a) => a._id === invoice._id).length > 0
             }
-            onClick={handleSelect}
+            onClick={() => handleSelect(invoice)}
           />
           <label
             className="custom-control-label"

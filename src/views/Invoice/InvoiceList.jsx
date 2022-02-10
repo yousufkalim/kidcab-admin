@@ -25,15 +25,12 @@ const InvoiceList = () => {
   const [dropDownItem, setDropDownItem] = useState("all");
   const [selectedItems, setSelectedItems] = useState([]);
 
-  const handleSelect = (e) => {
-    const selected = selectedItems.filter((a) => a._id === e.target.value);
+  const handleSelect = (invoice) => {
+    const selected = selectedItems.filter((a) => a._id === invoice._id);
     if (selected.length > 0) {
-      setSelectedItems((prev) => prev.filter((a) => a._id !== e.target.value));
+      setSelectedItems((prev) => prev.filter((a) => a._id !== invoice._id));
     } else {
-      setSelectedItems((prev) => [
-        ...prev,
-        invoices.filter((a) => a._id === e.target.value)[0],
-      ]);
+      setSelectedItems((prev) => [...prev, invoice]);
     }
   };
 
