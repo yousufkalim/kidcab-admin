@@ -9,6 +9,16 @@ import { ExportQuotes } from "../../components/exportQuotes";
 const QuotesList = () => {
   const [openModal, setOpenModal] = useState(false);
   const [quotes, setQuotes] = useState();
+  const [selectedItems, setSelectedItems] = useState([]);
+
+  const handleSelect = (quote) => {
+    const selected = selectedItems.filter((a) => a._id === quote._id);
+    if (selected.length > 0) {
+      setSelectedItems((prev) => prev.filter((a) => a._id !== quote._id));
+    } else {
+      setSelectedItems((prev) => [...prev, quote]);
+    }
+  };
 
   const handleModal = () => {
     setOpenModal((open) => !open);
@@ -33,7 +43,7 @@ const QuotesList = () => {
                 <div className="d-flex justify-content-between ">
                   <h3 className="mb-0">Quotes List</h3>
                   <div>
-                    <ExportQuotes />{" "}
+                    <ExportQuotes quotes={selectedItems} />{" "}
                     <Button
                       color="primary"
                       href="#pablo"
@@ -49,6 +59,7 @@ const QuotesList = () => {
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
                   <tr>
+                    <th scope="col">Select</th>
                     <th scope="col">Quote Title</th>
                     <th scope="col">Status</th>
                     <th scope="col">Client</th>
@@ -65,6 +76,8 @@ const QuotesList = () => {
                       <PassengerRow
                         key={quote._id}
                         quote={quote}
+                        selectedItems={selectedItems}
+                        handleSelect={handleSelect}
                         autoRefresh={autoRefresh}
                       />
                     ))
