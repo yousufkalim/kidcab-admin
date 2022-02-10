@@ -22,11 +22,23 @@ import TripRow from "./TripRow";
 import { useState } from "react";
 import { useEffect } from "react";
 import api from "../../api/index";
+import { ExportTrips } from "components/exportTrips";
 
 const TripList = () => {
   const [openModal, setOpenModal] = useState(false);
   const [trips, setTrips] = useState();
   const [dropDownItem, setDropDownItem] = useState("all");
+  const [selectedItems, setSelectedItems] = useState([]);
+
+  const handleSelect = (trip) => {
+    const selected = selectedItems.filter((a) => a._id === trip._id);
+    if (selected.length > 0) {
+      setSelectedItems((prev) => prev.filter((a) => a._id !== trip._id));
+    } else {
+      setSelectedItems((prev) => [...prev, trip]);
+    }
+  };
+
   const handleModal = () => {
     setOpenModal((open) => !open);
     return openModal;
@@ -51,6 +63,10 @@ const TripList = () => {
                 <div className="d-flex justify-content-between ">
                   <h3 className="mb-0">Trip List</h3>
                   <div>
+                    <ExportTrips
+                      dropDownItem={dropDownItem}
+                      trips={selectedItems}
+                    />
                     <UncontrolledDropdown>
                       <DropdownToggle
                         color="primary"
@@ -126,6 +142,7 @@ const TripList = () => {
               <Table className="align-items-center table-flush my-3" responsive>
                 <thead className="thead-light">
                   <tr>
+                    <th scope="col">Select</th>
                     <th scope="col">Trip Status</th>
                     <th scope="col" className="text-center">
                       Clients
@@ -153,6 +170,8 @@ const TripList = () => {
                       <TripRow
                         key={trip._id}
                         trip={trip}
+                        selectedItems={selectedItems}
+                        handleSelect={handleSelect}
                         autoRefresh={autoRefresh}
                       />
                     ))
