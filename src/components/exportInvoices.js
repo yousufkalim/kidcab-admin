@@ -86,20 +86,32 @@ export const ExportInvoices = ({ dropDownItem, invoices }) => {
   };
 
   // exporting excel
-  const handleSubmitExcel = (dropDownItem) => {
-    api("get", `invoices/status/${dropDownItem}`).then((res) => {
-      let updatedInvoices = res.data.invoices.map((item) => {
+  const handleSubmitExcel = async (dropDownItem) => {
+    let updatedInvoices;
+    if (invoices.length > 0) {
+      updatedInvoices = invoices.map((item) => {
         return {
           "Invoice Title": item.invoice_title,
-          "Issue Date": item.issue_date,
+          "Issue Date": new Date(item.issue_date).toLocaleString(),
           Status: item.status,
           "Total price": item.total_price,
           Trip: item.trip.quote.quote_title,
         };
       });
+    } else {
+      const res = await api("get", `invoices/status/${dropDownItem}`);
+      updatedInvoices = res.data.invoices.map((item) => {
+        return {
+          "Invoice Title": item.invoice_title,
+          "Issue Date": new Date(item.issue_date).toLocaleString(),
+          Status: item.status,
+          "Total price": item.total_price,
+          Trip: item.trip.quote.quote_title,
+        };
+      });
+    }
 
-      exportToCSV(updatedInvoices, " Invoices");
-    });
+    exportToCSV(updatedInvoices, " Invoices");
   };
 
   // Render
