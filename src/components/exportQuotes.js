@@ -14,7 +14,7 @@ import {
 } from "reactstrap";
 
 // Component
-export const ExportQuotes = () => {
+export const ExportQuotes = ({ quotes }) => {
   const [exportItem, setExportItem] = useState("");
 
   // File Type
@@ -49,51 +49,79 @@ export const ExportQuotes = () => {
   };
   //pdf export
 
-  const handleSubmitPdf = () => {
-    api("get", "quotes").then((res) => {
-      let tableRows = res.data.quotes.map((item) => {
+  const handleSubmitPdf = async () => {
+    let tableRows;
+    if (quotes.length > 0) {
+      tableRows = quotes.map((item) => {
         return [
           item.quote_title,
           item.status,
           item.client.first_name,
           item.passengers.length,
           item.trip_info?.total_trips,
-          item.trip_info?.start_date,
-          item.trip_info?.end_date,
+          new Date(item.trip_info?.start_date).toLocaleString(),
+          new Date(item.trip_info?.end_date).toLocaleString(),
         ];
       });
-
-      const doc = new jsPDF();
-
-      doc.autoTable(myHeader, tableRows, {
-        startY: 54,
-        theme: "grid",
-        styles: {
-          halign: "center",
-        },
+    } else {
+      const res = await api("get", "quotes");
+      tableRows = res.data.quotes.map((item) => {
+        return [
+          item.quote_title,
+          item.status,
+          item.client.first_name,
+          item.passengers.length,
+          item.trip_info?.total_trips,
+          new Date(item.trip_info?.start_date).toLocaleString(),
+          new Date(item.trip_info?.end_date).toLocaleString(),
+        ];
       });
+    }
 
-      doc.save("Quotes.pdf");
+    const doc = new jsPDF();
+
+    doc.autoTable(myHeader, tableRows, {
+      startY: 54,
+      theme: "grid",
+      styles: {
+        align: "center",
+      },
     });
+
+    doc.save("Quotes.pdf");
   };
 
   // Fexporting excel
-  const handleSubmitExcel = () => {
-    api("get", "quotes").then((res) => {
-      let updatedQuotes = res.data.quotes.map((item) => {
+  const handleSubmitExcel = async () => {
+    let updatedQuotes;
+    if (quotes.length > 0) {
+      updatedQuotes = quotes.map((item) => {
         return {
           "Quote Title": item.quote_title,
           Status: item.status,
           Client: item.client.first_name,
           "No of Passengers": item.passengers.length,
           "No of Trips": item.trip_info?.total_trips,
-          "Start date": item.trip_info?.start_date,
-          "End date": item.trip_info?.end_date,
+          "Start date": new Date(item.trip_info?.start_date).toLocaleString(),
+          "End date": new Date(item.trip_info?.end_date).toLocaleString(),
         };
       });
+    } else {
+      const res = await api("get", "quotes");
+      updatedQuotes = res.data.quotes.map((item) => {
+        return {
+          "Quote Title": item.quote_title,
+          Status: item.status,
+          Client: item.client.first_name,
+          "No of Passengers": item.passengers.length,
+          "No of Trips": item.trip_info?.total_trips,
+          "Start date": new Date(item.trip_info?.start_date).toLocaleString(),
+          "End date": new Date(item.trip_info?.end_date).toLocaleString(),
+        };
+      });
+    }
 
-      exportToCSV(updatedQuotes, " Quotes");
-    });
+    exportToCSV(updatedQuotes, " Quotes");
   };
 
   // Render

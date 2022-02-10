@@ -13,7 +13,7 @@ import {
 } from "reactstrap";
 
 // Component
-export const ExportInvoices = ({ dropDownItem }) => {
+export const ExportInvoices = ({ dropDownItem, invoices }) => {
   const [exportItem, setExportItem] = useState("");
 
   // File Type
@@ -46,47 +46,72 @@ export const ExportInvoices = ({ dropDownItem }) => {
   };
 
   //exporting pdf
-  const handleSubmitPdf = () => {
-    api("get", `invoices/status/${dropDownItem}`).then((res) => {
-      let tableRows = res.data.invoices.map((item) => {
+  const handleSubmitPdf = async () => {
+    let tableRows;
+
+    if (invoices.length > 0) {
+      tableRows = invoices.map((item) => {
         return [
           item.invoice_title,
-          item.issue_date,
+          new Date(item.issue_date).toLocaleString(),
           item.status,
           item.total_price,
           item.trip.quote.quote_title,
         ];
       });
-
-      const doc = new jsPDF();
-
-      doc.autoTable(myHeader, tableRows, {
-        startY: 54,
-        theme: "grid",
-        styles: {
-          halign: "center",
-        },
+    } else {
+      const res = await api("get", `invoices/status/${dropDownItem}`);
+      tableRows = res.data?.invoices?.map((item) => {
+        return [
+          item.invoice_title,
+          new Date(item.issue_date).toLocaleString(),
+          item.status,
+          item.total_price,
+          item.trip.quote.quote_title,
+        ];
       });
+    }
 
-      doc.save("Invoices.pdf");
+    const doc = new jsPDF();
+
+    doc.autoTable(myHeader, tableRows, {
+      startY: 54,
+      theme: "grid",
+      styles: {
+        align: "center",
+      },
     });
+
+    doc.save("Invoices.pdf");
   };
 
   // exporting excel
-  const handleSubmitExcel = (dropDownItem) => {
-    api("get", `invoices/status/${dropDownItem}`).then((res) => {
-      let updatedInvoices = res.data.invoices.map((item) => {
+  const handleSubmitExcel = async (dropDownItem) => {
+    let updatedInvoices;
+    if (invoices.length > 0) {
+      updatedInvoices = invoices.map((item) => {
         return {
           "Invoice Title": item.invoice_title,
-          "Issue Date": item.issue_date,
+          "Issue Date": new Date(item.issue_date).toLocaleString(),
           Status: item.status,
           "Total price": item.total_price,
           Trip: item.trip.quote.quote_title,
         };
       });
+    } else {
+      const res = await api("get", `invoices/status/${dropDownItem}`);
+      updatedInvoices = res.data.invoices.map((item) => {
+        return {
+          "Invoice Title": item.invoice_title,
+          "Issue Date": new Date(item.issue_date).toLocaleString(),
+          Status: item.status,
+          "Total price": item.total_price,
+          Trip: item.trip.quote.quote_title,
+        };
+      });
+    }
 
-      exportToCSV(updatedInvoices, " Invoices");
-    });
+    exportToCSV(updatedInvoices, " Invoices");
   };
 
   // Render

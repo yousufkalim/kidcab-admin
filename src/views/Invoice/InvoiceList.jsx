@@ -23,6 +23,16 @@ const InvoiceList = () => {
   const [openModal, setOpenModal] = useState(false);
   const [invoices, setInvoices] = useState();
   const [dropDownItem, setDropDownItem] = useState("all");
+  const [selectedItems, setSelectedItems] = useState([]);
+
+  const handleSelect = (invoice) => {
+    const selected = selectedItems.filter((a) => a._id === invoice._id);
+    if (selected.length > 0) {
+      setSelectedItems((prev) => prev.filter((a) => a._id !== invoice._id));
+    } else {
+      setSelectedItems((prev) => [...prev, invoice]);
+    }
+  };
 
   const handleModal = () => {
     setOpenModal((open) => !open);
@@ -49,7 +59,10 @@ const InvoiceList = () => {
                   <h3 className="mb-0">Invoice List</h3>
 
                   <div>
-                    <ExportInvoices dropDownItem={dropDownItem} />{" "}
+                    <ExportInvoices
+                      dropDownItem={dropDownItem}
+                      invoices={selectedItems}
+                    />{" "}
                     <UncontrolledDropdown>
                       <DropdownToggle
                         color="primary"
@@ -125,14 +138,13 @@ const InvoiceList = () => {
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
                   <tr>
+                    <th scope="col">Select</th>
                     <th scope="col">Title</th>
                     <th scope="col">Issue Date</th>
                     <th scope="col">Status</th>
                     <th scope="col">Total Price</th>
                     <th scope="col">Trip</th>
-                    <th scope="col" className="text-right">
-                      Actions
-                    </th>
+                    <th scope="col">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -141,6 +153,8 @@ const InvoiceList = () => {
                       <InvoiceRow
                         key={invoice._id}
                         invoice={invoice}
+                        selectedItems={selectedItems}
+                        handleSelect={handleSelect}
                         autoRefresh={autoRefresh}
                       />
                     ))

@@ -3,7 +3,7 @@ import { Badge, UncontrolledDropdown, DropdownToggle, Media } from "reactstrap";
 import ClientAvatar from "./ClientAvatar";
 import QuotesForm from "./QuotesForm";
 
-const QuotesRow = ({ quote, autoRefresh }) => {
+const QuotesRow = ({ quote, autoRefresh, selectedItems, handleSelect }) => {
   const [openModal, setOpenModal] = useState(false);
   const handleModal = () => {
     setOpenModal((open) => !open);
@@ -12,6 +12,24 @@ const QuotesRow = ({ quote, autoRefresh }) => {
 
   return (
     <tr>
+      <td scope="row">
+        <div className="custom-control custom-checkbox mb-3">
+          <input
+            className="custom-control-input"
+            id={`customCheck1${quote._id}`}
+            type="checkbox"
+            value={quote._id}
+            checked={
+              selectedItems.filter((a) => a._id === quote._id).length > 0
+            }
+            onClick={() => handleSelect(quote)}
+          />
+          <label
+            className="custom-control-label"
+            htmlFor={`customCheck1${quote._id}`}
+          ></label>
+        </div>
+      </td>
       <th scope="row">
         <Media className="align-items-center">
           <Media>
