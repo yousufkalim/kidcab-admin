@@ -23,6 +23,7 @@ import { useState } from "react";
 import { useEffect } from "react";
 import api from "../../api/index";
 import { ExportTrips } from "components/exportTrips";
+import { toast } from "react-toastify";
 
 const TripList = () => {
   const [openModal, setOpenModal] = useState(false);
@@ -37,6 +38,16 @@ const TripList = () => {
     } else {
       setSelectedItems((prev) => [...prev, trip]);
     }
+  };
+
+  const handleDeleteMany = async () => {
+    const tripIds = selectedItems.map((a) => a._id);
+
+    api("delete", "trips/deleteMany", { data: { tripIds } }).then(() => {
+      toast.success("Trips deleted successfully");
+      autoRefresh();
+      setSelectedItems([]);
+    });
   };
 
   const handleModal = () => {
@@ -63,6 +74,16 @@ const TripList = () => {
                 <div className="d-flex justify-content-between ">
                   <h3 className="mb-0">Trip List</h3>
                   <div>
+                    {selectedItems.length > 0 && (
+                      <Button
+                        color="danger"
+                        href="#pablo"
+                        onClick={handleDeleteMany}
+                        size="md"
+                      >
+                        Delete Trips
+                      </Button>
+                    )}
                     <ExportTrips
                       dropDownItem={dropDownItem}
                       trips={selectedItems}
