@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useEffect } from "react";
 import api from "../../api/index";
 import { ExportQuotes } from "../../components/exportQuotes";
+import { toast } from "react-toastify";
 
 const QuotesList = () => {
   const [openModal, setOpenModal] = useState(false);
@@ -19,7 +20,15 @@ const QuotesList = () => {
       setSelectedItems((prev) => [...prev, quote]);
     }
   };
+  const handleDeleteMany = async () => {
+    const quotesIds = selectedItems.map((a) => a._id);
 
+    api("delete", "quotes/deleteMany", { data: { quotesIds } }).then(() => {
+      toast.success("Quotes deleted successfully");
+      autoRefresh();
+      setSelectedItems([]);
+    });
+  };
   const handleModal = () => {
     setOpenModal((open) => !open);
     return openModal;
@@ -43,6 +52,16 @@ const QuotesList = () => {
                 <div className="d-flex justify-content-between ">
                   <h3 className="mb-0">Quotes List</h3>
                   <div>
+                    {selectedItems.length > 0 && (
+                      <Button
+                        color="danger"
+                        href="#pablo"
+                        onClick={handleDeleteMany}
+                        size="md"
+                      >
+                        Delete Quotes
+                      </Button>
+                    )}
                     <ExportQuotes quotes={selectedItems} />{" "}
                     <Button
                       color="primary"
