@@ -18,6 +18,7 @@ import { useState } from "react";
 import { useEffect } from "react";
 import api from "../../api/index";
 import { ExportInvoices } from "../../components/exportInvoices";
+import { toast } from "react-toastify";
 
 const InvoiceList = () => {
   const [openModal, setOpenModal] = useState(false);
@@ -33,7 +34,15 @@ const InvoiceList = () => {
       setSelectedItems((prev) => [...prev, invoice]);
     }
   };
+  const handleDeleteMany = async () => {
+    const invoiceIds = selectedItems.map((a) => a._id);
 
+    api("delete", "invoices/deleteMany", { data: { invoiceIds } }).then(() => {
+      toast.success("Invoices deleted successfully");
+      autoRefresh();
+      setSelectedItems([]);
+    });
+  };
   const handleModal = () => {
     setOpenModal((open) => !open);
     return openModal;
@@ -59,6 +68,16 @@ const InvoiceList = () => {
                   <h3 className="mb-0">Invoice List</h3>
 
                   <div>
+                    {selectedItems.length > 0 && (
+                      <Button
+                        color="danger"
+                        href="#pablo"
+                        onClick={handleDeleteMany}
+                        size="md"
+                      >
+                        Delete Invoices
+                      </Button>
+                    )}
                     <ExportInvoices
                       dropDownItem={dropDownItem}
                       invoices={selectedItems}
