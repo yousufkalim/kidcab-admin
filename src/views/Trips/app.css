@@ -1,0 +1,20 @@
+.TimePicker-ss {
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.react-time-picker {
+  box-sizing: border-box;
+  height: calc(1.5em + 1.25rem + 2px);
+  border-color: white;
+  box-shadow: 0 1px 3px rgb(50 50 93 / 15%), 0 1px 0 rgb(0 0 0 / 2%);
+}
+.react-time-picker__wrapper {
+  display: flex;
+  flex-grow: 1;
+  flex-shrink: 0;
+  box-shadow: 0 1px 3px rgb(50 50 93 / 15%), 0 1px 0 rgb(0 0 0 / 2%);
+  border: 0;
+  transition: box-shadow 0.15s ease;
+  border-radius: 0.375rem;
+}
