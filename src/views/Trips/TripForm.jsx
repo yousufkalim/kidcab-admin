@@ -47,6 +47,7 @@ const TripForm = ({
   const [allQuotes, setAllQuotes] = useState([]);
   const [quotes, setQuotes] = useState([]);
   const [value, onChange] = useState("10:00");
+  const [time, setTime] = useState(value);
   const [selectedDays, setSelectedDays] = useState([]);
   const [openDateModal, setOpenDateModal] = useState(false);
 
@@ -63,6 +64,11 @@ const TripForm = ({
   }, []);
   useEffect(() => {
     if (isEditing) {
+      var time = new Date(editTrip.date).getTime();
+      const minutes = Math.floor((time / (1000 * 60)) % 60);
+      const hours = Math.floor((time / (1000 * 60 * 60)) % 24);
+      time = `${hours}:${minutes}`;
+      onChange(time);
       setTrip({
         date: editTrip.date,
         status: editTrip.status,
@@ -75,6 +81,7 @@ const TripForm = ({
         rides: editTrip.rides,
         client: editTrip.client,
         quote: editTrip.quote,
+        time: editTrip.time,
       });
       setStartAddress(editTrip.start_address);
       setEndAddress(editTrip.end_address);
@@ -132,18 +139,18 @@ const TripForm = ({
       return toast.error("Please enter quote status");
     }
 
-    // if (trip.date == "" ) {
-    //   return toast.error("Please enter trip date");
-    // }
     if (selectedDays.length == 0 && !isEditing) {
       return toast.error("Please enter trip dates");
     }
 
+    selectedDays.map((date) => {
+      if (new Date().getTime() < date.getTime()) {
+        return toast.error(`Cant Select Past date `);
+      }
+    });
+
     if (trip.client_price == "") {
       return toast.error("Please enter client price");
-    }
-    if (trip.time == "") {
-      return toast.error("Please enter trip time");
     }
     if (trip.driver_price == "") {
       return toast.error("Please enter drive price");
@@ -261,7 +268,6 @@ const TripForm = ({
                           </span>{" "}
                           Trip Date
                         </label>
-                        {console.log("Date ---> ", trip.date)}
                         {isEditing ? (
                           <Input
                             className="form-control-alternative"
@@ -306,6 +312,7 @@ const TripForm = ({
                           <TimePicker
                             style={{ height: "calc(1.5em + 1.25rem + 2px)" }}
                             name="time"
+                            // value={isEditing ? time : value}
                             value={value}
                             onChange={onChange}
                           />

@@ -53,22 +53,19 @@ const TripRow = ({ trip, autoRefresh, selectedItems, handleSelect }) => {
       </td>
       <td className="text-center">
         {trip?.quote?.passengers
-          ? trip?.quote?.passengers.map((passenger) => (
-              <ManagerAvatar key={passenger.first_name} user={passenger} />
-            ))
+          ? trip?.quote?.passengers.length
           : "No Passenger is added"}
       </td>
       <td className="text-center">
         {trip?.invited_drivers
-          ? trip?.invited_drivers?.map(({ driver }) => {
-              if (driver)
-                return <ManagerAvatar key={driver.first_name} user={driver} />;
-              else return null;
-            })
+          ? trip?.invited_drivers.length
           : "No Driver is Invited"}
       </td>
-      <td className="text-center">{trip?.start_address?.street_address}</td>
-      <td className="text-center">{trip?.end_address?.street_address}</td>
+      <td className="text-center">
+        {trip?.date ? trip?.date.split("T")[0] : "Date not Found"}
+      </td>
+      <td className="text-center">{trip?.start_address?.label1}</td>
+      <td className="text-center">{trip?.end_address?.label1}</td>
       <td className="text-right">
         <UncontrolledDropdown>
           <DropdownToggle
