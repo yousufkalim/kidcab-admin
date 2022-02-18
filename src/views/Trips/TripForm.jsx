@@ -261,12 +261,13 @@ const TripForm = ({
                             {trip.date ? "" : "*"}
                           </span>{" "}
                           Trip Date
+                          {console.log(trip?.date?.split("T")[0])}
                         </label>
                         {isEditing ? (
                           <Input
                             className="form-control-alternative"
                             id="input-date"
-                            value={selectedDays?.map((i) => i)}
+                            // value={selectedDays?.map((i) => i)}
                             placeholder={"Select Dates"}
                             readonly
                             type="date"
