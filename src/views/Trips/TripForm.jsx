@@ -270,7 +270,7 @@ const TripForm = ({
                             placeholder={"Select Dates"}
                             readonly
                             type="date"
-                            value={trip?.date?.split("T")[0]}
+                            // value={trip?.date?.split("T")[0]}
                             name="date"
                             onChange={handleInputChange}
                             // onClick={() => setOpenDateModal(true)}
@@ -308,6 +308,8 @@ const TripForm = ({
                             name="time"
                             value={value}
                             onChange={onChange}
+                            clockIcon={false}
+                            disableClock={true}
                           />
                         </div>
                       </FormGroup>
