@@ -175,6 +175,9 @@ const TripList = () => {
                       Invited Drivers
                     </th>
                     <th scope="col" className="text-center">
+                      Date
+                    </th>
+                    <th scope="col" className="text-center">
                       Start Address
                     </th>
                     <th scope="col" className="text-center">
