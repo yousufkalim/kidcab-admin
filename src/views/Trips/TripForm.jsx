@@ -143,12 +143,6 @@ const TripForm = ({
       return toast.error("Please enter trip dates");
     }
 
-    selectedDays.map((date) => {
-      if (new Date().getTime() < date.getTime()) {
-        return toast.error(`Cant Select Past date `);
-      }
-    });
-
     if (trip.client_price == "") {
       return toast.error("Please enter client price");
     }
