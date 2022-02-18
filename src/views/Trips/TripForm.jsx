@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import api from "../../api";
 import AddressInput from "components/Form/AddressInput";
+import TimePicker from "react-time-picker";
+import "../Trips/app.css";
 import {
   Modal,
   ModalBody,
@@ -18,7 +20,6 @@ import {
 import Select from "react-select";
 import DayPicker, { DateUtils } from "react-day-picker";
 import "react-day-picker/lib/style.css";
-
 const TripForm = ({
   openModal,
   handleModal,
@@ -45,7 +46,7 @@ const TripForm = ({
   const [clients, setClients] = useState();
   const [allQuotes, setAllQuotes] = useState([]);
   const [quotes, setQuotes] = useState([]);
-
+  const [value, onChange] = useState("10:00");
   const [selectedDays, setSelectedDays] = useState([]);
   const [openDateModal, setOpenDateModal] = useState(false);
 
@@ -118,7 +119,7 @@ const TripForm = ({
     e.preventDefault();
     let method = "post";
     let uri = "trips";
-
+    console.log(trip, "trip");
     if (
       startAddress.lat == endAddress.lat &&
       startAddress.lng == endAddress.lng &&
@@ -141,6 +142,9 @@ const TripForm = ({
     if (trip.client_price == "") {
       return toast.error("Please enter client price");
     }
+    if (trip.time == "") {
+      return toast.error("Please enter trip time");
+    }
     if (trip.driver_price == "") {
       return toast.error("Please enter drive price");
     }
@@ -153,6 +157,7 @@ const TripForm = ({
       start_address: startAddress,
       end_address: endAddress,
       dates: selectedDays,
+      time: value,
     }).then((res) => {
       // eslint-disable-next-line eqeqeq
       if (res.status == 200) {
@@ -219,7 +224,7 @@ const TripForm = ({
 
                 <div className="pl-lg-4">
                   <Row>
-                    <Col lg="6">
+                    <Col lg="4">
                       <FormGroup>
                         <label
                           className="form-control-label"
@@ -245,7 +250,7 @@ const TripForm = ({
                         </Input>
                       </FormGroup>
                     </Col>
-                    <Col lg="6">
+                    <Col lg="5">
                       <FormGroup>
                         <label
                           className="form-control-label"
@@ -257,30 +262,54 @@ const TripForm = ({
                           Trip Date
                         </label>
                         {console.log("Date ---> ", trip.date)}
-                        {isEditing ? <Input
-                          className="form-control-alternative"
-                          id="input-date"
-                          value={selectedDays?.map((i) => i)}
-                          placeholder={"Select Dates"}
-                          readonly
-                          type="date"
-                          value={trip?.date?.split("T")[0]}
-                          name="date"
-                          onChange={handleInputChange}
-                        // onClick={() => setOpenDateModal(true)}
-                        /> : <Input
-                          className="form-control-alternative"
-                          id="input-date"
-                          value={selectedDays?.map((i) => i)}
-                          placeholder={"Select Dates"}
-                          readonly
-                          type="text"
-                          // value={trip?.date?.split("T")[0]}
-                          // name="date"
-                          // onChange={handleInputChange}
-                          onClick={() => setOpenDateModal(true)}
-                        />}
-
+                        {isEditing ? (
+                          <Input
+                            className="form-control-alternative"
+                            id="input-date"
+                            value={selectedDays?.map((i) => i)}
+                            placeholder={"Select Dates"}
+                            readonly
+                            type="date"
+                            value={trip?.date?.split("T")[0]}
+                            name="date"
+                            onChange={handleInputChange}
+                            // onClick={() => setOpenDateModal(true)}
+                          />
+                        ) : (
+                          <Input
+                            className="form-control-alternative"
+                            id="input-date"
+                            value={selectedDays?.map((i) => i)}
+                            placeholder={"Select Dates"}
+                            readonly
+                            type="text"
+                            // value={trip?.date?.split("T")[0]}
+                            // name="date"
+                            // onChange={handleInputChange}
+                            onClick={() => setOpenDateModal(true)}
+                          />
+                        )}
+                      </FormGroup>
+                    </Col>
+                    <Col lg="3">
+                      <FormGroup>
+                        <div className="TimePicker-ss">
+                          <label
+                            className="form-control-label"
+                            htmlFor="input-time"
+                          >
+                            <span style={{ color: "red" }}>
+                              {trip.time ? "" : "*"}
+                            </span>{" "}
+                            Select Trip Time
+                          </label>
+                          <TimePicker
+                            style={{ height: "calc(1.5em + 1.25rem + 2px)" }}
+                            name="time"
+                            value={value}
+                            onChange={onChange}
+                          />
+                        </div>
                       </FormGroup>
                     </Col>
                   </Row>
@@ -378,7 +407,7 @@ const TripForm = ({
                             isDisabled={
                               trip?.required_drivers <= 0 ||
                               trip?.required_drivers ===
-                              trip?.assigned_drivers?.length
+                                trip?.assigned_drivers?.length
                             }
                             name="drivers"
                             isMulti
