@@ -57,11 +57,14 @@ const QuotesForm = ({
 
   const [clients, setClients] = useState();
   const [passengers, setPassengers] = useState([]);
-
+  const [selectedPassenger, setSelectedPassenger] = useState([]);
   useEffect(() => {
     api("get", "users").then((res) => setClients(res.data.users));
-    // api("get", "passengers").then((res) => setPassengers(res.data.passengers));
     if (isEditing) {
+      api(
+        "get",
+        `passengers/getPassengerByClient/${editQuote.client._id}`
+      ).then((res) => setPassengers(res.data.passenger));
       setQuote({
         title: editQuote.quote_title,
         quoteNumber: editQuote.quote_number,
@@ -98,7 +101,7 @@ const QuotesForm = ({
       passengers: e.map((passenger) => passenger.value),
     }));
   };
-
+  console.log(quote);
   const handleDelete = () => {
     let method = "delete";
     let uri = "quotes";
@@ -210,6 +213,7 @@ const QuotesForm = ({
 
   return (
     <>
+      {console.log(selectedPassenger, "Set")}
       <Modal isOpen={openModal} size="xl" centered>
         <ModalHeader charCode="X" toggle={handleModal}>
           {isEditing ? "Edit" : "Add"} A Quote
@@ -322,6 +326,10 @@ const QuotesForm = ({
                               value: passenger._id,
                               label: `${passenger.first_name} ${passenger.last_name}`,
                             }))}
+                            // defaultOptions={selectedPassenger.map((p) => ({
+                            //   value: p._id,
+                            //   label: `${p.first_name} ${p.last_name}`,
+                            // }))}
                             name="passengers"
                             className="form-control-alternative"
                             options={passengers.map((passenger) => ({

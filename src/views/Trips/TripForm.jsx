@@ -4,6 +4,7 @@ import api from "../../api";
 import AddressInput from "components/Form/AddressInput";
 import TimePicker from "react-time-picker";
 import "../Trips/app.css";
+import * as moment from "moment";
 import {
   Modal,
   ModalBody,
@@ -20,6 +21,29 @@ import {
 import Select from "react-select";
 import DayPicker, { DateUtils } from "react-day-picker";
 import "react-day-picker/lib/style.css";
+const options = [
+  { value: 1, label: "Monday" },
+  { value: 2, label: "Tuesday" },
+  { value: 3, label: "Wednesday" },
+  { value: 4, label: "Thrusday" },
+  { value: 5, label: "Friday" },
+  { value: 6, label: "Saturday" },
+  { value: 0, label: "Sunday" },
+];
+const disableDates = () => {
+  var today, dd, mm, yyyy;
+  today = new Date();
+  dd = today.getDate();
+  mm = today.getMonth() + 1;
+  yyyy = today.getFullYear();
+  if (mm < 10) {
+    mm = "0" + mm;
+  }
+  if (dd < 10) {
+    dd = "0";
+  }
+  return yyyy + "-" + mm + "-" + dd;
+};
 const TripForm = ({
   openModal,
   handleModal,
@@ -30,12 +54,16 @@ const TripForm = ({
   const [trip, setTrip] = useState({
     date: "",
     status: "pending",
+    trip_type: "",
     addresses: null,
     client_price: "",
     driver_price: "",
     required_drivers: "",
     assigned_drivers: [],
     invited_drivers: [],
+    Days: [],
+    startdate: "",
+    enddate: "",
     rides: null,
     client: "",
     quote: {},
@@ -46,11 +74,11 @@ const TripForm = ({
   const [clients, setClients] = useState();
   const [allQuotes, setAllQuotes] = useState([]);
   const [quotes, setQuotes] = useState([]);
-  const [value, onChange] = useState("10:00");
-  const [time, setTime] = useState(value);
+  const [value, onChange] = useState(["12:00"]);
+  const [daysLength, setDaysLength] = useState([]);
+  const [tripType, setTriptype] = useState("simple");
   const [selectedDays, setSelectedDays] = useState([]);
   const [openDateModal, setOpenDateModal] = useState(false);
-
   useEffect(() => {
     api("get", "drivers").then((res) => {
       setDrivers(res.data.drivers);
@@ -91,12 +119,25 @@ const TripForm = ({
 
   const handleInputChange = (e) => {
     setTrip({ ...trip, [e.target.name]: e.target.value });
+    if (e.target.name === "trip_type") {
+      setTriptype(e.target.value);
+    }
   };
 
+  const handleDayChange = (e) => {
+    setTrip({ ...trip, Days: e.value });
+    let data = [];
+    let time = [];
+    e.map((i) => {
+      data.push(i);
+      time.push("10:00");
+    });
+    onChange(time);
+    setDaysLength(data);
+  };
   const handleClientChange = (e) => {
     setTrip((user) => ({ ...user, client: e.value }));
     setQuotes(allQuotes.filter((a) => a.client?._id === e.value));
-    // setPassengers(clients.filter((a) => a._id === e.value)[0]?.passengers);
   };
 
   const handleDelete = () => {
@@ -126,7 +167,6 @@ const TripForm = ({
     e.preventDefault();
     let method = "post";
     let uri = "trips";
-    console.log(trip, "trip");
     if (
       startAddress.lat == endAddress.lat &&
       startAddress.lng == endAddress.lng &&
@@ -139,7 +179,7 @@ const TripForm = ({
       return toast.error("Please enter quote status");
     }
 
-    if (selectedDays.length == 0 && !isEditing) {
+    if (selectedDays.length == 0 && !isEditing && trip.trip_type == "simple") {
       return toast.error("Please enter trip dates");
     }
 
@@ -153,23 +193,42 @@ const TripForm = ({
       method = "put";
       uri = uri + `/${editTrip._id}`;
     }
-    api(method, uri, {
-      ...trip,
-      start_address: startAddress,
-      end_address: endAddress,
-      dates: selectedDays,
-      time: value,
-    }).then((res) => {
-      // eslint-disable-next-line eqeqeq
-      if (res.status == 200) {
-        toast.success("Saved Successfully");
-        handleModal();
-        autoRefresh();
-      } else {
-        toast.error("Save Error", res);
-      }
-    });
-    // .catch((error) => toast.error(error.message));
+    if (trip.trip_type === "recurring") {
+      console.log(trip.trip_type);
+      api(method, uri, {
+        ...trip,
+        start_address: startAddress,
+        end_address: endAddress,
+        days: daysLength,
+        time: value,
+      }).then((res) => {
+        // eslint-disable-next-line eqeqeq
+        if (res.status == 200) {
+          toast.success("Saved Successfully");
+          handleModal();
+          autoRefresh();
+        } else {
+          toast.error("Save Error", res);
+        }
+      });
+    } else {
+      api(method, uri, {
+        ...trip,
+        start_address: startAddress,
+        end_address: endAddress,
+        dates: selectedDays,
+        time: value,
+      }).then((res) => {
+        // eslint-disable-next-line eqeqeq
+        if (res.status == 200) {
+          toast.success("Saved Successfully");
+          handleModal();
+          autoRefresh();
+        } else {
+          toast.error("Save Error", res);
+        }
+      });
+    }
   };
 
   const handleDayClick = (day, { selected }) => {
@@ -180,9 +239,11 @@ const TripForm = ({
       let newis = selectedDays.filter((item, i) => i != selectedIndex);
       setSelectedDays(newis);
     } else {
-      setSelectedDays([...selectedDays, day]);
+      if (!moment(day).isBefore(new Date()))
+        setSelectedDays([...selectedDays, day]);
     }
   };
+
   const handleDateModal = () => {
     setOpenDateModal((open) => !open);
     return openDateModal;
@@ -222,10 +283,9 @@ const TripForm = ({
                     </Col>
                   </Row>
                 </div>
-
                 <div className="pl-lg-4">
                   <Row>
-                    <Col lg="4">
+                    <Col lg="6">
                       <FormGroup>
                         <label
                           className="form-control-label"
@@ -251,71 +311,233 @@ const TripForm = ({
                         </Input>
                       </FormGroup>
                     </Col>
-                    <Col lg="5">
-                      <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-date"
-                        >
-                          <span style={{ color: "red" }}>
-                            {trip.date ? "" : "*"}
-                          </span>{" "}
-                          Trip Date
-                          {console.log(trip?.date?.split("T")[0])}
-                        </label>
-                        {isEditing ? (
-                          <Input
-                            className="form-control-alternative"
-                            id="input-date"
-                            // value={selectedDays?.map((i) => i)}
-                            placeholder={"Select Dates"}
-                            readonly
-                            type="date"
-                            value={trip?.date?.split("T")[0]}
-                            name="date"
-                            onChange={handleInputChange}
-                            // onClick={() => setOpenDateModal(true)}
-                          />
-                        ) : (
-                          <Input
-                            className="form-control-alternative"
-                            id="input-date"
-                            value={selectedDays?.map((i) => i)}
-                            placeholder={"Select Dates"}
-                            readonly
-                            type="text"
-                            // value={trip?.date?.split("T")[0]}
-                            // name="date"
-                            // onChange={handleInputChange}
-                            onClick={() => setOpenDateModal(true)}
-                          />
-                        )}
-                      </FormGroup>
-                    </Col>
-                    <Col lg="3">
-                      <FormGroup>
-                        <div className="TimePicker-ss">
+                    {!isEditing && (
+                      <Col lg="6">
+                        <FormGroup>
                           <label
                             className="form-control-label"
-                            htmlFor="input-time"
+                            htmlFor="input-tripType"
                           >
-                            <span style={{ color: "red" }}>
-                              {trip.time ? "" : "*"}
-                            </span>{" "}
-                            Select Trip Time
+                            Trip Type
                           </label>
-                          <TimePicker
-                            style={{ height: "calc(1.5em + 1.25rem + 2px)" }}
-                            name="time"
-                            // value={isEditing ? time : value}
-                            value={value}
-                            onChange={onChange}
-                          />
-                        </div>
-                      </FormGroup>
-                    </Col>
+                          <Input
+                            id="input-trip_type"
+                            name="trip_type"
+                            className="form-control-alternative"
+                            type="select"
+                            value={trip.trip_type}
+                            onChange={handleInputChange}
+                          >
+                            <option value="simple">simple</option>
+                            <option value="recurring">recurring</option>
+                          </Input>
+                        </FormGroup>
+                      </Col>
+                    )}
                   </Row>
                 </div>
+                {tripType == "simple" ? (
+                  <div className="pl-lg-4">
+                    <Row>
+                      <Col lg="6">
+                        <FormGroup>
+                          <label
+                            className="form-control-label"
+                            htmlFor="input-date"
+                          >
+                            <span style={{ color: "red" }}>
+                              {trip.date ? "" : "*"}
+                            </span>{" "}
+                            Trip Date
+                          </label>
+                          {isEditing ? (
+                            <Input
+                              className="form-control-alternative"
+                              id="input-date"
+                              // value={selectedDays?.map((i) => i)}
+                              placeholder={"Select Dates"}
+                              type="date"
+                              min={disableDates()}
+                              value={trip?.date?.split("T")[0]}
+                              name="date"
+                              onChange={handleInputChange}
+                              // onClick={() => setOpenDateModal(true)}
+                            />
+                          ) : (
+                            <Input
+                              className="form-control-alternative"
+                              id="input-date"
+                              value={selectedDays?.map((i) =>
+                                moment(i).format("DD/MM/YYYY")
+                              )}
+                              min={disableDates()}
+                              placeholder={"Select Dates"}
+                              readonly
+                              type="text"
+                              onClick={() => setOpenDateModal(true)}
+                            />
+                          )}
+                        </FormGroup>
+                      </Col>
+                      <Col lg="6">
+                        <FormGroup>
+                          <div className="TimePicker-ss">
+                            <label
+                              className="form-control-label"
+                              htmlFor="input-time"
+                            >
+                              <span style={{ color: "red" }}>
+                                {trip.time ? "" : "*"}
+                              </span>{" "}
+                              Select Trip Time
+                            </label>
+                            <TimePicker
+                              style={{ height: "calc(1.5em + 1.25rem + 2px)" }}
+                              name="time"
+                              value={value}
+                              onChange={onChange}
+                            />
+                          </div>
+                        </FormGroup>
+                      </Col>
+                    </Row>
+                  </div>
+                ) : (
+                  <>
+                    <div className="pl-lg-4">
+                      <Row>
+                        <Col lg="4">
+                          <FormGroup>
+                            <label
+                              className="form-control-label"
+                              htmlFor="input-date"
+                            >
+                              <span style={{ color: "red" }}>
+                                {trip.date ? "" : "*"}
+                              </span>{" "}
+                              Start Date
+                            </label>
+                            <Input
+                              className="form-control-alternative"
+                              id="input-date"
+                              // value={selectedDays?.map((i) => i)}
+                              placeholder={"Select Date"}
+                              type="date"
+                              value={trip.startdate}
+                              min={disableDates()}
+                              name="startdate"
+                              onChange={handleInputChange}
+                              // onClick={() => setOpenDateModal(true)}
+                            />
+                          </FormGroup>
+                        </Col>
+                        <Col lg="4">
+                          <FormGroup>
+                            <label
+                              className="form-control-label"
+                              htmlFor="input-date"
+                            >
+                              <span style={{ color: "red" }}>
+                                {trip.date ? "" : "*"}
+                              </span>{" "}
+                              End Date
+                            </label>
+                            <Input
+                              className="form-control-alternative"
+                              id="input-date"
+                              min={disableDates()}
+                              // value={selectedDays?.map((i) => i)}
+                              placeholder={"Select Date"}
+                              type="date"
+                              value={trip.enddate}
+                              name="enddate"
+                              onChange={handleInputChange}
+                              // onClick={() => setOpenDateModal(true)}
+                            />
+                          </FormGroup>
+                        </Col>
+                        <Col lg="4">
+                          <FormGroup>
+                            <label
+                              for="exampleSelect"
+                              className="form-control-label"
+                            >
+                              <span style={{ color: "red" }}>
+                                {trip.days ? "" : "*"}
+                              </span>{" "}
+                              Select Days
+                            </label>
+                            <Select
+                              onChange={handleDayChange}
+                              name="Days"
+                              isMulti
+                              hideSelectedOptions
+                              className="form-control-alternative"
+                              value={trip.Days}
+                              defaultValue={null}
+                              options={options}
+                            />
+                          </FormGroup>
+                        </Col>
+                      </Row>
+                    </div>
+                    <div className="pl-lg-4">
+                      <Row>
+                        {daysLength.map((i, index) => {
+                          return (
+                            <>
+                              <Col lg="6">
+                                <FormGroup>
+                                  <label
+                                    className="form-control-label"
+                                    htmlFor="input-Day"
+                                  >
+                                    Day
+                                  </label>
+                                  <Input
+                                    id="input-Day"
+                                    name="input-Day"
+                                    readOnly
+                                    className="input-Day"
+                                    value={i.label}
+                                  ></Input>
+                                </FormGroup>
+                              </Col>
+                              <Col lg="6">
+                                <FormGroup>
+                                  <div className="TimePicker-ss">
+                                    <label
+                                      className="form-control-label"
+                                      htmlFor="input-time"
+                                    >
+                                      <span style={{ color: "red" }}>
+                                        {trip.time ? "" : "*"}
+                                      </span>{" "}
+                                      Select Trip Time
+                                    </label>
+                                    <TimePicker
+                                      style={{
+                                        height: "calc(1.5em + 1.25rem + 2px)",
+                                      }}
+                                      name="time"
+                                      value={value[index]}
+                                      onChange={(value) => {
+                                        onChange((prev) => {
+                                          prev[index] = value;
+                                          return [...prev];
+                                        });
+                                      }}
+                                    />
+                                  </div>
+                                </FormGroup>
+                              </Col>
+                            </>
+                          );
+                        })}
+                      </Row>
+                    </div>
+                  </>
+                )}
                 <div className="pl-lg-4">
                   <Row>
                     <Col lg="6">
@@ -414,6 +636,15 @@ const TripForm = ({
                             name="drivers"
                             isMulti
                             className="form-control-alternative"
+                            // {isEditing && }
+                            defaultValue={
+                              isEditing
+                                ? editTrip?.invited_drivers.map((i) => ({
+                                    value: i?.driver?._id,
+                                    label: `${i?.driver?.first_name} ${i?.driver?.last_name}`,
+                                  }))
+                                : null
+                            }
                             options={drivers.map((driver) => ({
                               value: driver?._id,
                               label: `${driver?.first_name} ${driver?.last_name}`,
@@ -543,7 +774,11 @@ const TripForm = ({
           {isEditing ? "Edit" : "Select"} Date
         </ModalHeader>
         <div style={{ textAlign: "center" }}>
-          <DayPicker selectedDays={selectedDays} onDayClick={handleDayClick} />
+          <DayPicker
+            disabledDays={{ before: new Date() }}
+            selectedDays={selectedDays}
+            onDayClick={handleDayClick}
+          />
         </div>
       </Modal>
     </>
