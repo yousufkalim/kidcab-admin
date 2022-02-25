@@ -1,4 +1,15 @@
-import { Card, CardHeader, Table, Container, Row, Button } from "reactstrap";
+import {
+  Card,
+  CardHeader,
+  Table,
+  Container,
+  Row,
+  Button,
+  DropdownToggle,
+  DropdownMenu,
+  UncontrolledDropdown,
+  DropdownItem,
+} from "reactstrap";
 import PassengerForm from "./QuotesForm";
 import PassengerRow from "./QuotesRow";
 import { useState } from "react";
@@ -11,6 +22,7 @@ const QuotesList = () => {
   const [openModal, setOpenModal] = useState(false);
   const [quotes, setQuotes] = useState();
   const [selectedItems, setSelectedItems] = useState([]);
+  const [dropDownItem, setDropDownItem] = useState("all");
 
   const handleSelect = (quote) => {
     const selected = selectedItems.filter((a) => a._id === quote._id);
@@ -34,13 +46,14 @@ const QuotesList = () => {
     return openModal;
   };
   const autoRefresh = () => {
-    api("get", "quotes").then((res) => {
+    api("get", `/quotes/status/${dropDownItem}`).then((res) => {
+      console.log("response --------", res.data.quotes);
       setQuotes(res.data.quotes);
     });
   };
   useEffect(() => {
     autoRefresh();
-  }, [openModal]);
+  }, [openModal, dropDownItem]);
   return (
     <>
       <Container className="mt--7" fluid>
@@ -62,7 +75,61 @@ const QuotesList = () => {
                         Delete Quotes
                       </Button>
                     )}
-                    <ExportQuotes quotes={selectedItems} />{" "}
+                    <ExportQuotes
+                      dropDownItem={dropDownItem}
+                      quotes={selectedItems}
+                    />{" "}
+                    <UncontrolledDropdown>
+                      <DropdownToggle
+                        color="primary"
+                        name
+                        href="#pablo"
+                        role="button"
+                        caret
+                        style={{ textTransform: "capitalize" }}
+                      >
+                        {dropDownItem}
+                        &nbsp;qoutes
+                      </DropdownToggle>
+                      <DropdownMenu>
+                        <DropdownItem
+                          name="all"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            setDropDownItem(e.target.name);
+                          }}
+                        >
+                          All Qoutes
+                        </DropdownItem>
+                        <DropdownItem
+                          name="pending"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            setDropDownItem(e.target.name);
+                          }}
+                        >
+                          Pending Qoutes
+                        </DropdownItem>
+                        <DropdownItem
+                          name="accepted"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            setDropDownItem(e.target.name);
+                          }}
+                        >
+                          Accepted Qoutes
+                        </DropdownItem>
+                        <DropdownItem
+                          name="rejected"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            setDropDownItem(e.target.name);
+                          }}
+                        >
+                          Rejected Qoutes
+                        </DropdownItem>
+                      </DropdownMenu>
+                    </UncontrolledDropdown>
                     <Button
                       color="primary"
                       href="#pablo"

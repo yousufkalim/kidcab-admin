@@ -74,7 +74,7 @@ const TripForm = ({
   const [clients, setClients] = useState();
   const [allQuotes, setAllQuotes] = useState([]);
   const [quotes, setQuotes] = useState([]);
-  const [value, onChange] = useState(["12:00"]);
+  const [value, onChange] = useState("12:00");
   const [daysLength, setDaysLength] = useState([]);
   const [tripType, setTriptype] = useState("simple");
   const [selectedDays, setSelectedDays] = useState([]);
@@ -92,10 +92,9 @@ const TripForm = ({
   }, []);
   useEffect(() => {
     if (isEditing) {
-      var time = new Date(editTrip.date).getTime();
-      const minutes = Math.floor((time / (1000 * 60)) % 60);
-      const hours = Math.floor((time / (1000 * 60 * 60)) % 24);
-      time = `${hours}:${minutes}`;
+      var hours = new Date(editTrip.date).getHours();
+      var minutes = new Date(editTrip.date).getMinutes();
+      var time = `${hours}:${minutes}`;
       onChange(time);
       setTrip({
         date: editTrip.date,
@@ -194,7 +193,6 @@ const TripForm = ({
       uri = uri + `/${editTrip._id}`;
     }
     if (trip.trip_type === "recurring") {
-      console.log(trip.trip_type);
       api(method, uri, {
         ...trip,
         start_address: startAddress,
@@ -239,8 +237,9 @@ const TripForm = ({
       let newis = selectedDays.filter((item, i) => i != selectedIndex);
       setSelectedDays(newis);
     } else {
-      if (!moment(day).isBefore(new Date()))
-        setSelectedDays([...selectedDays, day]);
+      if (!moment(day).isBefore(new Date())) moment(day).format("LL");
+      console.log(day);
+      setSelectedDays([...selectedDays, day]);
     }
   };
 
@@ -311,29 +310,28 @@ const TripForm = ({
                         </Input>
                       </FormGroup>
                     </Col>
-                    {!isEditing && (
-                      <Col lg="6">
-                        <FormGroup>
-                          <label
-                            className="form-control-label"
-                            htmlFor="input-tripType"
-                          >
-                            Trip Type
-                          </label>
-                          <Input
-                            id="input-trip_type"
-                            name="trip_type"
-                            className="form-control-alternative"
-                            type="select"
-                            value={trip.trip_type}
-                            onChange={handleInputChange}
-                          >
-                            <option value="simple">simple</option>
-                            <option value="recurring">recurring</option>
-                          </Input>
-                        </FormGroup>
-                      </Col>
-                    )}
+
+                    <Col lg="6">
+                      <FormGroup>
+                        <label
+                          className="form-control-label"
+                          htmlFor="input-tripType"
+                        >
+                          Trip Type
+                        </label>
+                        <Input
+                          id="input-trip_type"
+                          name="trip_type"
+                          className="form-control-alternative"
+                          type="select"
+                          value={trip.trip_type}
+                          onChange={handleInputChange}
+                        >
+                          <option value="simple">simple</option>
+                          <option value="recurring">recurring</option>
+                        </Input>
+                      </FormGroup>
+                    </Col>
                   </Row>
                 </div>
                 {tripType == "simple" ? (
@@ -630,8 +628,10 @@ const TripForm = ({
                             }
                             isDisabled={
                               trip?.required_drivers <= 0 ||
-                              trip?.required_drivers ===
-                                trip?.assigned_drivers?.length
+                              trip?.required_drivers ==
+                                trip?.assigned_drivers?.length ||
+                              trip?.required_drivers ==
+                                trip?.invited_drivers?.length
                             }
                             name="drivers"
                             isMulti
