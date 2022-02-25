@@ -69,20 +69,14 @@ const TripRow = ({ trip, autoRefresh, selectedItems, handleSelect }) => {
       <td className="text-right">
         <UncontrolledDropdown>
           <DropdownToggle
-            className="btn-icon-only text-light"
-            href="#pablo"
+            className="btn-icon-only text-dark"
             role="button"
             size="sm"
             color=""
-            onClick={(e) => e.preventDefault()}
+            onClick={handleModal}
           >
-            <i className="fas fa-ellipsis-v" />
+            <i className="fas fa-edit" />
           </DropdownToggle>
-          <DropdownMenu className="dropdown-menu-arrow" right>
-            <DropdownItem href="#pablo" onClick={handleModal}>
-              Edit Trip
-            </DropdownItem>
-          </DropdownMenu>
         </UncontrolledDropdown>
       </td>
       {openModal && (
