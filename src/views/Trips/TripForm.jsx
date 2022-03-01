@@ -95,6 +95,10 @@ const TripForm = ({
       var hours = new Date(editTrip.date).getHours();
       var minutes = new Date(editTrip.date).getMinutes();
       var time = `${hours}:${minutes}`;
+      console.log(
+        "d",
+        editTrip.invited_drivers.map((driver) => driver)
+      );
       onChange(time);
       setTrip({
         date: editTrip.date,
@@ -104,7 +108,9 @@ const TripForm = ({
         driver_price: editTrip.driver_price,
         required_drivers: editTrip.required_drivers,
         assigned_drivers: editTrip.assigned_drivers,
-        invited_drivers: editTrip.invited_drivers.map((driver) => driver._id),
+        invited_drivers: editTrip.invited_drivers.map(
+          (driver) => driver.driver._id
+        ),
         rides: editTrip.rides,
         client: editTrip.client,
         quote: editTrip.quote,
@@ -187,6 +193,9 @@ const TripForm = ({
     }
     if (trip.driver_price == "") {
       return toast.error("Please enter drive price");
+    }
+    if (trip.driver_price < 1) {
+      return toast.error("Please enter valid driver price");
     }
     if (editTrip) {
       method = "put";
@@ -352,6 +361,7 @@ const TripForm = ({
                             <Input
                               className="form-control-alternative"
                               id="input-date"
+                              locale={"en-gb"}
                               // value={selectedDays?.map((i) => i)}
                               placeholder={"Select Dates"}
                               type="date"
@@ -436,7 +446,7 @@ const TripForm = ({
                               htmlFor="input-date"
                             >
                               <span style={{ color: "red" }}>
-                                {trip.date ? "" : "*"}
+                                {trip.dBate ? "" : "*"}
                               </span>{" "}
                               End Date
                             </label>
@@ -636,7 +646,6 @@ const TripForm = ({
                             name="drivers"
                             isMulti
                             className="form-control-alternative"
-                            // {isEditing && }
                             defaultValue={
                               isEditing
                                 ? editTrip?.invited_drivers.map((i) => ({
