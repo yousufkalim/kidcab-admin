@@ -64,8 +64,8 @@ const TripRow = ({ trip, autoRefresh, selectedItems, handleSelect }) => {
       <td className="text-center">
         {trip?.date ? trip?.date.split("T")[0] : "Date not Found"}
       </td>
-      <td className="text-center">{trip?.start_address?.label1}</td>
-      <td className="text-center">{trip?.end_address?.label1}</td>
+      <td className="text-center">{trip?.start_address?.city}</td>
+      <td className="text-center">{trip?.end_address?.city}</td>
       <td className="text-right">
         <UncontrolledDropdown>
           <DropdownToggle

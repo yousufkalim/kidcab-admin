@@ -94,6 +94,10 @@ const TripForm = ({
       var hours = new Date(editTrip.date).getHours();
       var minutes = new Date(editTrip.date).getMinutes();
       var time = `${hours}:${minutes}`;
+      console.log(
+        "d",
+        editTrip.invited_drivers.map((driver) => driver)
+      );
       onChange(time);
       setTrip({
         date: editTrip.date,
@@ -184,19 +188,18 @@ const TripForm = ({
       return toast.error("Please enter trip dates");
     }
 
-    if (trip.client_price == "") {
-      return toast.error("Please enter client price");
+    if (trip.client_price < 1 || trip.client_price == "") {
+      return toast.error("Invalid client price");
     }
     if (trip.driver_price == "") {
       return toast.error("Please enter drive price");
     }
-
+    if (trip.driver_price < 1) {
+      return toast.error("Please enter valid driver price");
+    }
     if (editTrip) {
       method = "put";
       uri = uri + `/${editTrip._id}`;
-    }
-    if (trip.qoute == undefined) {
-      trip.qoute = "";
     }
     if (trip.trip_type === "recurring") {
       api(method, uri, {
@@ -358,6 +361,7 @@ const TripForm = ({
                             <Input
                               className="form-control-alternative"
                               id="input-date"
+                              locale={"en-gb"}
                               // value={selectedDays?.map((i) => i)}
                               placeholder={"Select Dates"}
                               type="date"
@@ -442,7 +446,7 @@ const TripForm = ({
                               htmlFor="input-date"
                             >
                               <span style={{ color: "red" }}>
-                                {trip.date ? "" : "*"}
+                                {trip.dBate ? "" : "*"}
                               </span>{" "}
                               End Date
                             </label>
@@ -642,7 +646,6 @@ const TripForm = ({
                             name="drivers"
                             isMulti
                             className="form-control-alternative"
-                            // {isEditing && }
                             defaultValue={
                               isEditing
                                 ? editTrip?.invited_drivers.map((i) => ({
