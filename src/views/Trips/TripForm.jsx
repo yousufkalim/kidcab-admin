@@ -66,7 +66,6 @@ const TripForm = ({
     enddate: "",
     rides: null,
     client: "",
-    quote: {},
   });
   let [startAddress, setStartAddress] = useState({});
   let [endAddress, setEndAddress] = useState({});
@@ -95,6 +94,10 @@ const TripForm = ({
       var hours = new Date(editTrip.date).getHours();
       var minutes = new Date(editTrip.date).getMinutes();
       var time = `${hours}:${minutes}`;
+      console.log(
+        "d",
+        editTrip.invited_drivers.map((driver) => driver)
+      );
       onChange(time);
       setTrip({
         date: editTrip.date,
@@ -104,10 +107,12 @@ const TripForm = ({
         driver_price: editTrip.driver_price,
         required_drivers: editTrip.required_drivers,
         assigned_drivers: editTrip.assigned_drivers,
-        invited_drivers: editTrip.invited_drivers.map((driver) => driver._id),
+        invited_drivers: editTrip.invited_drivers.map(
+          (driver) => driver.driver._id
+        ),
         rides: editTrip.rides,
         client: editTrip.client,
-        quote: editTrip.quote,
+        quote: editTrip?.quote,
         time: editTrip.time,
       });
       setStartAddress(editTrip.start_address);
@@ -146,6 +151,7 @@ const TripForm = ({
       method = "delete";
       uri = uri + `/${editTrip._id}`;
     }
+
     api(method, uri)
       .then((res) => {
         // eslint-disable-next-line eqeqeq
@@ -175,18 +181,21 @@ const TripForm = ({
       return toast.error("Start and end address cant be same");
     }
     if (trip.status == "") {
-      return toast.error("Please enter quote status");
+      return toast.error("Please enter trip status");
     }
 
     if (selectedDays.length == 0 && !isEditing && trip.trip_type == "simple") {
       return toast.error("Please enter trip dates");
     }
 
-    if (trip.client_price == "") {
-      return toast.error("Please enter client price");
+    if (trip.client_price < 1 || trip.client_price == "") {
+      return toast.error("Invalid client price");
     }
     if (trip.driver_price == "") {
       return toast.error("Please enter drive price");
+    }
+    if (trip.driver_price < 1) {
+      return toast.error("Please enter valid driver price");
     }
     if (editTrip) {
       method = "put";
@@ -352,6 +361,7 @@ const TripForm = ({
                             <Input
                               className="form-control-alternative"
                               id="input-date"
+                              locale={"en-gb"}
                               // value={selectedDays?.map((i) => i)}
                               placeholder={"Select Dates"}
                               type="date"
@@ -436,7 +446,7 @@ const TripForm = ({
                               htmlFor="input-date"
                             >
                               <span style={{ color: "red" }}>
-                                {trip.date ? "" : "*"}
+                                {trip.dBate ? "" : "*"}
                               </span>{" "}
                               End Date
                             </label>
@@ -636,7 +646,6 @@ const TripForm = ({
                             name="drivers"
                             isMulti
                             className="form-control-alternative"
-                            // {isEditing && }
                             defaultValue={
                               isEditing
                                 ? editTrip?.invited_drivers.map((i) => ({
@@ -725,9 +734,6 @@ const TripForm = ({
                           className="form-control-label"
                           htmlFor="input-fname"
                         >
-                          <span style={{ color: "red" }}>
-                            {trip.quote[0] ? "" : "*"}
-                          </span>{" "}
                           Quote
                         </label>
                         {quotes && (
@@ -735,7 +741,7 @@ const TripForm = ({
                             onChange={(e) =>
                               setTrip((user) => ({ ...user, quote: e.value }))
                             }
-                            name="quotes"
+                            name="quote"
                             defaultValue={
                               trip.quote?._id && {
                                 value: trip?.quote?._id,
