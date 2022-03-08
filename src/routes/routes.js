@@ -31,12 +31,42 @@ var routes = [
     layout: "/admin",
   },
   {
+    path: "/trips",
+    name: "Trips",
+    icon: "fa fa-calendar text-pink",
+    component: Trips,
+    layout: "/admin",
+  },
+  {
+    path: "/",
+    name: "Schedule",
+    icon: "fa fa-calendar text-pink",
+    component: "",
+    layout: "/schedule",
+  },
+  {
     path: "/quotes",
     name: "Quotes",
     icon: "ni ni-ruler-pencil text-info",
     component: Quotes,
     layout: "/admin",
   },
+
+  {
+    path: "/invoice",
+    name: "Invoices",
+    icon: "fa fa-calendar-check text-yellow",
+    component: Invoices,
+    layout: "/admin",
+  },
+  {
+    path: "/",
+    name: "Payment",
+    icon: "fa fa-calendar text-pink",
+    component: "",
+    layout: "/payment",
+  },
+
   {
     path: "/driver",
     name: "Drivers",
@@ -51,20 +81,7 @@ var routes = [
     component: Vehicles,
     layout: "/admin",
   },
-  {
-    path: "/trips",
-    name: "Trips",
-    icon: "fa fa-calendar text-pink",
-    component: Trips,
-    layout: "/admin",
-  },
-  {
-    path: "/invoice",
-    name: "Invoices",
-    icon: "fa fa-calendar-check text-yellow",
-    component: Invoices,
-    layout: "/admin",
-  },
+
   {
     path: "/login",
     name: "Login",
