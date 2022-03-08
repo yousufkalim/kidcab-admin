@@ -402,6 +402,8 @@ const TripForm = ({
                             <TimePicker
                               style={{ height: "calc(1.5em + 1.25rem + 2px)" }}
                               name="time"
+                              clockIcon={null}
+                              amPmAriaLabel={null}
                               value={value}
                               onChange={onChange}
                             />
