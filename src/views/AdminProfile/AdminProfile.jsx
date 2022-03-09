@@ -21,9 +21,7 @@ const AdminProfile = ({ openModal, handleModal, user }) => {
   const [company, setCompany] = useState({
     firstName: "",
     lastName: "",
-    logo: "",
     email: "",
-    password: "",
     address: "",
     phoneNumber: "",
     siret: "",
@@ -42,8 +40,6 @@ const AdminProfile = ({ openModal, handleModal, user }) => {
     setCompany({
       firstName: user.name?.first_name || "",
       lastName: user.name?.last_name || "",
-      logo: user.logo || "",
-      password: user.password || "",
       email: user.email || "",
       phoneNumber: user.phone_number || "",
       vat: user.vat_number || "",
@@ -121,7 +117,6 @@ const AdminProfile = ({ openModal, handleModal, user }) => {
     );
     formData.append("email", company.email);
     formData.append("password", company.password);
-    formData.append("logo", company.logo);
     formData.append("phone_number", company.phoneNumber);
     formData.append("address", company.address);
     formData.append("siret_number", company.siret);
@@ -133,6 +128,14 @@ const AdminProfile = ({ openModal, handleModal, user }) => {
     formData.append("bank_name", company.bankName);
     formData.append("iban", company.iban);
     formData.append("bic", company.bic);
+
+    if (company.password) {
+      formData.append("password", company.password);
+    }
+
+    if (company.logo) {
+      formData.append("logo", company.logo);
+    }
 
     // if (company.name == "") {
     //   return toast.error("Please enter your name");
