@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import AddressInput from "components/Form/AddressInput";
 import api from "../../api";
+import { UpdateStore } from "StoreContext";
 import {
   Modal,
   ModalBody,
@@ -16,13 +17,14 @@ import {
 } from "reactstrap";
 // core components
 
-const AdminProfile = ({ openModal, handleModal, user, isEditing }) => {
+const AdminProfile = ({ openModal, handleModal, user }) => {
   const [company, setCompany] = useState({
-    name: "",
+    firstName: "",
+    lastName: "",
     logo: "",
     email: "",
     password: "",
-    address: {},
+    address: "",
     phoneNumber: "",
     siret: "",
     vat: "",
@@ -31,33 +33,34 @@ const AdminProfile = ({ openModal, handleModal, user, isEditing }) => {
     rcsCity: "",
     bankAccount: "",
     bankName: "",
-    bic: "",
+    iban: "",
     bic: "",
   });
-  let [address, setAddress] = useState({});
+  const updateStore = UpdateStore();
 
   useEffect(() => {
-    console.log(user);
     setCompany({
-      name: user.name?.first_name + " " + user.name?.last_name,
-      logo: user.logo,
-      password: user.password,
-      email: user.email,
-      phoneNumber: user.phone_number,
-      vat: user.vat_number,
-      siret: user.siret_number,
-      legalForm: user.legal_form,
-      shareCapital: user.share_capital,
-      legalForm: user.legalForm,
-      bankName: user.bank_name,
-      bankAccount: user.bank_account,
-      iban: user.iban,
-      bic: user.bic,
+      firstName: user.name?.first_name || "",
+      lastName: user.name?.last_name || "",
+      logo: user.logo || "",
+      password: user.password || "",
+      email: user.email || "",
+      phoneNumber: user.phone_number || "",
+      vat: user.vat_number || "",
+      siret: user.siret_number || "",
+      legalForm: user.legal_form || "",
+      shareCapital: user.share_capital || "",
+      rcsCity: user.rcs_city || "",
+      bankName: user.bank_name || "",
+      bankAccount: user.bank_account || "",
+      iban: user.iban || "",
+      bic: user.bic || "",
+      address: user.address || "",
     });
-    // setAddress(user.address);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
   const handleFileChange = (e) => {
     setCompany({ ...company, [e.target.name]: e.target.files[0] });
   };
@@ -83,26 +86,57 @@ const AdminProfile = ({ openModal, handleModal, user, isEditing }) => {
   //     }
   //   });
   // };
+  // const admin = {
+  //   first_name: company.firstName,
+  //   last_name: company.lastName,
+  //   email: company.email,
+  //   password: company.password,
+  //   logo: company.logo,
+  //   phone_number: company.phoneNumber,
+  //   address: JSON.stringify(address),
+  //   siret_number: company.siret,
+  //   vat: company.vat,
+  //   legal_form: company.legalForm,
+  //   share_capital: company.shareCapital,
+  //   rcs_city: company.rcsCity,
+  //   bank_account: company.bankAccount,
+  //   bank_name: company.bankName,
+  //   iban: company.iban,
+  //   bic: company.bic,
+  // };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    let method = "post";
-    let uri = "companys";
+    let method = "put";
+    let uri = "admins";
 
     const formData = new FormData();
 
-    formData.append("name", company.name);
+    formData.append(
+      "name",
+      JSON.stringify({
+        first_name: company.firstName,
+        last_name: company.lastName,
+      })
+    );
     formData.append("email", company.email);
     formData.append("password", company.password);
     formData.append("logo", company.logo);
-    formData.append("phone_number", company.phone_number);
-    formData.append("address", JSON.stringify(address));
+    formData.append("phone_number", company.phoneNumber);
+    formData.append("address", company.address);
     formData.append("siret_number", company.siret);
-    formData.append("vat", company.vat_number);
+    formData.append("vat", company.vat);
+    formData.append("legal_form", company.legalForm);
+    formData.append("share_capital", company.shareCapital);
+    formData.append("rcs_city", company.rcsCity);
+    formData.append("bank_account", company.bankAccount);
+    formData.append("bank_name", company.bankName);
+    formData.append("iban", company.iban);
+    formData.append("bic", company.bic);
 
-    if (company.name == "") {
-      return toast.error("Please enter your name");
-    }
+    // if (company.name == "") {
+    //   return toast.error("Please enter your name");
+    // }
     // if (company.lastName == "") {
     //   return toast.error("Please enter your last name");
     // }
@@ -120,20 +154,32 @@ const AdminProfile = ({ openModal, handleModal, user, isEditing }) => {
     //   return toast.error("Passwords should be of atleast 8 letters");
     // }
 
-    if (user) {
-      method = "put";
-      uri = uri + `/${user._id}`;
-    }
+    uri = uri + `/${user._id}`;
+
     api(method, uri, formData).then((res) => {
       // eslint-disable-next-line eqeqeq
+      let admin = res.data.admin;
       if (res.status == 200) {
+        console.log("RES======>", res.data.admin);
         toast.success("Saved Successfully");
 
+        updateStore({
+          user: admin,
+        });
+
+        localStorage.setItem(
+          "user",
+          JSON.stringify({
+            admin,
+          })
+        );
         handleModal();
       } else {
         toast.error("Save Error", res);
       }
     });
+    console.log("=========================", company);
+
     //window.location.reload();
   };
 
@@ -141,7 +187,7 @@ const AdminProfile = ({ openModal, handleModal, user, isEditing }) => {
     <>
       <Modal isOpen={openModal} size="xl" centered>
         <ModalHeader charCode="X" toggle={handleModal}>
-          {isEditing ? "Edit" : "Add"} Profile
+          Profile
         </ModalHeader>
         <ModalBody>
           <Row>
@@ -183,9 +229,9 @@ const AdminProfile = ({ openModal, handleModal, user, isEditing }) => {
                         >
                           <span style={{ color: "red" }}>
                             {" "}
-                            {company.name ? "" : "*"}{" "}
+                            {company.firstName ? "" : "*"}{" "}
                           </span>
-                          {""} Name
+                          {""} First Name
                         </label>
                         <Input
                           className="form-control-alternative"
@@ -193,8 +239,32 @@ const AdminProfile = ({ openModal, handleModal, user, isEditing }) => {
                           required={true}
                           placeholder="John"
                           type="text"
-                          value={company.name}
-                          name="name"
+                          value={company.firstName}
+                          name="firstName"
+                          onChange={handleInputChange}
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col lg="6">
+                      <FormGroup>
+                        <label
+                          className="form-control-label"
+                          htmlFor="input-lname"
+                        >
+                          <span style={{ color: "red" }}>
+                            {" "}
+                            {company.lastName ? "" : "*"}{" "}
+                          </span>
+                          {""} Last Name
+                        </label>
+                        <Input
+                          className="form-control-alternative"
+                          id="input-lname"
+                          required={true}
+                          placeholder="John"
+                          type="text"
+                          value={company.lastName}
+                          name="lastName"
                           onChange={handleInputChange}
                         />
                       </FormGroup>
@@ -314,10 +384,20 @@ const AdminProfile = ({ openModal, handleModal, user, isEditing }) => {
                   <Row>
                     <Col md="12">
                       <FormGroup>
-                        <AddressInput
-                          label="Address"
-                          address={address}
-                          setAddress={setAddress}
+                        <label
+                          className="form-control-label"
+                          htmlFor="input-address"
+                        >
+                          Address
+                        </label>
+                        <Input
+                          className="form-control-alternative"
+                          id="input-address"
+                          placeholder="Enter your address"
+                          type="text"
+                          value={company.address}
+                          name="address"
+                          onChange={handleInputChange}
                         />
                       </FormGroup>
                     </Col>
@@ -476,7 +556,7 @@ const AdminProfile = ({ openModal, handleModal, user, isEditing }) => {
           <Button color="primary" onClick={handleSubmit}>
             Save
           </Button>{" "}
-          {isEditing && <Button onClick={handleModal}>Cancel</Button>}{" "}
+          <Button onClick={handleModal}>Cancel</Button>
         </ModalFooter>
       </Modal>
     </>
