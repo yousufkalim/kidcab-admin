@@ -1,34 +1,33 @@
 // reactstrap components
-
+import { ExportTrips } from "components/exportTrips";
+import React, { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import {
+  Button,
   Card,
   CardHeader,
-  CardFooter,
-  Pagination,
-  PaginationItem,
-  PaginationLink,
-  Table,
   Container,
-  Row,
-  Button,
-  ButtonDropdown,
-  DropdownToggle,
-  DropdownMenu,
-  UncontrolledDropdown,
   DropdownItem,
+  DropdownMenu,
+  DropdownToggle,
+  Input,
+  Row,
+  Table,
+  UncontrolledDropdown,
 } from "reactstrap";
+import api from "../../api/index";
 import TripForm from "./TripForm";
 import TripRow from "./TripRow";
-import { useState } from "react";
-import { useEffect } from "react";
-import api from "../../api/index";
-import { ExportTrips } from "components/exportTrips";
-import { toast } from "react-toastify";
 
 const TripList = () => {
   const [openModal, setOpenModal] = useState(false);
   const [trips, setTrips] = useState();
   const [dropDownItem, setDropDownItem] = useState("all");
+  const [filterdropDownItem, setFilterDropDownItem] = useState("all");
+  const [filter, setFilter] = useState("");
+  const [dates, setDates] = useState([]);
+  const [typefilter, setTypeFilter] = useState(false);
+  const [datefilter, setDateFilter] = useState(false);
   const [selectedItems, setSelectedItems] = useState([]);
 
   const handleSelect = (trip) => {
@@ -42,7 +41,6 @@ const TripList = () => {
 
   const handleDeleteMany = async () => {
     const tripIds = selectedItems.map((a) => a._id);
-
     api("delete", "trips/deleteMany", { data: { tripIds } }).then(() => {
       toast.success("Trips deleted successfully");
       autoRefresh();
@@ -55,17 +53,83 @@ const TripList = () => {
     return openModal;
   };
   const autoRefresh = () => {
-    api("get", `trips/status/${dropDownItem}`).then((res) => {
-      console.log("response --------", res.data.trips);
-      setTrips(res.data.trips);
+    console.log(filterdropDownItem, "filterdropDownItem");
+    api("get", `trips/status/${filterdropDownItem}`).then((res) => {
+      console.log("response --------", res?.data?.trips);
+      setTrips(res?.data?.trips);
     });
   };
+
+  const filterArr = React.useMemo(() => {
+    if (filter === "") return trips;
+    return trips.filter((trip) =>
+      (
+        trip.client.first_name.toLowerCase() +
+        trip.client.last_name.toLowerCase()
+      ).includes(filter.split(" ").join(""))
+    );
+  }, [filter, trips]);
+
+  const filterCheck = (e) => {
+    e.preventDefault();
+    setDropDownItem(e.target.name);
+    if (e.target.name === "all") {
+      setTypeFilter(false);
+      setDateFilter(false);
+      setFilter("");
+      setFilterDropDownItem(e.target.name);
+      autoRefresh();
+    } else if (e.target.name == "date-filter") {
+      if (typefilter === true) {
+        setTypeFilter(false);
+      }
+      setDateFilter((prevCheck) => !prevCheck);
+    } else if (e.target.name === "trip-type-filter") {
+      if (datefilter === true) {
+        setDateFilter(false);
+      }
+      setTypeFilter((prevCheck) => !prevCheck);
+    }
+  };
+
+  const handleInputChange = (e) => {
+    setDates({ ...dates, [e.target.name]: e.target.value });
+  };
+
+  const handelNameFilter = (e) => {
+    e.preventDefault();
+    setFilterDropDownItem(e.target.name);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    let method = "post";
+    let uri = "trips/tripsByDate";
+    if (dates.start_end == "") {
+      return toast.error("Please enter start date");
+    }
+    if (dates.end_date == "") {
+      return toast.error("Please enter end date");
+    }
+    api(method, uri, {
+      ...dates,
+    }).then((res) => {
+      // eslint-disable-next-line eqeqeq
+      if (res.status == 200) {
+        setTrips(res.data.trips);
+      } else {
+        toast.error(" Error", res);
+      }
+    });
+  };
+
   useEffect(() => {
     autoRefresh();
-  }, [openModal, dropDownItem]);
+  }, [openModal, filterdropDownItem]);
 
   return (
     <>
+      {console.log(filterdropDownItem)}
       <Container className="mt--7" fluid>
         <Row>
           <div className="col">
@@ -90,66 +154,35 @@ const TripList = () => {
                     />
                     <UncontrolledDropdown>
                       <DropdownToggle
-                        color="primary"
+                        color="danger"
                         name
                         href="#pablo"
                         role="button"
                         caret
-                        style={{ textTransform: "capitalize" }}
+                        size="md"
+                        style={{
+                          textTransform: "capitalize",
+                        }}
                       >
                         {dropDownItem}
-                        &nbsp;trips
                       </DropdownToggle>
                       <DropdownMenu>
-                        <DropdownItem
-                          name="all"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            setDropDownItem(e.target.name);
-                          }}
-                        >
+                        <DropdownItem name="all" onClick={filterCheck}>
                           All Trips
                         </DropdownItem>
                         <DropdownItem
-                          name="pending"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            setDropDownItem(e.target.name);
-                          }}
+                          name="trip-type-filter"
+                          onClick={filterCheck}
                         >
-                          Pending Trips
+                          Filter By trip type
                         </DropdownItem>
-                        <DropdownItem
-                          name="confirmed"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            setDropDownItem(e.target.name);
-                          }}
-                        >
-                          Confirmed Trips
-                        </DropdownItem>
-                        <DropdownItem
-                          name="cancelled"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            setDropDownItem(e.target.name);
-                          }}
-                        >
-                          Cancelled Trips
-                        </DropdownItem>
-                        <DropdownItem
-                          name="completed"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            setDropDownItem(e.target.name);
-                          }}
-                        >
-                          Completed Trips
+                        <DropdownItem name="date-filter" onClick={filterCheck}>
+                          Filter By Date
                         </DropdownItem>
                       </DropdownMenu>
-                    </UncontrolledDropdown>{" "}
+                    </UncontrolledDropdown>
                     <Button
-                      color="primary"
+                      color="info"
                       href="#pablo"
                       onClick={handleModal}
                       size="md"
@@ -159,6 +192,163 @@ const TripList = () => {
                     </Button>
                   </div>
                 </div>
+                {typefilter ? (
+                  <>
+                    <div
+                      className="Trip_Filer"
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        margin: "11px",
+                        marginTop: "24px",
+                      }}
+                    >
+                      <div style={{ width: "60%" }}>
+                        <Input
+                          aria-label="Search"
+                          className="form-control-rounded "
+                          placeholder="Search Client name"
+                          type="search"
+                          name="client-search"
+                          style={{ border: "none", backgroundColor: "#e8f7ff" }}
+                          onChange={(e) => {
+                            setFilter(e.target.value.toLowerCase());
+                          }}
+                        />
+                      </div>
+                      <div>
+                        <UncontrolledDropdown
+                          style={{
+                            marginTop: "-13px",
+                            position: "absolute",
+                            right: "210px",
+                          }}
+                        >
+                          <DropdownToggle
+                            color="primary"
+                            name
+                            href="#pablo"
+                            role="button"
+                            caret
+                            size="sm"
+                            style={{
+                              textTransform: "capitalize",
+                            }}
+                          >
+                            {filterdropDownItem}
+                            &nbsp;trips
+                          </DropdownToggle>
+                          <DropdownMenu>
+                            <DropdownItem name="all" onClick={handelNameFilter}>
+                              All Trips
+                            </DropdownItem>
+                            <DropdownItem
+                              name="pending"
+                              onClick={handelNameFilter}
+                            >
+                              Pending Trips
+                            </DropdownItem>
+                            <DropdownItem
+                              name="confirmed"
+                              onClick={handelNameFilter}
+                            >
+                              Confirmed Trips
+                            </DropdownItem>
+                            <DropdownItem
+                              name="cancelled"
+                              onClick={handelNameFilter}
+                            >
+                              Cancelled Trips
+                            </DropdownItem>
+                            <DropdownItem
+                              name="completed"
+                              onClick={handelNameFilter}
+                            >
+                              Completed Trips
+                            </DropdownItem>
+                          </DropdownMenu>
+                        </UncontrolledDropdown>
+                      </div>
+                    </div>
+                  </>
+                ) : datefilter ? (
+                  <>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        width: "100%",
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: "35%",
+                        }}
+                      >
+                        <label
+                          className="form-control-label"
+                          htmlFor="input-date"
+                        >
+                          <span style={{ color: "red" }}>
+                            {dates?.start_date ? "" : "*"}
+                          </span>{" "}
+                          Start Date
+                        </label>
+                        <Input
+                          className="form-control-alternative"
+                          id="input-date"
+                          placeholder={"Select Start Date"}
+                          type="date"
+                          value={dates?.start_date}
+                          name="start_date"
+                          onChange={handleInputChange}
+                        />
+                      </div>
+                      <div
+                        style={{
+                          width: "35%",
+                          marginLeft: "20px",
+                        }}
+                      >
+                        <label
+                          className="form-control-label"
+                          htmlFor="input-date"
+                        >
+                          <span style={{ color: "red" }}>
+                            {dates?.end_date ? "" : "*"}
+                          </span>{" "}
+                          End Date
+                        </label>
+                        <Input
+                          className="form-control-alternative"
+                          id="input-date"
+                          placeholder={"Select End Date"}
+                          type="date"
+                          value={dates?.end_date}
+                          name="end_date"
+                          onChange={handleInputChange}
+                        />
+                      </div>
+                      <div style={{ marginTop: "35px" }}></div>
+                    </div>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        marginTop: "10px",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <Button color="primary" size="md" onClick={handleSubmit}>
+                        Search
+                      </Button>
+                    </div>
+                  </>
+                ) : (
+                  ""
+                )}
               </CardHeader>
               <Table className="align-items-center table-flush my-3" responsive>
                 <thead className="thead-light">
@@ -189,8 +379,8 @@ const TripList = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {trips ? (
-                    trips.map((trip) => (
+                  {filterArr ? (
+                    filterArr?.map((trip) => (
                       <TripRow
                         key={trip._id}
                         trip={trip}
