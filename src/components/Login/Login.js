@@ -30,13 +30,13 @@ const Login = () => {
     const token = result.data.token;
     const admin = result.data.admin;
     if (token && result.status === 200) {
-      setToken(token);
+      localStorage.setItem("user", JSON.stringify(admin));
       updateStore({
         token: token,
         authorization: true,
         user: admin,
       });
-      console.log("Authorized");
+      setToken(token);
     }
   };
   if (authorization) return <Redirect push to="/admin" />;
