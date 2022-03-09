@@ -30,6 +30,7 @@ const AdminNavbar = (props) => {
     });
     if (res.status === 200) {
       removeToken();
+      localStorage.removeItem("user");
       window.location = "/login";
     }
   };

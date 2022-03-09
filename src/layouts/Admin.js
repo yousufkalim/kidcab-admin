@@ -9,15 +9,22 @@ import Sidebar from "components/Sidebar/Sidebar.js";
 import { getToken, SetAuthToken } from "../variables/auth";
 
 import routes from "routes/routes";
+import { UpdateStore } from "StoreContext";
 
 const Admin = (props) => {
   const mainContent = useRef(null);
   const location = useLocation();
   const [token, setToken] = useState("");
+  const updateStore = UpdateStore();
+
   useEffect(() => {
     setToken(getToken());
     if (getToken()) {
       SetAuthToken(token);
+      const user = localStorage.getItem("user");
+      updateStore({
+        user: JSON.parse(user),
+      });
     } else {
       window.location.replace("/auth/login");
     }
