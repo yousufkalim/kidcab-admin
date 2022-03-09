@@ -58,9 +58,9 @@ const TripForm = ({
     addresses: null,
     client_price: "",
     driver_price: "",
-    required_drivers: "",
     assigned_drivers: [],
     invited_drivers: [],
+    passengers: [],
     Days: [],
     startdate: "",
     enddate: "",
@@ -69,10 +69,11 @@ const TripForm = ({
   });
   let [startAddress, setStartAddress] = useState({});
   let [endAddress, setEndAddress] = useState({});
-  const [drivers, setDrivers] = useState();
+  let [stepAddress, setStepAddress] = useState({});
+  const [drivers, setDrivers] = useState([]);
+  const [passengers, setPassengers] = useState([]);
+  const [allPassengers, setAllPassengers] = useState([]);
   const [clients, setClients] = useState();
-  const [allQuotes, setAllQuotes] = useState([]);
-  const [quotes, setQuotes] = useState([]);
   const [value, onChange] = useState("12:00");
   const [daysLength, setDaysLength] = useState([]);
   const [tripType, setTriptype] = useState("simple");
@@ -85,8 +86,8 @@ const TripForm = ({
     api("get", "users").then((res) => {
       setClients(res.data.users);
     });
-    api("get", "quotes").then((res) => {
-      setAllQuotes(res.data.quotes?.filter((a) => a.status === "accepted"));
+    api("get", `passengers`).then((res) => {
+      setAllPassengers(res.data.passengers);
     });
   }, []);
   useEffect(() => {
@@ -94,10 +95,6 @@ const TripForm = ({
       var hours = new Date(editTrip.date).getHours();
       var minutes = new Date(editTrip.date).getMinutes();
       var time = `${hours}:${minutes}`;
-      console.log(
-        "d",
-        editTrip.invited_drivers.map((driver) => driver)
-      );
       onChange(time);
       setTrip({
         date: editTrip.date,
@@ -105,11 +102,11 @@ const TripForm = ({
         addresses: editTrip.addresses,
         client_price: editTrip.client_price,
         driver_price: editTrip.driver_price,
-        required_drivers: editTrip.required_drivers,
         assigned_drivers: editTrip.assigned_drivers,
         invited_drivers: editTrip.invited_drivers.map(
           (driver) => driver.driver._id
         ),
+        passengers: editTrip.passengers.map((passenger) => passenger._id),
         rides: editTrip.rides,
         client: editTrip.client,
         quote: editTrip?.quote,
@@ -117,6 +114,7 @@ const TripForm = ({
       });
       setStartAddress(editTrip.start_address);
       setEndAddress(editTrip.end_address);
+      setStepAddress(editTrip.addresses);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -141,7 +139,8 @@ const TripForm = ({
   };
   const handleClientChange = (e) => {
     setTrip((user) => ({ ...user, client: e.value }));
-    setQuotes(allQuotes.filter((a) => a.client?._id === e.value));
+    console.log("e.value", e.value);
+    setPassengers(allPassengers.filter((a) => a.client._id === e.value));
   };
 
   const handleDelete = () => {
@@ -172,13 +171,22 @@ const TripForm = ({
     e.preventDefault();
     let method = "post";
     let uri = "trips";
+    console.log(stepAddress, "a");
     if (
-      startAddress.lat == endAddress.lat &&
-      startAddress.lng == endAddress.lng &&
-      startAddress.PostalCode == endAddress.PostalCode &&
-      startAddress.city == endAddress.city
+      (startAddress.lat == endAddress.lat &&
+        startAddress.lng == endAddress.lng &&
+        startAddress.PostalCode == endAddress.PostalCode &&
+        startAddress.city == endAddress.city) ||
+      (startAddress.lat == stepAddress.lat &&
+        startAddress.lng == stepAddress.lng &&
+        startAddress.PostalCode == stepAddress.PostalCode &&
+        startAddress.city == stepAddress.city) ||
+      (endAddress.lat == stepAddress.lat &&
+        endAddress.lng == stepAddress.lng &&
+        endAddress.PostalCode == stepAddress.PostalCode &&
+        endAddress.city == stepAddress.city)
     ) {
-      return toast.error("Start and end address cant be same");
+      return toast.error("Adresses cant be same");
     }
     if (trip.status == "") {
       return toast.error("Please enter trip status");
@@ -201,6 +209,7 @@ const TripForm = ({
       method = "put";
       uri = uri + `/${editTrip._id}`;
     }
+    console.log(editTrip, "T");
     if (trip.trip_type === "recurring") {
       api(method, uri, {
         ...trip,
@@ -208,6 +217,7 @@ const TripForm = ({
         end_address: endAddress,
         days: daysLength,
         time: value,
+        addresses: stepAddress,
       }).then((res) => {
         // eslint-disable-next-line eqeqeq
         if (res.status == 200) {
@@ -224,6 +234,7 @@ const TripForm = ({
         start_address: startAddress,
         end_address: endAddress,
         dates: selectedDays,
+        addresses: stepAddress,
         time: value,
       }).then((res) => {
         // eslint-disable-next-line eqeqeq
@@ -258,6 +269,7 @@ const TripForm = ({
   };
   return (
     <>
+      {console.log("p", allPassengers)};
       <Modal isOpen={openModal} size="xl" centered>
         <ModalHeader charCode="X" toggle={handleModal}>
           {isEditing ? "Edit" : "Add"} Trip
@@ -271,7 +283,7 @@ const TripForm = ({
                 </h6>
                 <div className="pl-lg-4">
                   <Row>
-                    <Col lg="6">
+                    <Col lg="4">
                       <FormGroup>
                         <AddressInput
                           label="Start Address"
@@ -280,12 +292,21 @@ const TripForm = ({
                         />
                       </FormGroup>
                     </Col>
-                    <Col lg="6">
+                    <Col lg="4">
                       <FormGroup>
                         <AddressInput
                           label="End Address"
                           address={endAddress}
                           setAddress={setEndAddress}
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col lg="4">
+                      <FormGroup>
+                        <AddressInput
+                          label="Add Step"
+                          address={isEditing ? trip.addresses : stepAddress}
+                          setAddress={setStepAddress}
                         />
                       </FormGroup>
                     </Col>
@@ -600,33 +621,16 @@ const TripForm = ({
                 </div>
                 <div className="pl-lg-4">
                   <Row>
-                    <Col lg="6">
-                      <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-rd"
-                        >
-                          Required Drivers
-                        </label>
-                        <Input
-                          className="form-control-alternative"
-                          id="input-rd"
-                          required={true}
-                          placeholder="Enter Required Drivers"
-                          type="number"
-                          value={trip.required_drivers}
-                          name="required_drivers"
-                          onChange={handleInputChange}
-                        />
-                      </FormGroup>
-                    </Col>
-                    <Col lg="6">
+                    <Col lg="4">
                       <FormGroup>
                         <label
                           className="form-control-label"
                           htmlFor="input-fname"
                         >
-                          Invited Drivers
+                          <span style={{ color: "red" }}>
+                            {trip.client ? "" : "*"}
+                          </span>{" "}
+                          Driver
                         </label>
                         {drivers && (
                           <Select
@@ -638,13 +642,7 @@ const TripForm = ({
                                 ),
                               }))
                             }
-                            isDisabled={
-                              trip?.required_drivers <= 0 ||
-                              trip?.required_drivers ==
-                                trip?.assigned_drivers?.length ||
-                              trip?.required_drivers ==
-                                trip?.invited_drivers?.length
-                            }
+                            isDisabled={isEditing}
                             name="drivers"
                             isMulti
                             className="form-control-alternative"
@@ -664,43 +662,7 @@ const TripForm = ({
                         )}
                       </FormGroup>
                     </Col>
-                    {/* <Col lg="6">
-                      <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-fname"
-                        >
-                          Assigned Drivers
-                        </label>
-                        {drivers && (
-                          <Select
-                            isDisabled
-                            onChange={(e) =>
-                              setTrip((user) => ({
-                                ...user,
-                                invited_drivers: e.map(
-                                  (driver) => driver.value
-                                ),
-                              }))
-                            }
-                            name="assignedDrivers"
-                            isMulti
-                            className="form-control-alternative"
-                            options={editTrip?.invited_drivers?.map(
-                              (driver) => ({
-                                value: driver?._id,
-                                label: `${driver?.first_name} ${driver?.last_name}`,
-                              })
-                            )}
-                          />
-                        )}
-                      </FormGroup>
-                    </Col> */}
-                  </Row>
-                </div>
-                <div className="pl-lg-4">
-                  <Row>
-                    <Col lg="6">
+                    <Col lg="4">
                       <FormGroup>
                         <label
                           className="form-control-label"
@@ -730,30 +692,39 @@ const TripForm = ({
                         )}
                       </FormGroup>
                     </Col>
-                    <Col lg="6">
+                    <Col lg="4">
                       <FormGroup>
                         <label
                           className="form-control-label"
                           htmlFor="input-fname"
                         >
-                          Quote
+                          Passengers
                         </label>
-                        {quotes && (
+                        {allPassengers && (
                           <Select
                             onChange={(e) =>
-                              setTrip((user) => ({ ...user, quote: e.value }))
+                              setTrip((user) => ({
+                                ...user,
+                                passengers: e.map(
+                                  (passenger) => passenger.value
+                                ),
+                              }))
                             }
-                            name="quote"
-                            defaultValue={
-                              trip.quote?._id && {
-                                value: trip?.quote?._id,
-                                label: `${trip?.quote?.quote_title}`,
-                              }
-                            }
+                            isDisabled={trip?.client <= 0}
+                            name="passengers"
+                            isMulti
                             className="form-control-alternative"
-                            options={quotes.map((quote) => ({
-                              value: quote?._id,
-                              label: `${quote?.quote_title}`,
+                            defaultValue={
+                              isEditing
+                                ? editTrip?.passengers.map((i) => ({
+                                    value: i?._id,
+                                    label: `${i?.first_name} ${i?.last_name}`,
+                                  }))
+                                : null
+                            }
+                            options={passengers.map((passenger) => ({
+                              value: passenger?._id,
+                              label: `${passenger?.first_name} ${passenger?.last_name}`,
                             }))}
                           />
                         )}

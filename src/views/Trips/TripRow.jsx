@@ -16,6 +16,7 @@ const TripRow = ({ trip, autoRefresh, selectedItems, handleSelect }) => {
     setOpenModal((open) => !open);
     return openModal;
   };
+
   return (
     <tr>
       <td scope="row">
@@ -45,20 +46,17 @@ const TripRow = ({ trip, autoRefresh, selectedItems, handleSelect }) => {
         </Badge>
       </th>
       <td className="text-center">
-        {trip.client ? (
-          <ManagerAvatar user={trip.client} />
-        ) : (
-          "No client is added"
-        )}
+        {trip.client ? trip.client.first_name : "No client is added"}
       </td>
       <td className="text-center">
-        {trip?.quote?.passengers
-          ? trip?.quote?.passengers.length
-          : "No Passenger is added"}
+        {/* {trip?.passengers
+          ? trip.passengers.map((i) => i.first_name)
+          : "No Passenger is added"} */}
+        {trip?.passengers ? trip.passengers.length : "No Passenger is added"}
       </td>
       <td className="text-center">
         {trip?.invited_drivers
-          ? trip?.invited_drivers.length
+          ? trip.invited_drivers.length
           : "No Driver is Invited"}
       </td>
       <td className="text-center">
