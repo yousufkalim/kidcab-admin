@@ -1,313 +1,486 @@
-// reactstrap components
+import { useState, useEffect } from "react";
+import { toast } from "react-toastify";
+import AddressInput from "components/Form/AddressInput";
+import api from "../../api";
 import {
+  Modal,
+  ModalBody,
+  ModalHeader,
+  ModalFooter,
   Button,
-  Card,
-  CardHeader,
-  CardBody,
   FormGroup,
   Form,
   Input,
-  Container,
   Row,
   Col,
 } from "reactstrap";
 // core components
-import UserHeader from "components/Headers/UserHeader.js";
-import { Store } from "StoreContext";
 
-const Profile = () => {
-  const { user } = Store();
-  console.log(user);
+const AdminProfile = ({ openModal, handleModal, user, isEditing }) => {
+  const [company, setCompany] = useState({
+    name: "",
+    logo: "",
+    email: "",
+    password: "",
+    address: {},
+    phoneNumber: "",
+    siret: "",
+    vat: "",
+    legalForm: "",
+    shareCapital: "",
+    rcsCity: "",
+    bankAccount: "",
+    bankName: "",
+    bic: "",
+    bic: "",
+  });
+  let [address, setAddress] = useState({});
+
+  useEffect(() => {
+    console.log(user);
+    setCompany({
+      name: user.name?.first_name + " " + user.name?.last_name,
+      logo: user.logo,
+      password: user.password,
+      email: user.email,
+      phoneNumber: user.phone_number,
+      vat: user.vat_number,
+      siret: user.siret_number,
+      legalForm: user.legal_form,
+      shareCapital: user.share_capital,
+      legalForm: user.legalForm,
+      bankName: user.bank_name,
+      bankAccount: user.bank_account,
+      iban: user.iban,
+      bic: user.bic,
+    });
+    // setAddress(user.address);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  const handleFileChange = (e) => {
+    setCompany({ ...company, [e.target.name]: e.target.files[0] });
+  };
+  const handleInputChange = (e) => {
+    setCompany({ ...company, [e.target.name]: e.target.value });
+  };
+
+  // const handleDelete = () => {
+  //   let method = "delete";
+  //   let uri = "companys";
+  //   if (user) {
+  //     method = "delete";
+  //     uri = uri + `/${user._id}`;
+  //   }
+  //   api(method, uri).then((res) => {
+  //     // eslint-disable-next-line eqeqeq
+  //     if (res.status == 200) {
+  //       toast.success("Delete Successfully");
+  //       handleModal();
+  //       autoRefresh();
+  //     } else {
+  //       toast.error("Delete Error", res.data.message);
+  //     }
+  //   });
+  // };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    let method = "post";
+    let uri = "companys";
+
+    const formData = new FormData();
+
+    formData.append("name", company.name);
+    formData.append("email", company.email);
+    formData.append("password", company.password);
+    formData.append("logo", company.logo);
+    formData.append("phone_number", company.phone_number);
+    formData.append("address", JSON.stringify(address));
+    formData.append("siret_number", company.siret);
+    formData.append("vat", company.vat_number);
+
+    if (company.name == "") {
+      return toast.error("Please enter your name");
+    }
+    // if (company.lastName == "") {
+    //   return toast.error("Please enter your last name");
+    // }
+    // if (company.email == "") {
+    //   return toast.error("Please enter email");
+    // }
+    // if (!(company.email.includes(".") && company.email.includes("@"))) {
+    //   return toast.error("Please enter a valid email");
+    // }
+
+    // if (company.password == "") {
+    //   return toast.error("Password is required");
+    // }
+    // if (company.password.length < 8) {
+    //   return toast.error("Passwords should be of atleast 8 letters");
+    // }
+
+    if (user) {
+      method = "put";
+      uri = uri + `/${user._id}`;
+    }
+    api(method, uri, formData).then((res) => {
+      // eslint-disable-next-line eqeqeq
+      if (res.status == 200) {
+        toast.success("Saved Successfully");
+
+        handleModal();
+      } else {
+        toast.error("Save Error", res);
+      }
+    });
+    //window.location.reload();
+  };
+
   return (
     <>
-      <UserHeader />
-      {/* Page content */}
-      <Container className="mt--7" fluid>
-        <Row>
-          <Col className="order-xl-2 mb-5 mb-xl-0" xl="4">
-            <Card className="card-profile shadow">
-              <Row className="justify-content-center">
-                <Col className="order-lg-2" lg="3">
-                  <div className="card-profile-image">
-                    <a href="#pablo" onClick={(e) => e.preventDefault()}>
-                      <img
-                        alt="..."
-                        className="rounded-circle"
-                        src={user.profile_pic}
-                      />
-                    </a>
-                  </div>
-                </Col>
-              </Row>
-              <CardHeader className="text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4">
-                <div className="d-flex justify-content-between">
-                  <Button
-                    className="mr-4"
-                    color="info"
-                    href="#pablo"
-                    onClick={(e) => e.preventDefault()}
-                    size="sm"
-                  >
-                    Connect
-                  </Button>
-                  <Button
-                    className="float-right"
-                    color="default"
-                    href="#pablo"
-                    onClick={(e) => e.preventDefault()}
-                    size="sm"
-                  >
-                    Message
-                  </Button>
+      <Modal isOpen={openModal} size="xl" centered>
+        <ModalHeader charCode="X" toggle={handleModal}>
+          {isEditing ? "Edit" : "Add"} Profile
+        </ModalHeader>
+        <ModalBody>
+          <Row>
+            <Col>
+              <Form>
+                <h6 className="heading-small text-muted mb-4">Profile</h6>
+                <div className="pl-lg-4">
+                  <Row>
+                    <Col lg="12">
+                      <FormGroup>
+                        <label
+                          className="form-control-label"
+                          htmlFor="input-image"
+                        >
+                          <span style={{ color: "red" }}>
+                            {company.logo ? "" : "*"}
+                          </span>{" "}
+                          Add Logo <i className="ni ni-album-2" />
+                        </label>
+                        <Input
+                          className="form-control-file form"
+                          id="input-image"
+                          name="logo"
+                          type="file"
+                          onChange={handleFileChange}
+                        />
+                      </FormGroup>
+                    </Col>
+                  </Row>
                 </div>
-              </CardHeader>
-              <CardBody className="pt-0 pt-md-4">
-                <Row>
-                  <div className="col">
-                    <div className="card-profile-stats d-flex justify-content-center mt-md-5">
-                      <div>
-                        <span className="heading">22</span>
-                        <span className="description">Friends</span>
-                      </div>
-                      <div>
-                        <span className="heading">10</span>
-                        <span className="description">Photos</span>
-                      </div>
-                      <div>
-                        <span className="heading">89</span>
-                        <span className="description">Comments</span>
-                      </div>
-                    </div>
-                  </div>
-                </Row>
-                <div className="text-center">
-                  <h3>
-                    <span className="font-weight-light">, 27</span>
-                  </h3>
-                  <div className="h5 font-weight-300">
-                    <i className="ni location_pin mr-2" />
-                    Bucharest, Romania
-                  </div>
-                  <div className="h5 mt-4">
-                    <i className="ni business_briefcase-24 mr-2" />
-                    Solution Manager - Creative Tim Officer
-                  </div>
-                  <div>
-                    <i className="ni education_hat mr-2" />
-                    University of Computer Science
-                  </div>
-                  <hr className="my-4" />
-                  <p>
-                    Ryan — the name taken by Melbourne-raised, Brooklyn-based
-                    Nick Murphy — writes, performs and records all of his own
-                    music.
-                  </p>
-                  <a href="#pablo" onClick={(e) => e.preventDefault()}>
-                    Show more
-                  </a>
+
+                <div className="pl-lg-4">
+                  <Row>
+                    <Col lg="6">
+                      <FormGroup>
+                        <label
+                          className="form-control-label"
+                          htmlFor="input-fname"
+                        >
+                          <span style={{ color: "red" }}>
+                            {" "}
+                            {company.name ? "" : "*"}{" "}
+                          </span>
+                          {""} Name
+                        </label>
+                        <Input
+                          className="form-control-alternative"
+                          id="input-fname"
+                          required={true}
+                          placeholder="John"
+                          type="text"
+                          value={company.name}
+                          name="name"
+                          onChange={handleInputChange}
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col lg="6">
+                      <FormGroup>
+                        <label
+                          className="form-control-label"
+                          htmlFor="input-email"
+                        >
+                          <span style={{ color: "red" }}>
+                            {company.email ? "" : "*"} {""}
+                          </span>
+                          Email Address
+                        </label>
+                        <Input
+                          type="email"
+                          name="email"
+                          className="form-control-alternative"
+                          id="input-email"
+                          placeholder="johndoe@example.com"
+                          value={company.email}
+                          onChange={handleInputChange}
+                        />
+                      </FormGroup>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col lg="6">
+                      <FormGroup>
+                        <label
+                          className="form-control-label"
+                          htmlFor="input-password"
+                        >
+                          <span style={{ color: "red" }}>
+                            {company.password ? "" : "*"}{" "}
+                          </span>
+                          Password
+                        </label>
+                        <Input
+                          className="form-control-alternative"
+                          id="input-password"
+                          placeholder="Password"
+                          type="password"
+                          value={company.password}
+                          name="password"
+                          onChange={handleInputChange}
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col lg="6">
+                      <FormGroup>
+                        <label
+                          className="form-control-label"
+                          htmlFor="input-password"
+                        >
+                          City of RCS
+                        </label>
+                        <Input
+                          className="form-control-alternative"
+                          id="input-rcsCity"
+                          placeholder="City of RCS"
+                          type="text"
+                          value={company.rcsCity}
+                          name="rcsCity"
+                          onChange={handleInputChange}
+                        />
+                      </FormGroup>
+                    </Col>
+                  </Row>
                 </div>
-              </CardBody>
-            </Card>
-          </Col>
-          <Col className="order-xl-1" xl="8">
-            <Card className="bg-secondary shadow">
-              <CardHeader className="bg-white border-0">
-                <Row className="align-items-center">
-                  <Col xs="8">
-                    <h3 className="mb-0">My account</h3>
-                  </Col>
-                  <Col className="text-right" xs="4">
-                    <Button
-                      color="primary"
-                      href="#pablo"
-                      onClick={(e) => e.preventDefault()}
-                      size="sm"
-                    >
-                      Settings
-                    </Button>
-                  </Col>
-                </Row>
-              </CardHeader>
-              <CardBody>
-                <Form>
-                  <h6 className="heading-small text-muted mb-4">
-                    User information
-                  </h6>
-                  <div className="pl-lg-4">
-                    <Row>
-                      <Col lg="6">
-                        <FormGroup>
-                          <label
-                            className="form-control-label"
-                            htmlFor="input-username"
-                          >
-                            Username
-                          </label>
-                          <Input
-                            className="form-control-alternative"
-                            defaultValue="lucky.jesse"
-                            id="input-username"
-                            placeholder="Username"
-                            type="text"
-                          />
-                        </FormGroup>
-                      </Col>
-                      <Col lg="6">
-                        <FormGroup>
-                          <label
-                            className="form-control-label"
-                            htmlFor="input-email"
-                          >
-                            Email address
-                          </label>
-                          <Input
-                            className="form-control-alternative"
-                            id="input-email"
-                            placeholder="jesse@example.com"
-                            type="email"
-                          />
-                        </FormGroup>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col lg="6">
-                        <FormGroup>
-                          <label
-                            className="form-control-label"
-                            htmlFor="input-first-name"
-                          >
-                            First name
-                          </label>
-                          <Input
-                            className="form-control-alternative"
-                            defaultValue="Lucky"
-                            id="input-first-name"
-                            placeholder="First name"
-                            type="text"
-                          />
-                        </FormGroup>
-                      </Col>
-                      <Col lg="6">
-                        <FormGroup>
-                          <label
-                            className="form-control-label"
-                            htmlFor="input-last-name"
-                          >
-                            Last name
-                          </label>
-                          <Input
-                            className="form-control-alternative"
-                            defaultValue="Jesse"
-                            id="input-last-name"
-                            placeholder="Last name"
-                            type="text"
-                          />
-                        </FormGroup>
-                      </Col>
-                    </Row>
-                  </div>
-                  <hr className="my-4" />
-                  {/* Address */}
-                  <h6 className="heading-small text-muted mb-4">
-                    Contact information
-                  </h6>
-                  <div className="pl-lg-4">
-                    <Row>
-                      <Col md="12">
-                        <FormGroup>
-                          <label
-                            className="form-control-label"
-                            htmlFor="input-address"
-                          >
-                            Address
-                          </label>
-                          <Input
-                            className="form-control-alternative"
-                            defaultValue="Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09"
-                            id="input-address"
-                            placeholder="Home Address"
-                            type="text"
-                          />
-                        </FormGroup>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col lg="4">
-                        <FormGroup>
-                          <label
-                            className="form-control-label"
-                            htmlFor="input-city"
-                          >
-                            City
-                          </label>
-                          <Input
-                            className="form-control-alternative"
-                            defaultValue="New York"
-                            id="input-city"
-                            placeholder="City"
-                            type="text"
-                          />
-                        </FormGroup>
-                      </Col>
-                      <Col lg="4">
-                        <FormGroup>
-                          <label
-                            className="form-control-label"
-                            htmlFor="input-country"
-                          >
-                            Country
-                          </label>
-                          <Input
-                            className="form-control-alternative"
-                            defaultValue="United States"
-                            id="input-country"
-                            placeholder="Country"
-                            type="text"
-                          />
-                        </FormGroup>
-                      </Col>
-                      <Col lg="4">
-                        <FormGroup>
-                          <label
-                            className="form-control-label"
-                            htmlFor="input-country"
-                          >
-                            Postal code
-                          </label>
-                          <Input
-                            className="form-control-alternative"
-                            id="input-postal-code"
-                            placeholder="Postal code"
-                            type="number"
-                          />
-                        </FormGroup>
-                      </Col>
-                    </Row>
-                  </div>
-                  <hr className="my-4" />
-                  {/* Description */}
-                  <h6 className="heading-small text-muted mb-4">About me</h6>
-                  <div className="pl-lg-4">
-                    <FormGroup>
-                      <label>About Me</label>
-                      <Input
-                        className="form-control-alternative"
-                        placeholder="A few words about you ..."
-                        rows="4"
-                        defaultValue="A beautiful Dashboard for Bootstrap 4. It is Free and
-                          Open Source."
-                        type="textarea"
-                      />
-                    </FormGroup>
-                  </div>
-                </Form>
-              </CardBody>
-            </Card>
-          </Col>
-        </Row>
-      </Container>
+
+                <div className="pl-lg-4">
+                  <Row>
+                    <Col lg="6">
+                      <FormGroup>
+                        <label
+                          className="form-control-label"
+                          htmlFor="input-legalForm"
+                        >
+                          Legal Form
+                        </label>
+                        <Input
+                          className="form-control-alternative"
+                          id="input-shareCapital"
+                          placeholder="legal Form"
+                          type="text"
+                          value={company.legalForm}
+                          name="legalForm"
+                          onChange={handleInputChange}
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col lg="6">
+                      <FormGroup>
+                        <label
+                          className="form-control-label"
+                          htmlFor="input-cap"
+                        >
+                          Share Capital
+                        </label>
+                        <Input
+                          className="form-control-alternative"
+                          id="input-shareCapital"
+                          placeholder="Share Capital"
+                          type="text"
+                          value={company.shareCapital}
+                          name="shareCapital"
+                          onChange={handleInputChange}
+                        />
+                      </FormGroup>
+                    </Col>
+                  </Row>
+                </div>
+
+                <div className="pl-lg-4">
+                  <Row>
+                    <Col md="12">
+                      <FormGroup>
+                        <AddressInput
+                          label="Address"
+                          address={address}
+                          setAddress={setAddress}
+                        />
+                      </FormGroup>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col lg="4">
+                      <FormGroup>
+                        <label
+                          className="form-control-label"
+                          htmlFor="input-phone"
+                        >
+                          Phone Number
+                        </label>
+                        <Input
+                          className="form-control-alternative"
+                          id="input-phone"
+                          placeholder="+33123456789"
+                          type="text"
+                          value={company.phoneNumber}
+                          name="phoneNumber"
+                          onChange={handleInputChange}
+                          maxLength="11"
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col lg="4">
+                      <FormGroup>
+                        <label
+                          className="form-control-label"
+                          htmlFor="input-siret"
+                        >
+                          Siret Number
+                        </label>
+                        <Input
+                          className="form-control-alternative"
+                          id="input-siret"
+                          placeholder="79465211500013"
+                          type="text"
+                          value={company.siret}
+                          name="siret"
+                          onChange={handleInputChange}
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col lg="4">
+                      <FormGroup>
+                        <label
+                          className="form-control-label"
+                          htmlFor="input-intra"
+                        >
+                          VAT Number
+                        </label>
+                        <Input
+                          className="form-control-alternative"
+                          id="input-intra"
+                          placeholder="123456789"
+                          type="text"
+                          value={company.vat}
+                          name="vat"
+                          onChange={handleInputChange}
+                        />
+                      </FormGroup>
+                    </Col>
+                  </Row>
+                </div>
+
+                <div className="pl-lg-4">
+                  <Row>
+                    <Col lg="4">
+                      <FormGroup>
+                        <label
+                          className="form-control-label"
+                          htmlFor="input-bankName"
+                        >
+                          Bank Name
+                        </label>
+                        <Input
+                          className="form-control-alternative"
+                          id="input-bankName"
+                          placeholder="Example Bank Ltd"
+                          type="text"
+                          value={company.bankName}
+                          name="bankName"
+                          onChange={handleInputChange}
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col lg="4">
+                      <FormGroup>
+                        <label
+                          className="form-control-label"
+                          htmlFor="input-iban"
+                        >
+                          IBAN Number
+                        </label>
+                        <Input
+                          className="form-control-alternative"
+                          id="input-iban"
+                          placeholder="123456789"
+                          type="text"
+                          value={company.iban}
+                          name="iban"
+                          onChange={handleInputChange}
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col lg="4">
+                      <FormGroup>
+                        <label
+                          className="form-control-label"
+                          htmlFor="input-iban"
+                        >
+                          Bank Account
+                        </label>
+                        <Input
+                          className="form-control-alternative"
+                          id="input-iban"
+                          placeholder="bank Account"
+                          type="text"
+                          value={company.bankAccount}
+                          name="bankAccount"
+                          onChange={handleInputChange}
+                        />
+                      </FormGroup>
+                    </Col>
+                  </Row>
+                </div>
+                <div className="pl-lg-4">
+                  <Row>
+                    <Col lg="4">
+                      <FormGroup>
+                        <label
+                          className="form-control-label"
+                          htmlFor="input-bic"
+                        >
+                          BIC
+                        </label>
+                        <Input
+                          className="form-control-alternative"
+                          id="input-bsnk"
+                          placeholder="bic"
+                          type="text"
+                          value={company.bic}
+                          name="bic"
+                          onChange={handleInputChange}
+                        />
+                      </FormGroup>
+                    </Col>
+                  </Row>
+                </div>
+              </Form>
+            </Col>
+          </Row>
+        </ModalBody>
+        <ModalFooter>
+          <Button color="primary" onClick={handleSubmit}>
+            Save
+          </Button>{" "}
+          {isEditing && <Button onClick={handleModal}>Cancel</Button>}{" "}
+        </ModalFooter>
+      </Modal>
     </>
   );
 };
 
-export default Profile;
+export default AdminProfile;
