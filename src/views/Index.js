@@ -1,10 +1,11 @@
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 // node.js library that concatenates classes (strings)
 import classnames from "classnames";
 // javascipt plugin for creating charts
 import Chart from "chart.js";
 // react plugin used to create charts
 import { Line, Bar } from "react-chartjs-2";
+import * as moment from "moment";
 // reactstrap components
 import {
   Button,
@@ -30,7 +31,7 @@ import {
 } from "variables/charts.js";
 
 import Header from "components/Headers/Header.js";
-
+import api from "../api/index";
 const Index = (props) => {
   const [activeNav, setActiveNav] = useState(1);
   const [chartExample1Data, setChartExample1Data] = useState("data1");
@@ -44,10 +45,33 @@ const Index = (props) => {
     setActiveNav(index);
     setChartExample1Data("data" + index);
   };
+  const [reports, setReports] = useState([]);
+  const [pendingpayments, setPendingPayments] = useState([]);
+  useEffect(() => {
+    autoRefresh();
+    autoInvoice();
+  }, []);
+
+  const autoInvoice = () => {
+    api("get", `invoices/`).then((res) => {
+      let pendingPayment = res?.data?.invoices.filter(
+        (a) => a.status == "pending"
+      );
+      setPendingPayments(pendingPayment);
+    });
+  };
+
+  const autoRefresh = () => {
+    api("post", `/trips/getDayReport`).then((res) => {
+      let reports = res?.data?.reports;
+      setReports(reports);
+    });
+  };
   return (
     <>
       <Header />
       {/* Page content */}
+      {console.log("tt", pendingpayments)}
       <Container className="mt--7" fluid>
         <Row>
           <Col className="mb-5 mb-xl-0" xl="8">
@@ -133,73 +157,34 @@ const Index = (props) => {
               <CardHeader className="border-0">
                 <Row className="align-items-center">
                   <div className="col">
-                    <h3 className="mb-0">Page visits</h3>
-                  </div>
-                  <div className="col text-right">
-                    <Button
-                      color="primary"
-                      href="#pablo"
-                      onClick={(e) => e.preventDefault()}
-                      size="sm"
-                    >
-                      See all
-                    </Button>
+                    <h3 className="mb-0">Weekly report</h3>
                   </div>
                 </Row>
               </CardHeader>
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
                   <tr>
-                    <th scope="col">Page name</th>
-                    <th scope="col">Visitors</th>
-                    <th scope="col">Unique users</th>
-                    <th scope="col">Bounce rate</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Total Earning</th>
+                    <th scope="col">Total Rides</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <th scope="row">/kidcab/</th>
-                    <td>4,569</td>
-                    <td>340</td>
-                    <td>
-                      <i className="fas fa-arrow-up text-success mr-3" /> 46,53%
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">/kidcab/users</th>
-                    <td>3,985</td>
-                    <td>319</td>
-                    <td>
-                      <i className="fas fa-arrow-down text-warning mr-3" />{" "}
-                      46,53%
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">/kidcab/quotes</th>
-                    <td>3,513</td>
-                    <td>294</td>
-                    <td>
-                      <i className="fas fa-arrow-down text-warning mr-3" />{" "}
-                      36,49%
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">/kidcab/trips</th>
-                    <td>2,050</td>
-                    <td>147</td>
-                    <td>
-                      <i className="fas fa-arrow-up text-success mr-3" /> 50,87%
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">/kidcab/drivers</th>
-                    <td>1,795</td>
-                    <td>190</td>
-                    <td>
-                      <i className="fas fa-arrow-down text-danger mr-3" />{" "}
-                      46,53%
-                    </td>
-                  </tr>
+                  <>
+                    {reports ? (
+                      reports?.map((report) => (
+                        <tr>
+                          <td>{report._id}</td>
+                          <td>{report.driver_price}</td>
+                          <td>{report.turnover}</td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr className="h1 mx-lg-auto text-center">
+                        <td>No Report Found</td>
+                      </tr>
+                    )}
+                  </>
                 </tbody>
               </Table>
             </Card>
@@ -209,105 +194,39 @@ const Index = (props) => {
               <CardHeader className="border-0">
                 <Row className="align-items-center">
                   <div className="col">
-                    <h3 className="mb-0">Social traffic</h3>
-                  </div>
-                  <div className="col text-right">
-                    <Button
-                      color="primary"
-                      href="#pablo"
-                      onClick={(e) => e.preventDefault()}
-                      size="sm"
-                    >
-                      See all
-                    </Button>
+                    <h3 className="mb-0">Pending Payments</h3>
                   </div>
                 </Row>
               </CardHeader>
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
                   <tr>
-                    <th scope="col">Referral</th>
-                    <th scope="col">Visitors</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Price</th>
                     <th scope="col" />
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <th scope="row">Facebook</th>
-                    <td>1,480</td>
-                    <td>
-                      <div className="d-flex align-items-center">
-                        <span className="mr-2">60%</span>
-                        <div>
-                          <Progress
-                            max="100"
-                            value="60"
-                            barClassName="bg-gradient-danger"
-                          />
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">Facebook</th>
-                    <td>5,480</td>
-                    <td>
-                      <div className="d-flex align-items-center">
-                        <span className="mr-2">70%</span>
-                        <div>
-                          <Progress
-                            max="100"
-                            value="70"
-                            barClassName="bg-gradient-success"
-                          />
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">Google</th>
-                    <td>4,807</td>
-                    <td>
-                      <div className="d-flex align-items-center">
-                        <span className="mr-2">80%</span>
-                        <div>
-                          <Progress max="100" value="80" />
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">Instagram</th>
-                    <td>3,678</td>
-                    <td>
-                      <div className="d-flex align-items-center">
-                        <span className="mr-2">75%</span>
-                        <div>
-                          <Progress
-                            max="100"
-                            value="75"
-                            barClassName="bg-gradient-info"
-                          />
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">twitter</th>
-                    <td>2,645</td>
-                    <td>
-                      <div className="d-flex align-items-center">
-                        <span className="mr-2">30%</span>
-                        <div>
-                          <Progress
-                            max="100"
-                            value="30"
-                            barClassName="bg-gradient-warning"
-                          />
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
+                  <>
+                    {pendingpayments ? (
+                      pendingpayments?.map((pendingpayment) => (
+                        <tr>
+                          <td>{pendingpayment.invoice_title}</td>
+                          <td>
+                            {moment(pendingpayment.issue_date).format(
+                              "DD/MM/YYYY"
+                            )}
+                          </td>
+                          <td>{pendingpayment.total_price}</td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr className="h1 mx-lg-auto text-center">
+                        <td>NoT Found</td>
+                      </tr>
+                    )}
+                  </>
                 </tbody>
               </Table>
             </Card>
