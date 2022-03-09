@@ -7,6 +7,7 @@ import Invoices from "../views/Invoice/Invoices";
 import Quotes from "../views/Quotes/Quotes";
 import Vehicles from "../views/Vehicles";
 import Trips from "../views/Trips/Trips";
+import Schedule from "../views/Schedule/Schedule";
 
 var routes = [
   {
@@ -33,16 +34,16 @@ var routes = [
   {
     path: "/trips",
     name: "Trips",
-    icon: "fa fa-calendar text-pink",
+    icon: "fas fa-suitcase-rolling text-pink",
     component: Trips,
     layout: "/admin",
   },
   {
-    path: "/",
+    path: "/schedule",
     name: "Schedule",
-    icon: "fa fa-calendar text-pink",
-    component: "",
-    layout: "/schedule",
+    icon: "fa fa-calendar text-blue",
+    component: Schedule,
+    layout: "/admin",
   },
   {
     path: "/quotes",
@@ -62,7 +63,7 @@ var routes = [
   {
     path: "/",
     name: "Payment",
-    icon: "fa fa-calendar text-pink",
+    icon: "fas fa-money-check-alt text-pink",
     component: "",
     layout: "/payment",
   },
