@@ -112,6 +112,13 @@ const TripForm = ({
         quote: editTrip?.quote,
         time: editTrip.time,
       });
+      api("get", `passengers`).then((res) => {
+        setPassengers(
+          res.data.passengers.filter(
+            (a) => a.client._id === editTrip?.client?._id
+          )
+        );
+      });
       setStartAddress(editTrip.start_address);
       setEndAddress(editTrip.end_address);
       setStepAddress(editTrip.addresses);
@@ -139,7 +146,6 @@ const TripForm = ({
   };
   const handleClientChange = (e) => {
     setTrip((user) => ({ ...user, client: e.value }));
-    console.log("e.value", e.value);
     setPassengers(allPassengers.filter((a) => a.client._id === e.value));
   };
 
@@ -205,6 +211,10 @@ const TripForm = ({
     if (trip.driver_price < 1) {
       return toast.error("Please enter valid driver price");
     }
+
+    if (trip.passengers.length < 1) {
+      return toast.error("Passenger is required");
+    }
     if (editTrip) {
       method = "put";
       uri = uri + `/${editTrip._id}`;
@@ -269,7 +279,6 @@ const TripForm = ({
   };
   return (
     <>
-      {console.log("p", allPassengers)};
       <Modal isOpen={openModal} size="xl" centered>
         <ModalHeader charCode="X" toggle={handleModal}>
           {isEditing ? "Edit" : "Add"} Trip
@@ -423,7 +432,7 @@ const TripForm = ({
                             <TimePicker
                               style={{ height: "calc(1.5em + 1.25rem + 2px)" }}
                               name="time"
-                              clockIcon={null}
+                              disableClock={true}
                               amPmAriaLabel={null}
                               value={value}
                               onChange={onChange}
@@ -630,7 +639,7 @@ const TripForm = ({
                           <span style={{ color: "red" }}>
                             {trip.client ? "" : "*"}
                           </span>{" "}
-                          Driver
+                          Drivers Name
                         </label>
                         {drivers && (
                           <Select
