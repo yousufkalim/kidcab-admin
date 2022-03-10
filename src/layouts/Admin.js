@@ -6,18 +6,24 @@ import { Container } from "reactstrap";
 import AdminNavbar from "components/Navbars/AdminNavbar.js";
 import AdminFooter from "components/Footers/AdminFooter.js";
 import Sidebar from "components/Sidebar/Sidebar.js";
-import { getToken, SetAuthToken } from "../variables/auth";
+import { getToken, getUser, SetAuthToken } from "../variables/auth";
 
 import routes from "routes/routes";
+import { UpdateStore } from "StoreContext";
 
 const Admin = (props) => {
   const mainContent = useRef(null);
   const location = useLocation();
   const [token, setToken] = useState("");
+  const updateStore = UpdateStore();
+
   useEffect(() => {
     setToken(getToken());
-    if (getToken()) {
+    if (getToken() && getUser()) {
       SetAuthToken(token);
+      updateStore({
+        user: JSON.parse(getUser()),
+      });
     } else {
       window.location.replace("/auth/login");
     }

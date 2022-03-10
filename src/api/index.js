@@ -27,7 +27,7 @@ const api = async (method = "get", uri, body) => {
           console.log("API Error --------> ", { ...err });
 
           toast.error(
-            err?.response?.data ? err.response.data.message?.msg : err?.message
+            err?.response?.data ? err.response.data?.message : err?.message
           );
 
           reject(err);

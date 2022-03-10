@@ -2,17 +2,14 @@ import { Link } from "react-router-dom";
 import api from "api";
 import { Store } from "StoreContext";
 import { getToken, removeToken } from "../../variables/auth";
+import { useState } from "react";
+import AdminProfile from "../../views/AdminProfile/AdminProfile";
+
 import {
   DropdownMenu,
   DropdownItem,
   UncontrolledDropdown,
   DropdownToggle,
-  Form,
-  FormGroup,
-  InputGroupAddon,
-  InputGroupText,
-  Input,
-  InputGroup,
   Navbar,
   Nav,
   Container,
@@ -21,6 +18,11 @@ import {
 
 const AdminNavbar = (props) => {
   const { user } = Store();
+  const [openModal, setOpenModal] = useState(false);
+  const handleModal = () => {
+    setOpenModal((open) => !open);
+    return openModal;
+  };
   const handleLogout = async () => {
     const res = await api("post", "admins/logout", {
       token: getToken(),
@@ -28,6 +30,7 @@ const AdminNavbar = (props) => {
     });
     if (res.status === 200) {
       removeToken();
+      localStorage.removeItem("user");
       window.location = "/login";
     }
   };
@@ -82,7 +85,7 @@ const AdminNavbar = (props) => {
                 </DropdownItem>
                 <DropdownItem to="/admin/admin-profile" tag={Link}>
                   <i className="ni ni-single-02 text-success" />
-                  <span>My profile</span>
+                  <span onClick={handleModal}>My profile</span>
                 </DropdownItem>
 
                 <DropdownItem divider />
@@ -93,6 +96,14 @@ const AdminNavbar = (props) => {
               </DropdownMenu>
             </UncontrolledDropdown>
           </Nav>
+          {openModal && (
+            <AdminProfile
+              openModal={openModal}
+              handleModal={handleModal}
+              user={user}
+              isEditing={true}
+            />
+          )}
         </Container>
       </Navbar>
     </>
