@@ -31,12 +31,12 @@ const Login = () => {
     const admin = result.data.admin;
     if (token && result.status === 200) {
       localStorage.setItem("user", JSON.stringify(admin));
+      setToken(token);
       updateStore({
         token: token,
         authorization: true,
         user: admin,
       });
-      setToken(token);
     }
   };
   if (authorization) return <Redirect push to="/admin" />;
