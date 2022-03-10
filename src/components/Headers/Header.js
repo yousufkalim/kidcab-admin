@@ -125,6 +125,11 @@ const Header = () => {
                           {trips}
                         </span>
                       </div>
+                      <Col className="col-auto">
+                        <div className="icon icon-shape bg-danger text-white rounded-circle shadow">
+                          <i className="fas fa-chart-bar" />
+                        </div>
+                      </Col>
                     </Row>
                   </CardBody>
                 </Card>
