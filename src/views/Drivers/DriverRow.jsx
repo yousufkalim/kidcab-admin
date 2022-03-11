@@ -20,22 +20,6 @@ const DriverRow = ({ user, autoRefresh }) => {
     <tr>
       <th scope="row">
         <Media className="align-items-center">
-          <a
-            className="avatar rounded-circle mr-3"
-            href="#pablo"
-            onClick={(e) => e.preventDefault()}
-          >
-            {user.profile_pic ? (
-              <img
-                className="rounded-circle"
-                style={{ width: "100%", height: "100%" }}
-                alt={`${user.first_name} profile pic`}
-                src={process.env.REACT_APP_BASE_URL + user?.profile_pic}
-              />
-            ) : (
-              <i className="ni ni-circle-08" />
-            )}
-          </a>
           <Media>
             <span className="mb-0 text-sm">
               {user.first_name + " " + user.last_name}
