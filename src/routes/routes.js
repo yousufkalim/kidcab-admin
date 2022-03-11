@@ -60,13 +60,13 @@ var routes = [
     component: Invoices,
     layout: "/admin",
   },
-  {
-    path: "/",
-    name: "Payment",
-    icon: "fas fa-money-check-alt text-pink",
-    component: "",
-    layout: "/payment",
-  },
+  // {
+  //   path: "/",
+  //   name: "Payment",
+  //   icon: "fas fa-money-check-alt text-pink",
+  //   component: "",
+  //   layout: "/payment",
+  // },
 
   {
     path: "/driver",
