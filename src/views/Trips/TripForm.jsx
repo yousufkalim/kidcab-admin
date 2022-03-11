@@ -79,6 +79,7 @@ const TripForm = ({
   const [tripType, setTriptype] = useState("simple");
   const [selectedDays, setSelectedDays] = useState([]);
   const [openDateModal, setOpenDateModal] = useState(false);
+  const [passengerChange, setPassengerChange] = useState([]);
   useEffect(() => {
     api("get", "drivers").then((res) => {
       setDrivers(res.data.drivers);
@@ -119,6 +120,14 @@ const TripForm = ({
           )
         );
       });
+
+      let p = editTrip.passengers.map((passenger) => {
+        return {
+          label: passenger.first_name + " " + passenger.last_name,
+          value: passenger._id,
+        };
+      });
+      setPassengerChange(p);
       setStartAddress(editTrip.start_address);
       setEndAddress(editTrip.end_address);
       setStepAddress(editTrip.addresses);
@@ -145,8 +154,16 @@ const TripForm = ({
     setDaysLength(data);
   };
   const handleClientChange = (e) => {
-    setTrip((user) => ({ ...user, client: e.value }));
+    setTrip((user) => ({ ...user, client: e.value, passengers: [] }));
     setPassengers(allPassengers.filter((a) => a.client._id === e.value));
+    setPassengerChange([]);
+  };
+  const handlePassengerChange = (e) => {
+    setTrip((user) => ({
+      ...user,
+      passengers: e.map((passenger) => passenger.value),
+    }));
+    setPassengerChange(e.map((passenger) => passenger));
   };
 
   const handleDelete = () => {
@@ -177,7 +194,6 @@ const TripForm = ({
     e.preventDefault();
     let method = "post";
     let uri = "trips";
-    console.log(stepAddress, "a");
     if (
       (startAddress.lat == endAddress.lat &&
         startAddress.lng == endAddress.lng &&
@@ -219,7 +235,6 @@ const TripForm = ({
       method = "put";
       uri = uri + `/${editTrip._id}`;
     }
-    console.log(editTrip, "T");
     if (trip.trip_type === "recurring") {
       api(method, uri, {
         ...trip,
@@ -279,6 +294,7 @@ const TripForm = ({
   };
   return (
     <>
+      {console.log(editTrip, "editTrip?.passengers")}
       <Modal isOpen={openModal} size="xl" centered>
         <ModalHeader charCode="X" toggle={handleModal}>
           {isEditing ? "Edit" : "Add"} Trip
@@ -399,7 +415,6 @@ const TripForm = ({
                               value={trip?.date?.split("T")[0]}
                               name="date"
                               onChange={handleInputChange}
-                              // onClick={() => setOpenDateModal(true)}
                             />
                           ) : (
                             <Input
@@ -711,30 +726,34 @@ const TripForm = ({
                         </label>
                         {allPassengers && (
                           <Select
-                            onChange={(e) =>
-                              setTrip((user) => ({
-                                ...user,
-                                passengers: e.map(
-                                  (passenger) => passenger.value
-                                ),
-                              }))
-                            }
+                            onChange={handlePassengerChange}
                             isDisabled={trip?.client <= 0}
                             name="passengers"
                             isMulti
                             className="form-control-alternative"
-                            defaultValue={
-                              isEditing
-                                ? editTrip?.passengers.map((i) => ({
-                                    value: i?._id,
-                                    label: `${i?.first_name} ${i?.last_name}`,
-                                  }))
-                                : null
-                            }
-                            options={passengers.map((passenger) => ({
-                              value: passenger?._id,
-                              label: `${passenger?.first_name} ${passenger?.last_name}`,
+                            value={passengerChange?.map((i) => ({
+                              value: i.value,
+                              label: i.label,
                             }))}
+                            // defaultValue={
+                            //   isEditing
+                            //     ? editTrip?.passengers.map((i) => ({
+                            //         value: i?._id,
+                            //         label: `${i?.first_name} ${i?.last_name}`,
+                            //       }))
+                            //     : null
+                            // }
+                            options={passengers
+                              .map((passenger) => ({
+                                value: passenger?._id,
+                                label: `${passenger?.first_name} ${passenger?.last_name}`,
+                              }))
+                              .filter(
+                                (p) =>
+                                  passengerChange.findIndex(
+                                    (v) => v === p.label
+                                  ) < 0
+                              )}
                           />
                         )}
                       </FormGroup>
