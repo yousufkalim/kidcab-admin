@@ -116,7 +116,6 @@ const AdminProfile = ({ openModal, handleModal, user }) => {
       })
     );
     formData.append("email", company.email);
-    formData.append("password", company.password);
     formData.append("phone_number", company.phoneNumber);
     formData.append("address", company.address);
     formData.append("siret_number", company.siret);
@@ -173,7 +172,7 @@ const AdminProfile = ({ openModal, handleModal, user }) => {
         localStorage.setItem(
           "user",
           JSON.stringify({
-            admin,
+            ...admin,
           })
         );
         handleModal();
