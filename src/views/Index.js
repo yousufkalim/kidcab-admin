@@ -168,7 +168,7 @@ const Index = (props) => {
               <CardHeader className="border-0">
                 <Row className="align-items-center">
                   <div className="col">
-                    <h3 className="mb-0">Over_Due invoices</h3>
+                    <h3 className="mb-0">Over Due Invoices</h3>
                   </div>
                 </Row>
               </CardHeader>
