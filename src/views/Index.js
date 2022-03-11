@@ -46,7 +46,10 @@ const Index = (props) => {
     setChartExample1Data("data" + index);
   };
   const [reports, setReports] = useState([]);
+  const [trips, setTrips] = useState([]);
   const [pendingpayments, setPendingPayments] = useState([]);
+  const [overdueInvoices, setOverdueInvoices] = useState([]);
+
   useEffect(() => {
     autoRefresh();
     autoInvoice();
@@ -57,11 +60,19 @@ const Index = (props) => {
       let pendingPayment = res?.data?.invoices.filter(
         (a) => a.status == "pending"
       );
+      let overdueinvoices = res?.data?.invoices.filter(
+        (a) => a.status == "late"
+      );
+      setOverdueInvoices(overdueinvoices);
       setPendingPayments(pendingPayment);
     });
   };
 
   const autoRefresh = () => {
+    api("get", `/trips/status/pending`).then((res) => {
+      let trips = res?.data?.trips;
+      setTrips(trips);
+    });
     api("post", `/trips/getDayReport`).then((res) => {
       let reports = res?.data?.reports;
       setReports(reports);
@@ -70,89 +81,10 @@ const Index = (props) => {
   return (
     <>
       <Header />
-      {/* Page content */}
-      {console.log("tt", pendingpayments)}
+      {console.log(trips, "trip")}
       <Container className="mt--7" fluid>
         <Row>
-          <Col className="mb-5 mb-xl-0" xl="8">
-            <Card className="bg-gradient-default shadow">
-              <CardHeader className="bg-transparent">
-                <Row className="align-items-center">
-                  <div className="col">
-                    <h6 className="text-uppercase text-light ls-1 mb-1">
-                      Overview
-                    </h6>
-                    <h2 className="text-white mb-0">Sales value</h2>
-                  </div>
-                  <div className="col">
-                    <Nav className="justify-content-end" pills>
-                      <NavItem>
-                        <NavLink
-                          className={classnames("py-2 px-3", {
-                            active: activeNav === 1,
-                          })}
-                          href="#pablo"
-                          onClick={(e) => toggleNavs(e, 1)}
-                        >
-                          <span className="d-none d-md-block">Month</span>
-                          <span className="d-md-none">M</span>
-                        </NavLink>
-                      </NavItem>
-                      <NavItem>
-                        <NavLink
-                          className={classnames("py-2 px-3", {
-                            active: activeNav === 2,
-                          })}
-                          data-toggle="tab"
-                          href="#pablo"
-                          onClick={(e) => toggleNavs(e, 2)}
-                        >
-                          <span className="d-none d-md-block">Week</span>
-                          <span className="d-md-none">W</span>
-                        </NavLink>
-                      </NavItem>
-                    </Nav>
-                  </div>
-                </Row>
-              </CardHeader>
-              <CardBody>
-                {/* Chart */}
-                <div className="chart">
-                  <Line
-                    data={chartExample1[chartExample1Data]}
-                    options={chartExample1.options}
-                    getDatasetAtEvent={(e) => console.log(e)}
-                  />
-                </div>
-              </CardBody>
-            </Card>
-          </Col>
-          <Col xl="4">
-            <Card className="shadow">
-              <CardHeader className="bg-transparent">
-                <Row className="align-items-center">
-                  <div className="col">
-                    <h6 className="text-uppercase text-muted ls-1 mb-1">
-                      Performance
-                    </h6>
-                    <h2 className="mb-0">Total orders</h2>
-                  </div>
-                </Row>
-              </CardHeader>
-              <CardBody>
-                {/* Chart */}
-                <div className="chart">
-                  <Bar
-                    data={chartExample2.data}
-                    options={chartExample2.options}
-                  />
-                </div>
-              </CardBody>
-            </Card>
-          </Col>
-        </Row>
-        <Row className="mt-5">
-          <Col className="mb-5 mb-xl-0" xl="8">
+          <Col className="mb-5 mb-xl-0" xl="6">
             <Card className="shadow">
               <CardHeader className="border-0">
                 <Row className="align-items-center">
@@ -189,7 +121,90 @@ const Index = (props) => {
               </Table>
             </Card>
           </Col>
-          <Col xl="4">
+          <Col className="mb-5 mb-xl-0" xl="6">
+            <Card className="shadow">
+              <CardHeader className="border-0">
+                <Row className="align-items-center">
+                  <div className="col">
+                    <h3 className="mb-0">Pending Trips</h3>
+                  </div>
+                </Row>
+              </CardHeader>
+              <Table className="align-items-center table-flush" responsive>
+                <thead className="thead-light">
+                  <tr>
+                    <th scope="col">Client</th>
+                    <th scope="col">Passengers</th>
+                    <th scope="col">Invited Drivers</th>
+                    <th scope="col">DATE</th>
+                    <th scope="col" />
+                  </tr>
+                </thead>
+                <tbody>
+                  <>
+                    {trips ? (
+                      trips?.map((trip) => (
+                        <tr>
+                          <td>{trip?.client?.first_name}</td>
+                          <td>{trip?.passengers?.length}</td>
+                          <td>{trip?.invited_drivers?.length}</td>
+                          <td>{moment(trip.date).format("DD/MM/YYYY")}</td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr className="h1 mx-lg-auto text-center">
+                        <td>NoT Found</td>
+                      </tr>
+                    )}
+                  </>
+                </tbody>
+              </Table>
+            </Card>
+          </Col>
+        </Row>
+        <Row className="mt-5">
+          <Col className="mb-5 mb-xl-0" xl="6">
+            <Card className="shadow">
+              <CardHeader className="border-0">
+                <Row className="align-items-center">
+                  <div className="col">
+                    <h3 className="mb-0">Over_Due invoices</h3>
+                  </div>
+                </Row>
+              </CardHeader>
+              <Table className="align-items-center table-flush" responsive>
+                <thead className="thead-light">
+                  <tr>
+                    <th scope="col">TITLE</th>
+                    <th scope="col">DATE </th>
+                    <th scope="col">TRIP</th>
+                    <th scope="col">PRICE</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <>
+                    {overdueInvoices ? (
+                      overdueInvoices?.map((invoice) => (
+                        <tr>
+                          <td>{invoice?.invoice_title}</td>
+                          <td>
+                            {moment(invoice.issue_date).format("DD/MM/YYYY")}
+                          </td>
+                          <td>{invoice?.trip?.client?.first_name}</td>
+                          <td>{invoice?.total_price}</td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr className="h1 mx-lg-auto text-center">
+                        <td>No Invoice Found</td>
+                      </tr>
+                    )}
+                  </>
+                </tbody>
+              </Table>
+            </Card>
+          </Col>
+          <Col className="mb-5 mb-xl-0" xl="6">
             <Card className="shadow">
               <CardHeader className="border-0">
                 <Row className="align-items-center">
@@ -201,29 +216,28 @@ const Index = (props) => {
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
                   <tr>
-                    <th scope="col">Title</th>
-                    <th scope="col">Date</th>
-                    <th scope="col">Price</th>
-                    <th scope="col" />
+                    <th scope="col">TITLE</th>
+                    <th scope="col">DATE </th>
+                    <th scope="col">TRIP</th>
+                    <th scope="col">PRICE</th>
                   </tr>
                 </thead>
                 <tbody>
                   <>
                     {pendingpayments ? (
-                      pendingpayments?.map((pendingpayment) => (
+                      pendingpayments?.map((invoice) => (
                         <tr>
-                          <td>{pendingpayment.invoice_title}</td>
+                          <td>{invoice?.invoice_title}</td>
                           <td>
-                            {moment(pendingpayment.issue_date).format(
-                              "DD/MM/YYYY"
-                            )}
+                            {moment(invoice.issue_date).format("DD/MM/YYYY")}
                           </td>
-                          <td>{pendingpayment.total_price}</td>
+                          <td>{invoice?.trip?.client?.first_name}</td>
+                          <td>{invoice?.total_price}</td>
                         </tr>
                       ))
                     ) : (
                       <tr className="h1 mx-lg-auto text-center">
-                        <td>NoT Found</td>
+                        <td>No Invoice Found</td>
                       </tr>
                     )}
                   </>

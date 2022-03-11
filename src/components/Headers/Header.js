@@ -2,33 +2,23 @@ import React, { useEffect, useState } from "react";
 import { Card, CardBody, CardTitle, Container, Row, Col } from "reactstrap";
 import api from "../../api/index";
 const Header = () => {
-  const [invoices, setInvoices] = useState([]);
-  const [trips, setTrips] = useState([]);
-  const [lateinvoices, setLateInvoices] = useState(0);
-  const [pendingpayment, setPendingPayment] = useState(0);
-  const [pendingtrips, setPendingTrips] = useState(0);
+  const [users, setUsers] = useState(0);
+  const [passengers, setPassengers] = useState(0);
+  const [drivers, setDrivers] = useState(0);
 
   useEffect(() => {
     autoRefresh();
-    autoInvoice();
   }, []);
 
   const autoRefresh = () => {
-    api("get", `trips/`).then((res) => {
-      let Trips = res?.data?.trips;
-      setTrips(Trips.length);
-      let pendingTrips = Trips.filter((i) => i.status === "pending");
-      setPendingTrips(pendingTrips.length);
+    api("get", `users/`).then((res) => {
+      setUsers(res?.data?.users.length);
     });
-  };
-  const autoInvoice = () => {
-    api("get", `invoices/`).then((res) => {
-      const data = res?.data?.invoices;
-      setInvoices(data);
-      let lateInvoices = data.filter((i) => i.status === "late");
-      setLateInvoices(lateInvoices.length);
-      let pendingPayment = data.filter((a) => a.status == "pending");
-      setPendingPayment(pendingPayment.length);
+    api("get", `passengers/`).then((res) => {
+      setPassengers(res?.data?.passengers.length);
+    });
+    api("get", `drivers/`).then((res) => {
+      setDrivers(res?.data?.drivers.length);
     });
   };
 
@@ -38,8 +28,8 @@ const Header = () => {
         <Container fluid>
           <div className="header-body">
             <Row>
-              <Col lg="6" xl="3">
-                <Card className="card-stats mb-4 mb-xl-0">
+              <Col lg="8" xl="4">
+                <Card className="card-stats mb-5 mb-xl-0">
                   <CardBody>
                     <Row>
                       <div className="col">
@@ -47,10 +37,10 @@ const Header = () => {
                           tag="h5"
                           className="text-uppercase text-muted mb-0"
                         >
-                          Pending trips
+                          Total Users
                         </CardTitle>
                         <span className="h2 font-weight-bold mb-0">
-                          {pendingtrips}
+                          {users}
                         </span>
                       </div>
                       <Col className="col-auto">
@@ -62,7 +52,7 @@ const Header = () => {
                   </CardBody>
                 </Card>
               </Col>
-              <Col lg="6" xl="3">
+              <Col lg="8" xl="4">
                 <Card className="card-stats mb-4 mb-xl-0">
                   <CardBody>
                     <Row>
@@ -71,10 +61,10 @@ const Header = () => {
                           tag="h5"
                           className="text-uppercase text-muted mb-0"
                         >
-                          over_due invoices
+                          Total Drivers
                         </CardTitle>
                         <span className="h2 font-weight-bold mb-0">
-                          {lateinvoices}
+                          {drivers}
                         </span>
                       </div>
                       <Col className="col-auto">
@@ -86,7 +76,7 @@ const Header = () => {
                   </CardBody>
                 </Card>
               </Col>
-              <Col lg="6" xl="3">
+              <Col lg="8" xl="4">
                 <Card className="card-stats mb-4 mb-xl-0">
                   <CardBody>
                     <Row>
@@ -95,10 +85,10 @@ const Header = () => {
                           tag="h5"
                           className="text-uppercase text-muted mb-0"
                         >
-                          Pending Payments
+                          Total Passengers
                         </CardTitle>
                         <span className="h2 font-weight-bold mb-0">
-                          {pendingpayment}
+                          {passengers}
                         </span>
                       </div>
                       <Col className="col-auto">
@@ -110,7 +100,7 @@ const Header = () => {
                   </CardBody>
                 </Card>
               </Col>
-              <Col lg="6" xl="3">
+              {/* <Col lg="6" xl="3" style={{ display: "flex" }}>
                 <Card className="card-stats mb-4 mb-xl-0">
                   <CardBody>
                     <Row>
@@ -125,10 +115,15 @@ const Header = () => {
                           {trips}
                         </span>
                       </div>
+                      <Col className="col-auto">
+                        <div className="icon icon-shape bg-danger text-white rounded-circle shadow">
+                          <i className="fas fa-chart-bar" />
+                        </div>
+                      </Col>
                     </Row>
                   </CardBody>
                 </Card>
-              </Col>
+              </Col> */}
             </Row>
           </div>
         </Container>
