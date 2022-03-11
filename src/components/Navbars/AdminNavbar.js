@@ -79,13 +79,9 @@ const AdminNavbar = (props) => {
                 </Media>
               </DropdownToggle>
               <DropdownMenu className="dropdown-menu-arrow" right>
-                <DropdownItem to="/admin/admin-profile" tag={Link}>
-                  <i className="ni ni-satisfied text-primary" />
-                  <span>Welcome</span>
-                </DropdownItem>
-                <DropdownItem to="/admin/admin-profile" tag={Link}>
+                <DropdownItem onClick={handleModal}>
                   <i className="ni ni-single-02 text-success" />
-                  <span onClick={handleModal}>My profile</span>
+                  <span>My profile</span>
                 </DropdownItem>
 
                 <DropdownItem divider />

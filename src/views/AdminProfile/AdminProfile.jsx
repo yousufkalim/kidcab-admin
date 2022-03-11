@@ -24,15 +24,14 @@ const AdminProfile = ({ openModal, handleModal, user }) => {
     email: "",
     address: "",
     phoneNumber: "",
+    companyName: "",
     siret: "",
     vat: "",
     legalForm: "",
     shareCapital: "",
     rcsCity: "",
-    bankAccount: "",
     bankName: "",
     iban: "",
-    bic: "",
   });
   const updateStore = UpdateStore();
 
@@ -43,14 +42,13 @@ const AdminProfile = ({ openModal, handleModal, user }) => {
       email: user.email || "",
       phoneNumber: user.phone_number || "",
       vat: user.vat_number || "",
+      companyName: user.company_name || "",
       siret: user.siret_number || "",
       legalForm: user.legal_form || "",
       shareCapital: user.share_capital || "",
       rcsCity: user.rcs_city || "",
       bankName: user.bank_name || "",
-      bankAccount: user.bank_account || "",
       iban: user.iban || "",
-      bic: user.bic || "",
       address: user.address || "",
     });
 
@@ -118,15 +116,14 @@ const AdminProfile = ({ openModal, handleModal, user }) => {
     formData.append("email", company.email);
     formData.append("phone_number", company.phoneNumber);
     formData.append("address", company.address);
+    formData.append("company_name", company.companyName);
     formData.append("siret_number", company.siret);
     formData.append("vat", company.vat);
     formData.append("legal_form", company.legalForm);
     formData.append("share_capital", company.shareCapital);
     formData.append("rcs_city", company.rcsCity);
-    formData.append("bank_account", company.bankAccount);
     formData.append("bank_name", company.bankName);
     formData.append("iban", company.iban);
-    formData.append("bic", company.bic);
 
     if (company.password) {
       formData.append("password", company.password);
@@ -188,38 +185,12 @@ const AdminProfile = ({ openModal, handleModal, user }) => {
   return (
     <>
       <Modal isOpen={openModal} size="xl" centered>
-        <ModalHeader charCode="X" toggle={handleModal}>
-          Profile
-        </ModalHeader>
+        <ModalHeader charCode="X" toggle={handleModal}></ModalHeader>
         <ModalBody>
           <Row>
             <Col>
               <Form>
-                <h6 className="heading-small text-muted mb-4">Profile</h6>
-                <div className="pl-lg-4">
-                  <Row>
-                    <Col lg="12">
-                      <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-image"
-                        >
-                          <span style={{ color: "red" }}>
-                            {company.logo ? "" : "*"}
-                          </span>{" "}
-                          Add Logo <i className="ni ni-album-2" />
-                        </label>
-                        <Input
-                          className="form-control-file form"
-                          id="input-image"
-                          name="logo"
-                          type="file"
-                          onChange={handleFileChange}
-                        />
-                      </FormGroup>
-                    </Col>
-                  </Row>
-                </div>
+                <h6 className="heading-small text-muted mb-4">Admin Profile</h6>
 
                 <div className="pl-lg-4">
                   <Row>
@@ -293,17 +264,12 @@ const AdminProfile = ({ openModal, handleModal, user }) => {
                         />
                       </FormGroup>
                     </Col>
-                  </Row>
-                  <Row>
                     <Col lg="6">
                       <FormGroup>
                         <label
                           className="form-control-label"
                           htmlFor="input-password"
                         >
-                          <span style={{ color: "red" }}>
-                            {company.password ? "" : "*"}{" "}
-                          </span>
                           Password
                         </label>
                         <Input
@@ -313,6 +279,59 @@ const AdminProfile = ({ openModal, handleModal, user }) => {
                           type="password"
                           value={company.password}
                           name="password"
+                          onChange={handleInputChange}
+                        />
+                      </FormGroup>
+                    </Col>
+                  </Row>
+                </div>
+
+                <hr className="my-4" />
+
+                {/* Contact Information */}
+                <h6 className="heading-small text-muted mb-4">
+                  Company information
+                </h6>
+
+                <div className="pl-lg-4">
+                  <Row>
+                    <Col lg="12">
+                      <FormGroup>
+                        <label
+                          className="form-control-label"
+                          htmlFor="input-image"
+                        >
+                          <span style={{ color: "red" }}>
+                            {company.logo ? "" : "*"}
+                          </span>{" "}
+                          Add Logo <i className="ni ni-album-2" />
+                        </label>
+                        <Input
+                          className="form-control-file form"
+                          id="input-image"
+                          name="logo"
+                          type="file"
+                          onChange={handleFileChange}
+                        />
+                      </FormGroup>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col lg="6">
+                      <FormGroup>
+                        <label
+                          className="form-control-label"
+                          htmlFor="input-companyName"
+                        >
+                          Company Name
+                        </label>
+                        <Input
+                          className="form-control-alternative"
+                          id="input-companyName"
+                          placeholder="Company Name"
+                          type="text"
+                          value={company.companyName}
+                          name="companyName"
                           onChange={handleInputChange}
                         />
                       </FormGroup>
@@ -337,9 +356,6 @@ const AdminProfile = ({ openModal, handleModal, user }) => {
                       </FormGroup>
                     </Col>
                   </Row>
-                </div>
-
-                <div className="pl-lg-4">
                   <Row>
                     <Col lg="6">
                       <FormGroup>
@@ -487,13 +503,13 @@ const AdminProfile = ({ openModal, handleModal, user }) => {
                         />
                       </FormGroup>
                     </Col>
-                    <Col lg="4">
+                    <Col lg="8">
                       <FormGroup>
                         <label
                           className="form-control-label"
                           htmlFor="input-iban"
                         >
-                          IBAN Number
+                          IBAN / BIC
                         </label>
                         <Input
                           className="form-control-alternative"
@@ -502,48 +518,6 @@ const AdminProfile = ({ openModal, handleModal, user }) => {
                           type="text"
                           value={company.iban}
                           name="iban"
-                          onChange={handleInputChange}
-                        />
-                      </FormGroup>
-                    </Col>
-                    <Col lg="4">
-                      <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-iban"
-                        >
-                          Bank Account
-                        </label>
-                        <Input
-                          className="form-control-alternative"
-                          id="input-iban"
-                          placeholder="bank Account"
-                          type="text"
-                          value={company.bankAccount}
-                          name="bankAccount"
-                          onChange={handleInputChange}
-                        />
-                      </FormGroup>
-                    </Col>
-                  </Row>
-                </div>
-                <div className="pl-lg-4">
-                  <Row>
-                    <Col lg="4">
-                      <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-bic"
-                        >
-                          BIC
-                        </label>
-                        <Input
-                          className="form-control-alternative"
-                          id="input-bsnk"
-                          placeholder="bic"
-                          type="text"
-                          value={company.bic}
-                          name="bic"
                           onChange={handleInputChange}
                         />
                       </FormGroup>
