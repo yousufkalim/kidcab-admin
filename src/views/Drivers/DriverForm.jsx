@@ -92,14 +92,14 @@ const DriverForm = ({
         social_capital: editUser.company?.social_capital,
         vat_number: editUser.company?.vat_number,
         city_of_rcs: editUser.company?.city_of_rcs,
+        profile_pic: editUser?.profile_pic,
         criminal_record_date: editUser.criminal_record_date,
         kbis_date: editUser.kbis_date,
         ris_date: editUser.ris_date,
         proRc_date: editUser.proRc_date,
       });
-      setAddress(editUser.address);
+      setAddress(editUser?.address);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleFileChange = (e) => {
@@ -174,6 +174,9 @@ const DriverForm = ({
     }
 
     if (user.criminal_record_image) {
+      if (user?.criminal_record_date == "") {
+        return toast.error("Please enter criminal_record expirty date");
+      }
       formData.append(
         "criminal_record_image",
         user.criminal_record_image,
@@ -184,15 +187,24 @@ const DriverForm = ({
 
     if (user.ris_image) {
       formData.append("ris_image", user.ris_image, user.ris_image?.name);
+      if (user?.ris_date == "") {
+        return toast.error("Please enter RIS expirty date");
+      }
       formData.append("ris_date", user.ris_date);
     }
 
     if (user.kbis_image) {
       formData.append("kbis_image", user.kbis_image, user.kbis_image?.name);
       formData.append("kbis_date", user.kbis_date);
+      if (user?.kbis_date == "") {
+        return toast.error("Please enter KBIS expirty date");
+      }
     }
 
     if (user.proRc_image) {
+      if (user?.proRc_dates == "") {
+        return toast.error("Please enter proRC expirty date");
+      }
       formData.append("proRc_image", user.proRc_image, user.proRc_image?.name);
       formData.append("proRc_date", user.proRc_date);
     }
@@ -220,10 +232,6 @@ const DriverForm = ({
         user.license_back?.name
       );
 
-    if (user.profile_pic == "") {
-      return toast.error("Please attach profile picture");
-    }
-
     if (user.firstName == "") {
       return toast.error("Please enter your first name");
     }
@@ -247,48 +255,34 @@ const DriverForm = ({
       return toast.error("Please select your role");
     }
 
-    if (
-      !(
-        address.lat ||
-        address.lng ||
-        address.city ||
-        address.label ||
-        address.label ||
-        address.label2
-      )
-    ) {
-      return toast.error("Please select your addres");
-    }
-
     if (user.phone == "") {
       return toast.error("Please enter phone number");
     }
 
-    if (user.id_front == "") {
-      return toast.error("Please attach ID card front picture");
-    }
-    if (user.id_back == "") {
-      return toast.error("Please attach ID card back picture");
-    }
-    if (user.vtc_front == "") {
-      return toast.error("Please attach vtc card front picture");
-    }
-    if (user.vtc_back == "") {
-      return toast.error("Please attach vtc card back picture");
-    }
-    if (user.license_front == "") {
-      return toast.error("Please attach license front picture");
-    }
-    if (user.license_back == "") {
-      return toast.error("Please attach license back picture");
-    }
+    // if (user.id_front == "") {
+    //   return toast.error("Please attach ID card front picture");
+    // }
+    // if (user.id_back == "") {
+    //   return toast.error("Please attach ID card back picture");
+    // }
+    // if (user.vtc_front == "") {
+    //   return toast.error("Please attach vtc card front picture");
+    // }
+    // if (user.vtc_back == "") {
+    //   return toast.error("Please attach vtc card back picture");
+    // }
+    // if (user.license_front == "") {
+    //   return toast.error("Please attach license front picture");
+    // }
+    // if (user.license_back == "") {
+    //   return toast.error("Please attach license back picture");
+    // }
 
     if (editUser) {
       method = "put";
       uri = uri + `/${editUser._id}`;
     }
     api(method, uri, formData).then((res) => {
-      // eslint-disable-next-line eqeqeq
       if (res.status == 200) {
         toast.success("Saved Successfully");
         handleModal();
@@ -301,6 +295,7 @@ const DriverForm = ({
 
   return (
     <>
+      {console.log(user, "user")}
       <Modal isOpen={openModal} size="xl" centered>
         <ModalHeader charCode="X" toggle={handleModal}>
           {isEditing ? "Edit" : "Add"} Driver
@@ -320,9 +315,6 @@ const DriverForm = ({
                           className="form-control-label"
                           htmlFor="input-image"
                         >
-                          <span style={{ color: "red" }}>
-                            {user.profile_pic ? "" : "*"}
-                          </span>{" "}
                           Add Profile Picture <i className="ni ni-album-2" />
                         </label>
                         <Input
@@ -694,6 +686,7 @@ const DriverForm = ({
                       <FormGroup>
                         <AddressInput
                           label="Address"
+                          optional={true}
                           address={address}
                           setAddress={setAddress}
                         />
@@ -781,9 +774,6 @@ const DriverForm = ({
                           className="form-control-label"
                           htmlFor="input-id-front"
                         >
-                          <span style={{ color: "red" }}>
-                            {user.id_front ? "" : "*"}
-                          </span>{" "}
                           Add Identity Card/Passport/Residence Permit Front Side{" "}
                           <i className="fa fa-id-card" />
                         </label>
@@ -802,9 +792,6 @@ const DriverForm = ({
                           className="form-control-label"
                           htmlFor="input-id-back"
                         >
-                          <span style={{ color: "red" }}>
-                            {user.id_back ? "" : "*"}
-                          </span>{" "}
                           Add Identity Card/Passport/Residence Permit Back Side{" "}
                           <i className="fa fa-id-card" />
                         </label>
@@ -826,9 +813,6 @@ const DriverForm = ({
                           className="form-control-label"
                           htmlFor="input-vtc-front"
                         >
-                          <span style={{ color: "red" }}>
-                            {user.vtc_back ? "" : "*"}
-                          </span>{" "}
                           Add VTC Card Front Side{" "}
                           <i className="fa fa-id-card" />
                         </label>
@@ -847,9 +831,6 @@ const DriverForm = ({
                           className="form-control-label"
                           htmlFor="input-vtc-back"
                         >
-                          <span style={{ color: "red" }}>
-                            {user.vtc_back ? "" : "*"}
-                          </span>{" "}
                           Add VTC Card Back Side <i className="fa fa-id-card" />
                         </label>
 
@@ -870,9 +851,6 @@ const DriverForm = ({
                           className="form-control-label"
                           htmlFor="input-license-front"
                         >
-                          <span style={{ color: "red" }}>
-                            {user.license_front ? "" : "*"}
-                          </span>{" "}
                           Add License Card Front Side{" "}
                           <i className="fa fa-id-card" />
                         </label>
@@ -891,9 +869,6 @@ const DriverForm = ({
                           className="form-control-label"
                           htmlFor="input-license-back"
                         >
-                          <span style={{ color: "red" }}>
-                            {user.license_back ? "" : "*"}
-                          </span>{" "}
                           Add License Card Back Side{" "}
                           <i className="fa fa-id-card" />
                         </label>
@@ -915,9 +890,6 @@ const DriverForm = ({
                           className="form-control-label"
                           htmlFor="input-criminal-record"
                         >
-                          <span style={{ color: "red" }}>
-                            {user.criminal_record_image ? "" : "*"}
-                          </span>{" "}
                           Add Criminal Record <i className="fa fa-id-card" />
                         </label>
                         <Input
@@ -936,7 +908,7 @@ const DriverForm = ({
                           htmlFor="input-date"
                         >
                           <span style={{ color: "red" }}>
-                            {user.criminal_record_date ? "" : "*"}
+                            {user.criminal_record_image && "*"}
                           </span>{" "}
                           Valid Till
                         </label>
@@ -962,9 +934,6 @@ const DriverForm = ({
                           className="form-control-label"
                           htmlFor="input-restricted-information-statement"
                         >
-                          <span style={{ color: "red" }}>
-                            {user.ris_image ? "" : "*"}
-                          </span>{" "}
                           Add Restricted Information Statement{" "}
                           <i className="fa fa-id-card" />
                         </label>
@@ -985,7 +954,7 @@ const DriverForm = ({
                           htmlFor="input-date"
                         >
                           <span style={{ color: "red" }}>
-                            {user.ris_date ? "" : "*"}
+                            {user.ris_image && "*"}
                           </span>{" "}
                           Valid Till
                         </label>
@@ -1010,9 +979,6 @@ const DriverForm = ({
                           className="form-control-label"
                           htmlFor="input-kbis"
                         >
-                          <span style={{ color: "red" }}>
-                            {user.kbis_image ? "" : "*"}
-                          </span>{" "}
                           Add KBIS <i className="fa fa-id-card" />
                         </label>
 
@@ -1033,7 +999,7 @@ const DriverForm = ({
                           htmlFor="input-date"
                         >
                           <span style={{ color: "red" }}>
-                            {user.kbis_date ? "" : "*"}
+                            {user.kbis_image && "*"}
                           </span>{" "}
                           Valid Till
                         </label>
@@ -1059,9 +1025,6 @@ const DriverForm = ({
                           className="form-control-label"
                           htmlFor="input-pro_rc_insurance_certificate"
                         >
-                          <span style={{ color: "red" }}>
-                            {user.proRc_image ? "" : "*"}
-                          </span>{" "}
                           Add Pro RC Insurance Certificate{" "}
                           <i className="fa fa-id-card" />
                         </label>
@@ -1082,7 +1045,7 @@ const DriverForm = ({
                           htmlFor="input-date"
                         >
                           <span style={{ color: "red" }}>
-                            {user.proRc_date ? "" : "*"}
+                            {user.proRc_image && "*"}
                           </span>{" "}
                           Valid Till
                         </label>

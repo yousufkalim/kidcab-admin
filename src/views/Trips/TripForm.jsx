@@ -105,7 +105,7 @@ const TripForm = ({
         driver_price: editTrip.driver_price,
         assigned_drivers: editTrip.assigned_drivers,
         invited_drivers: editTrip.invited_drivers.map(
-          (driver) => driver.driver._id
+          (driver) => driver?.driver?._id
         ),
         passengers: editTrip.passengers.map((passenger) => passenger._id),
         rides: editTrip.rides,
