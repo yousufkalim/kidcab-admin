@@ -17,20 +17,7 @@ var routes = [
     component: Index,
     layout: "/admin",
   },
-  {
-    path: "/clients",
-    name: "Clients",
-    icon: "fa fa-address-book text-blue",
-    component: Clients,
-    layout: "/admin",
-  },
-  {
-    path: "/passengers",
-    name: "Passengers",
-    icon: "fa fa-users text-pink",
-    component: Passengers,
-    layout: "/admin",
-  },
+
   {
     path: "/trips",
     name: "Trips",
@@ -38,6 +25,7 @@ var routes = [
     component: Trips,
     layout: "/admin",
   },
+
   {
     path: "/schedule",
     name: "Schedule",
@@ -45,6 +33,7 @@ var routes = [
     component: Schedule,
     layout: "/admin",
   },
+
   {
     path: "/quotes",
     name: "Quotes",
@@ -60,6 +49,21 @@ var routes = [
     component: Invoices,
     layout: "/admin",
   },
+  {
+    path: "/clients",
+    name: "Clients",
+    icon: "fa fa-address-book text-blue",
+    component: Clients,
+    layout: "/admin",
+  },
+  {
+    path: "/passengers",
+    name: "Passengers",
+    icon: "fa fa-users text-pink",
+    component: Passengers,
+    layout: "/admin",
+  },
+
   // {
   //   path: "/",
   //   name: "Payment",
@@ -82,7 +86,6 @@ var routes = [
     component: Vehicles,
     layout: "/admin",
   },
-
   {
     path: "/login",
     name: "Login",

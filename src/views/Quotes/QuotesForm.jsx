@@ -28,7 +28,6 @@ const QuotesForm = ({
     title: "",
     quoteNumber: "",
     client: "",
-    passengers: [],
     status: "pending",
     issueDate: "",
     totalTrips: "",
@@ -37,6 +36,7 @@ const QuotesForm = ({
     startDate: "",
     endDate: "",
     docuSignLink: "",
+    comment: "",
   });
   let [startAddress, setStartAddress] = useState({
     lat: "",
@@ -56,20 +56,13 @@ const QuotesForm = ({
   });
 
   const [clients, setClients] = useState();
-  const [passengers, setPassengers] = useState([]);
-  const [selectedPassenger, setSelectedPassenger] = useState([]);
   useEffect(() => {
     api("get", "users").then((res) => setClients(res.data.users));
     if (isEditing) {
-      api(
-        "get",
-        `passengers/getPassengerByClient/${editQuote.client._id}`
-      ).then((res) => setPassengers(res.data.passenger));
       setQuote({
         title: editQuote.quote_title,
         quoteNumber: editQuote.quote_number,
         client: editQuote.client,
-        passengers: editQuote.passengers,
         status: editQuote.status,
         issueDate: editQuote.issue_date,
         totalTrips: editQuote.trip_info.total_trips,
@@ -78,6 +71,7 @@ const QuotesForm = ({
         startDate: editQuote.trip_info.start_date,
         endDate: editQuote.trip_info.end_date,
         docuSignLink: editQuote.docu_sign_link,
+        comment: editQuote?.comment,
       });
 
       setStartAddress(editQuote.trip_info.start_address);
@@ -92,15 +86,8 @@ const QuotesForm = ({
 
   const handleClientChange = (e) => {
     setQuote((quote) => ({ ...quote, client: e.value }));
-    setPassengers(clients.filter((a) => a._id === e.value)[0]?.passengers);
   };
 
-  const handlePassengerChange = (e) => {
-    setQuote((quote) => ({
-      ...quote,
-      passengers: e.map((passenger) => passenger.value),
-    }));
-  };
   console.log(quote);
   const handleDelete = () => {
     let method = "delete";
@@ -134,8 +121,8 @@ const QuotesForm = ({
 
     const formData = {};
     formData["quote_title"] = quote.title;
-    formData["passengers"] = quote.passengers;
     formData["client"] = quote.client;
+    formData["comment"] = quote.comment;
     formData["quote_number"] = quote.quoteNumber;
     formData["issue_date"] = quote.issueDate;
     formData["total_price"] = quote.totalPrice;
@@ -154,9 +141,6 @@ const QuotesForm = ({
     }
     if (quote.client == "") {
       return toast.error("Please enter client name");
-    }
-    if (quote.passengers == "") {
-      return toast.error("Please enter passanger's name");
     }
     if (quote.status == "") {
       return toast.error("Please enter quote status");
@@ -213,7 +197,6 @@ const QuotesForm = ({
 
   return (
     <>
-      {console.log(selectedPassenger, "Set")}
       <Modal isOpen={openModal} size="xl" centered>
         <ModalHeader charCode="X" toggle={handleModal}>
           {isEditing ? "Edit" : "Add"} A Quote
@@ -275,7 +258,7 @@ const QuotesForm = ({
                     </Col>
                   </Row>
                   <Row>
-                    <Col lg="6">
+                    <Col lg="4">
                       <FormGroup>
                         <Label
                           for="exampleSelect"
@@ -306,7 +289,7 @@ const QuotesForm = ({
                         )}
                       </FormGroup>
                     </Col>
-                    <Col lg="6">
+                    {/* <Col lg="6">
                       <FormGroup>
                         <Label
                           for="exampleSelect"
@@ -339,10 +322,9 @@ const QuotesForm = ({
                           />
                         )}
                       </FormGroup>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col lg="6">
+                          </Col> */}
+
+                    <Col lg="4">
                       <FormGroup>
                         <Label
                           for="exampleSelect"
@@ -368,7 +350,7 @@ const QuotesForm = ({
                         </Input>
                       </FormGroup>
                     </Col>
-                    <Col lg="6">
+                    <Col lg="4">
                       <FormGroup>
                         <label
                           className="form-control-label"
@@ -549,6 +531,27 @@ const QuotesForm = ({
                           type="text"
                           value={quote.docuSignLink}
                           name="docuSignLink"
+                          onChange={handleInputChange}
+                        />
+                      </FormGroup>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col lg="12">
+                      <FormGroup>
+                        <label
+                          className="form-control-label"
+                          htmlFor="input-lname"
+                        >
+                          Add comment
+                        </label>
+                        <Input
+                          className="form-control-alternative"
+                          id="input-lname"
+                          placeholder="Add Comment"
+                          type="textarea"
+                          value={quote.comment}
+                          name="comment"
                           onChange={handleInputChange}
                         />
                       </FormGroup>
