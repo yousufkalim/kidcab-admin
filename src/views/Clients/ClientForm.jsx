@@ -34,7 +34,7 @@ const ClientForm = ({
     intraCommunityNo: "",
     bankName: "",
     iban: "",
-    gender: "",
+    // gender: "",
   });
   let [address, setAddress] = useState({});
 
@@ -46,7 +46,7 @@ const ClientForm = ({
         password: editUser.password,
         email: editUser.email,
         phone_number: editUser.phone_number,
-        gender: editUser.gender,
+        // gender: editUser.gender,
         siret: editUser.siret_number,
         intraCommunityNo: editUser.intra_community,
         bankName: editUser.bank_info.bank_name,
@@ -96,7 +96,7 @@ const ClientForm = ({
     formData.append("last_name", user.lastName);
     formData.append("email", user.email);
     formData.append("password", user.password);
-    formData.append("gender", user.gender);
+    // formData.append("gender", user.gender);
     formData.append("phone_number", user.phone_number);
     formData.append("address", JSON.stringify(address));
     formData.append("siret_number", user.siret);
@@ -203,8 +203,31 @@ const ClientForm = ({
                       </FormGroup>
                     </Col>
                   </Row>
-                  {!isEditing && (
-                    <Row>
+                  <Row>
+                    {isEditing ? (
+                      <Col lg="12">
+                        <FormGroup>
+                          <label
+                            className="form-control-label"
+                            htmlFor="input-email"
+                          >
+                            <span style={{ color: "red" }}>
+                              {user.email ? "" : "*"} {""}
+                            </span>
+                            Email Address
+                          </label>
+                          <Input
+                            type="email"
+                            name="email"
+                            className="form-control-alternative"
+                            id="input-email"
+                            placeholder="johndoe@example.com"
+                            value={user.email}
+                            onChange={handleInputChange}
+                          />
+                        </FormGroup>
+                      </Col>
+                    ) : (
                       <Col lg="6">
                         <FormGroup>
                           <label
@@ -227,6 +250,8 @@ const ClientForm = ({
                           />
                         </FormGroup>
                       </Col>
+                    )}
+                    {!isEditing && (
                       <Col lg="6">
                         <FormGroup>
                           <label
@@ -249,10 +274,10 @@ const ClientForm = ({
                           />
                         </FormGroup>
                       </Col>
-                    </Row>
-                  )}
+                    )}
+                  </Row>
                 </div>
-                <div className="pl-lg-4">
+                {/* <div className="pl-lg-4">
                   <h6 className="heading-small text-muted mb-4">Gender</h6>
                   <Row>
                     <Col lg="3">
@@ -319,8 +344,8 @@ const ClientForm = ({
                       </FormGroup>
                     </Col>
                   </Row>
-                </div>
-                <hr className="my-4" />
+                </div> */}
+                {/* <hr className="my-4" /> */}
                 {/* Contact Information */}
                 <h6 className="heading-small text-muted mb-4">
                   Contact information
@@ -331,6 +356,7 @@ const ClientForm = ({
                       <FormGroup>
                         <AddressInput
                           label="Address"
+                          optional={true}
                           address={address}
                           setAddress={setAddress}
                         />

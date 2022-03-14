@@ -3,7 +3,7 @@ import axios from "axios";
 import Autocomplete from "react-autocomplete";
 import { SetAuthToken } from "variables/auth";
 
-function AddressInput({ label, address, setAddress }) {
+function AddressInput({ label, address, setAddress, optional }) {
   let [addresses, setAddresses] = useState([]);
 
   // Get All Address in drop down List from API
@@ -82,7 +82,9 @@ function AddressInput({ label, address, setAddress }) {
         className="form-control-label"
         htmlFor={`input-address-${label.split(" ").join("")}`}
       >
-        <span style={{ color: "red" }}>{address?.label ? "" : "*"}</span>{" "}
+        {!optional && (
+          <span style={{ color: "red" }}>{address?.label ? "" : "*"}</span>
+        )}
         {label}
       </label>
 
