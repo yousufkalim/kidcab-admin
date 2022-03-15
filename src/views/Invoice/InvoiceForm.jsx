@@ -30,14 +30,14 @@ const InvoiceForm = ({
     total_price: "",
     status: "pending",
     comments: "",
-    trip: "",
+    client: "",
   });
 
-  const [trips, setTrips] = useState([]);
+  const [users, setUsers] = useState([]);
 
   useEffect(() => {
-    api("get", "trips").then((res) => {
-      setTrips(res.data.trips);
+    api("get", "users").then((res) => {
+      setUsers(res.data.users);
     });
 
     if (isEditing) {
@@ -46,7 +46,7 @@ const InvoiceForm = ({
         issue_date: editUser.issue_date,
         total_price: editUser.total_price,
         status: editUser.status,
-        trip: editUser.trip,
+        client: editUser.client,
         comments: editUser.comments,
       });
     }
@@ -57,8 +57,8 @@ const InvoiceForm = ({
     setUser({ ...user, [e.target.name]: e.target.value });
   };
 
-  const handleTripChange = (e) => {
-    setUser({ ...user, trip: e.value });
+  const handleUserChange = (e) => {
+    setUser({ ...user, client: e.value });
   };
 
   const handleDelete = () => {
@@ -167,26 +167,29 @@ const InvoiceForm = ({
                           for="exampleSelect"
                           className="form-control-label"
                         >
-                          {/* <span style={{ color: "red" }}>
-                            {user.trip ? "" : "*"}
-                          </span>{" "} */}
-                          Select Trip
+                          Select Client
                         </Label>
-                        {trips && (
+                        {users && (
                           <Select
-                            onChange={handleTripChange}
-                            name="trip"
+                            onChange={handleUserChange}
+                            name="user"
                             hideSelectedOptions
                             defaultValue={
-                              user?.trip?._id && {
-                                value: user?.trip?._id,
-                                label: `${user?.trip?.client?.first_name} - ${user?.trip?.quote?.quote_title}`,
+                              user._id && {
+                                value: user.client._id,
+                                label: `${
+                                  user.client.first_name +
+                                  " " +
+                                  user.client.last_name
+                                }`,
                               }
                             }
                             className="form-control-alternative"
-                            options={trips.map((trip) => ({
-                              value: trip._id,
-                              label: `${trip.client?.first_name} - ${trip.quote?.quote_title}`,
+                            options={users.map((user) => ({
+                              value: user._id,
+                              label: `${
+                                user.first_name + " " + user.last_name
+                              }`,
                             }))}
                           />
                         )}
