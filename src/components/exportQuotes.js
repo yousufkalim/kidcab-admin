@@ -66,7 +66,7 @@ export const ExportQuotes = ({ quotes }) => {
       let uri = "quotes/export_pdf";
 
       await api(method, uri, { quotes: quoteIds }).then((res) => {
-        res.data.files.map((file) => {
+        res.data.files.map(async (file) => {
           let filename = file.split("/").pop();
 
           // Code to download a pdf from URL
@@ -93,6 +93,7 @@ export const ExportQuotes = ({ quotes }) => {
             }
           };
           req.send();
+          await api("delete", "quotes/pdf", { data: { file: filename } });
         });
       });
     } else {
