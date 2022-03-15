@@ -4,6 +4,7 @@ import { Store } from "StoreContext";
 import { getToken, removeToken } from "../../variables/auth";
 import { useState } from "react";
 import AdminProfile from "../../views/AdminProfile/AdminProfile";
+import CompanyProfile from "../../views/CompanyProfile/CompanyProfile";
 
 import {
   DropdownMenu,
@@ -18,10 +19,16 @@ import {
 
 const AdminNavbar = (props) => {
   const { user } = Store();
-  const [openModal, setOpenModal] = useState(false);
-  const handleModal = () => {
-    setOpenModal((open) => !open);
-    return openModal;
+  const [openProfileModal, setOpenProfileModal] = useState(false);
+  const [openCompanyModal, setOpenCompanyModal] = useState(false);
+
+  const handleProfileModal = () => {
+    setOpenProfileModal((open) => !open);
+    return openProfileModal;
+  };
+  const handleCompanyModal = () => {
+    setOpenCompanyModal((open) => !open);
+    return openCompanyModal;
   };
   const handleLogout = async () => {
     const res = await api("post", "admins/logout", {
@@ -44,31 +51,11 @@ const AdminNavbar = (props) => {
           >
             {props.brandText}
           </Link>
-          {/* <Form className="navbar-search navbar-search-dark form-inline mr-3 d-none d-md-flex ml-lg-auto">
-            <FormGroup className="mb-0">
-              <InputGroup className="input-group-alternative">
-                <InputGroupAddon addonType="prepend">
-                  <InputGroupText>
-                    <i className="fas fa-search" />
-                  </InputGroupText>
-                </InputGroupAddon>
-                <Input placeholder="Search" type="text" />
-              </InputGroup>
-            </FormGroup>
-          </Form> */}
+
           <Nav className="align-items-center d-none d-md-flex" navbar>
             <UncontrolledDropdown nav>
               <DropdownToggle className="pr-0" nav>
                 <Media className="align-items-center">
-                  {/* <span className="avatar avatar-sm rounded-circle">
-                    <img
-                      alt="..."
-                      src={
-                        require("../../assets/img/theme/team-4-800x800.jpg")
-                          .default
-                      }
-                    />
-                  </span> */}
                   <Media className="ml-2 d-none d-lg-block">
                     <span className="mb-0 text-sm font-weight-bold">
                       {user.name
@@ -79,9 +66,13 @@ const AdminNavbar = (props) => {
                 </Media>
               </DropdownToggle>
               <DropdownMenu className="dropdown-menu-arrow" right>
-                <DropdownItem onClick={handleModal}>
+                <DropdownItem onClick={handleProfileModal}>
                   <i className="ni ni-single-02 text-success" />
                   <span>My profile</span>
+                </DropdownItem>
+                <DropdownItem onClick={handleCompanyModal}>
+                  <i className="ni ni-single-02 text-success" />
+                  <span>Company profile</span>
                 </DropdownItem>
 
                 <DropdownItem divider />
@@ -92,11 +83,18 @@ const AdminNavbar = (props) => {
               </DropdownMenu>
             </UncontrolledDropdown>
           </Nav>
-          {openModal && (
+          {openProfileModal && (
             <AdminProfile
-              openModal={openModal}
-              handleModal={handleModal}
+              openModal={openProfileModal}
+              handleModal={handleProfileModal}
               user={user}
+              isEditing={true}
+            />
+          )}
+          {openCompanyModal && (
+            <CompanyProfile
+              openModal={openCompanyModal}
+              handleModal={handleCompanyModal}
               isEditing={true}
             />
           )}
