@@ -96,7 +96,7 @@ export const ExportQuotes = ({ quotes }) => {
         });
       });
     } else {
-      toast.warning("Can only export Quotes of a single client only!");
+      toast.warning("Ne peut exporter que les devis d'un seul client!");
     }
   };
 
