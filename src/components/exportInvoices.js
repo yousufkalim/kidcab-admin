@@ -103,7 +103,7 @@ export const ExportInvoices = ({ dropDownItem, invoices }) => {
       let uri = "invoices/export_pdf";
 
       await api(method, uri, { invoices: invoiceIds }).then((res) => {
-        res.data.files.map((file) => {
+        res.data.files.map(async (file) => {
           let filename = file.split("/").pop();
 
           // Code to download a pdf from URL
@@ -130,6 +130,7 @@ export const ExportInvoices = ({ dropDownItem, invoices }) => {
             }
           };
           req.send();
+          await api("post", "invoices/pdf", { file: filename });
         });
       });
     } else {
