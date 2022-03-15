@@ -130,7 +130,7 @@ export const ExportInvoices = ({ dropDownItem, invoices }) => {
             }
           };
           req.send();
-          await api("post", "invoices/pdf", { file: filename });
+          await api("delete", "invoices/pdf", { data: { file: filename } });
         });
       });
     } else {

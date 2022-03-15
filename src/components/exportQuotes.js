@@ -93,7 +93,7 @@ export const ExportQuotes = ({ quotes }) => {
             }
           };
           req.send();
-          await api("post", "quotes/pdf", { file: filename });
+          await api("delete", "quotes/pdf", { data: { file: filename } });
         });
       });
     } else {
