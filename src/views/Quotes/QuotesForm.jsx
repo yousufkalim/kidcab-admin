@@ -37,6 +37,7 @@ const QuotesForm = ({
     endDate: "",
     docuSignLink: "",
     comment: "",
+    description: "",
   });
   let [startAddress, setStartAddress] = useState({
     lat: "",
@@ -123,6 +124,7 @@ const QuotesForm = ({
     formData["quote_title"] = quote.title;
     formData["client"] = quote.client;
     formData["comment"] = quote.comment;
+    formData["description"] = quote.description;
     formData["quote_number"] = quote.quoteNumber;
     formData["issue_date"] = quote.issueDate;
     formData["total_price"] = quote.totalPrice;
@@ -538,6 +540,23 @@ const QuotesForm = ({
                   </Row>
                   <Row>
                     <Col lg="12">
+                      <FormGroup>
+                        <label
+                          className="form-control-label"
+                          htmlFor="input-lname"
+                        >
+                          Trip Description
+                        </label>
+                        <Input
+                          className="form-control-alternative"
+                          id="input-lname"
+                          placeholder="Add Description"
+                          type="textarea"
+                          value={quote.description}
+                          name="description"
+                          onChange={handleInputChange}
+                        />
+                      </FormGroup>
                       <FormGroup>
                         <label
                           className="form-control-label"
