@@ -53,7 +53,6 @@ const QuotesList = () => {
   };
   const autoRefresh = () => {
     api("get", `/quotes/status/${filterdropDownItem}`).then((res) => {
-      console.log("response --------", res.data.quotes);
       setQuotes(res.data.quotes);
     });
   };
@@ -166,19 +165,22 @@ const QuotesList = () => {
                   </div>
                   <div>
                     {selectedItems.length > 0 && (
-                      <Button
-                        color="danger"
-                        href="#pablo"
-                        onClick={handleDeleteMany}
-                        size="md"
-                      >
-                        Delete Quotes
-                      </Button>
+                      <>
+                        <Button
+                          color="danger"
+                          href="#pablo"
+                          onClick={handleDeleteMany}
+                          size="md"
+                        >
+                          Delete Quotes
+                        </Button>
+                        <ExportQuotes
+                          dropDownItem={dropDownItem}
+                          quotes={selectedItems}
+                        />
+                      </>
                     )}
-                    <ExportQuotes
-                      dropDownItem={dropDownItem}
-                      quotes={selectedItems}
-                    />{" "}
+
                     <UncontrolledDropdown>
                       <DropdownToggle
                         color="danger"
@@ -214,8 +216,16 @@ const QuotesList = () => {
                       onClick={handleModal}
                       size="md"
                     >
-                      <i className="ni ni-fat-add"></i>
-                      Add Quotes
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                      >
+                        <i className="ni ni-fat-add"></i>
+                        <> Add Quotes</>
+                      </div>
                     </Button>
                   </div>
                 </div>
@@ -304,8 +314,9 @@ const QuotesList = () => {
                     <th scope="col">Quote Title</th>
                     <th scope="col">Status</th>
                     <th scope="col">Client</th>
-                    <th scope="col">Passengers</th>
                     <th scope="col">No. of Trips</th>
+                    <th scope="col">Total Price</th>
+                    <th scope="col">Total Price Including VAT</th>
                     <th scope="col">Start Date</th>
                     <th scope="col">End Date</th>
                     <th scope="col">Actions </th>

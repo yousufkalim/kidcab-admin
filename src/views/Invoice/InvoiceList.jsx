@@ -69,19 +69,21 @@ const InvoiceList = () => {
 
                   <div>
                     {selectedItems.length > 0 && (
-                      <Button
-                        color="danger"
-                        href="#pablo"
-                        onClick={handleDeleteMany}
-                        size="md"
-                      >
-                        Delete Invoices
-                      </Button>
+                      <>
+                        <Button
+                          color="danger"
+                          href="#pablo"
+                          onClick={handleDeleteMany}
+                          size="md"
+                        >
+                          Delete Invoices
+                        </Button>
+                        <ExportInvoices
+                          dropDownItem={dropDownItem}
+                          invoices={selectedItems}
+                        />
+                      </>
                     )}
-                    <ExportInvoices
-                      dropDownItem={dropDownItem}
-                      invoices={selectedItems}
-                    />{" "}
                     <UncontrolledDropdown>
                       <DropdownToggle
                         color="primary"
@@ -162,7 +164,7 @@ const InvoiceList = () => {
                     <th scope="col">Issue Date</th>
                     <th scope="col">Status</th>
                     <th scope="col">Total Price</th>
-                    <th scope="col">Trip</th>
+                    <th scope="col">Client</th>
                     <th scope="col">Actions</th>
                   </tr>
                 </thead>
