@@ -141,7 +141,7 @@ const ScheduleCalendar = (props) => {
     nextEvents.splice(idx, 1, updatedEvent);
     setEvents(nextEvents);
     try {
-      const res = await api("put", `trips/${event.id}`, { date: start });
+      const res = await api("put", `trips/event/${event.id}`, { date: start });
     } catch (error) {
       setEvents(tempEvents);
       console.log("error", error);
