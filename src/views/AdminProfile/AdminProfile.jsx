@@ -53,9 +53,6 @@ const AdminProfile = ({ openModal, handleModal, user }) => {
       })
     );
     formData.append("email", admin.email);
-    formData.append("phone_number", admin.phoneNumber);
-    formData.append("address", admin.address);
-    formData.append("admin_name", admin.adminName);
 
     if (admin.password) {
       formData.append("password", admin.password);
