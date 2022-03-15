@@ -166,19 +166,22 @@ const QuotesList = () => {
                   </div>
                   <div>
                     {selectedItems.length > 0 && (
-                      <Button
-                        color="danger"
-                        href="#pablo"
-                        onClick={handleDeleteMany}
-                        size="md"
-                      >
-                        Delete Quotes
-                      </Button>
+                      <>
+                        <Button
+                          color="danger"
+                          href="#pablo"
+                          onClick={handleDeleteMany}
+                          size="md"
+                        >
+                          Delete Quotes
+                        </Button>
+                        <ExportQuotes
+                          dropDownItem={dropDownItem}
+                          quotes={selectedItems}
+                        />
+                      </>
                     )}
-                    <ExportQuotes
-                      dropDownItem={dropDownItem}
-                      quotes={selectedItems}
-                    />{" "}
+
                     <UncontrolledDropdown>
                       <DropdownToggle
                         color="danger"
