@@ -105,8 +105,9 @@ const InvoiceForm = ({
     e.preventDefault();
     let method = "post";
     let uri = "invoices";
-
-    user["client"] = user.client._id;
+    if (user.client._id) {
+      user["client"] = user.client._id;
+    }
     user["issue_date"] = moment(user.issue_date).format("YYYY-MM-DD");
     api(method, uri, user).then((res) => {
       if (res.status === 200) {
