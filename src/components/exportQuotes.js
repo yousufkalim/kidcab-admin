@@ -3,8 +3,8 @@ import * as FileSaver from "file-saver";
 import * as XLSX from "xlsx";
 import { useState } from "react";
 import api from "../api/index";
-import { jsPDF } from "jspdf";
 import "jspdf-autotable";
+import { toast } from "react-toastify";
 
 import {
   DropdownToggle,
@@ -49,46 +49,55 @@ export const ExportQuotes = ({ quotes }) => {
   };
   //pdf export
 
-  const handleSubmitPdf = async () => {
-    let tableRows;
-    if (quotes.length > 0) {
-      tableRows = quotes.map((item) => {
-        return [
-          item.quote_title,
-          item.status,
-          item.client.first_name,
-          item.passengers.length,
-          item.trip_info?.total_trips,
-          new Date(item.trip_info?.start_date).toLocaleString(),
-          new Date(item.trip_info?.end_date).toLocaleString(),
-        ];
-      });
-    } else {
-      const res = await api("get", "quotes");
-      tableRows = res.data.quotes.map((item) => {
-        return [
-          item.quote_title,
-          item.status,
-          item.client.first_name,
-          item.passengers.length,
-          item.trip_info?.total_trips,
-          new Date(item.trip_info?.start_date).toLocaleString(),
-          new Date(item.trip_info?.end_date).toLocaleString(),
-        ];
-      });
-    }
+  const handleExportPdf = async () => {
+    let filteredQuotes = {};
 
-    const doc = new jsPDF();
-
-    doc.autoTable(myHeader, tableRows, {
-      startY: 54,
-      theme: "grid",
-      styles: {
-        align: "center",
-      },
+    let quoteIds = quotes.map((quote) => {
+      if (!filteredQuotes[quote.client._id]) {
+        filteredQuotes[quote.client._id] = [];
+      } else {
+        filteredQuotes[quote.client._id].push(quote);
+      }
+      return quote._id;
     });
 
-    doc.save("Quotes.pdf");
+    if (Object.keys(filteredQuotes).length === 1) {
+      let method = "post";
+      let uri = "quotes/export_pdf";
+
+      await api(method, uri, { quotes: quoteIds }).then((res) => {
+        res.data.files.map((file) => {
+          let filename = file.split("/").pop();
+
+          // Code to download a pdf from URL
+          const req = new XMLHttpRequest();
+          req.open("GET", file, true);
+          req.responseType = "blob";
+          req.onload = function () {
+            const blob = new Blob([req.response], {
+              type: "application/pdf",
+            });
+
+            const isIE = false || !!document.documentMode;
+            if (isIE) {
+              window.navigator.msSaveBlob(blob, filename);
+            } else {
+              const windowUrl = window.URL || window.webkitURL;
+              const href = windowUrl.createObjectURL(blob);
+              const a = document.createElement("a");
+              a.setAttribute("download", filename);
+              a.setAttribute("href", href);
+              document.body.appendChild(a);
+              a.click();
+              document.body.removeChild(a);
+            }
+          };
+          req.send();
+        });
+      });
+    } else {
+      toast.warning("Ne peut exporter que les devis d'un seul client!");
+    }
   };
 
   // Fexporting excel
@@ -143,7 +152,7 @@ export const ExportQuotes = ({ quotes }) => {
           name="pdf"
           onClick={(e) => {
             setExportItem(e.target.name);
-            handleSubmitPdf();
+            handleExportPdf();
           }}
         >
           PDF

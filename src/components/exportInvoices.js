@@ -11,6 +11,7 @@ import {
   UncontrolledDropdown,
   DropdownItem,
 } from "reactstrap";
+import { toast } from "react-toastify";
 
 // Component
 export const ExportInvoices = ({ dropDownItem, invoices }) => {
@@ -85,6 +86,57 @@ export const ExportInvoices = ({ dropDownItem, invoices }) => {
     doc.save("Invoices.pdf");
   };
 
+  const handleExportPdf = async () => {
+    let filteredInvoices = {};
+
+    let invoiceIds = invoices.map((invoice) => {
+      if (!filteredInvoices[invoice.client._id]) {
+        filteredInvoices[invoice.client._id] = [];
+      } else {
+        filteredInvoices[invoice.client._id].push(invoice);
+      }
+      return invoice._id;
+    });
+
+    if (Object.keys(filteredInvoices).length === 1) {
+      let method = "post";
+      let uri = "invoices/export_pdf";
+
+      await api(method, uri, { invoices: invoiceIds }).then((res) => {
+        res.data.files.map((file) => {
+          let filename = file.split("/").pop();
+
+          // Code to download a pdf from URL
+          const req = new XMLHttpRequest();
+          req.open("GET", file, true);
+          req.responseType = "blob";
+          req.onload = function () {
+            const blob = new Blob([req.response], {
+              type: "application/pdf",
+            });
+
+            const isIE = false || !!document.documentMode;
+            if (isIE) {
+              window.navigator.msSaveBlob(blob, filename);
+            } else {
+              const windowUrl = window.URL || window.webkitURL;
+              const href = windowUrl.createObjectURL(blob);
+              const a = document.createElement("a");
+              a.setAttribute("download", filename);
+              a.setAttribute("href", href);
+              document.body.appendChild(a);
+              a.click();
+              document.body.removeChild(a);
+            }
+          };
+          req.send();
+        });
+      });
+    } else {
+      toast.warning("Ne peut exporter que les factures d'un seul client!");
+    }
+  };
+
   // exporting excel
   const handleSubmitExcel = async (dropDownItem) => {
     let updatedInvoices;
@@ -133,7 +185,7 @@ export const ExportInvoices = ({ dropDownItem, invoices }) => {
           name="pdf"
           onClick={(e) => {
             setExportItem(e.target.name);
-            handleSubmitPdf();
+            handleExportPdf();
           }}
         >
           PDF
