@@ -50,55 +50,44 @@ export const ExportQuotes = ({ quotes }) => {
   //pdf export
 
   const handleExportPdf = async () => {
-    let filteredQuotes = {};
-
     let quoteIds = quotes.map((quote) => {
-      if (!filteredQuotes[quote.client._id]) {
-        filteredQuotes[quote.client._id] = [];
-      } else {
-        filteredQuotes[quote.client._id].push(quote);
-      }
       return quote._id;
     });
 
-    if (Object.keys(filteredQuotes).length === 1) {
-      let method = "post";
-      let uri = "quotes/export_pdf";
+    let method = "post";
+    let uri = "quotes/export_pdf";
 
-      await api(method, uri, { quotes: quoteIds }).then((res) => {
-        res.data.files.map(async (file) => {
-          let filename = file.split("/").pop();
+    await api(method, uri, { quotes: quoteIds }).then((res) => {
+      res.data.files.map(async (file) => {
+        let filename = file.split("/").pop();
 
-          // Code to download a pdf from URL
-          const req = new XMLHttpRequest();
-          req.open("GET", file, true);
-          req.responseType = "blob";
-          req.onload = function () {
-            const blob = new Blob([req.response], {
-              type: "application/pdf",
-            });
+        // Code to download a pdf from URL
+        const req = new XMLHttpRequest();
+        req.open("GET", file, true);
+        req.responseType = "blob";
+        req.onload = function () {
+          const blob = new Blob([req.response], {
+            type: "application/pdf",
+          });
 
-            const isIE = false || !!document.documentMode;
-            if (isIE) {
-              window.navigator.msSaveBlob(blob, filename);
-            } else {
-              const windowUrl = window.URL || window.webkitURL;
-              const href = windowUrl.createObjectURL(blob);
-              const a = document.createElement("a");
-              a.setAttribute("download", filename);
-              a.setAttribute("href", href);
-              document.body.appendChild(a);
-              a.click();
-              document.body.removeChild(a);
-            }
-          };
-          req.send();
-          await api("delete", "quotes/pdf", { data: { file: filename } });
-        });
+          const isIE = false || !!document.documentMode;
+          if (isIE) {
+            window.navigator.msSaveBlob(blob, filename);
+          } else {
+            const windowUrl = window.URL || window.webkitURL;
+            const href = windowUrl.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.setAttribute("download", filename);
+            a.setAttribute("href", href);
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+          }
+        };
+        req.send();
+        await api("delete", "quotes/pdf", { data: { file: filename } });
       });
-    } else {
-      toast.warning("Ne peut exporter que les devis d'un seul client!");
-    }
+    });
   };
 
   // Fexporting excel
