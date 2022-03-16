@@ -15,6 +15,8 @@ import {
   Col,
   Label,
 } from "reactstrap";
+import moment from "moment";
+
 // core components
 
 const InvoiceForm = ({
@@ -88,6 +90,25 @@ const InvoiceForm = ({
       method = "put";
       uri = uri + `/${editUser._id}`;
     }
+    api(method, uri, user).then((res) => {
+      if (res.status === 200) {
+        toast.success("Saved Successfully");
+        handleModal();
+        autoRefresh();
+      } else {
+        toast.error("Save Error", res);
+      }
+    });
+  };
+
+  const handleDuplicate = (e) => {
+    e.preventDefault();
+    let method = "post";
+    let uri = "invoices";
+    if (user.client._id) {
+      user["client"] = user.client._id;
+    }
+    user["issue_date"] = moment(user.issue_date).format("YYYY-MM-DD");
     api(method, uri, user).then((res) => {
       if (res.status === 200) {
         toast.success("Saved Successfully");
@@ -275,9 +296,14 @@ const InvoiceForm = ({
             Save
           </Button>{" "}
           {isEditing && (
-            <Button color="danger" onClick={handleDelete}>
-              Delete
-            </Button>
+            <>
+              <Button color="primary" onClick={handleDuplicate}>
+                Duplicate
+              </Button>
+              <Button color="danger" onClick={handleDelete}>
+                Delete
+              </Button>
+            </>
           )}{" "}
           <Button onClick={handleModal}>Cancel</Button>
         </ModalFooter>

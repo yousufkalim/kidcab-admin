@@ -21,9 +21,58 @@ import api from "../../api/index";
 const DriverList = () => {
   const [openModal, setOpenModal] = useState(false);
   const [users, setUsers] = useState();
+  const [user, setUser] = useState({
+    profile_pic: "",
+    id_front: "",
+    id_back: "",
+    vtc_front: "",
+    vtc_back: "",
+    criminal_record_image: "",
+    criminal_record_date: "",
+    ris_image: "",
+    ris_date: "",
+    kbis_image: "",
+    kbis_date: "",
+    proRc_image: "",
+    address: "",
+    proRc_date: "",
+    license_front: "",
+    license_back: "",
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+    phone: "",
+    bankName: "",
+    iban: "",
+    role: "",
+    vehicles: [],
+    company_name: "",
+    siret_number: "",
+    legal_info: "",
+    social_capital: "",
+    vat_number: "",
+    city_of_rcs: "",
+  });
   const handleModal = () => {
     setOpenModal((open) => !open);
     return openModal;
+  };
+  const handleFileChange = (e) => {
+    setUser({ ...user, [e.target.name]: e.target.files[0] });
+  };
+
+  const handleInputChange = (e) => {
+    setUser({ ...user, [e.target.name]: e.target.value });
+  };
+
+  const handleVehicleChange = (e) => {
+    console.log(e, "v");
+    setUser((user) => ({ ...user, vehicles: [e] }));
+  };
+
+  const handleRoleChange = (e) => {
+    setUser((user) => ({ ...user, role: e.value }));
   };
   const autoRefresh = () => {
     api("get", "drivers").then((res) => setUsers(res.data.drivers));
@@ -137,8 +186,12 @@ const DriverList = () => {
           <DriverForm
             openModal={openModal}
             handleModal={handleModal}
-            user={undefined}
-            isEditing={false}
+            handleFileChange={handleFileChange}
+            handleInputChange={handleInputChange}
+            handleVehicleChange={handleVehicleChange}
+            handleRoleChange={handleRoleChange}
+            editUser={user}
+            isClose={true}
             autoRefresh={autoRefresh}
           />
         )}

@@ -58,6 +58,7 @@ const DriverRow = ({ user, autoRefresh }) => {
           handleModal={handleModal}
           editUser={user}
           isEditing={true}
+          isClose={false}
           autoRefresh={autoRefresh}
         />
       )}

@@ -15,6 +15,8 @@ import {
   Col,
   Label,
 } from "reactstrap";
+import moment from "moment";
+
 // core components
 import Select from "react-select";
 const QuotesForm = ({
@@ -31,6 +33,7 @@ const QuotesForm = ({
     status: "pending",
     issueDate: "",
     totalTrips: "",
+    unitPrice: "",
     totalPrice: "",
     vat: "",
     startDate: "",
@@ -68,6 +71,7 @@ const QuotesForm = ({
         issueDate: editQuote.issue_date,
         totalTrips: editQuote.trip_info.total_trips,
         totalPrice: editQuote.total_price,
+        unitPrice: editQuote.trip_info.unit_price,
         vat: editQuote.vat,
         startDate: editQuote.trip_info.start_date,
         endDate: editQuote.trip_info.end_date,
@@ -89,7 +93,6 @@ const QuotesForm = ({
     setQuote((quote) => ({ ...quote, client: e.value }));
   };
 
-  console.log(quote);
   const handleDelete = () => {
     let method = "delete";
     let uri = "quotes";
@@ -118,7 +121,11 @@ const QuotesForm = ({
       end_date: quote.endDate,
       start_address: startAddress,
       end_address: endAddress,
+      unit_price: quote.unitPrice,
     };
+
+    let totalPrice = quote.unitPrice * quote.totalTrips;
+    console.log("trips", totalPrice);
 
     const formData = {};
     formData["quote_title"] = quote.title;
@@ -127,7 +134,7 @@ const QuotesForm = ({
     formData["description"] = quote.description;
     formData["quote_number"] = quote.quoteNumber;
     formData["issue_date"] = quote.issueDate;
-    formData["total_price"] = quote.totalPrice;
+    formData["total_price"] = quote.unitPrice * quote.totalTrips;
     formData["vat"] = quote.vat;
     formData["status"] = quote.status;
     formData["trip_info"] = JSON.stringify(tripInfo);
@@ -153,9 +160,10 @@ const QuotesForm = ({
     if (tripInfo.total_trips == "") {
       return toast.error("Please enter total number of trips");
     }
-    if (quote.totalPrice == "") {
+    if (quote.unitPrice == "") {
       return toast.error("Please enter quote price");
     }
+
     if (quote.vat == "") {
       return toast.error("Please enter vat");
     }
@@ -186,6 +194,94 @@ const QuotesForm = ({
       uri = uri + `/${editQuote._id}`;
     }
 
+    api(method, uri, formData).then((res) => {
+      if (res.status === 200) {
+        toast.success("Saved Successfully");
+        handleModal();
+        autoRefresh();
+      } else {
+        toast.error("Save Error", res);
+      }
+    });
+  };
+  const handleDuplicate = (e) => {
+    e.preventDefault();
+    let method = "post";
+    let uri = "quotes";
+    const tripInfo = {
+      total_trips: quote.totalTrips,
+      start_date: quote.startDate,
+      end_date: quote.endDate,
+      start_address: startAddress,
+      end_address: endAddress,
+      unit_price: quote.unitPrice,
+    };
+
+    let totalPrice = quote.unitPrice * quote.totalTrips;
+
+    const formData = {};
+    formData["quote_title"] = quote.title;
+    formData["client"] = quote.client._id ? quote.client._id : quote.client;
+    formData["comment"] = quote.comment ? quote.comment : "";
+    formData["description"] = quote.description ? quote.description : "";
+    formData["quote_number"] = quote.quoteNumber;
+    formData["issue_date"] = moment(quote.issueDate).format("YYYY-MM-DD");
+    formData["total_price"] = quote.unitPrice * quote.totalTrips;
+    formData["vat"] = quote.vat;
+    formData["status"] = quote.status;
+    formData["trip_info"] = JSON.stringify(tripInfo);
+    formData["docu_sign_link"] = quote.docuSignLink;
+
+    //validations
+
+    if (quote.title == "") {
+      return toast.error("Please enter quote title");
+    }
+    if (quote.quoteNumber == "") {
+      return toast.error("Please enter quote number");
+    }
+    if (quote.client == "") {
+      return toast.error("Please enter client name");
+    }
+    if (quote.status == "") {
+      return toast.error("Please enter quote status");
+    }
+    if (quote.issueDate == "") {
+      return toast.error("Please enter issue date");
+    }
+    if (tripInfo.total_trips == "") {
+      return toast.error("Please enter total number of trips");
+    }
+    if (quote.unitPrice == "") {
+      return toast.error("Please enter quote price");
+    }
+
+    if (quote.vat == "") {
+      return toast.error("Please enter vat");
+    }
+
+    if (tripInfo.start_date == "") {
+      return toast.error("Please enter start date");
+    }
+    if (tripInfo.end_date == "") {
+      return toast.error("Please enter end date");
+    }
+    if (tripInfo.start_address.lat == "") {
+      return toast.error("Please enter start address");
+    }
+    if (tripInfo.end_address.lat == "") {
+      return toast.error("Please enter end address");
+    }
+    if (
+      startAddress.lat == endAddress.lat &&
+      startAddress.lng == endAddress.lng &&
+      startAddress.PostalCode == endAddress.PostalCode &&
+      startAddress.city == endAddress.city
+    ) {
+      return toast.error("Start and end address cant be same");
+    }
+
+    console.log("formData", formData);
     api(method, uri, formData).then((res) => {
       if (res.status === 200) {
         toast.success("Saved Successfully");
@@ -291,41 +387,6 @@ const QuotesForm = ({
                         )}
                       </FormGroup>
                     </Col>
-                    {/* <Col lg="6">
-                      <FormGroup>
-                        <Label
-                          for="exampleSelect"
-                          className="form-control-label"
-                        >
-                          <span style={{ color: "red" }}>
-                            {quote.passengers[0] ? "" : "*"}
-                          </span>{" "}
-                          Select Passengers
-                        </Label>
-                        {passengers && (
-                          <Select
-                            onChange={handlePassengerChange}
-                            isMulti
-                            hideSelectedOptions
-                            defaultValue={quote.passengers.map((passenger) => ({
-                              value: passenger._id,
-                              label: `${passenger.first_name} ${passenger.last_name}`,
-                            }))}
-                            // defaultOptions={selectedPassenger.map((p) => ({
-                            //   value: p._id,
-                            //   label: `${p.first_name} ${p.last_name}`,
-                            // }))}
-                            name="passengers"
-                            className="form-control-alternative"
-                            options={passengers.map((passenger) => ({
-                              value: passenger._id,
-                              label: `${passenger.first_name} ${passenger.last_name}`,
-                            }))}
-                          />
-                        )}
-                      </FormGroup>
-                          </Col> */}
-
                     <Col lg="4">
                       <FormGroup>
                         <Label
@@ -412,18 +473,18 @@ const QuotesForm = ({
                           htmlFor="input-fname"
                         >
                           <span style={{ color: "red" }}>
-                            {quote.totalPrice ? "" : "*"}
+                            {quote.unitPrice ? "" : "*"}
                           </span>{" "}
-                          Total Price
+                          Unit Price
                         </label>
                         <Input
                           className="form-control-alternative"
                           id="input-fname"
                           required={true}
-                          placeholder="Total Trips"
+                          placeholder="Unit Trips"
                           type="text"
-                          value={quote.totalPrice}
-                          name="totalPrice"
+                          value={quote.unitPrice}
+                          name="unitPrice"
                           onChange={handleInputChange}
                         />
                       </FormGroup>
@@ -586,9 +647,14 @@ const QuotesForm = ({
             Save
           </Button>
           {isEditing && (
-            <Button color="danger" onClick={handleDelete}>
-              Delete
-            </Button>
+            <>
+              <Button color="primary" onClick={handleDuplicate}>
+                Duplicate
+              </Button>
+              <Button color="danger" onClick={handleDelete}>
+                Delete
+              </Button>
+            </>
           )}{" "}
           <Button onClick={handleModal}>Cancel</Button>
         </ModalFooter>

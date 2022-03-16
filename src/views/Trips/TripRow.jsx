@@ -49,9 +49,6 @@ const TripRow = ({ trip, autoRefresh, selectedItems, handleSelect }) => {
         {trip.client ? trip.client.first_name : "No client is added"}
       </td>
       <td className="text-center">
-        {/* {trip?.passengers
-          ? trip.passengers.map((i) => i.first_name)
-          : "No Passenger is added"} */}
         {trip?.passengers ? trip.passengers.length : "No Passenger is added"}
       </td>
       <td className="text-center">
