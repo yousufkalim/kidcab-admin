@@ -16,6 +16,8 @@ import {
   Label,
 } from "reactstrap";
 import moment from "moment";
+import View from "../../components/view";
+
 // core components
 let current = moment();
 
@@ -40,6 +42,7 @@ const VehicleForm = ({
     inspection_info: "",
     inspection_expiry_date: "",
     driver: "",
+    registration_card: "",
   });
 
   useEffect(() => {
@@ -55,9 +58,12 @@ const VehicleForm = ({
         inspection_info: editVehicle.inspection_info,
         driver: editVehicle.driver,
         inspection_expiry_date: editVehicle.inspection_expiry_date,
+        insurance_certificate: editVehicle.insurance_certificate,
         insurance_expiry_date: editVehicle.insurance_expiry_date,
+        registration_card: editVehicle.registration_card,
       });
     }
+    console.log(editVehicle);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const handleFileChange = (e) => {
@@ -365,8 +371,8 @@ const VehicleForm = ({
                           {/* <span style={{ color: "red" }}>
                             {vehicle.inspection_info ? "" : "*"}
                           </span>{" "} */}
-                          Add Inspection Card
-                          <i className="fa fa-id-card" />
+                          Add Inspection Card{" "}
+                          <View url={vehicle.inspection_info} />
                         </label>
                         <Input
                           className="form-control-file form"
@@ -408,8 +414,8 @@ const VehicleForm = ({
                           className="form-control-label"
                           htmlFor="input-number-plate"
                         >
-                          Add Registration Card
-                          <i className="fa fa-id-card" />
+                          Add Registration Card{" "}
+                          <View url={vehicle.registration_card} />
                         </label>
                         <Input
                           className="form-control-file form"
@@ -431,8 +437,8 @@ const VehicleForm = ({
                           <span style={{ color: "red" }}>
                             {vehicle.insurance_certificate ? "" : "*"}
                           </span>{" "}
-                          Add vehicle Insurance Certificate
-                          <i className="fa fa-id-card" />
+                          Add vehicle Insurance Certificate{" "}
+                          <View url={vehicle.insurance_certificate} />
                         </label>
                         <Input
                           className="form-control-file form"
