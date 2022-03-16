@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import api from "../../api";
 import AddressInput from "components/Form/AddressInput";
+import View from "../../components/view";
 import {
   Modal,
   ModalBody,
@@ -58,6 +59,8 @@ const DriverForm = ({
     vat_number: "",
     city_of_rcs: "",
   });
+  const [docs, setDocs] = useState({});
+
   const [address, setAddress] = useState({
     lat: "",
     lng: "",
@@ -97,6 +100,22 @@ const DriverForm = ({
         ris_date: editUser.ris_date,
         proRc_date: editUser.proRc_date,
       });
+      setDocs({
+        profile_pic: editUser.profile_pic,
+        id_card_front: editUser.id_card_front,
+        id_card_back: editUser.id_card_back,
+        vtc_card_front: editUser.vtc_card_front,
+        vtc_card_back: editUser.vtc_card_back,
+        criminal_record_image: editUser.criminal_record_image,
+        ris_image: editUser.ris_image,
+        kbis_image: editUser.kbis_image,
+        proRc_image: editUser.proRc_image,
+        license_card_front: editUser.license_card_front,
+        license_card_back: editUser.license_card_back,
+      });
+
+      console.log(editUser);
+
       setAddress(editUser.address);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -323,7 +342,7 @@ const DriverForm = ({
                           <span style={{ color: "red" }}>
                             {user.profile_pic ? "" : "*"}
                           </span>{" "}
-                          Add Profile Picture <i className="ni ni-album-2" />
+                          Add Profile Picture <View url={docs.profile_pic} />
                         </label>
                         <Input
                           className="form-control-file form"
@@ -785,7 +804,8 @@ const DriverForm = ({
                             {user.id_front ? "" : "*"}
                           </span>{" "}
                           Add Identity Card/Passport/Residence Permit Front Side{" "}
-                          <i className="fa fa-id-card" />
+                          <i className="fa fa-id-card" />{" "}
+                          <View url={docs.id_card_front} />
                         </label>
                         <Input
                           className="form-control-file form"
@@ -807,6 +827,7 @@ const DriverForm = ({
                           </span>{" "}
                           Add Identity Card/Passport/Residence Permit Back Side{" "}
                           <i className="fa fa-id-card" />
+                          <View url={docs.id_card_back} />
                         </label>
 
                         <Input
@@ -831,6 +852,7 @@ const DriverForm = ({
                           </span>{" "}
                           Add VTC Card Front Side{" "}
                           <i className="fa fa-id-card" />
+                          <View url={docs.vtc_card_front} />
                         </label>
                         <Input
                           className="form-control-file form"
@@ -851,6 +873,7 @@ const DriverForm = ({
                             {user.vtc_back ? "" : "*"}
                           </span>{" "}
                           Add VTC Card Back Side <i className="fa fa-id-card" />
+                          <View url={docs.vtc_card_back} />
                         </label>
 
                         <Input
@@ -874,6 +897,7 @@ const DriverForm = ({
                             {user.license_front ? "" : "*"}
                           </span>{" "}
                           Add License Card Front Side{" "}
+                          <View url={docs.license_card_front} />
                           <i className="fa fa-id-card" />
                         </label>
                         <Input
@@ -896,6 +920,7 @@ const DriverForm = ({
                           </span>{" "}
                           Add License Card Back Side{" "}
                           <i className="fa fa-id-card" />
+                          <View url={docs.license_card_back} />
                         </label>
 
                         <Input
@@ -919,6 +944,7 @@ const DriverForm = ({
                             {user.criminal_record_image ? "" : "*"}
                           </span>{" "}
                           Add Criminal Record <i className="fa fa-id-card" />
+                          <View url={docs.criminal_record_image} />
                         </label>
                         <Input
                           className="form-control-file form"
@@ -967,8 +993,8 @@ const DriverForm = ({
                           </span>{" "}
                           Add Restricted Information Statement{" "}
                           <i className="fa fa-id-card" />
+                          <View url={docs.ris_image} />
                         </label>
-
                         <Input
                           className="form-control-file form"
                           id="input-restricted-information-statement"
@@ -1014,6 +1040,7 @@ const DriverForm = ({
                             {user.kbis_image ? "" : "*"}
                           </span>{" "}
                           Add KBIS <i className="fa fa-id-card" />
+                          <View url={docs.kbis_image} />
                         </label>
 
                         <Input
@@ -1064,6 +1091,7 @@ const DriverForm = ({
                           </span>{" "}
                           Add Pro RC Insurance Certificate{" "}
                           <i className="fa fa-id-card" />
+                          <View url={docs.proRc_image} />
                         </label>
 
                         <Input
