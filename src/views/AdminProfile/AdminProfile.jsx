@@ -21,7 +21,6 @@ const AdminProfile = ({ openModal, handleModal, user }) => {
     firstName: "",
     lastName: "",
     email: "",
-    password: "",
   });
   const updateStore = UpdateStore();
 
@@ -30,7 +29,6 @@ const AdminProfile = ({ openModal, handleModal, user }) => {
       firstName: user.name?.first_name || "",
       lastName: user.name?.last_name || "",
       email: user.email || "",
-      password: user.phone_number || "",
     });
   }, []);
 
