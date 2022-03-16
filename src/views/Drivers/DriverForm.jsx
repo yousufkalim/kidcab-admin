@@ -22,8 +22,13 @@ let current = moment();
 const DriverForm = ({
   openModal,
   handleModal,
+  handleFileChange,
+  handleInputChange,
+  handleVehicleChange,
+  handleRoleChange,
   editUser,
   isEditing,
+  isClose,
   autoRefresh,
 }) => {
   const [user, setUser] = useState({
@@ -67,7 +72,6 @@ const DriverForm = ({
     postal_code: "",
   });
   const [vehicles, setVehicles] = useState();
-
   useEffect(() => {
     api("get", "vehicles").then((res) => {
       setVehicles(res.data.vehicles);
@@ -75,46 +79,92 @@ const DriverForm = ({
   }, []);
 
   useEffect(() => {
+    if (isClose) {
+      console.log("v", editUser.vehicles);
+      setUser({
+        firstName: editUser?.firstName,
+        lastName: editUser?.lastName,
+        password: editUser?.password,
+        email: editUser?.email,
+        phone: editUser?.phone,
+        role: editUser?.role,
+        bankName: editUser?.bankName,
+        iban: editUser?.iban,
+        vehicles: editUser?.vehicles.map((i) => {
+          return i.value;
+        }),
+        company_name: editUser?.company_name,
+        siret_number: editUser?.siret_number,
+        legal_info: editUser?.legal_info,
+        social_capital: editUser?.siret_number,
+        vat_number: editUser?.vat_number,
+        city_of_rcs: editUser?.city_of_rcs,
+        profile_pic: editUser?.profile_pic,
+        criminal_record_date: editUser?.criminal_record_date,
+        kbis_date: editUser?.kbis_date,
+        ris_date: editUser?.ris_date,
+        proRc_date: editUser?.proRc_date,
+        criminal_record_image: editUser?.criminal_record_image,
+        ris_image: editUser?.ris_image,
+        kbis_image: editUser?.kbis_image,
+        proRc_image: editUser.proRc_image,
+        id_front: editUser?.id_front,
+        id_back: editUser?.id_front,
+        vtc_front: editUser?.vtc_front,
+        vtc_back: editUser?.vtc_back,
+        license_front: editUser?.license_front,
+        license_back: editUser?.license_back,
+        address: editUser?.address,
+      });
+      setAddress(editUser?.address);
+    }
+  }, [editUser]);
+
+  useEffect(() => {
     if (isEditing) {
       setUser({
-        firstName: editUser.first_name,
-        lastName: editUser.last_name,
-        password: editUser.password,
-        email: editUser.email,
-        phone: editUser.phone_number,
-        role: editUser.role,
-        bankName: editUser.bank_info.bank_name,
-        iban: editUser.bank_info.iban,
-        vehicles: editUser.vehicles,
-        company_name: editUser.company?.company_name,
-        siret_number: editUser.company?.siret_number,
-        legal_info: editUser.company?.legal_info,
-        social_capital: editUser.company?.social_capital,
-        vat_number: editUser.company?.vat_number,
-        city_of_rcs: editUser.company?.city_of_rcs,
-        criminal_record_date: editUser.criminal_record_date,
-        kbis_date: editUser.kbis_date,
-        ris_date: editUser.ris_date,
-        proRc_date: editUser.proRc_date,
+        firstName: editUser?.first_name,
+        lastName: editUser?.last_name,
+        password: editUser?.password,
+        email: editUser?.email,
+        phone: editUser?.phone_number,
+        role: editUser?.role,
+        bankName: editUser?.bank_info?.bank_name,
+        iban: editUser?.bank_info?.iban,
+        vehicles: editUser?.vehicles,
+        company_name: editUser?.company?.company_name,
+        siret_number: editUser?.company?.siret_number,
+        legal_info: editUser?.company?.legal_info,
+        social_capital: editUser?.company?.social_capital,
+        vat_number: editUser?.company?.vat_number,
+        city_of_rcs: editUser?.company?.city_of_rcs,
+        profile_pic: editUser?.profile_pic,
+        criminal_record_date: editUser?.criminal_record_date,
+        kbis_date: editUser?.kbis_date,
+        ris_date: editUser?.ris_date,
+        proRc_date: editUser?.proRc_date,
       });
-      setAddress(editUser.address);
+      setAddress(editUser?.address);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleFileChange = (e) => {
+  const handleFile1Change = (e) => {
+    console.log(e.target.files[0]);
     setUser({ ...user, [e.target.name]: e.target.files[0] });
   };
 
-  const handleInputChange = (e) => {
+  const handleInput1Change = (e) => {
+    console.log("e.target.value", e.target.name);
     setUser({ ...user, [e.target.name]: e.target.value });
   };
 
-  const handleVehicleChange = (e) => {
+  const handleVehicle1Change = (e) => {
+    console.log("v");
     setUser((user) => ({ ...user, vehicles: [e.value] }));
   };
 
-  const handleRoleChange = (e) => {
+  const handleRole1Change = (e) => {
+    console.log("inside role1");
     setUser((user) => ({ ...user, role: e.value }));
   };
 
@@ -126,7 +176,6 @@ const DriverForm = ({
       uri = uri + `/${editUser._id}`;
     }
     api(method, uri).then((res) => {
-      // eslint-disable-next-line
       if (res.status == 200) {
         toast.success("Delete Successfully");
         handleModal();
@@ -174,6 +223,9 @@ const DriverForm = ({
     }
 
     if (user.criminal_record_image) {
+      if (user?.criminal_record_date == "") {
+        return toast.error("Please enter criminal_record expirty date");
+      }
       formData.append(
         "criminal_record_image",
         user.criminal_record_image,
@@ -184,15 +236,24 @@ const DriverForm = ({
 
     if (user.ris_image) {
       formData.append("ris_image", user.ris_image, user.ris_image?.name);
+      if (user?.ris_date == "") {
+        return toast.error("Please enter RIS expirty date");
+      }
       formData.append("ris_date", user.ris_date);
     }
 
     if (user.kbis_image) {
       formData.append("kbis_image", user.kbis_image, user.kbis_image?.name);
       formData.append("kbis_date", user.kbis_date);
+      if (user?.kbis_date == "") {
+        return toast.error("Please enter KBIS expirty date");
+      }
     }
 
     if (user.proRc_image) {
+      if (user?.proRc_dates == "") {
+        return toast.error("Please enter proRC expirty date");
+      }
       formData.append("proRc_image", user.proRc_image, user.proRc_image?.name);
       formData.append("proRc_date", user.proRc_date);
     }
@@ -220,10 +281,6 @@ const DriverForm = ({
         user.license_back?.name
       );
 
-    if (user.profile_pic == "") {
-      return toast.error("Please attach profile picture");
-    }
-
     if (user.firstName == "") {
       return toast.error("Please enter your first name");
     }
@@ -247,48 +304,15 @@ const DriverForm = ({
       return toast.error("Please select your role");
     }
 
-    if (
-      !(
-        address.lat ||
-        address.lng ||
-        address.city ||
-        address.label ||
-        address.label ||
-        address.label2
-      )
-    ) {
-      return toast.error("Please select your addres");
-    }
-
     if (user.phone == "") {
       return toast.error("Please enter phone number");
     }
 
-    if (user.id_front == "") {
-      return toast.error("Please attach ID card front picture");
-    }
-    if (user.id_back == "") {
-      return toast.error("Please attach ID card back picture");
-    }
-    if (user.vtc_front == "") {
-      return toast.error("Please attach vtc card front picture");
-    }
-    if (user.vtc_back == "") {
-      return toast.error("Please attach vtc card back picture");
-    }
-    if (user.license_front == "") {
-      return toast.error("Please attach license front picture");
-    }
-    if (user.license_back == "") {
-      return toast.error("Please attach license back picture");
-    }
-
-    if (editUser) {
+    if (isEditing) {
       method = "put";
       uri = uri + `/${editUser._id}`;
     }
     api(method, uri, formData).then((res) => {
-      // eslint-disable-next-line eqeqeq
       if (res.status == 200) {
         toast.success("Saved Successfully");
         handleModal();
@@ -320,9 +344,6 @@ const DriverForm = ({
                           className="form-control-label"
                           htmlFor="input-image"
                         >
-                          <span style={{ color: "red" }}>
-                            {user.profile_pic ? "" : "*"}
-                          </span>{" "}
                           Add Profile Picture <i className="ni ni-album-2" />
                         </label>
                         <Input
@@ -358,7 +379,9 @@ const DriverForm = ({
                           type="text"
                           value={user.firstName}
                           name="firstName"
-                          onChange={handleInputChange}
+                          onChange={
+                            isEditing ? handleInput1Change : handleInputChange
+                          }
                         />
                       </FormGroup>
                     </Col>
@@ -380,7 +403,9 @@ const DriverForm = ({
                           type="email"
                           value={user.lastName}
                           name="lastName"
-                          onChange={handleInputChange}
+                          onChange={
+                            isEditing ? handleInput1Change : handleInputChange
+                          }
                         />
                       </FormGroup>
                     </Col>
@@ -405,7 +430,9 @@ const DriverForm = ({
                             type="text"
                             value={user.email}
                             name="email"
-                            onChange={handleInputChange}
+                            onChange={
+                              isEditing ? handleInput1Change : handleInputChange
+                            }
                           />
                         </FormGroup>
                       </Col>
@@ -427,7 +454,9 @@ const DriverForm = ({
                             type="password"
                             value={user.password}
                             name="password"
-                            onChange={handleInputChange}
+                            onChange={
+                              isEditing ? handleInput1Change : handleInputChange
+                            }
                           />
                         </FormGroup>
                       </Col>
@@ -449,7 +478,9 @@ const DriverForm = ({
                         </Label>
 
                         <Select
-                          onChange={handleRoleChange}
+                          onChange={
+                            isEditing ? handleRole1Change : handleRoleChange
+                          }
                           name="role"
                           hideSelectedOptions
                           defaultValue={
@@ -484,17 +515,25 @@ const DriverForm = ({
                             </span>{" "}
                             Select Vehicle
                           </Label>
-
                           {vehicles && (
                             <Select
-                              onChange={handleVehicleChange}
                               name="vehicles"
                               hideSelectedOptions
+                              onChange={
+                                isEditing
+                                  ? handleVehicle1Change
+                                  : handleVehicleChange
+                              }
                               defaultValue={
-                                user?.vehicles?.length > 0 && {
-                                  value: user?.vehicles[0]?._id,
-                                  label: user?.vehicles[0]?.vehicle_name,
-                                }
+                                isClose
+                                  ? editUser.vehicles?.map((i) => ({
+                                      value: i.value,
+                                      label: i.label,
+                                    }))
+                                  : user?.vehicles?.length > 0 && {
+                                      value: user?.vehicles[0]?._id,
+                                      label: user?.vehicles[0]?.vehicle_name,
+                                    }
                               }
                               className="form-control-alternative"
                               options={vehicles.map((vehicle) => ({
@@ -505,7 +544,7 @@ const DriverForm = ({
                           )}
                         </FormGroup>
                       </Col>
-                    ) : (
+                    ) : user.role === "fleet_manager" ? (
                       <Col lg="6">
                         <FormGroup>
                           <label
@@ -541,6 +580,24 @@ const DriverForm = ({
                           )}
                         </FormGroup>
                       </Col>
+                    ) : (
+                      <Col lg="6">
+                        <FormGroup>
+                          <label
+                            className="form-control-label"
+                            htmlFor="input-fname"
+                          >
+                            Select Vehicles
+                          </label>
+
+                          <Select
+                            name="vehicles"
+                            isMulti
+                            className="form-control-alternative"
+                            isDisabled={true}
+                          />
+                        </FormGroup>
+                      </Col>
                     )}
                   </Row>
                 </div>
@@ -572,7 +629,11 @@ const DriverForm = ({
                               type="text"
                               value={user.company_name}
                               name="company_name"
-                              onChange={handleInputChange}
+                              onChange={
+                                isEditing
+                                  ? handleInput1Change
+                                  : handleInputChange
+                              }
                             />
                           </FormGroup>
                         </Col>
@@ -592,7 +653,11 @@ const DriverForm = ({
                               type="text"
                               value={user.city_of_rcs}
                               name="city_of_rcs"
-                              onChange={handleInputChange}
+                              onChange={
+                                isEditing
+                                  ? handleInput1Change
+                                  : handleInputChange
+                              }
                             />
                           </FormGroup>
                         </Col>
@@ -615,7 +680,11 @@ const DriverForm = ({
                               type="text"
                               value={user.siret_number}
                               name="siret_number"
-                              onChange={handleInputChange}
+                              onChange={
+                                isEditing
+                                  ? handleInput1Change
+                                  : handleInputChange
+                              }
                             />
                           </FormGroup>
                         </Col>
@@ -634,7 +703,11 @@ const DriverForm = ({
                               type="text"
                               value={user.vat_number}
                               name="vat_number"
-                              onChange={handleInputChange}
+                              onChange={
+                                isEditing
+                                  ? handleInput1Change
+                                  : handleInputChange
+                              }
                             />
                           </FormGroup>
                         </Col>
@@ -655,7 +728,11 @@ const DriverForm = ({
                               type="text"
                               value={user.social_capital}
                               name="social_capital"
-                              onChange={handleInputChange}
+                              onChange={
+                                isEditing
+                                  ? handleInput1Change
+                                  : handleInputChange
+                              }
                             />
                           </FormGroup>
                         </Col>
@@ -674,7 +751,11 @@ const DriverForm = ({
                               type="text"
                               value={user.legal_info}
                               name="legal_info"
-                              onChange={handleInputChange}
+                              onChange={
+                                isEditing
+                                  ? handleInput1Change
+                                  : handleInputChange
+                              }
                             />
                           </FormGroup>
                         </Col>
@@ -694,6 +775,7 @@ const DriverForm = ({
                       <FormGroup>
                         <AddressInput
                           label="Address"
+                          optional={true}
                           address={address}
                           setAddress={setAddress}
                         />
@@ -717,7 +799,9 @@ const DriverForm = ({
                           type="text"
                           value={user.phone}
                           name="phone"
-                          onChange={handleInputChange}
+                          onChange={
+                            isEditing ? handleInput1Change : handleInputChange
+                          }
                           maxLength={14}
                         />
                       </FormGroup>
@@ -744,7 +828,9 @@ const DriverForm = ({
                           type="text"
                           value={user.bankName}
                           name="bankName"
-                          onChange={handleInputChange}
+                          onChange={
+                            isEditing ? handleInput1Change : handleInputChange
+                          }
                         />
                       </FormGroup>
                     </Col>
@@ -763,7 +849,9 @@ const DriverForm = ({
                           type="text"
                           value={user.iban}
                           name="iban"
-                          onChange={handleInputChange}
+                          onChange={
+                            isEditing ? handleInput1Change : handleInputChange
+                          }
                         />
                       </FormGroup>
                     </Col>
@@ -781,9 +869,6 @@ const DriverForm = ({
                           className="form-control-label"
                           htmlFor="input-id-front"
                         >
-                          <span style={{ color: "red" }}>
-                            {user.id_front ? "" : "*"}
-                          </span>{" "}
                           Add Identity Card/Passport/Residence Permit Front Side{" "}
                           <i className="fa fa-id-card" />
                         </label>
@@ -792,7 +877,9 @@ const DriverForm = ({
                           id="input-id-front"
                           name="id_front"
                           type="file"
-                          onChange={handleFileChange}
+                          onChange={
+                            isEditing ? handleFile1Change : handleFileChange
+                          }
                         />
                       </FormGroup>
                     </Col>
@@ -802,9 +889,6 @@ const DriverForm = ({
                           className="form-control-label"
                           htmlFor="input-id-back"
                         >
-                          <span style={{ color: "red" }}>
-                            {user.id_back ? "" : "*"}
-                          </span>{" "}
                           Add Identity Card/Passport/Residence Permit Back Side{" "}
                           <i className="fa fa-id-card" />
                         </label>
@@ -814,7 +898,9 @@ const DriverForm = ({
                           id="input-id-back"
                           name="id_back"
                           type="file"
-                          onChange={handleFileChange}
+                          onChange={
+                            isEditing ? handleFile1Change : handleFileChange
+                          }
                         />
                       </FormGroup>
                     </Col>
@@ -826,9 +912,6 @@ const DriverForm = ({
                           className="form-control-label"
                           htmlFor="input-vtc-front"
                         >
-                          <span style={{ color: "red" }}>
-                            {user.vtc_back ? "" : "*"}
-                          </span>{" "}
                           Add VTC Card Front Side{" "}
                           <i className="fa fa-id-card" />
                         </label>
@@ -837,7 +920,9 @@ const DriverForm = ({
                           id="input-vtc-front"
                           name="vtc_front"
                           type="file"
-                          onChange={handleFileChange}
+                          onChange={
+                            isEditing ? handleFile1Change : handleFileChange
+                          }
                         />
                       </FormGroup>
                     </Col>
@@ -847,9 +932,6 @@ const DriverForm = ({
                           className="form-control-label"
                           htmlFor="input-vtc-back"
                         >
-                          <span style={{ color: "red" }}>
-                            {user.vtc_back ? "" : "*"}
-                          </span>{" "}
                           Add VTC Card Back Side <i className="fa fa-id-card" />
                         </label>
 
@@ -858,7 +940,9 @@ const DriverForm = ({
                           id="input-vtc-back"
                           name="vtc_back"
                           type="file"
-                          onChange={handleFileChange}
+                          onChange={
+                            isEditing ? handleFile1Change : handleFileChange
+                          }
                         />
                       </FormGroup>
                     </Col>
@@ -870,9 +954,6 @@ const DriverForm = ({
                           className="form-control-label"
                           htmlFor="input-license-front"
                         >
-                          <span style={{ color: "red" }}>
-                            {user.license_front ? "" : "*"}
-                          </span>{" "}
                           Add License Card Front Side{" "}
                           <i className="fa fa-id-card" />
                         </label>
@@ -881,7 +962,9 @@ const DriverForm = ({
                           id="input-license-front"
                           name="license_front"
                           type="file"
-                          onChange={handleFileChange}
+                          onChange={
+                            isEditing ? handleFile1Change : handleFileChange
+                          }
                         />
                       </FormGroup>
                     </Col>
@@ -891,9 +974,6 @@ const DriverForm = ({
                           className="form-control-label"
                           htmlFor="input-license-back"
                         >
-                          <span style={{ color: "red" }}>
-                            {user.license_back ? "" : "*"}
-                          </span>{" "}
                           Add License Card Back Side{" "}
                           <i className="fa fa-id-card" />
                         </label>
@@ -903,7 +983,9 @@ const DriverForm = ({
                           id="input-license-back"
                           name="license_back"
                           type="file"
-                          onChange={handleFileChange}
+                          onChange={
+                            isEditing ? handleFile1Change : handleFileChange
+                          }
                         />
                       </FormGroup>
                     </Col>
@@ -915,9 +997,6 @@ const DriverForm = ({
                           className="form-control-label"
                           htmlFor="input-criminal-record"
                         >
-                          <span style={{ color: "red" }}>
-                            {user.criminal_record_image ? "" : "*"}
-                          </span>{" "}
                           Add Criminal Record <i className="fa fa-id-card" />
                         </label>
                         <Input
@@ -925,7 +1004,9 @@ const DriverForm = ({
                           id="input-criminal-record"
                           name="criminal_record_image"
                           type="file"
-                          onChange={handleFileChange}
+                          onChange={
+                            isEditing ? handleFile1Change : handleFileChange
+                          }
                         />
                       </FormGroup>
                     </Col>
@@ -936,7 +1017,7 @@ const DriverForm = ({
                           htmlFor="input-date"
                         >
                           <span style={{ color: "red" }}>
-                            {user.criminal_record_date ? "" : "*"}
+                            {user.criminal_record_image && "*"}
                           </span>{" "}
                           Valid Till
                         </label>
@@ -949,7 +1030,9 @@ const DriverForm = ({
                           type="date"
                           value={user?.criminal_record_date?.split("T")[0]}
                           name="criminal_record_date"
-                          onChange={handleInputChange}
+                          onChange={
+                            isEditing ? handleInput1Change : handleInputChange
+                          }
                           min={moment(current).format("YYYY-MM-DD")}
                         />
                       </FormGroup>
@@ -962,9 +1045,6 @@ const DriverForm = ({
                           className="form-control-label"
                           htmlFor="input-restricted-information-statement"
                         >
-                          <span style={{ color: "red" }}>
-                            {user.ris_image ? "" : "*"}
-                          </span>{" "}
                           Add Restricted Information Statement{" "}
                           <i className="fa fa-id-card" />
                         </label>
@@ -974,7 +1054,9 @@ const DriverForm = ({
                           id="input-restricted-information-statement"
                           name="ris_image"
                           type="file"
-                          onChange={handleFileChange}
+                          onChange={
+                            isEditing ? handleFile1Change : handleFileChange
+                          }
                         />
                       </FormGroup>
                     </Col>
@@ -985,8 +1067,8 @@ const DriverForm = ({
                           htmlFor="input-date"
                         >
                           <span style={{ color: "red" }}>
-                            {user.ris_date ? "" : "*"}
-                          </span>{" "}
+                            {user.ris_image ? (user?.ris_date ? "" : "*") : ""}
+                          </span>
                           Valid Till
                         </label>
                         <Input
@@ -997,7 +1079,9 @@ const DriverForm = ({
                           type="date"
                           value={user?.ris_date?.split("T")[0]}
                           name="ris_date"
-                          onChange={handleInputChange}
+                          onChange={
+                            isEditing ? handleInput1Change : handleInputChange
+                          }
                           min={moment(current).format("YYYY-MM-DD")}
                         />
                       </FormGroup>
@@ -1010,9 +1094,6 @@ const DriverForm = ({
                           className="form-control-label"
                           htmlFor="input-kbis"
                         >
-                          <span style={{ color: "red" }}>
-                            {user.kbis_image ? "" : "*"}
-                          </span>{" "}
                           Add KBIS <i className="fa fa-id-card" />
                         </label>
 
@@ -1021,7 +1102,9 @@ const DriverForm = ({
                           id="input-kbis"
                           name="kbis_image"
                           type="file"
-                          onChange={handleFileChange}
+                          onChange={
+                            isEditing ? handleFile1Change : handleFileChange
+                          }
                         />
                       </FormGroup>
                     </Col>
@@ -1033,8 +1116,12 @@ const DriverForm = ({
                           htmlFor="input-date"
                         >
                           <span style={{ color: "red" }}>
-                            {user.kbis_date ? "" : "*"}
-                          </span>{" "}
+                            {user.kbis_image
+                              ? user?.kbis_date
+                                ? ""
+                                : "*"
+                              : ""}
+                          </span>
                           Valid Till
                         </label>
 
@@ -1046,7 +1133,9 @@ const DriverForm = ({
                           type="date"
                           value={user?.kbis_date?.split("T")[0]}
                           name="kbis_date"
-                          onChange={handleInputChange}
+                          onChange={
+                            isEditing ? handleInput1Change : handleInputChange
+                          }
                           min={moment(current).format("YYYY-MM-DD")}
                         />
                       </FormGroup>
@@ -1059,9 +1148,6 @@ const DriverForm = ({
                           className="form-control-label"
                           htmlFor="input-pro_rc_insurance_certificate"
                         >
-                          <span style={{ color: "red" }}>
-                            {user.proRc_image ? "" : "*"}
-                          </span>{" "}
                           Add Pro RC Insurance Certificate{" "}
                           <i className="fa fa-id-card" />
                         </label>
@@ -1071,7 +1157,10 @@ const DriverForm = ({
                           id="input-pro_rc_insurance_certificate"
                           name="proRc_image"
                           type="file"
-                          onChange={handleFileChange}
+                          title=" "
+                          onChange={
+                            isEditing ? handleFile1Change : handleFileChange
+                          }
                         />
                       </FormGroup>
                     </Col>
@@ -1082,8 +1171,12 @@ const DriverForm = ({
                           htmlFor="input-date"
                         >
                           <span style={{ color: "red" }}>
-                            {user.proRc_date ? "" : "*"}
-                          </span>{" "}
+                            {user.proRc_image
+                              ? user?.proRc_date
+                                ? ""
+                                : "*"
+                              : ""}
+                          </span>
                           Valid Till
                         </label>
                         <Input
@@ -1094,7 +1187,9 @@ const DriverForm = ({
                           type="date"
                           value={user?.proRc_date?.split("T")[0]}
                           name="proRc_date"
-                          onChange={handleInputChange}
+                          onChange={
+                            isEditing ? handleInput1Change : handleInputChange
+                          }
                           min={moment(current).format("YYYY-MM-DD")}
                         />
                       </FormGroup>

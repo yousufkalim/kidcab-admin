@@ -28,6 +28,7 @@ const TripList = () => {
   const [dates, setDates] = useState([]);
   const [typefilter, setTypeFilter] = useState(false);
   const [datefilter, setDateFilter] = useState(false);
+  const [driverfilter, setDriverFilter] = useState(false);
   const [selectedItems, setSelectedItems] = useState([]);
 
   const handleSelect = (trip) => {
@@ -53,7 +54,6 @@ const TripList = () => {
     return openModal;
   };
   const autoRefresh = () => {
-    console.log(filterdropDownItem, "filterdropDownItem");
     api("get", `trips/status/${filterdropDownItem}`).then((res) => {
       console.log("response --------", res?.data?.trips);
       setTrips(res?.data?.trips);
@@ -61,13 +61,30 @@ const TripList = () => {
   };
 
   const filterArr = React.useMemo(() => {
+    {
+      console.log("filter", filter);
+    }
     if (filter === "") return trips;
-    return trips.filter((trip) =>
-      (
-        trip.client.first_name.toLowerCase() +
-        trip.client.last_name.toLowerCase()
-      ).includes(filter.split(" ").join(""))
-    );
+    else if (typefilter === true) {
+      return trips.filter((trip) =>
+        (
+          trip.client.first_name.toLowerCase() +
+          trip.client.last_name.toLowerCase()
+        ).includes(filter.split(" ").join(""))
+      );
+    } else if (driverfilter === true) {
+      return trips
+        ?.map((trip) => {
+          let val = trip?.invited_drivers?.filter((driver) => {
+            return (
+              driver?.driver?.first_name.toLowerCase() +
+              driver?.driver?.last_name.toLowerCase()
+            ).includes(filter.split(" ").join(""));
+          });
+          return { ...trip, invited_drivers: val };
+        })
+        .filter((v) => v.invited_drivers.length > 0);
+    }
   }, [filter, trips]);
 
   const filterCheck = (e) => {
@@ -76,19 +93,28 @@ const TripList = () => {
     if (e.target.name === "all") {
       setTypeFilter(false);
       setDateFilter(false);
+      setDriverFilter(false);
       setFilter("");
       setFilterDropDownItem(e.target.name);
       autoRefresh();
     } else if (e.target.name == "date-filter") {
-      if (typefilter === true) {
+      if (typefilter === true || driverfilter === true) {
         setTypeFilter(false);
+        setDriverFilter(false);
       }
       setDateFilter((prevCheck) => !prevCheck);
     } else if (e.target.name === "trip-type-filter") {
-      if (datefilter === true) {
+      if (datefilter === true || driverfilter === true) {
         setDateFilter(false);
+        setDriverFilter(false);
       }
       setTypeFilter((prevCheck) => !prevCheck);
+    } else if (e.target.name === "driver-filter") {
+      if (datefilter === true || typefilter === true) {
+        setTypeFilter(false);
+        setDateFilter(false);
+      }
+      setDriverFilter((prevCheck) => !prevCheck);
     }
   };
 
@@ -129,7 +155,7 @@ const TripList = () => {
 
   return (
     <>
-      {console.log(filterdropDownItem)}
+      {console.log(datefilter, "d", typefilter, "t", driverfilter, "dr")}
       <Container className="mt--7" fluid>
         <Row>
           <div className="col">
@@ -178,6 +204,12 @@ const TripList = () => {
                         </DropdownItem>
                         <DropdownItem name="date-filter" onClick={filterCheck}>
                           Filter By Date
+                        </DropdownItem>
+                        <DropdownItem
+                          name="driver-filter"
+                          onClick={filterCheck}
+                        >
+                          Filter By Driver
                         </DropdownItem>
                       </DropdownMenu>
                     </UncontrolledDropdown>
@@ -346,8 +378,35 @@ const TripList = () => {
                       </div>
                     </div>
                   </>
+                ) : driverfilter ? (
+                  <>
+                    <div
+                      className="Trip_Filer"
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        margin: "11px",
+                        marginTop: "24px",
+                      }}
+                    >
+                      <div style={{ width: "60%" }}>
+                        <Input
+                          aria-label="Search"
+                          className="form-control-rounded "
+                          placeholder="Search Driver name"
+                          type="search"
+                          name="driver-search"
+                          style={{ border: "none", backgroundColor: "#e8f7ff" }}
+                          onChange={(e) => {
+                            setFilter(e.target.value.toLowerCase());
+                          }}
+                        />
+                      </div>
+                    </div>
+                  </>
                 ) : (
-                  ""
+                  " "
                 )}
               </CardHeader>
               <Table className="align-items-center table-flush my-3" responsive>
