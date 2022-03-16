@@ -36,9 +36,9 @@ const VehicleForm = ({
     model: "",
     color: "",
     engine_type: "",
-    gray_card: "",
-    inspection_info: "",
-    inspection_expiry_date: "",
+    inspection_date: "",
+    graycard: "",
+    graycard_expiry_date: "",
     driver: "",
   });
 
@@ -51,10 +51,10 @@ const VehicleForm = ({
         model: editVehicle.model,
         color: editVehicle.color,
         engine_type: editVehicle.engine_type,
-        gray_card: editVehicle.gray_card,
-        inspection_info: editVehicle.inspection_info,
+        inspection_date: editVehicle.inspection_date,
+        graycard: editVehicle.graycard,
         driver: editVehicle.driver,
-        inspection_expiry_date: editVehicle.inspection_expiry_date,
+        graycard_expiry_date: editVehicle.graycard_expiry_date,
         insurance_expiry_date: editVehicle.insurance_expiry_date,
       });
     }
@@ -99,8 +99,6 @@ const VehicleForm = ({
     let method = "post";
     let uri = "vehicles";
     let d = new Date();
-
-    console.log();
     if (vehicle.vehicle_name == "") {
       return toast.error("Please enter vehicle name");
     }
@@ -119,8 +117,8 @@ const VehicleForm = ({
     if (vehicle.engine_type == "") {
       return toast.error("Please enter your engine type");
     }
-    if (vehicle.gray_card == "") {
-      return toast.error("Please enter grey card");
+    if (vehicle.inspection_date == "") {
+      return toast.error("Please enter Last inspection_date");
     }
     if (vehicle.insurance_certificate == "") {
       return toast.error("Please enter your vehicle's insurance card");
@@ -136,7 +134,7 @@ const VehicleForm = ({
     formData.append("model", vehicle.model);
     formData.append("color", vehicle.color);
     formData.append("engine_type", vehicle.engine_type);
-    formData.append("gray_card", vehicle.gray_card);
+    formData.append("inspection_date", vehicle.inspection_date);
     formData.append("driver", JSON.stringify(vehicle.driver));
 
     if (vehicle.insurance_certificate) {
@@ -144,9 +142,9 @@ const VehicleForm = ({
       formData.append("insurance_expiry_date", vehicle.insurance_expiry_date);
     }
 
-    if (vehicle.inspection_info) {
-      formData.append("inspection_info", vehicle.inspection_info);
-      formData.append("inspection_expiry_date", vehicle.inspection_expiry_date);
+    if (vehicle.graycard) {
+      formData.append("graycard", vehicle.graycard);
+      formData.append("graycard_expiry_date", vehicle.graycard_expiry_date);
     }
 
     if (vehicle.registration_card) {
@@ -172,6 +170,7 @@ const VehicleForm = ({
 
   return (
     <>
+      {console.log("v", vehicle)}
       <Modal isOpen={openModal} size="xl" centered>
         <ModalHeader charCode="X" toggle={handleModal}>
           {isEditing ? "Edit" : "Add"} Vehicle
@@ -317,18 +316,20 @@ const VehicleForm = ({
                           className="form-control-label"
                         >
                           <span style={{ color: "red" }}>
-                            {vehicle.gray_card ? "" : "*"}
+                            {vehicle.inspection_date ? "" : "*"}
                           </span>{" "}
-                          Gray Card
+                          Last technical inspection
                         </Label>
                         <Input
-                          id="exampleSelect"
-                          name="gray_card"
-                          value={vehicle.gray_card}
-                          onChange={handleInputChange}
                           className="form-control-alternative"
-                          placeholder="Enter Vehicle Gray Card Information"
-                          type="text"
+                          id="input-date"
+                          name="inspection_date"
+                          required={true}
+                          placeholder="Enter last technical inspection date"
+                          value={vehicle?.inspection_date?.split("T")[0]}
+                          onChange={handleInputChange}
+                          type="date"
+                          max={moment(current).format("YYYY-MM-DD")}
                         />
                       </FormGroup>
                     </Col>
@@ -362,16 +363,13 @@ const VehicleForm = ({
                           className="form-control-label"
                           htmlFor="input-inspection-info"
                         >
-                          {/* <span style={{ color: "red" }}>
-                            {vehicle.inspection_info ? "" : "*"}
-                          </span>{" "} */}
-                          Add Inspection Card
+                          Add Gray Card
                           <i className="fa fa-id-card" />
                         </label>
                         <Input
                           className="form-control-file form"
-                          id="input-inspection-info"
-                          name="inspection_info"
+                          id="input-graycard"
+                          name="graycard"
                           type="file"
                           onChange={handleFileChange}
                         />
@@ -386,7 +384,7 @@ const VehicleForm = ({
                           {/* <span style={{ color: "red" }}>
                             {vehicle.inspection_expiry_date ? "" : "*"}
                           </span>{" "} */}
-                          Inspection Valid Till
+                          Gray Valid Till
                         </label>
 
                         <Input
@@ -395,8 +393,8 @@ const VehicleForm = ({
                           required={true}
                           placeholder="Enter validity date"
                           type="date"
-                          value={vehicle?.inspection_expiry_date?.split("T")[0]}
-                          name="inspection_expiry_date"
+                          value={vehicle?.graycard_expiry_date?.split("T")[0]}
+                          name="graycard_expiry_date"
                           onChange={handleInputChange}
                           min={moment(current).format("YYYY-MM-DD")}
                         />
