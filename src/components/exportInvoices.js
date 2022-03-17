@@ -47,45 +47,6 @@ export const ExportInvoices = ({ dropDownItem, invoices }) => {
   };
 
   //exporting pdf
-  const handleSubmitPdf = async () => {
-    let tableRows;
-
-    if (invoices.length > 0) {
-      tableRows = invoices.map((item) => {
-        return [
-          item.invoice_title,
-          new Date(item.issue_date).toLocaleString(),
-          item.status,
-          item.total_price,
-          item.trip.quote.quote_title,
-        ];
-      });
-    } else {
-      const res = await api("get", `invoices/status/${dropDownItem}`);
-      tableRows = res.data?.invoices?.map((item) => {
-        return [
-          item.invoice_title,
-          new Date(item.issue_date).toLocaleString(),
-          item.status,
-          item.total_price,
-          item.trip.quote.quote_title,
-        ];
-      });
-    }
-
-    const doc = new jsPDF();
-
-    doc.autoTable(myHeader, tableRows, {
-      startY: 54,
-      theme: "grid",
-      styles: {
-        align: "center",
-      },
-    });
-
-    doc.save("Invoices.pdf");
-  };
-
   const handleExportPdf = async () => {
     let invoiceIds = invoices.map((invoice) => {
       return invoice._id;
