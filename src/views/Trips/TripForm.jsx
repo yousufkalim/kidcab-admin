@@ -448,7 +448,8 @@ const TripForm = ({
                               style={{ height: "calc(1.5em + 1.25rem + 2px)" }}
                               name="time"
                               disableClock={true}
-                              amPmAriaLabel={null}
+                              clockIcon={null}
+                              amPmAriaLabel={true}
                               value={value}
                               onChange={onChange}
                             />
@@ -493,7 +494,7 @@ const TripForm = ({
                               htmlFor="input-date"
                             >
                               <span style={{ color: "red" }}>
-                                {trip.dBate ? "" : "*"}
+                                {trip.enddate ? "" : "*"}
                               </span>{" "}
                               End Date
                             </label>

@@ -24,6 +24,7 @@ const InvoiceList = () => {
   const [openModal, setOpenModal] = useState(false);
   const [invoices, setInvoices] = useState();
   const [dropDownItem, setDropDownItem] = useState("all");
+  const [statusdropDown, setStatusDropDown] = useState("Bulk Action");
   const [selectedItems, setSelectedItems] = useState([]);
 
   const handleSelect = (invoice) => {
@@ -53,11 +54,28 @@ const InvoiceList = () => {
     });
   };
 
+  const changeStatus = (e) => {
+    e.preventDefault();
+    setStatusDropDown(e.target.name);
+    let value = e.target.name;
+    api("post", `invoices/setstatus`, {
+      invoices: selectedItems,
+      value: value,
+    }).then((res) => {
+      // console.log(res.data.updatedinvoices);
+      setInvoices(res.data.updatedinvoices);
+      toast.success("Status Updated successfully");
+      setSelectedItems([]);
+      setStatusDropDown("Bulk Action");
+    });
+  };
+
   useEffect(() => {
     autoRefresh();
-  }, [openModal, dropDownItem]);
+  }, [openModal, dropDownItem, invoices]);
   return (
     <>
+      {console.log(selectedItems, "s")}
       <Container className="mt--7" fluid>
         {/* Table */}
         <Row>
@@ -78,6 +96,35 @@ const InvoiceList = () => {
                         >
                           Delete Invoices
                         </Button>
+                        <UncontrolledDropdown>
+                          <DropdownToggle
+                            color="primary"
+                            name
+                            href="#pablo"
+                            role="button"
+                            caret
+                            style={{ textTransform: "capitalize" }}
+                          >
+                            {statusdropDown}
+                          </DropdownToggle>
+                          <DropdownMenu>
+                            <DropdownItem name="pending" onClick={changeStatus}>
+                              Pending
+                            </DropdownItem>
+                            <DropdownItem name="paid" onClick={changeStatus}>
+                              Paid
+                            </DropdownItem>
+                            <DropdownItem name="late" onClick={changeStatus}>
+                              Late
+                            </DropdownItem>
+                            <DropdownItem
+                              name="cancelled"
+                              onClick={changeStatus}
+                            >
+                              cancel
+                            </DropdownItem>
+                          </DropdownMenu>
+                        </UncontrolledDropdown>{" "}
                         <ExportInvoices
                           dropDownItem={dropDownItem}
                           invoices={selectedItems}

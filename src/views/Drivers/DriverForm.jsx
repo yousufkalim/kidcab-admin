@@ -48,6 +48,10 @@ const DriverForm = ({
     proRc_date: "",
     license_front: "",
     license_back: "",
+    kbis_extract: "",
+    rib: "",
+    professional_liability: "",
+    insurance_civil_liability: "",
     firstName: "",
     lastName: "",
     email: "",
@@ -83,7 +87,6 @@ const DriverForm = ({
 
   useEffect(() => {
     if (isClose) {
-      console.log("v", editUser.vehicles);
       setUser({
         firstName: editUser?.firstName,
         lastName: editUser?.lastName,
@@ -117,6 +120,10 @@ const DriverForm = ({
         vtc_back: editUser?.vtc_back,
         license_front: editUser?.license_front,
         license_back: editUser?.license_back,
+        kbis_extract: editUser?.kbis_extract,
+        rib: editUser?.rib,
+        professional_liability: editUser?.professional_liability,
+        insurance_civil_liability: editUser?.insurance_civil_liability,
         address: editUser?.address,
       });
       setAddress(editUser?.address);
@@ -141,7 +148,6 @@ const DriverForm = ({
         social_capital: editUser?.company?.social_capital,
         vat_number: editUser?.company?.vat_number,
         city_of_rcs: editUser?.company?.city_of_rcs,
-        profile_pic: editUser?.profile_pic,
         criminal_record_date: editUser?.criminal_record_date,
         kbis_date: editUser?.kbis_date,
         ris_date: editUser?.ris_date,
@@ -168,7 +174,6 @@ const DriverForm = ({
   }, []);
 
   const handleFile1Change = (e) => {
-    console.log(e.target.files[0]);
     setUser({ ...user, [e.target.name]: e.target.files[0] });
   };
 
@@ -210,20 +215,26 @@ const DriverForm = ({
     let uri = "drivers";
 
     const bankInfo = {
-      bank_name: user.bankName,
-      iban: user.iban,
+      bank_name: user?.bankName,
+      iban: user?.iban,
     };
 
     const formData = new FormData();
-    if (user.profile_pic)
-      formData.append("profile_pic", user.profile_pic, user.profile_pic?.name);
+    if (user?.profile_pic)
+      formData.append(
+        "profile_pic",
+        user?.profile_pic,
+        user?.profile_pic?.name
+      );
     formData.append("first_name", user.firstName);
     formData.append("last_name", user.lastName);
     formData.append("email", user.email);
     formData.append("password", user.password);
     formData.append("role", user.role);
     formData.append("phone_number", user.phone);
-    formData.append("address", JSON.stringify(address));
+    if (address?.lat && address?.lng) {
+      formData.append("address", JSON.stringify(address));
+    }
     formData.append("vehicles", JSON.stringify(user.vehicles));
     formData.append("bank_info", JSON.stringify(bankInfo));
 
@@ -239,9 +250,36 @@ const DriverForm = ({
           city_of_rcs: user.city_of_rcs,
         })
       );
+      if (user.kbis_extract) {
+        formData.append(
+          "kbis_extract",
+          user.kbis_extract,
+          user.kbis_extract?.name
+        );
+      }
+
+      if (user.rib) {
+        formData.append("rib", user.rib, user.rib?.name);
+      }
+
+      if (user.professional_liability) {
+        formData.append(
+          "professional_liability",
+          user.professional_liability,
+          user.professional_liability?.name
+        );
+      }
+
+      if (user.insurance_civil_liability) {
+        formData.append(
+          "insurance_civil_liability",
+          user.insurance_civil_liability,
+          user.insurance_civil_liability?.name
+        );
+      }
     }
 
-    if (user.criminal_record_image) {
+    if (user?.criminal_record_image) {
       if (user?.criminal_record_date == "") {
         return toast.error("Please enter criminal_record expirty date");
       }
@@ -344,6 +382,7 @@ const DriverForm = ({
 
   return (
     <>
+      {console.log("user", user)}
       <Modal isOpen={openModal} size="xl" centered>
         <ModalHeader charCode="X" toggle={handleModal}>
           {isEditing ? "Edit" : "Add"} Driver
@@ -779,6 +818,86 @@ const DriverForm = ({
                           </FormGroup>
                         </Col>
                       </Row>
+                      <Row>
+                        <Col lg="3">
+                          <FormGroup>
+                            <label
+                              className="form-control-label"
+                              htmlFor="input-id-front"
+                            >
+                              Add insurance civil liability{" "}
+                              <i className="fa fa-id-card" />
+                            </label>
+                            <Input
+                              className="form-control-file form"
+                              id="input-insurance-civil-liability"
+                              name="insurance_civil_liability"
+                              type="file"
+                              onChange={
+                                isEditing ? handleFile1Change : handleFileChange
+                              }
+                            />
+                          </FormGroup>
+                        </Col>
+                        <Col lg="3">
+                          <FormGroup>
+                            <label
+                              className="form-control-label"
+                              htmlFor="input-id-front"
+                            >
+                              Add Professional liability{" "}
+                              <i className="fa fa-id-card" />
+                            </label>
+                            <Input
+                              className="form-control-file form"
+                              id="input-Professional-liability"
+                              name="professional_liability"
+                              type="file"
+                              onChange={
+                                isEditing ? handleFile1Change : handleFileChange
+                              }
+                            />
+                          </FormGroup>
+                        </Col>
+                        <Col lg="3">
+                          <FormGroup>
+                            <label
+                              className="form-control-label"
+                              htmlFor="input-id-front"
+                            >
+                              Add RIB <i className="fa fa-id-card" />
+                            </label>
+                            <Input
+                              className="form-control-file form"
+                              id="input-RIB"
+                              name="rib"
+                              type="file"
+                              onChange={
+                                isEditing ? handleFile1Change : handleFileChange
+                              }
+                            />
+                          </FormGroup>
+                        </Col>
+                        <Col lg="3">
+                          <FormGroup>
+                            <label
+                              className="form-control-label"
+                              htmlFor="input-id-front"
+                            >
+                              Add Kbis extract <i className="fa fa-id-card" />
+                            </label>
+                            <Input
+                              className="form-control-file form"
+                              id="input-kbis-extract"
+                              name="kbis_extract"
+                              type="file"
+                              onChange={
+                                isEditing ? handleFile1Change : handleFileChange
+                              }
+                            />
+                          </FormGroup>
+                        </Col>
+                      </Row>{" "}
                     </div>
                   </>
                 )}
@@ -845,7 +964,7 @@ const DriverForm = ({
                           id="input-bankName"
                           placeholder="Bank Name"
                           type="text"
-                          value={user.bankName}
+                          value={user?.bankName}
                           name="bankName"
                           onChange={
                             isEditing ? handleInput1Change : handleInputChange

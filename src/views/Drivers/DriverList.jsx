@@ -53,12 +53,17 @@ const DriverList = () => {
     social_capital: "",
     vat_number: "",
     city_of_rcs: "",
+    kbis_extract: "",
+    rib: "",
+    professional_liability: "",
+    insurance_civil_liability: "",
   });
   const handleModal = () => {
     setOpenModal((open) => !open);
     return openModal;
   };
   const handleFileChange = (e) => {
+    console.log("handleFileChange");
     setUser({ ...user, [e.target.name]: e.target.files[0] });
   };
 
