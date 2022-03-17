@@ -75,7 +75,6 @@ const InvoiceList = () => {
   }, [openModal, dropDownItem, invoices]);
   return (
     <>
-      {console.log(selectedItems, "s")}
       <Container className="mt--7" fluid>
         {/* Table */}
         <Row>
