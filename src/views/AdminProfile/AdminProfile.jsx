@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
-import AddressInput from "components/Form/AddressInput";
 import api from "../../api";
 import { UpdateStore } from "StoreContext";
 import {
@@ -18,86 +17,24 @@ import {
 // core components
 
 const AdminProfile = ({ openModal, handleModal, user }) => {
-  const [company, setCompany] = useState({
+  const [admin, setAdmin] = useState({
     firstName: "",
     lastName: "",
     email: "",
-    address: "",
-    phoneNumber: "",
-    companyName: "",
-    siret: "",
-    vat: "",
-    legalForm: "",
-    shareCapital: "",
-    rcsCity: "",
-    bankName: "",
-    iban: "",
   });
   const updateStore = UpdateStore();
 
   useEffect(() => {
-    setCompany({
+    setAdmin({
       firstName: user.name?.first_name || "",
       lastName: user.name?.last_name || "",
       email: user.email || "",
-      phoneNumber: user.phone_number || "",
-      vat: user.vat_number || "",
-      companyName: user.company_name || "",
-      siret: user.siret_number || "",
-      legalForm: user.legal_form || "",
-      shareCapital: user.share_capital || "",
-      rcsCity: user.rcs_city || "",
-      bankName: user.bank_name || "",
-      iban: user.iban || "",
-      address: user.address || "",
     });
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleFileChange = (e) => {
-    setCompany({ ...company, [e.target.name]: e.target.files[0] });
-  };
   const handleInputChange = (e) => {
-    setCompany({ ...company, [e.target.name]: e.target.value });
+    setAdmin({ ...admin, [e.target.name]: e.target.value });
   };
-
-  // const handleDelete = () => {
-  //   let method = "delete";
-  //   let uri = "companys";
-  //   if (user) {
-  //     method = "delete";
-  //     uri = uri + `/${user._id}`;
-  //   }
-  //   api(method, uri).then((res) => {
-  //     // eslint-disable-next-line eqeqeq
-  //     if (res.status == 200) {
-  //       toast.success("Delete Successfully");
-  //       handleModal();
-  //       autoRefresh();
-  //     } else {
-  //       toast.error("Delete Error", res.data.message);
-  //     }
-  //   });
-  // };
-  // const admin = {
-  //   first_name: company.firstName,
-  //   last_name: company.lastName,
-  //   email: company.email,
-  //   password: company.password,
-  //   logo: company.logo,
-  //   phone_number: company.phoneNumber,
-  //   address: JSON.stringify(address),
-  //   siret_number: company.siret,
-  //   vat: company.vat,
-  //   legal_form: company.legalForm,
-  //   share_capital: company.shareCapital,
-  //   rcs_city: company.rcsCity,
-  //   bank_account: company.bankAccount,
-  //   bank_name: company.bankName,
-  //   iban: company.iban,
-  //   bic: company.bic,
-  // };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -109,49 +46,15 @@ const AdminProfile = ({ openModal, handleModal, user }) => {
     formData.append(
       "name",
       JSON.stringify({
-        first_name: company.firstName,
-        last_name: company.lastName,
+        first_name: admin.firstName,
+        last_name: admin.lastName,
       })
     );
-    formData.append("email", company.email);
-    formData.append("phone_number", company.phoneNumber);
-    formData.append("address", company.address);
-    formData.append("company_name", company.companyName);
-    formData.append("siret_number", company.siret);
-    formData.append("vat", company.vat);
-    formData.append("legal_form", company.legalForm);
-    formData.append("share_capital", company.shareCapital);
-    formData.append("rcs_city", company.rcsCity);
-    formData.append("bank_name", company.bankName);
-    formData.append("iban", company.iban);
+    formData.append("email", admin.email);
 
-    if (company.password) {
-      formData.append("password", company.password);
+    if (admin.password) {
+      formData.append("password", admin.password);
     }
-
-    if (company.logo) {
-      formData.append("logo", company.logo);
-    }
-
-    // if (company.name == "") {
-    //   return toast.error("Please enter your name");
-    // }
-    // if (company.lastName == "") {
-    //   return toast.error("Please enter your last name");
-    // }
-    // if (company.email == "") {
-    //   return toast.error("Please enter email");
-    // }
-    // if (!(company.email.includes(".") && company.email.includes("@"))) {
-    //   return toast.error("Please enter a valid email");
-    // }
-
-    // if (company.password == "") {
-    //   return toast.error("Password is required");
-    // }
-    // if (company.password.length < 8) {
-    //   return toast.error("Passwords should be of atleast 8 letters");
-    // }
 
     uri = uri + `/${user._id}`;
 
@@ -159,7 +62,6 @@ const AdminProfile = ({ openModal, handleModal, user }) => {
       // eslint-disable-next-line eqeqeq
       let admin = res.data.admin;
       if (res.status == 200) {
-        console.log("RES======>", res.data.admin);
         toast.success("Saved Successfully");
 
         updateStore({
@@ -177,9 +79,6 @@ const AdminProfile = ({ openModal, handleModal, user }) => {
         toast.error("Save Error", res);
       }
     });
-    console.log("=========================", company);
-
-    //window.location.reload();
   };
 
   return (
@@ -202,7 +101,7 @@ const AdminProfile = ({ openModal, handleModal, user }) => {
                         >
                           <span style={{ color: "red" }}>
                             {" "}
-                            {company.firstName ? "" : "*"}{" "}
+                            {admin.firstName ? "" : "*"}{" "}
                           </span>
                           {""} First Name
                         </label>
@@ -212,7 +111,7 @@ const AdminProfile = ({ openModal, handleModal, user }) => {
                           required={true}
                           placeholder="John"
                           type="text"
-                          value={company.firstName}
+                          value={admin.firstName}
                           name="firstName"
                           onChange={handleInputChange}
                         />
@@ -226,7 +125,7 @@ const AdminProfile = ({ openModal, handleModal, user }) => {
                         >
                           <span style={{ color: "red" }}>
                             {" "}
-                            {company.lastName ? "" : "*"}{" "}
+                            {admin.lastName ? "" : "*"}{" "}
                           </span>
                           {""} Last Name
                         </label>
@@ -236,7 +135,7 @@ const AdminProfile = ({ openModal, handleModal, user }) => {
                           required={true}
                           placeholder="John"
                           type="text"
-                          value={company.lastName}
+                          value={admin.lastName}
                           name="lastName"
                           onChange={handleInputChange}
                         />
@@ -249,7 +148,7 @@ const AdminProfile = ({ openModal, handleModal, user }) => {
                           htmlFor="input-email"
                         >
                           <span style={{ color: "red" }}>
-                            {company.email ? "" : "*"} {""}
+                            {admin.email ? "" : "*"} {""}
                           </span>
                           Email Address
                         </label>
@@ -259,7 +158,7 @@ const AdminProfile = ({ openModal, handleModal, user }) => {
                           className="form-control-alternative"
                           id="input-email"
                           placeholder="johndoe@example.com"
-                          value={company.email}
+                          value={admin.email}
                           onChange={handleInputChange}
                         />
                       </FormGroup>
@@ -277,247 +176,8 @@ const AdminProfile = ({ openModal, handleModal, user }) => {
                           id="input-password"
                           placeholder="Password"
                           type="password"
-                          value={company.password}
+                          value={admin.password}
                           name="password"
-                          onChange={handleInputChange}
-                        />
-                      </FormGroup>
-                    </Col>
-                  </Row>
-                </div>
-
-                <hr className="my-4" />
-
-                {/* Contact Information */}
-                <h6 className="heading-small text-muted mb-4">
-                  Company information
-                </h6>
-
-                <div className="pl-lg-4">
-                  <Row>
-                    <Col lg="12">
-                      <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-image"
-                        >
-                          <span style={{ color: "red" }}>
-                            {company.logo ? "" : "*"}
-                          </span>{" "}
-                          Add Logo <i className="ni ni-album-2" />
-                        </label>
-                        <Input
-                          className="form-control-file form"
-                          id="input-image"
-                          name="logo"
-                          type="file"
-                          onChange={handleFileChange}
-                        />
-                      </FormGroup>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col lg="6">
-                      <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-companyName"
-                        >
-                          Company Name
-                        </label>
-                        <Input
-                          className="form-control-alternative"
-                          id="input-companyName"
-                          placeholder="Company Name"
-                          type="text"
-                          value={company.companyName}
-                          name="companyName"
-                          onChange={handleInputChange}
-                        />
-                      </FormGroup>
-                    </Col>
-                    <Col lg="6">
-                      <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-password"
-                        >
-                          City of RCS
-                        </label>
-                        <Input
-                          className="form-control-alternative"
-                          id="input-rcsCity"
-                          placeholder="City of RCS"
-                          type="text"
-                          value={company.rcsCity}
-                          name="rcsCity"
-                          onChange={handleInputChange}
-                        />
-                      </FormGroup>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col lg="6">
-                      <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-legalForm"
-                        >
-                          Legal Form
-                        </label>
-                        <Input
-                          className="form-control-alternative"
-                          id="input-shareCapital"
-                          placeholder="legal Form"
-                          type="text"
-                          value={company.legalForm}
-                          name="legalForm"
-                          onChange={handleInputChange}
-                        />
-                      </FormGroup>
-                    </Col>
-                    <Col lg="6">
-                      <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-cap"
-                        >
-                          Share Capital
-                        </label>
-                        <Input
-                          className="form-control-alternative"
-                          id="input-shareCapital"
-                          placeholder="Share Capital"
-                          type="text"
-                          value={company.shareCapital}
-                          name="shareCapital"
-                          onChange={handleInputChange}
-                        />
-                      </FormGroup>
-                    </Col>
-                  </Row>
-                </div>
-
-                <div className="pl-lg-4">
-                  <Row>
-                    <Col md="12">
-                      <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-address"
-                        >
-                          Address
-                        </label>
-                        <Input
-                          className="form-control-alternative"
-                          id="input-address"
-                          placeholder="Enter your address"
-                          type="text"
-                          value={company.address}
-                          name="address"
-                          onChange={handleInputChange}
-                        />
-                      </FormGroup>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col lg="4">
-                      <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-phone"
-                        >
-                          Phone Number
-                        </label>
-                        <Input
-                          className="form-control-alternative"
-                          id="input-phone"
-                          placeholder="+33123456789"
-                          type="text"
-                          value={company.phoneNumber}
-                          name="phoneNumber"
-                          onChange={handleInputChange}
-                          maxLength="11"
-                        />
-                      </FormGroup>
-                    </Col>
-                    <Col lg="4">
-                      <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-siret"
-                        >
-                          Siret Number
-                        </label>
-                        <Input
-                          className="form-control-alternative"
-                          id="input-siret"
-                          placeholder="79465211500013"
-                          type="text"
-                          value={company.siret}
-                          name="siret"
-                          onChange={handleInputChange}
-                        />
-                      </FormGroup>
-                    </Col>
-                    <Col lg="4">
-                      <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-intra"
-                        >
-                          VAT Number
-                        </label>
-                        <Input
-                          className="form-control-alternative"
-                          id="input-intra"
-                          placeholder="123456789"
-                          type="text"
-                          value={company.vat}
-                          name="vat"
-                          onChange={handleInputChange}
-                        />
-                      </FormGroup>
-                    </Col>
-                  </Row>
-                </div>
-
-                <div className="pl-lg-4">
-                  <Row>
-                    <Col lg="4">
-                      <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-bankName"
-                        >
-                          Bank Name
-                        </label>
-                        <Input
-                          className="form-control-alternative"
-                          id="input-bankName"
-                          placeholder="Example Bank Ltd"
-                          type="text"
-                          value={company.bankName}
-                          name="bankName"
-                          onChange={handleInputChange}
-                        />
-                      </FormGroup>
-                    </Col>
-                    <Col lg="8">
-                      <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-iban"
-                        >
-                          IBAN / BIC
-                        </label>
-                        <Input
-                          className="form-control-alternative"
-                          id="input-iban"
-                          placeholder="123456789"
-                          type="text"
-                          value={company.iban}
-                          name="iban"
                           onChange={handleInputChange}
                         />
                       </FormGroup>

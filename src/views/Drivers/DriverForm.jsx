@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import api from "../../api";
 import AddressInput from "components/Form/AddressInput";
+import View from "../../components/view";
 import {
   Modal,
   ModalBody,
@@ -67,6 +68,8 @@ const DriverForm = ({
     vat_number: "",
     city_of_rcs: "",
   });
+  const [docs, setDocs] = useState({});
+
   const [address, setAddress] = useState({
     lat: "",
     lng: "",
@@ -150,7 +153,23 @@ const DriverForm = ({
         ris_date: editUser?.ris_date,
         proRc_date: editUser?.proRc_date,
       });
-      setAddress(editUser?.address);
+      setDocs({
+        profile_pic: editUser.profile_pic,
+        id_card_front: editUser.id_card_front,
+        id_card_back: editUser.id_card_back,
+        vtc_card_front: editUser.vtc_card_front,
+        vtc_card_back: editUser.vtc_card_back,
+        criminal_record_image: editUser.criminal_record_image,
+        ris_image: editUser.ris_image,
+        kbis_image: editUser.kbis_image,
+        proRc_image: editUser.proRc_image,
+        license_card_front: editUser.license_card_front,
+        license_card_back: editUser.license_card_back,
+      });
+
+      console.log(editUser);
+
+      setAddress(editUser.address);
     }
   }, []);
 
@@ -383,7 +402,7 @@ const DriverForm = ({
                           className="form-control-label"
                           htmlFor="input-image"
                         >
-                          Add Profile Picture <i className="ni ni-album-2" />
+                          Add Profile Picture <View url={docs.profile_pic} />
                         </label>
                         <Input
                           className="form-control-file form"
@@ -989,7 +1008,7 @@ const DriverForm = ({
                           htmlFor="input-id-front"
                         >
                           Add Identity Card/Passport/Residence Permit Front Side{" "}
-                          <i className="fa fa-id-card" />
+                          <View url={docs.id_card_front} />
                         </label>
                         <Input
                           className="form-control-file form"
@@ -1009,7 +1028,7 @@ const DriverForm = ({
                           htmlFor="input-id-back"
                         >
                           Add Identity Card/Passport/Residence Permit Back Side{" "}
-                          <i className="fa fa-id-card" />
+                          <View url={docs.id_card_back} />
                         </label>
 
                         <Input
@@ -1032,7 +1051,7 @@ const DriverForm = ({
                           htmlFor="input-vtc-front"
                         >
                           Add VTC Card Front Side{" "}
-                          <i className="fa fa-id-card" />
+                          <View url={docs.vtc_card_front} />
                         </label>
                         <Input
                           className="form-control-file form"
@@ -1051,7 +1070,8 @@ const DriverForm = ({
                           className="form-control-label"
                           htmlFor="input-vtc-back"
                         >
-                          Add VTC Card Back Side <i className="fa fa-id-card" />
+                          Add VTC Card Back Side{" "}
+                          <View url={docs.vtc_card_back} />
                         </label>
 
                         <Input
@@ -1074,7 +1094,7 @@ const DriverForm = ({
                           htmlFor="input-license-front"
                         >
                           Add License Card Front Side{" "}
-                          <i className="fa fa-id-card" />
+                          <View url={docs.license_card_front} />
                         </label>
                         <Input
                           className="form-control-file form"
@@ -1094,7 +1114,7 @@ const DriverForm = ({
                           htmlFor="input-license-back"
                         >
                           Add License Card Back Side{" "}
-                          <i className="fa fa-id-card" />
+                          <View url={docs.license_card_back} />
                         </label>
 
                         <Input
@@ -1116,7 +1136,8 @@ const DriverForm = ({
                           className="form-control-label"
                           htmlFor="input-criminal-record"
                         >
-                          Add Criminal Record <i className="fa fa-id-card" />
+                          Add Criminal Record{" "}
+                          <View url={docs.criminal_record_image} />
                         </label>
                         <Input
                           className="form-control-file form"
@@ -1165,9 +1186,8 @@ const DriverForm = ({
                           htmlFor="input-restricted-information-statement"
                         >
                           Add Restricted Information Statement{" "}
-                          <i className="fa fa-id-card" />
+                          <View url={docs.ris_image} />
                         </label>
-
                         <Input
                           className="form-control-file form"
                           id="input-restricted-information-statement"
@@ -1213,7 +1233,7 @@ const DriverForm = ({
                           className="form-control-label"
                           htmlFor="input-kbis"
                         >
-                          Add KBIS <i className="fa fa-id-card" />
+                          Add KBIS <View url={docs.kbis_image} />
                         </label>
 
                         <Input
@@ -1268,7 +1288,7 @@ const DriverForm = ({
                           htmlFor="input-pro_rc_insurance_certificate"
                         >
                           Add Pro RC Insurance Certificate{" "}
-                          <i className="fa fa-id-card" />
+                          <View url={docs.proRc_image} />
                         </label>
 
                         <Input

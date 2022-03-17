@@ -15,6 +15,8 @@ import {
   Col,
   Label,
 } from "reactstrap";
+import moment from "moment";
+
 // core components
 import Select from "react-select";
 const QuotesForm = ({
@@ -192,6 +194,94 @@ const QuotesForm = ({
       uri = uri + `/${editQuote._id}`;
     }
 
+    api(method, uri, formData).then((res) => {
+      if (res.status === 200) {
+        toast.success("Saved Successfully");
+        handleModal();
+        autoRefresh();
+      } else {
+        toast.error("Save Error", res);
+      }
+    });
+  };
+  const handleDuplicate = (e) => {
+    e.preventDefault();
+    let method = "post";
+    let uri = "quotes";
+    const tripInfo = {
+      total_trips: quote.totalTrips,
+      start_date: quote.startDate,
+      end_date: quote.endDate,
+      start_address: startAddress,
+      end_address: endAddress,
+      unit_price: quote.unitPrice,
+    };
+
+    let totalPrice = quote.unitPrice * quote.totalTrips;
+
+    const formData = {};
+    formData["quote_title"] = quote.title;
+    formData["client"] = quote.client._id ? quote.client._id : quote.client;
+    formData["comment"] = quote.comment ? quote.comment : "";
+    formData["description"] = quote.description ? quote.description : "";
+    formData["quote_number"] = quote.quoteNumber;
+    formData["issue_date"] = moment(quote.issueDate).format("YYYY-MM-DD");
+    formData["total_price"] = quote.unitPrice * quote.totalTrips;
+    formData["vat"] = quote.vat;
+    formData["status"] = quote.status;
+    formData["trip_info"] = JSON.stringify(tripInfo);
+    formData["docu_sign_link"] = quote.docuSignLink;
+
+    //validations
+
+    if (quote.title == "") {
+      return toast.error("Please enter quote title");
+    }
+    if (quote.quoteNumber == "") {
+      return toast.error("Please enter quote number");
+    }
+    if (quote.client == "") {
+      return toast.error("Please enter client name");
+    }
+    if (quote.status == "") {
+      return toast.error("Please enter quote status");
+    }
+    if (quote.issueDate == "") {
+      return toast.error("Please enter issue date");
+    }
+    if (tripInfo.total_trips == "") {
+      return toast.error("Please enter total number of trips");
+    }
+    if (quote.unitPrice == "") {
+      return toast.error("Please enter quote price");
+    }
+
+    if (quote.vat == "") {
+      return toast.error("Please enter vat");
+    }
+
+    if (tripInfo.start_date == "") {
+      return toast.error("Please enter start date");
+    }
+    if (tripInfo.end_date == "") {
+      return toast.error("Please enter end date");
+    }
+    if (tripInfo.start_address.lat == "") {
+      return toast.error("Please enter start address");
+    }
+    if (tripInfo.end_address.lat == "") {
+      return toast.error("Please enter end address");
+    }
+    if (
+      startAddress.lat == endAddress.lat &&
+      startAddress.lng == endAddress.lng &&
+      startAddress.PostalCode == endAddress.PostalCode &&
+      startAddress.city == endAddress.city
+    ) {
+      return toast.error("Start and end address cant be same");
+    }
+
+    console.log("formData", formData);
     api(method, uri, formData).then((res) => {
       if (res.status === 200) {
         toast.success("Saved Successfully");
@@ -557,9 +647,14 @@ const QuotesForm = ({
             Save
           </Button>
           {isEditing && (
-            <Button color="danger" onClick={handleDelete}>
-              Delete
-            </Button>
+            <>
+              <Button color="primary" onClick={handleDuplicate}>
+                Duplicate
+              </Button>
+              <Button color="danger" onClick={handleDelete}>
+                Delete
+              </Button>
+            </>
           )}{" "}
           <Button onClick={handleModal}>Cancel</Button>
         </ModalFooter>

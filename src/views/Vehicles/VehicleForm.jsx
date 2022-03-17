@@ -16,6 +16,8 @@ import {
   Label,
 } from "reactstrap";
 import moment from "moment";
+import View from "../../components/view";
+
 // core components
 let current = moment();
 
@@ -40,6 +42,7 @@ const VehicleForm = ({
     graycard: "",
     graycard_expiry_date: "",
     driver: "",
+    registration_card: "",
   });
 
   useEffect(() => {
@@ -53,11 +56,15 @@ const VehicleForm = ({
         engine_type: editVehicle.engine_type,
         inspection_date: editVehicle.inspection_date,
         graycard: editVehicle.graycard,
+        graycard_expiry_date: editVehicle?.graycard_expiry_date,
         driver: editVehicle.driver,
-        graycard_expiry_date: editVehicle.graycard_expiry_date,
+        inspection_expiry_date: editVehicle.inspection_expiry_date,
+        insurance_certificate: editVehicle.insurance_certificate,
         insurance_expiry_date: editVehicle.insurance_expiry_date,
+        registration_card: editVehicle.registration_card,
       });
     }
+    console.log(editVehicle);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const handleFileChange = (e) => {
@@ -363,8 +370,10 @@ const VehicleForm = ({
                           className="form-control-label"
                           htmlFor="input-inspection-info"
                         >
-                          Add Gray Card
-                          <i className="fa fa-id-card" />
+                          {/* <span style={{ color: "red" }}>
+                            {vehicle.inspection_info ? "" : "*"}
+                          </span>{" "} */}
+                          Add Gray Card <View url={vehicle?.graycard} />
                         </label>
                         <Input
                           className="form-control-file form"
@@ -406,8 +415,8 @@ const VehicleForm = ({
                           className="form-control-label"
                           htmlFor="input-number-plate"
                         >
-                          Add Registration Card
-                          <i className="fa fa-id-card" />
+                          Add Registration Card{" "}
+                          <View url={vehicle.registration_card} />
                         </label>
                         <Input
                           className="form-control-file form"
@@ -429,8 +438,8 @@ const VehicleForm = ({
                           <span style={{ color: "red" }}>
                             {vehicle.insurance_certificate ? "" : "*"}
                           </span>{" "}
-                          Add vehicle Insurance Certificate
-                          <i className="fa fa-id-card" />
+                          Add vehicle Insurance Certificate{" "}
+                          <View url={vehicle.insurance_certificate} />
                         </label>
                         <Input
                           className="form-control-file form"
