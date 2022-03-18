@@ -106,14 +106,14 @@ const DriverForm = ({
         vat_number: editUser?.vat_number,
         city_of_rcs: editUser?.city_of_rcs,
         profile_pic: editUser?.profile_pic,
-        criminal_record_date: editUser?.criminal_record_date,
-        kbis_date: editUser?.kbis_date,
-        ris_date: editUser?.ris_date,
-        proRc_date: editUser?.proRc_date,
         criminal_record_image: editUser?.criminal_record_image,
+        criminal_record_date: editUser?.criminal_record_date,
         ris_image: editUser?.ris_image,
+        ris_date: editUser?.ris_date,
         kbis_image: editUser?.kbis_image,
+        kbis_date: editUser?.kbis_date,
         proRc_image: editUser.proRc_image,
+        proRc_date: editUser.proRc_date,
         id_front: editUser?.id_front,
         id_back: editUser?.id_front,
         vtc_front: editUser?.vtc_front,
@@ -275,7 +275,7 @@ const DriverForm = ({
     }
 
     if (user?.criminal_record_image) {
-      if (user?.criminal_record_date == "") {
+      if (!user.criminal_record_date) {
         return toast.error("Please enter criminal_record expirty date");
       }
       formData.append(
@@ -287,23 +287,23 @@ const DriverForm = ({
     }
 
     if (user.ris_image) {
-      formData.append("ris_image", user.ris_image, user.ris_image?.name);
-      if (user?.ris_date == "") {
+      if (!user.ris_date) {
         return toast.error("Please enter RIS expirty date");
       }
+      formData.append("ris_image", user.ris_image, user.ris_image?.name);
       formData.append("ris_date", user.ris_date);
     }
 
     if (user.kbis_image) {
-      formData.append("kbis_image", user.kbis_image, user.kbis_image?.name);
-      formData.append("kbis_date", user.kbis_date);
-      if (user?.kbis_date == "") {
+      if (!user.kbis_date) {
         return toast.error("Please enter KBIS expirty date");
       }
+      formData.append("kbis_image", user.kbis_image, user.kbis_image?.name);
+      formData.append("kbis_date", user.kbis_date);
     }
 
     if (user.proRc_image) {
-      if (user?.proRc_dates == "") {
+      if (!user?.proRc_date) {
         return toast.error("Please enter proRC expirty date");
       }
       formData.append("proRc_image", user.proRc_image, user.proRc_image?.name);
