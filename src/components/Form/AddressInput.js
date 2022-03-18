@@ -48,7 +48,6 @@ function AddressInput({ label, address, setAddress, optional }) {
     if (item) {
       for (var i = 0; i < addresses.length; i++) {
         if (addresses[i].label2 === item) {
-          console.log("Address found ---> ", addresses[i]);
           var postal_code = addresses[i].PostalCode;
           var lat = addresses[i].lat;
           var lng = addresses[i].lng;

@@ -62,7 +62,6 @@ const InvoiceList = () => {
       invoices: selectedItems,
       value: value,
     }).then((res) => {
-      // console.log(res.data.updatedinvoices);
       setInvoices(res.data.updatedinvoices);
       toast.success("Status Updated successfully");
       setSelectedItems([]);
@@ -72,7 +71,8 @@ const InvoiceList = () => {
 
   useEffect(() => {
     autoRefresh();
-  }, [openModal, dropDownItem, invoices]);
+  }, [openModal, dropDownItem]);
+
   return (
     <>
       <Container className="mt--7" fluid>

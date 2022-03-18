@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import { StoreProvider } from "./StoreContext";
 import "assets/plugins/nucleo/css/nucleo.css";
@@ -8,8 +8,22 @@ import "react-toastify/dist/ReactToastify.css";
 import AdminLayout from "layouts/Admin.js";
 import AuthLayout from "layouts/Auth.js";
 import { ToastContainer, Flip } from "react-toastify";
+import { io } from "socket.io-client";
+
+export const socket = io(process.env.REACT_APP_BASE_URL);
+
+// client-side
 
 const App = () => {
+  useEffect(() => {
+    socket.on("connect", () => {
+      console.log("Socket Connected");
+    });
+
+    socket.on("disconnect", () => {
+      console.log("Socket Disconnected");
+    });
+  }, []);
   return (
     <>
       <ToastContainer

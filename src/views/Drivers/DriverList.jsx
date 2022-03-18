@@ -63,7 +63,6 @@ const DriverList = () => {
     return openModal;
   };
   const handleFileChange = (e) => {
-    console.log("handleFileChange");
     setUser({ ...user, [e.target.name]: e.target.files[0] });
   };
 
@@ -74,7 +73,6 @@ const DriverList = () => {
   };
 
   const handleVehicleChange = (e) => {
-    console.log(e, "v");
     setUser((user) => ({ ...user, vehicles: [e] }));
   };
 

@@ -283,7 +283,6 @@ const TripForm = ({
       setSelectedDays(newis);
     } else {
       if (!moment(day).isBefore(new Date())) moment(day).format("LL");
-      console.log(day);
       setSelectedDays([...selectedDays, day]);
     }
   };
@@ -294,7 +293,6 @@ const TripForm = ({
   };
   return (
     <>
-      {console.log(editTrip, "editTrip?.passengers")}
       <Modal isOpen={openModal} size="xl" centered>
         <ModalHeader charCode="X" toggle={handleModal}>
           {isEditing ? "Edit" : "Add"} Trip

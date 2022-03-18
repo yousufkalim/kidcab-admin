@@ -125,7 +125,6 @@ const QuotesForm = ({
     };
 
     let totalPrice = quote.unitPrice * quote.totalTrips;
-    console.log("trips", totalPrice);
 
     const formData = {};
     formData["quote_title"] = quote.title;
@@ -281,7 +280,6 @@ const QuotesForm = ({
       return toast.error("Start and end address cant be same");
     }
 
-    console.log("formData", formData);
     api(method, uri, formData).then((res) => {
       if (res.status === 200) {
         toast.success("Saved Successfully");
