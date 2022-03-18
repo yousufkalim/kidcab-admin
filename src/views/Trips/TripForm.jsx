@@ -69,7 +69,8 @@ const TripForm = ({
   });
   let [startAddress, setStartAddress] = useState({});
   let [endAddress, setEndAddress] = useState({});
-  let [stepAddress, setStepAddress] = useState({});
+  let [stepAddress, setStepAddress] = useState([]);
+  let [addStep, setAddStep] = useState(false);
   const [drivers, setDrivers] = useState([]);
   const [passengers, setPassengers] = useState([]);
   const [allPassengers, setAllPassengers] = useState([]);
@@ -324,15 +325,27 @@ const TripForm = ({
                         />
                       </FormGroup>
                     </Col>
-                    <Col lg="4">
-                      <FormGroup>
-                        <AddressInput
-                          label="Add Step"
-                          address={isEditing ? trip.addresses : stepAddress}
-                          setAddress={setStepAddress}
-                        />
-                      </FormGroup>
-                    </Col>
+                    {addStep ? (
+                      <>
+                        <Col lg="4">
+                          <FormGroup>
+                            <AddressInput
+                              label="Add Step"
+                              address={isEditing ? trip.addresses : stepAddress}
+                              setAddress={setStepAddress}
+                            />
+                          </FormGroup>
+                        </Col>
+                      </>
+                    ) : (
+                      <>
+                        <Col lg="4">
+                          <FormGroup>
+                            <Button onClick={setAddStep(true)}>Add Step</Button>
+                          </FormGroup>
+                        </Col>
+                      </>
+                    )}
                   </Row>
                 </div>
                 <div className="pl-lg-4">
@@ -786,6 +799,11 @@ const TripForm = ({
             onDayClick={handleDayClick}
           />
         </div>
+        <ModalFooter>
+          <Button color="success" onClick={handleDateModal}>
+            Ok
+          </Button>
+        </ModalFooter>
       </Modal>
     </>
   );
