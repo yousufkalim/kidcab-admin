@@ -81,7 +81,6 @@ const Index = (props) => {
   return (
     <>
       <Header />
-      {console.log(trips, "trip")}
       <Container className="mt--7" fluid>
         <Row>
           <Col className="mb-5 mb-xl-0" xl="6">
