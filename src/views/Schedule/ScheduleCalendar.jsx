@@ -209,7 +209,7 @@ const ScheduleCalendar = (props) => {
                   alignItems: "center",
                   margin: "20px",
                   textAlign: "center",
-                  width: "30%",
+                  width: "20%",
                 }}
               >
                 <Input
@@ -233,6 +233,115 @@ const ScheduleCalendar = (props) => {
                 </Input>
               </FormGroup>
             )}
+
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <div
+                  style={{
+                    backgroundColor: "#59d455",
+                    width: "11px",
+                    height: "11px",
+                    borderRadius: "2px",
+                    marginRight: "4px",
+                  }}
+                ></div>
+                <div
+                  style={{
+                    fontSize: "12px",
+                  }}
+                >
+                  Confirmed
+                </div>
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  marginLeft: "10px",
+                }}
+              >
+                <div
+                  style={{
+                    backgroundColor: "#ff545d",
+                    width: "11px",
+                    height: "11px",
+                    borderRadius: "2px",
+                    marginRight: "4px",
+                  }}
+                ></div>
+                <div
+                  style={{
+                    fontSize: "12px",
+                  }}
+                >
+                  Cancelled
+                </div>
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  marginLeft: "10px",
+                }}
+              >
+                <div
+                  style={{
+                    backgroundColor: "#bababa",
+                    width: "11px",
+                    height: "11px",
+                    borderRadius: "2px",
+                    marginRight: "4px",
+                  }}
+                ></div>
+                <div
+                  style={{
+                    fontSize: "12px",
+                  }}
+                >
+                  Pending
+                </div>
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  marginLeft: "10px",
+                }}
+              >
+                <div
+                  style={{
+                    backgroundColor: "#3da8ff ",
+                    width: "11px",
+                    height: "11px",
+                    borderRadius: "2px",
+                    marginRight: "4px",
+                  }}
+                ></div>
+                <div
+                  style={{
+                    fontSize: "12px",
+                  }}
+                >
+                  Completed
+                </div>
+              </div>
+            </div>
+
             {clients.length > 0 && (
               <FormGroup
                 style={{
@@ -241,7 +350,7 @@ const ScheduleCalendar = (props) => {
                   alignItems: "center",
                   margin: "20px",
                   textAlign: "center",
-                  width: "30%",
+                  width: "20%",
                 }}
               >
                 <Input
