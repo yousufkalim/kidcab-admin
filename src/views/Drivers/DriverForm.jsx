@@ -176,12 +176,10 @@ const DriverForm = ({
   };
 
   const handleInput1Change = (e) => {
-    console.log("e.target.value", e.target.name);
     setUser({ ...user, [e.target.name]: e.target.value });
   };
 
   const handleVehicle1Change = (e) => {
-    console.log("v");
     setUser((user) => ({ ...user, vehicles: [e.value] }));
   };
 
@@ -379,7 +377,6 @@ const DriverForm = ({
 
   return (
     <>
-      {console.log("user", user)}
       <Modal isOpen={openModal} size="xl" centered>
         <ModalHeader charCode="X" toggle={handleModal}>
           {isEditing ? "Edit" : "Add"} Driver
