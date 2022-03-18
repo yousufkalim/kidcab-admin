@@ -69,7 +69,8 @@ const TripForm = ({
   });
   let [startAddress, setStartAddress] = useState({});
   let [endAddress, setEndAddress] = useState({});
-  let [stepAddress, setStepAddress] = useState({});
+  let [stepAddress, setStepAddress] = useState([]);
+  let [addStep, setAddStep] = useState(false);
   const [drivers, setDrivers] = useState([]);
   const [passengers, setPassengers] = useState([]);
   const [allPassengers, setAllPassengers] = useState([]);
@@ -283,7 +284,6 @@ const TripForm = ({
       setSelectedDays(newis);
     } else {
       if (!moment(day).isBefore(new Date())) moment(day).format("LL");
-      console.log(day);
       setSelectedDays([...selectedDays, day]);
     }
   };
@@ -294,7 +294,7 @@ const TripForm = ({
   };
   return (
     <>
-      {console.log(editTrip, "editTrip?.passengers")}
+      {console.log(addStep, "addStep")}
       <Modal isOpen={openModal} size="xl" centered>
         <ModalHeader charCode="X" toggle={handleModal}>
           {isEditing ? "Edit" : "Add"} Trip
@@ -326,15 +326,27 @@ const TripForm = ({
                         />
                       </FormGroup>
                     </Col>
-                    <Col lg="4">
-                      <FormGroup>
-                        <AddressInput
-                          label="Add Step"
-                          address={isEditing ? trip.addresses : stepAddress}
-                          setAddress={setStepAddress}
-                        />
-                      </FormGroup>
-                    </Col>
+                    {addStep ? (
+                      <>
+                        <Col lg="4">
+                          <FormGroup>
+                            <AddressInput
+                              label="Add Step"
+                              address={isEditing ? trip.addresses : stepAddress}
+                              setAddress={setStepAddress}
+                            />
+                          </FormGroup>
+                        </Col>
+                      </>
+                    ) : (
+                      <>
+                        <Col lg="4">
+                          <FormGroup>
+                            <Button onClick={setAddStep(true)}>Add Step</Button>
+                          </FormGroup>
+                        </Col>
+                      </>
+                    )}
                   </Row>
                 </div>
                 <div className="pl-lg-4">
@@ -788,6 +800,11 @@ const TripForm = ({
             onDayClick={handleDayClick}
           />
         </div>
+        <ModalFooter>
+          <Button color="success" onClick={handleDateModal}>
+            Ok
+          </Button>
+        </ModalFooter>
       </Modal>
     </>
   );

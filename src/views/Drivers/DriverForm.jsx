@@ -1154,7 +1154,11 @@ const DriverForm = ({
                           htmlFor="input-date"
                         >
                           <span style={{ color: "red" }}>
-                            {user.criminal_record_image && "*"}
+                            {user.criminal_record_image
+                              ? user?.criminal_record_date
+                                ? ""
+                                : "*"
+                              : ""}
                           </span>{" "}
                           Valid Till
                         </label>
