@@ -64,7 +64,6 @@ const VehicleForm = ({
         registration_card: editVehicle.registration_card,
       });
     }
-    console.log(editVehicle);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const handleFileChange = (e) => {
@@ -177,7 +176,6 @@ const VehicleForm = ({
 
   return (
     <>
-      {console.log("v", vehicle)}
       <Modal isOpen={openModal} size="xl" centered>
         <ModalHeader charCode="X" toggle={handleModal}>
           {isEditing ? "Edit" : "Add"} Vehicle

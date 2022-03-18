@@ -2,7 +2,6 @@ import React from "react";
 import { UncontrolledTooltip } from "reactstrap";
 
 const ClientAvatar = ({ user }) => {
-  console.log("user", user);
   return (
     <>
       <a
