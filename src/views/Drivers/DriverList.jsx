@@ -63,18 +63,14 @@ const DriverList = () => {
     return openModal;
   };
   const handleFileChange = (e) => {
-    console.log("handleFileChange");
     setUser({ ...user, [e.target.name]: e.target.files[0] });
   };
 
   const handleInputChange = (e) => {
-    console.log("u", e.target.name);
-    console.log(e.target.value, "v");
     setUser({ ...user, [e.target.name]: e.target.value });
   };
 
   const handleVehicleChange = (e) => {
-    console.log(e, "v");
     setUser((user) => ({ ...user, vehicles: [e] }));
   };
 

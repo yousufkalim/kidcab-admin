@@ -55,15 +55,11 @@ const TripList = () => {
   };
   const autoRefresh = () => {
     api("get", `trips/status/${filterdropDownItem}`).then((res) => {
-      console.log("response --------", res?.data?.trips);
       setTrips(res?.data?.trips);
     });
   };
 
   const filterArr = React.useMemo(() => {
-    {
-      console.log("filter", filter);
-    }
     if (filter === "") return trips;
     else if (typefilter === true) {
       return trips.filter((trip) =>
@@ -155,7 +151,6 @@ const TripList = () => {
 
   return (
     <>
-      {console.log(datefilter, "d", typefilter, "t", driverfilter, "dr")}
       <Container className="mt--7" fluid>
         <Row>
           <div className="col">

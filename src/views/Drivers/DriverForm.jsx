@@ -176,12 +176,10 @@ const DriverForm = ({
   };
 
   const handleInput1Change = (e) => {
-    console.log("e.target.value", e.target.name);
     setUser({ ...user, [e.target.name]: e.target.value });
   };
 
   const handleVehicle1Change = (e) => {
-    console.log("v");
     setUser((user) => ({ ...user, vehicles: [e.value] }));
   };
 
@@ -285,7 +283,6 @@ const DriverForm = ({
         user.criminal_record_image,
         user.criminal_record_image?.name
       );
-      formData.append("criminal_record_date", user.criminal_record_date);
     }
 
     if (user.ris_image) {
@@ -293,15 +290,12 @@ const DriverForm = ({
         return toast.error("Please enter RIS expirty date");
       }
       formData.append("ris_image", user.ris_image, user.ris_image?.name);
-      formData.append("ris_date", user.ris_date);
     }
-
     if (user.kbis_image) {
       if (!user.kbis_date) {
         return toast.error("Please enter KBIS expirty date");
       }
       formData.append("kbis_image", user.kbis_image, user.kbis_image?.name);
-      formData.append("kbis_date", user.kbis_date);
     }
 
     if (user.proRc_image) {
@@ -309,6 +303,17 @@ const DriverForm = ({
         return toast.error("Please enter proRC expirty date");
       }
       formData.append("proRc_image", user.proRc_image, user.proRc_image?.name);
+    }
+    if (user.criminal_record_date) {
+      formData.append("criminal_record_date", user.criminal_record_date);
+    }
+    if (user.ris_date) {
+      formData.append("ris_date", user.ris_date);
+    }
+    if (user.kbis_date) {
+      formData.append("kbis_date", user.kbis_date);
+    }
+    if (user?.proRc_date) {
       formData.append("proRc_date", user.proRc_date);
     }
 
@@ -361,7 +366,7 @@ const DriverForm = ({
     if (user.phone == "") {
       return toast.error("Please enter phone number");
     }
-
+    console.log("user", user);
     if (isEditing) {
       method = "put";
       uri = uri + `/${editUser._id}`;
@@ -379,7 +384,6 @@ const DriverForm = ({
 
   return (
     <>
-      {console.log("user", user)}
       <Modal isOpen={openModal} size="xl" centered>
         <ModalHeader charCode="X" toggle={handleModal}>
           {isEditing ? "Edit" : "Add"} Driver

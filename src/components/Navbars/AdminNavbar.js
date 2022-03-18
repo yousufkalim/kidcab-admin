@@ -1,8 +1,8 @@
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import api from "api";
 import { Store } from "StoreContext";
 import { getToken, removeToken } from "../../variables/auth";
-import { useState } from "react";
 import AdminProfile from "../../views/AdminProfile/AdminProfile";
 import CompanyProfile from "../../views/CompanyProfile/CompanyProfile";
 
@@ -16,16 +16,39 @@ import {
   Container,
   Media,
 } from "reactstrap";
+import { socket } from "../../App";
 
 const AdminNavbar = (props) => {
   const { user } = Store();
   const [openProfileModal, setOpenProfileModal] = useState(false);
   const [openCompanyModal, setOpenCompanyModal] = useState(false);
+  const [newNotifications, setNewNotifications] = useState([]);
+
+  useEffect(() => {
+    socket.on(`admin`, (data) => {
+      getNotifications();
+    });
+  }, []);
+
+  useEffect(() => {
+    getNotifications();
+  }, [user]);
+
+  const getNotifications = async () => {
+    const res = await api("get", `notifications/getAllAdmin`);
+    setNewNotifications(res.data.notifications);
+  };
+
+  const markAsRead = async () => {
+    const res = await api("put", `notifications/seen/${user._id}`);
+    setNewNotifications([]);
+  };
 
   const handleProfileModal = () => {
     setOpenProfileModal((open) => !open);
     return openProfileModal;
   };
+
   const handleCompanyModal = () => {
     setOpenCompanyModal((open) => !open);
     return openCompanyModal;
@@ -51,38 +74,110 @@ const AdminNavbar = (props) => {
           >
             {props.brandText}
           </Link>
-
-          <Nav className="align-items-center d-none d-md-flex" navbar>
-            <UncontrolledDropdown nav>
-              <DropdownToggle className="pr-0" nav>
-                <Media className="align-items-center">
-                  <Media className="ml-2 d-none d-lg-block">
-                    <span className="mb-0 text-sm font-weight-bold">
-                      {user.name
-                        ? `${user.name.first_name} ${user.name.last_name}`
-                        : "Admin"}
-                    </span>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Nav
+              className="align-items-center d-none d-md-flex"
+              style={{ marginRight: "20px" }}
+              navbar
+            >
+              <UncontrolledDropdown nav>
+                <DropdownToggle className="pr-0" nav>
+                  <Media className="align-items-center">
+                    <Media className="ml-2 d-none d-lg-block">
+                      <span className="mb-0 text-sm font-weight-bold">
+                        <div
+                          style={{ position: "relative", marginTop: "-5px" }}
+                        >
+                          {newNotifications.length > 0 && (
+                            <div
+                              style={{
+                                zIndex: "2",
+                                width: "8px",
+                                height: "8px",
+                                position: "absolute",
+                                borderRadius: "50px",
+                                backgroundColor: "red",
+                                left: "8px",
+                                top: "-2px",
+                                marginRight: "8px",
+                              }}
+                            ></div>
+                          )}
+                          <i
+                            style={{
+                              position: "absolute",
+                            }}
+                            class="fas fa-bell fa-lg"
+                          ></i>
+                        </div>
+                      </span>
+                    </Media>
                   </Media>
-                </Media>
-              </DropdownToggle>
-              <DropdownMenu className="dropdown-menu-arrow" right>
-                <DropdownItem onClick={handleProfileModal}>
-                  <i className="ni ni-single-02 text-success" />
-                  <span>My profile</span>
-                </DropdownItem>
-                <DropdownItem onClick={handleCompanyModal}>
-                  <i className="ni ni-single-02 text-success" />
-                  <span>Company profile</span>
-                </DropdownItem>
+                </DropdownToggle>
 
-                <DropdownItem divider />
-                <DropdownItem onClick={handleLogout}>
-                  <i className="ni ni-user-run text-danger" />
-                  <span>Logout</span>
-                </DropdownItem>
-              </DropdownMenu>
-            </UncontrolledDropdown>
-          </Nav>
+                <DropdownMenu className="dropdown-menu-arrow" right>
+                  <DropdownItem
+                    onClick={markAsRead}
+                    style={{
+                      textAlign: "center",
+                      borderBottom: "1px solid rgb(228 228 228)",
+                      color: "#46b9b5",
+                    }}
+                  >
+                    Mark as read
+                  </DropdownItem>
+                  {newNotifications.length > 0 ? (
+                    newNotifications.map((n, index) => {
+                      if (index < 10) {
+                        return <DropdownItem>{n.title}</DropdownItem>;
+                      }
+                    })
+                  ) : (
+                    <DropdownItem disabled={true}>
+                      No new notifications
+                    </DropdownItem>
+                  )}
+                </DropdownMenu>
+              </UncontrolledDropdown>
+            </Nav>
+            <Nav className="align-items-center d-none d-md-flex" navbar>
+              <UncontrolledDropdown nav>
+                <DropdownToggle className="pr-0" nav>
+                  <Media className="align-items-center">
+                    <Media className="ml-2 d-none d-lg-block">
+                      <span className="mb-0 text-sm font-weight-bold">
+                        {user.name
+                          ? `${user.name.first_name} ${user.name.last_name}`
+                          : "Admin"}
+                      </span>
+                    </Media>
+                  </Media>
+                </DropdownToggle>
+                <DropdownMenu className="dropdown-menu-arrow" right>
+                  <DropdownItem onClick={handleProfileModal}>
+                    <i className="ni ni-single-02 text-success" />
+                    <span>My profile</span>
+                  </DropdownItem>
+                  <DropdownItem onClick={handleCompanyModal}>
+                    <i className="ni ni-single-02 text-success" />
+                    <span>Company profile</span>
+                  </DropdownItem>
+
+                  <DropdownItem divider />
+                  <DropdownItem onClick={handleLogout}>
+                    <i className="ni ni-user-run text-danger" />
+                    <span>Logout</span>
+                  </DropdownItem>
+                </DropdownMenu>
+              </UncontrolledDropdown>
+            </Nav>
+          </div>
           {openProfileModal && (
             <AdminProfile
               openModal={openProfileModal}
