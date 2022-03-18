@@ -72,7 +72,6 @@ const InvoiceList = () => {
   useEffect(() => {
     autoRefresh();
   }, [openModal, dropDownItem]);
-
   return (
     <>
       <Container className="mt--7" fluid>

@@ -67,8 +67,6 @@ const DriverList = () => {
   };
 
   const handleInputChange = (e) => {
-    console.log("u", e.target.name);
-    console.log(e.target.value, "v");
     setUser({ ...user, [e.target.name]: e.target.value });
   };
 

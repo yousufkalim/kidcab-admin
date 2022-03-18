@@ -94,8 +94,9 @@ const TripForm = ({
   }, []);
   useEffect(() => {
     if (isEditing) {
-      var hours = new Date(editTrip.date).getHours();
-      var minutes = new Date(editTrip.date).getMinutes();
+      var date = new Date(editTrip.date);
+      var hours = date.getHours();
+      var minutes = date.getMinutes();
       var time = `${hours}:${minutes}`;
       onChange(time);
       setTrip({
@@ -214,7 +215,6 @@ const TripForm = ({
     if (trip.status == "") {
       return toast.error("Please enter trip status");
     }
-
     if (selectedDays.length == 0 && !isEditing && trip.trip_type == "simple") {
       return toast.error("Please enter trip dates");
     }
@@ -236,6 +236,13 @@ const TripForm = ({
       method = "put";
       uri = uri + `/${editTrip._id}`;
     }
+    let selectedDDays = selectedDays.map((date) => {
+      const serverDate = new Date(date);
+      var hours = value.split(":"); //split hours and minutes
+      serverDate.setHours(parseInt(hours[0]));
+      serverDate.setMinutes(parseInt(hours[1]));
+      return serverDate;
+    });
     if (trip.trip_type === "recurring") {
       api(method, uri, {
         ...trip,
@@ -259,7 +266,7 @@ const TripForm = ({
         ...trip,
         start_address: startAddress,
         end_address: endAddress,
-        dates: selectedDays,
+        dates: selectedDDays,
         addresses: stepAddress,
         time: value,
       }).then((res) => {
