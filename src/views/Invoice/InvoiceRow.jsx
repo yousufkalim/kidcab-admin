@@ -47,11 +47,15 @@ const InvoiceRow = ({ invoice, autoRefresh, handleSelect, selectedItems }) => {
       <td>{new Date(invoice.issue_date).toLocaleDateString()}</td>
       <td>
         <Badge color="" className="badge-dot mr-4">
-          {invoice.status === "canceled" ? (
+          {invoice.status === "cancelled" ? (
+            <i className="bg-danger" />
+          ) : invoice.status === "pending" ? (
+            <i className="bg-info" />
+          ) : invoice.status === "late" ? (
             <i className="bg-warning" />
-          ) : (
+          ) : invoice.status === "paid" ? (
             <i className="bg-success" />
-          )}
+          ) : null}
           {invoice.status}
         </Badge>
       </td>
