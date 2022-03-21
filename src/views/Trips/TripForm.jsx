@@ -297,9 +297,8 @@ const TripForm = ({
         ...trip,
         start_address: startAddress,
         end_address: endAddress,
-        dates: selectedDays,
+        dates: selectedDDays,
         addresses: allAddresses,
-        time: value,
       }).then((res) => {
         // eslint-disable-next-line eqeqeq
         if (res.status == 200) {

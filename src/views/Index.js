@@ -80,6 +80,7 @@ const Index = (props) => {
   };
   return (
     <>
+      {console.log("v", reports)}
       <Header />
       <Container className="mt--7" fluid>
         <Row>
@@ -88,16 +89,16 @@ const Index = (props) => {
               <CardHeader className="border-0">
                 <Row className="align-items-center">
                   <div className="col">
-                    <h3 className="mb-0">Daily Report</h3>
+                    <h3 className="mb-0">Daily report</h3>
                   </div>
                 </Row>
               </CardHeader>
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
                   <tr>
-                    <th scope="col">Client</th>
-                    <th scope="col">Status</th>
-                    <th scope="col">Earning</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Total Earning</th>
+                    <th scope="col">Total Rides</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -105,9 +106,9 @@ const Index = (props) => {
                     {reports ? (
                       reports?.map((report) => (
                         <tr>
-                          <td>{report._id}</td>
-                          <td>{report.driver_price}</td>
-                          <td>{report.turnover}</td>
+                          <td>{report?._id}</td>
+                          <td>{report?.driver_price}</td>
+                          <td>{report?.turnover}</td>
                         </tr>
                       ))
                     ) : (
@@ -173,8 +174,8 @@ const Index = (props) => {
               </CardHeader>
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
-                  <tr>
-                    <th scope="col">Invoice Title</th>
+                  <tr style={{ height: "7vh" }}>
+                    <th scope="col">Invoice TiTle</th>
                     <th scope="col">DATE </th>
                     <th scope="col">PRICE</th>
                   </tr>
@@ -212,8 +213,8 @@ const Index = (props) => {
               </CardHeader>
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
-                  <tr>
-                    <th scope="col">Invoice Title</th>
+                  <tr style={{ height: "7vh" }}>
+                    <th scope="col">INVOICE TITLE</th>
                     <th scope="col">DATE </th>
                     <th scope="col">PRICE</th>
                   </tr>
