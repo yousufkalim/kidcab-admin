@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import api from "../../api";
 import AddressInput from "components/Form/AddressInput";
+import AddressInputMultiple from "components/Form/AddressInputMultiple";
 import TimePicker from "react-time-picker";
 import "../Trips/app.css";
 import * as moment from "moment";
@@ -81,6 +82,8 @@ const TripForm = ({
   const [selectedDays, setSelectedDays] = useState([]);
   const [openDateModal, setOpenDateModal] = useState(false);
   const [passengerChange, setPassengerChange] = useState([]);
+  let [allAddresses, setAllAddresses] = useState([]);
+
   useEffect(() => {
     api("get", "drivers").then((res) => {
       setDrivers(res.data.drivers);
@@ -98,6 +101,8 @@ const TripForm = ({
       var minutes = new Date(editTrip.date).getMinutes();
       var time = `${hours}:${minutes}`;
       onChange(time);
+      setAllAddresses(editTrip.addresses);
+
       setTrip({
         date: editTrip.date,
         status: editTrip.status,
@@ -243,7 +248,7 @@ const TripForm = ({
         end_address: endAddress,
         days: daysLength,
         time: value,
-        addresses: stepAddress,
+        addresses: allAddresses,
       }).then((res) => {
         // eslint-disable-next-line eqeqeq
         if (res.status == 200) {
@@ -260,7 +265,7 @@ const TripForm = ({
         start_address: startAddress,
         end_address: endAddress,
         dates: selectedDays,
-        addresses: stepAddress,
+        addresses: allAddresses,
         time: value,
       }).then((res) => {
         // eslint-disable-next-line eqeqeq
@@ -325,27 +330,18 @@ const TripForm = ({
                         />
                       </FormGroup>
                     </Col>
-                    {addStep ? (
-                      <>
-                        <Col lg="4">
-                          <FormGroup>
-                            <AddressInput
-                              label="Add Step"
-                              address={isEditing ? trip.addresses : stepAddress}
-                              setAddress={setStepAddress}
-                            />
-                          </FormGroup>
-                        </Col>
-                      </>
-                    ) : (
-                      <>
-                        <Col lg="4">
-                          <FormGroup>
-                            <Button onClick={setAddStep(true)}>Add Step</Button>
-                          </FormGroup>
-                        </Col>
-                      </>
-                    )}
+                    <Col lg="4">
+                      <FormGroup>
+                        <AddressInputMultiple
+                          multiple={true}
+                          label="Add Step"
+                          address={stepAddress}
+                          setAddress={setStepAddress}
+                          allAddresses={allAddresses}
+                          setAllAddresses={setAllAddresses}
+                        />
+                      </FormGroup>
+                    </Col>
                   </Row>
                 </div>
                 <div className="pl-lg-4">
