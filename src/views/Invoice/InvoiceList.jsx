@@ -62,7 +62,7 @@ const InvoiceList = () => {
       invoices: selectedItems,
       value: value,
     }).then((res) => {
-      setInvoices(res.data.updatedinvoices);
+      autoRefresh();
       toast.success("Status Updated successfully");
       setSelectedItems([]);
       setStatusDropDown("Bulk Action");

@@ -80,6 +80,7 @@ const Index = (props) => {
   };
   return (
     <>
+      {console.log("v", reports)}
       <Header />
       <Container className="mt--7" fluid>
         <Row>
@@ -88,7 +89,7 @@ const Index = (props) => {
               <CardHeader className="border-0">
                 <Row className="align-items-center">
                   <div className="col">
-                    <h3 className="mb-0">Weekly report</h3>
+                    <h3 className="mb-0">Daily report</h3>
                   </div>
                 </Row>
               </CardHeader>
@@ -105,9 +106,9 @@ const Index = (props) => {
                     {reports ? (
                       reports?.map((report) => (
                         <tr>
-                          <td>{report._id}</td>
-                          <td>{report.driver_price}</td>
-                          <td>{report.turnover}</td>
+                          <td>{report?._id}</td>
+                          <td>{report?.driver_price}</td>
+                          <td>{report?.turnover}</td>
                         </tr>
                       ))
                     ) : (
@@ -173,10 +174,9 @@ const Index = (props) => {
               </CardHeader>
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
-                  <tr>
-                    <th scope="col">TITLE</th>
+                  <tr style={{ height: "7vh" }}>
+                    <th scope="col">Invoice TiTle</th>
                     <th scope="col">DATE </th>
-                    <th scope="col">TRIP</th>
                     <th scope="col">PRICE</th>
                   </tr>
                 </thead>
@@ -189,7 +189,6 @@ const Index = (props) => {
                           <td>
                             {moment(invoice.issue_date).format("DD/MM/YYYY")}
                           </td>
-                          <td>{invoice?.trip?.client?.first_name}</td>
                           <td>{invoice?.total_price}</td>
                         </tr>
                       ))
@@ -214,10 +213,9 @@ const Index = (props) => {
               </CardHeader>
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
-                  <tr>
-                    <th scope="col">TITLE</th>
+                  <tr style={{ height: "7vh" }}>
+                    <th scope="col">INVOICE TITLE</th>
                     <th scope="col">DATE </th>
-                    <th scope="col">TRIP</th>
                     <th scope="col">PRICE</th>
                   </tr>
                 </thead>
@@ -230,7 +228,6 @@ const Index = (props) => {
                           <td>
                             {moment(invoice.issue_date).format("DD/MM/YYYY")}
                           </td>
-                          <td>{invoice?.trip?.client?.first_name}</td>
                           <td>{invoice?.total_price}</td>
                         </tr>
                       ))

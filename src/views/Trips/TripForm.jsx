@@ -67,6 +67,7 @@ const TripForm = ({
     enddate: "",
     rides: null,
     client: "",
+    comment: "",
   });
   let [startAddress, setStartAddress] = useState({});
   let [endAddress, setEndAddress] = useState({});
@@ -119,6 +120,7 @@ const TripForm = ({
         client: editTrip.client,
         quote: editTrip?.quote,
         time: editTrip.time,
+        comment: editTrip?.comment,
       });
       api("get", `passengers`).then((res) => {
         setPassengers(
@@ -238,9 +240,15 @@ const TripForm = ({
       return toast.error("Passenger is required");
     }
     if (editTrip) {
+      const serverDate = new Date(trip.date); //creating date for server
+      var hours = value.split(":"); //split hours and minutes
+      serverDate.setHours(parseInt(hours[0])); //setting time for server
+      serverDate.setMinutes(parseInt(hours[1])); //setting time for server
+      trip.date = serverDate; //Setting Trip Date
       method = "put";
       uri = uri + `/${editTrip._id}`;
     }
+
     if (trip.trip_type === "recurring") {
       let selectedDDays = [];
       const s_date = new Date(trip.startdate); //start date
@@ -289,9 +297,8 @@ const TripForm = ({
         ...trip,
         start_address: startAddress,
         end_address: endAddress,
-        dates: selectedDays,
+        dates: selectedDDays,
         addresses: allAddresses,
-        time: value,
       }).then((res) => {
         // eslint-disable-next-line eqeqeq
         if (res.status == 200) {
@@ -787,6 +794,20 @@ const TripForm = ({
                       </FormGroup>
                     </Col>
                   </Row>
+                  <FormGroup>
+                    <label className="form-control-label" htmlFor="input-lname">
+                      Add comment
+                    </label>
+                    <Input
+                      className="form-control-alternative"
+                      id="input-lname"
+                      placeholder="Add Comment"
+                      type="textarea"
+                      value={trip.comment}
+                      name="comment"
+                      onChange={handleInputChange}
+                    />
+                  </FormGroup>
                 </div>
               </Form>
             </Col>
