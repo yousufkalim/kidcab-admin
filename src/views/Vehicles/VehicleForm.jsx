@@ -17,6 +17,7 @@ import {
 } from "reactstrap";
 import moment from "moment";
 import View from "../../components/view";
+import FilePicker from "../../components/Form/FilePicker";
 
 // core components
 let current = moment();
@@ -44,6 +45,7 @@ const VehicleForm = ({
     driver: "",
     registration_card: "",
   });
+  const [docs, setDocs] = useState({});
 
   useEffect(() => {
     api("get", "drivers").then((res) => setDrivers(res.data.drivers));
@@ -61,6 +63,11 @@ const VehicleForm = ({
         inspection_expiry_date: editVehicle.inspection_expiry_date,
         insurance_certificate: editVehicle.insurance_certificate,
         insurance_expiry_date: editVehicle.insurance_expiry_date,
+        registration_card: editVehicle.registration_card,
+      });
+      setDocs({
+        graycard: editVehicle.graycard,
+        insurance_certificate: editVehicle.insurance_certificate,
         registration_card: editVehicle.registration_card,
       });
     }
@@ -362,27 +369,27 @@ const VehicleForm = ({
                     </Col>
                   </Row>
                   <Row>
-                    <Col lg="4">
+                    <Col lg="6">
                       <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-inspection-info"
-                        >
-                          {/* <span style={{ color: "red" }}>
-                            {vehicle.inspection_info ? "" : "*"}
-                          </span>{" "} */}
-                          Add Gray Card <View url={vehicle?.graycard} />
+                        <label className="form-control-label">
+                          Add Gray Card <View url={docs?.graycard} />
                         </label>
-                        <Input
-                          className="form-control-file form"
-                          id="input-graycard"
-                          name="graycard"
-                          type="file"
+                        <FilePicker
+                          lableClassName="form-control-label"
+                          htmlFor="input-graycard"
+                          InputClassName="form-control-file form"
+                          InputId="input-graycard"
+                          InputName="graycard"
+                          value={
+                            editVehicle?.graycard
+                              ? editVehicle?.graycard
+                              : vehicle?.graycard
+                          }
                           onChange={handleFileChange}
-                        />
+                        ></FilePicker>
                       </FormGroup>
                     </Col>
-                    <Col lg="4">
+                    <Col lg="6">
                       <FormGroup>
                         <label
                           className="form-control-label"
@@ -407,48 +414,34 @@ const VehicleForm = ({
                         />
                       </FormGroup>
                     </Col>
-                    <Col lg="4">
-                      <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-number-plate"
-                        >
-                          Add Registration Card{" "}
-                          <View url={vehicle.registration_card} />
-                        </label>
-                        <Input
-                          className="form-control-file form"
-                          id="input-number-plate"
-                          name="registration_card"
-                          type="file"
-                          onChange={handleFileChange}
-                        />
-                      </FormGroup>
-                    </Col>
                   </Row>
                   <Row>
-                    <Col lg="4">
+                    <Col lg="6">
                       <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-number-plate"
-                        >
+                        <label className="form-control-label">
                           <span style={{ color: "red" }}>
                             {vehicle.insurance_certificate ? "" : "*"}
                           </span>{" "}
                           Add vehicle Insurance Certificate{" "}
-                          <View url={vehicle.insurance_certificate} />
+                          <View url={docs.insurance_certificate} />
                         </label>
-                        <Input
-                          className="form-control-file form"
-                          id="input-number-plate"
-                          name="insurance_certificate"
-                          type="file"
+
+                        <FilePicker
+                          lableClassName="form-control-label"
+                          htmlFor="input-vehicle-insurance"
+                          InputClassName="form-control-file form"
+                          InputId="input-vehicle-insurance"
+                          InputName="insurance_certificate"
+                          value={
+                            editVehicle?.insurance_certificate
+                              ? editVehicle?.insurance_certificate
+                              : vehicle?.insurance_certificate
+                          }
                           onChange={handleFileChange}
-                        />
+                        ></FilePicker>
                       </FormGroup>
                     </Col>
-                    <Col lg="4">
+                    <Col lg="6">
                       <FormGroup>
                         <label
                           className="form-control-label"
@@ -471,6 +464,28 @@ const VehicleForm = ({
                           onChange={handleInputChange}
                           min={moment(current).format("YYYY-MM-DD")}
                         />
+                      </FormGroup>
+                    </Col>
+                    <Col lg="6">
+                      <FormGroup>
+                        <label className="form-control-label">
+                          Add Registration Card{" "}
+                          <View url={docs?.registration_card} />
+                        </label>
+
+                        <FilePicker
+                          lableClassName="form-control-label"
+                          htmlFor="input-number-plate"
+                          InputClassName="form-control-file form"
+                          InputId="input-number-plate"
+                          InputName="registration_card"
+                          value={
+                            editVehicle?.registration_card
+                              ? editVehicle?.registration_card
+                              : vehicle?.registration_card
+                          }
+                          onChange={handleFileChange}
+                        ></FilePicker>
                       </FormGroup>
                     </Col>
                   </Row>
