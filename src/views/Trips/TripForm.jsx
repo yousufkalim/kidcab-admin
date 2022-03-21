@@ -241,20 +241,31 @@ const TripForm = ({
       method = "put";
       uri = uri + `/${editTrip._id}`;
     }
-    let selectedDDays = selectedDays.map((date) => {
-      const serverDate = new Date(date);
-      var hours = value.split(":"); //split hours and minutes
-      serverDate.setHours(parseInt(hours[0]));
-      serverDate.setMinutes(parseInt(hours[1]));
-      return serverDate;
-    });
     if (trip.trip_type === "recurring") {
+      let selectedDDays = [];
+      const s_date = new Date(trip.startdate); //start date
+      const e_date = new Date(trip.enddate); //end date
+      let j = s_date;
+      //setting loop index
+      for (let i = 0; i < daysLength.length; i++) {
+        //this loop will run for each day
+        for (; j <= e_date; j.setDate(j.getDate() + 1)) {
+          //this loop will work from start to end date and find when date is repeating
+          if (daysLength[i].value === j.getDay()) {
+            let serverDate = new Date(j); //taking date coming from request
+            var hours = value[i].split(":"); //split hours and minutes
+            serverDate.setHours(parseInt(hours[0]));
+            serverDate.setMinutes(parseInt(hours[1]));
+            selectedDDays.push(serverDate);
+          }
+        }
+        j = new Date(trip.startdate); //After inner loop break this will reinitalize loop from start date
+      }
       api(method, uri, {
         ...trip,
         start_address: startAddress,
         end_address: endAddress,
-        days: daysLength,
-        time: value,
+        dates: selectedDDays,
         addresses: allAddresses,
       }).then((res) => {
         // eslint-disable-next-line eqeqeq
@@ -267,6 +278,13 @@ const TripForm = ({
         }
       });
     } else {
+      let selectedDDays = selectedDays.map((date) => {
+        const serverDate = new Date(date); //creating date for server
+        var hours = value.split(":"); //split hours and minutes
+        serverDate.setHours(parseInt(hours[0])); //setting time for server
+        serverDate.setMinutes(parseInt(hours[1])); //setting time for server
+        return serverDate;
+      });
       api(method, uri, {
         ...trip,
         start_address: startAddress,
@@ -483,7 +501,7 @@ const TripForm = ({
                               htmlFor="input-date"
                             >
                               <span style={{ color: "red" }}>
-                                {trip.date ? "" : "*"}
+                                {trip.startdate ? "" : "*"}
                               </span>{" "}
                               Start Date
                             </label>
@@ -533,7 +551,7 @@ const TripForm = ({
                               className="form-control-label"
                             >
                               <span style={{ color: "red" }}>
-                                {trip.days ? "" : "*"}
+                                {trip?.Days?.length < 1 ? "" : "*"}
                               </span>{" "}
                               Select Days
                             </label>
@@ -590,6 +608,9 @@ const TripForm = ({
                                         height: "calc(1.5em + 1.25rem + 2px)",
                                       }}
                                       name="time"
+                                      disableClock={true}
+                                      clockIcon={null}
+                                      amPmAriaLabel={true}
                                       value={value[index]}
                                       onChange={(value) => {
                                         onChange((prev) => {
@@ -750,14 +771,6 @@ const TripForm = ({
                               value: i.value,
                               label: i.label,
                             }))}
-                            // defaultValue={
-                            //   isEditing
-                            //     ? editTrip?.passengers.map((i) => ({
-                            //         value: i?._id,
-                            //         label: `${i?.first_name} ${i?.last_name}`,
-                            //       }))
-                            //     : null
-                            // }
                             options={passengers
                               .map((passenger) => ({
                                 value: passenger?._id,
