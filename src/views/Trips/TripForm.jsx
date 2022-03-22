@@ -164,7 +164,7 @@ const TripForm = ({
   };
   const handleClientChange = (e) => {
     setTrip((user) => ({ ...user, client: e.value, passengers: [] }));
-    setPassengers(allPassengers.filter((a) => a.client._id === e.value));
+    setPassengers(allPassengers.filter((a) => a?.client?._id === e.value));
     setPassengerChange([]);
   };
   const handlePassengerChange = (e) => {
@@ -478,10 +478,8 @@ const TripForm = ({
                               className="form-control-label"
                               htmlFor="input-time"
                             >
-                              <span style={{ color: "red" }}>
-                                {trip.time ? "" : "*"}
-                              </span>{" "}
-                              Select Trip Time
+                              <span style={{ color: "red" }}></span> Select Trip
+                              Time
                             </label>
                             <TimePicker
                               style={{ height: "calc(1.5em + 1.25rem + 2px)" }}
@@ -605,9 +603,7 @@ const TripForm = ({
                                       className="form-control-label"
                                       htmlFor="input-time"
                                     >
-                                      <span style={{ color: "red" }}>
-                                        {trip.time ? "" : "*"}
-                                      </span>{" "}
+                                      <span style={{ color: "red" }}></span>{" "}
                                       Select Trip Time
                                     </label>
                                     <TimePicker
@@ -695,7 +691,7 @@ const TripForm = ({
                           htmlFor="input-fname"
                         >
                           <span style={{ color: "red" }}>
-                            {trip.client ? "" : "*"}
+                            {trip.invited_drivers.length > 0 ? "" : "*"}
                           </span>{" "}
                           Drivers Name
                         </label>
