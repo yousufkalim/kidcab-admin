@@ -61,10 +61,10 @@ const InvoiceRow = ({ invoice, autoRefresh, handleSelect, selectedItems }) => {
       </td>
 
       <td>
-        <div className="d-flex align-items-center">€{invoice.total_price}</div>
+        <div className="d-flex align-items-center">€{invoice?.total_price}</div>
       </td>
       <td className="text-left">
-        {invoice?.client.first_name + " " + invoice?.client.last_name}
+        {invoice?.client?.first_name + " " + invoice?.client?.last_name}
       </td>
 
       <td className="text-right">
