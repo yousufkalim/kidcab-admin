@@ -26,14 +26,15 @@ const ClientList = () => {
     return openModal;
   };
   const autoRefresh = () => {
-    api("get", "users").then((res) => setUsers(res.data.users));
+    api("get", "users").then((res) => {
+      console.log(res.data.users, "res");
+      setUsers(res.data.users);
+    });
   };
 
   useEffect(() => {
-    // api("get", "users").then((res) => setUsers(res.data.users));
     autoRefresh();
   }, [openModal]);
-
   return (
     <>
       <Container className="mt--7" fluid>
