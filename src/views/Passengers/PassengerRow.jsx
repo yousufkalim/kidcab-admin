@@ -16,21 +16,21 @@ const PassengerRow = ({ user, autoRefresh }) => {
     setOpenModal((open) => !open);
     return openModal;
   };
+  console.log("user", user);
   return (
     <tr>
       <th scope="row">
         <Media className="align-items-center">
           <Media>
             <span className="mb-0 text-sm">
-              {user.first_name + " " + user.last_name}
+              {user?.first_name + " " + user?.last_name}
             </span>
           </Media>
         </Media>
       </th>
-      <td>{user.relationship}</td>
-      <td>{user.client.first_name + " " + user.client.last_name}</td>
-
-      <td>{user.client.email}</td>
+      <td>{user?.relationship}</td>
+      <td>{user?.client?.first_name + " " + user?.client?.last_name}</td>
+      <td>{user?.client?.email}</td>
       <td className="text-right">
         <UncontrolledDropdown>
           <DropdownToggle
