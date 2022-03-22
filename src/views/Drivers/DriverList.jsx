@@ -194,6 +194,7 @@ const DriverList = () => {
             handleVehicleChange={handleVehicleChange}
             handleRoleChange={handleRoleChange}
             editUser={user}
+            setUserData={setUser}
             isClose={true}
             autoRefresh={autoRefresh}
           />

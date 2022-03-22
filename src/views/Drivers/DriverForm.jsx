@@ -1,8 +1,9 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import api from "../../api";
 import AddressInput from "components/Form/AddressInput";
 import View from "../../components/view";
+import FilePicker from "../../components/Form/FilePicker";
 import {
   Modal,
   ModalBody,
@@ -31,6 +32,7 @@ const DriverForm = ({
   isEditing,
   isClose,
   autoRefresh,
+  setUserData,
 }) => {
   const [user, setUser] = useState({
     profile_pic: "",
@@ -102,7 +104,7 @@ const DriverForm = ({
         company_name: editUser?.company_name,
         siret_number: editUser?.siret_number,
         legal_info: editUser?.legal_info,
-        social_capital: editUser?.siret_number,
+        social_capital: editUser?.social_capital,
         vat_number: editUser?.vat_number,
         city_of_rcs: editUser?.city_of_rcs,
         profile_pic: editUser?.profile_pic,
@@ -115,7 +117,7 @@ const DriverForm = ({
         proRc_image: editUser.proRc_image,
         proRc_date: editUser.proRc_date,
         id_front: editUser?.id_front,
-        id_back: editUser?.id_front,
+        id_back: editUser?.id_back,
         vtc_front: editUser?.vtc_front,
         vtc_back: editUser?.vtc_back,
         license_front: editUser?.license_front,
@@ -126,7 +128,6 @@ const DriverForm = ({
         insurance_civil_liability: editUser?.insurance_civil_liability,
         address: editUser?.address,
       });
-      setAddress(editUser?.address);
     }
   }, [editUser]);
 
@@ -165,6 +166,10 @@ const DriverForm = ({
         proRc_image: editUser.proRc_image,
         license_card_front: editUser.license_card_front,
         license_card_back: editUser.license_card_back,
+        insurance_civil_liability: editUser.insurance_civil_liability,
+        professional_liability: editUser.professional_liability,
+        rib: editUser.rib,
+        kbis_extract: editUser.kbis_extract,
       });
 
       setAddress(editUser.address);
@@ -366,7 +371,6 @@ const DriverForm = ({
     if (user.phone == "") {
       return toast.error("Please enter phone number");
     }
-    console.log("user", user);
     if (isEditing) {
       method = "put";
       uri = uri + `/${editUser._id}`;
@@ -374,6 +378,43 @@ const DriverForm = ({
     api(method, uri, formData).then((res) => {
       if (res.status == 200) {
         toast.success("Saved Successfully");
+        setUserData({
+          profile_pic: "",
+          id_front: "",
+          id_back: "",
+          vtc_front: "",
+          vtc_back: "",
+          criminal_record_image: "",
+          criminal_record_date: "",
+          ris_image: "",
+          ris_date: "",
+          kbis_image: "",
+          kbis_date: "",
+          proRc_image: "",
+          proRc_date: "",
+          license_front: "",
+          license_back: "",
+          kbis_extract: "",
+          rib: "",
+          professional_liability: "",
+          insurance_civil_liability: "",
+          firstName: "",
+          lastName: "",
+          email: "",
+          password: "",
+          phone: "",
+          bankName: "",
+          iban: "",
+          role: "",
+          vehicles: [],
+          company_name: "",
+          siret_number: "",
+          legal_info: "",
+          social_capital: "",
+          vat_number: "",
+          city_of_rcs: "",
+        });
+
         handleModal();
         autoRefresh();
       } else {
@@ -398,20 +439,26 @@ const DriverForm = ({
                 <div className="pl-lg-4">
                   <Row>
                     <Col lg="12">
-                      <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-image"
-                        >
+                      <FormGroup style={{ width: "60%" }}>
+                        <label className="form-control-label">
                           Add Profile Picture <View url={docs.profile_pic} />
                         </label>
-                        <Input
-                          className="form-control-file form"
-                          id="input-image"
-                          name="profile_pic"
-                          type="file"
-                          onChange={handleFileChange}
-                        />
+
+                        <FilePicker
+                          lableClassName="form-control-label"
+                          htmlFor="input-image"
+                          InputClassName="form-control-file form"
+                          InputId="input-image"
+                          InputName="profile_pic"
+                          value={
+                            editUser.profile_pic
+                              ? editUser.profile_pic
+                              : user.profile_pic
+                          }
+                          onChange={
+                            isEditing ? handleFile1Change : handleFileChange
+                          }
+                        ></FilePicker>
                       </FormGroup>
                     </Col>
                   </Row>
@@ -820,82 +867,101 @@ const DriverForm = ({
                         </Col>
                       </Row>
                       <Row>
-                        <Col lg="3">
+                        <Col lg="6">
                           <FormGroup>
-                            <label
-                              className="form-control-label"
-                              htmlFor="input-id-front"
-                            >
+                            <label className="form-control-label">
                               Add insurance civil liability{" "}
                               <i className="fa fa-id-card" />
+                              <View url={docs.insurance_civil_liability} />
                             </label>
-                            <Input
-                              className="form-control-file form"
-                              id="input-insurance-civil-liability"
-                              name="insurance_civil_liability"
-                              type="file"
+
+                            <FilePicker
+                              lableClassName="form-control-label"
+                              htmlFor="input-insurance-civil-liability"
+                              InputClassName="form-control-file form"
+                              InputId="input-insurance-civil-liability"
+                              InputName="insurance_civil_liability"
+                              value={
+                                editUser.insurance_civil_liability
+                                  ? editUser.insurance_civil_liability
+                                  : user.insurance_civil_liability
+                              }
                               onChange={
                                 isEditing ? handleFile1Change : handleFileChange
                               }
-                            />
+                            ></FilePicker>
                           </FormGroup>
                         </Col>
-                        <Col lg="3">
+                        <Col lg="6">
                           <FormGroup>
-                            <label
-                              className="form-control-label"
-                              htmlFor="input-id-front"
-                            >
+                            <label className="form-control-label">
                               Add Professional liability{" "}
                               <i className="fa fa-id-card" />
+                              <View url={docs.professional_liability} />
                             </label>
-                            <Input
-                              className="form-control-file form"
-                              id="input-Professional-liability"
-                              name="professional_liability"
-                              type="file"
+
+                            <FilePicker
+                              lableClassName="form-control-label"
+                              htmlFor="input-Professional-liability"
+                              InputClassName="form-control-file form"
+                              InputId="input-Professional-liability"
+                              InputName="professional_liability"
+                              value={
+                                editUser.professional_liability
+                                  ? editUser.professional_liability
+                                  : user.professional_liability
+                              }
                               onChange={
                                 isEditing ? handleFile1Change : handleFileChange
                               }
-                            />
+                            ></FilePicker>
                           </FormGroup>
                         </Col>
-                        <Col lg="3">
+                        <Col lg="6">
                           <FormGroup>
-                            <label
-                              className="form-control-label"
-                              htmlFor="input-id-front"
-                            >
+                            <label className="form-control-label">
                               Add RIB <i className="fa fa-id-card" />
+                              <View url={docs.rib} />
                             </label>
-                            <Input
-                              className="form-control-file form"
-                              id="input-RIB"
-                              name="rib"
-                              type="file"
+
+                            <FilePicker
+                              lableClassName="form-control-label"
+                              htmlFor="input-RIB"
+                              InputClassName="form-control-file form"
+                              InputId="input-RIB"
+                              InputName="rib"
+                              value={editUser.rib ? editUser.rib : user.rib}
                               onChange={
                                 isEditing ? handleFile1Change : handleFileChange
                               }
-                            />
+                            ></FilePicker>
                           </FormGroup>
                         </Col>
-                        <Col lg="3">
+                        <Col lg="6">
                           <FormGroup>
                             <label
                               className="form-control-label"
                               htmlFor="input-id-front"
                             >
                               Add Kbis extract <i className="fa fa-id-card" />
+                              <View url={docs.kbis_extract} />
                             </label>
-                            <Input
-                              className="form-control-file form"
-                              id="input-kbis-extract"
-                              name="kbis_extract"
-                              type="file"
+
+                            <FilePicker
+                              lableClassName="form-control-label"
+                              htmlFor="input-kbis-extract"
+                              InputClassName="form-control-file form"
+                              InputId="input-kbis-extract"
+                              InputName="kbis_extract"
+                              value={
+                                editUser.kbis_extract
+                                  ? editUser.kbis_extract
+                                  : user.kbis_extract
+                              }
                               onChange={
                                 isEditing ? handleFile1Change : handleFileChange
                               }
-                            />
+                            ></FilePicker>
                           </FormGroup>
                         </Col>
                       </Row>{" "}
@@ -1003,152 +1069,178 @@ const DriverForm = ({
                 <div className="pl-lg-4">
                   <Row>
                     <Col lg="6">
-                      <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-id-front"
-                        >
+                      <FormGroup
+                        style={{ display: "flex", flexDirection: "column" }}
+                      >
+                        <label className="form-control-label">
                           Add Identity Card/Passport/Residence Permit Front Side{" "}
                           <View url={docs.id_card_front} />
                         </label>
-                        <Input
-                          className="form-control-file form"
-                          id="input-id-front"
-                          name="id_front"
-                          type="file"
+                        <FilePicker
+                          lableClassName="form-control-label"
+                          htmlFor="input-id-front"
+                          InputClassName="form-control-file form"
+                          InputId="input-id-front"
+                          InputName="id_front"
+                          value={
+                            editUser.id_card_front
+                              ? editUser.id_card_front
+                              : user.id_front
+                          }
                           onChange={
                             isEditing ? handleFile1Change : handleFileChange
                           }
-                        />
+                        ></FilePicker>
                       </FormGroup>
                     </Col>
                     <Col lg="6">
                       <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-id-back"
-                        >
+                        <label className="form-control-label">
                           Add Identity Card/Passport/Residence Permit Back Side{" "}
                           <View url={docs.id_card_back} />
                         </label>
 
-                        <Input
-                          className="form-control-file form"
-                          id="input-id-back"
-                          name="id_back"
-                          type="file"
+                        <FilePicker
+                          lableClassName="form-control-label"
+                          htmlFor="input-id-back"
+                          InputClassName="form-control-file form"
+                          InputId="input-id-back"
+                          InputName="id_back"
+                          value={
+                            editUser.id_card_back
+                              ? editUser.id_card_back
+                              : user.id_back
+                          }
                           onChange={
                             isEditing ? handleFile1Change : handleFileChange
                           }
-                        />
+                        ></FilePicker>
                       </FormGroup>
                     </Col>
                   </Row>
                   <Row>
                     <Col lg="6">
                       <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-vtc-front"
-                        >
-                          Add VTC Card Front Side{" "}
+                        <label className="form-control-label">
+                          Add VTC Card Front Side
                           <View url={docs.vtc_card_front} />
                         </label>
-                        <Input
-                          className="form-control-file form"
-                          id="input-vtc-front"
-                          name="vtc_front"
-                          type="file"
+
+                        <FilePicker
+                          lableClassName="form-control-label"
+                          htmlFor="input-vtc-front"
+                          InputClassName="form-control-file form"
+                          InputId="input-vtc-front"
+                          InputName="vtc_front"
+                          value={
+                            editUser.vtc_card_front
+                              ? editUser.vtc_card_front
+                              : user.vtc_front
+                          }
                           onChange={
                             isEditing ? handleFile1Change : handleFileChange
                           }
-                        />
+                        ></FilePicker>
                       </FormGroup>
                     </Col>
                     <Col lg="6">
                       <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-vtc-back"
-                        >
+                        <label className="form-control-label">
                           Add VTC Card Back Side{" "}
                           <View url={docs.vtc_card_back} />
                         </label>
 
-                        <Input
-                          className="form-control-file form"
-                          id="input-vtc-back"
-                          name="vtc_back"
-                          type="file"
+                        <FilePicker
+                          lableClassName="form-control-label"
+                          htmlFor="input-vtc-back"
+                          InputClassName="form-control-file form"
+                          InputId="input-vtc-back"
+                          InputName="vtc_back"
+                          value={
+                            editUser.vtc_card_back
+                              ? editUser.vtc_card_back
+                              : user.vtc_back
+                          }
                           onChange={
                             isEditing ? handleFile1Change : handleFileChange
                           }
-                        />
+                        ></FilePicker>
                       </FormGroup>
                     </Col>
                   </Row>
                   <Row>
                     <Col lg="6">
                       <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-license-front"
-                        >
+                        <label className="form-control-label">
                           Add License Card Front Side{" "}
                           <View url={docs.license_card_front} />
                         </label>
-                        <Input
-                          className="form-control-file form"
-                          id="input-license-front"
-                          name="license_front"
-                          type="file"
+
+                        <FilePicker
+                          lableClassName="form-control-label"
+                          htmlFor="input-license-front"
+                          InputClassName="form-control-file form"
+                          InputId="input-license-front"
+                          InputName="license_front"
+                          value={
+                            editUser.license_card_front
+                              ? editUser.license_card_front
+                              : user.license_front
+                          }
                           onChange={
                             isEditing ? handleFile1Change : handleFileChange
                           }
-                        />
+                        ></FilePicker>
                       </FormGroup>
                     </Col>
                     <Col lg="6">
                       <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-license-back"
-                        >
+                        <label className="form-control-label">
                           Add License Card Back Side{" "}
                           <View url={docs.license_card_back} />
                         </label>
 
-                        <Input
-                          className="form-control-file form"
-                          id="input-license-back"
-                          name="license_back"
-                          type="file"
+                        <FilePicker
+                          lableClassName="form-control-label"
+                          htmlFor="input-license-back"
+                          InputClassName="form-control-file form"
+                          InputId="input-license-back"
+                          InputName="license_back"
+                          value={
+                            editUser.license_card_back
+                              ? editUser.license_card_back
+                              : user.license_back
+                          }
                           onChange={
                             isEditing ? handleFile1Change : handleFileChange
                           }
-                        />
+                        ></FilePicker>
                       </FormGroup>
                     </Col>
                   </Row>
                   <Row>
                     <Col lg="6">
                       <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-criminal-record"
-                        >
+                        <label className="form-control-label">
                           Add Criminal Record{" "}
                           <View url={docs.criminal_record_image} />
                         </label>
-                        <Input
-                          className="form-control-file form"
-                          id="input-criminal-record"
-                          name="criminal_record_image"
-                          type="file"
+
+                        <FilePicker
+                          lableClassName="form-control-label"
+                          htmlFor="input-criminal-record"
+                          InputClassName="form-control-file form"
+                          InputId="input-criminal-record"
+                          InputName="criminal_record_image"
+                          value={
+                            editUser.criminal_record_image
+                              ? editUser.criminal_record_image
+                              : user.criminal_record_image
+                          }
                           onChange={
                             isEditing ? handleFile1Change : handleFileChange
                           }
-                        />
+                        ></FilePicker>
                       </FormGroup>
                     </Col>
                     <Col lg="6">
@@ -1186,22 +1278,26 @@ const DriverForm = ({
                   <Row>
                     <Col lg="6">
                       <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-restricted-information-statement"
-                        >
+                        <label className="form-control-label">
                           Add Restricted Information Statement{" "}
                           <View url={docs.ris_image} />
                         </label>
-                        <Input
-                          className="form-control-file form"
-                          id="input-restricted-information-statement"
-                          name="ris_image"
-                          type="file"
+
+                        <FilePicker
+                          lableClassName="form-control-label"
+                          htmlFor="input-restricted-information-statement"
+                          InputClassName="form-control-file form"
+                          InputId="input-restricted-information-statement"
+                          InputName="ris_image"
+                          value={
+                            editUser.ris_image
+                              ? editUser.ris_image
+                              : user.ris_image
+                          }
                           onChange={
                             isEditing ? handleFile1Change : handleFileChange
                           }
-                        />
+                        ></FilePicker>
                       </FormGroup>
                     </Col>
                     <Col lg="6">
@@ -1234,22 +1330,25 @@ const DriverForm = ({
                   <Row>
                     <Col lg="6">
                       <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-kbis"
-                        >
+                        <label className="form-control-label">
                           Add KBIS <View url={docs.kbis_image} />
                         </label>
 
-                        <Input
-                          className="form-control-file form"
-                          id="input-kbis"
-                          name="kbis_image"
-                          type="file"
+                        <FilePicker
+                          lableClassName="form-control-label"
+                          htmlFor="input-kbis"
+                          InputClassName="form-control-file form"
+                          InputId="input-kbis"
+                          InputName="kbis_image"
+                          value={
+                            editUser.kbis_image
+                              ? editUser.kbis_image
+                              : user.kbis_image
+                          }
                           onChange={
                             isEditing ? handleFile1Change : handleFileChange
                           }
-                        />
+                        ></FilePicker>
                       </FormGroup>
                     </Col>
 
@@ -1288,24 +1387,26 @@ const DriverForm = ({
                   <Row>
                     <Col lg="6">
                       <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-pro_rc_insurance_certificate"
-                        >
+                        <label className="form-control-label">
                           Add Pro RC Insurance Certificate{" "}
                           <View url={docs.proRc_image} />
                         </label>
 
-                        <Input
-                          className="form-control-file form"
-                          id="input-pro_rc_insurance_certificate"
-                          name="proRc_image"
-                          type="file"
-                          title=" "
+                        <FilePicker
+                          lableClassName="form-control-label"
+                          htmlFor="input-pro_rc_insurance_certificate"
+                          InputClassName="form-control-file form"
+                          InputId="input-pro_rc_insurance_certificate"
+                          InputName="proRc_image"
+                          value={
+                            editUser.proRc_image
+                              ? editUser.proRc_image
+                              : user.proRc_image
+                          }
                           onChange={
                             isEditing ? handleFile1Change : handleFileChange
                           }
-                        />
+                        ></FilePicker>
                       </FormGroup>
                     </Col>
                     <Col lg="6">
