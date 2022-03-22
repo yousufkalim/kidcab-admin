@@ -36,10 +36,10 @@ const PassengerForm = ({
     api("get", "users").then((res) => setClients(res.data.users));
     if (isEditing) {
       setUser({
-        firstName: editUser.first_name,
-        lastName: editUser.last_name,
-        client: editUser.client._id,
-        relationship: editUser.relationship,
+        firstName: editUser?.first_name,
+        lastName: editUser?.last_name,
+        client: editUser?.client?._id,
+        relationship: editUser?.relationship,
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

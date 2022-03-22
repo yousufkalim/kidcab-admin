@@ -44,12 +44,12 @@ const InvoiceForm = ({
 
     if (isEditing) {
       setUser({
-        invoice_title: editUser.invoice_title,
-        issue_date: editUser.issue_date,
-        total_price: editUser.total_price,
-        status: editUser.status,
-        client: editUser.client,
-        comments: editUser.comments,
+        invoice_title: editUser?.invoice_title,
+        issue_date: editUser?.issue_date,
+        total_price: editUser?.total_price,
+        status: editUser?.status,
+        client: editUser?.client,
+        comments: editUser?.comments,
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -143,7 +143,7 @@ const InvoiceForm = ({
                           htmlFor="input-fname"
                         >
                           <span style={{ color: "red" }}>
-                            {user.invoice_title ? "" : "*"}
+                            {user?.invoice_title ? "" : "*"}
                           </span>{" "}
                           Invoice Title
                         </label>
@@ -166,7 +166,7 @@ const InvoiceForm = ({
                           htmlFor="input-lname"
                         >
                           <span style={{ color: "red" }}>
-                            {user.issue_date ? "" : "*"}
+                            {user?.issue_date ? "" : "*"}
                           </span>{" "}
                           Issue Date
                         </label>
@@ -174,7 +174,7 @@ const InvoiceForm = ({
                           className="form-control"
                           id="input-lname"
                           type="date"
-                          value={user.issue_date?.split("T")[0]}
+                          value={user?.issue_date?.split("T")[0]}
                           name="issue_date"
                           onChange={handleInputChange}
                         />
@@ -209,7 +209,7 @@ const InvoiceForm = ({
                             options={users.map((user) => ({
                               value: user._id,
                               label: `${
-                                user.first_name + " " + user.last_name
+                                user?.first_name + " " + user?.last_name
                               }`,
                             }))}
                           />
@@ -249,7 +249,7 @@ const InvoiceForm = ({
                           className="form-control-label"
                         >
                           <span style={{ color: "red" }}>
-                            {user.total_price ? "" : "*"}
+                            {user?.total_price ? "" : "*"}
                           </span>{" "}
                           Total Price
                         </Label>
@@ -259,7 +259,7 @@ const InvoiceForm = ({
                           className="form-control"
                           placeholder="Enter Total Price"
                           type="number"
-                          value={user.total_price}
+                          value={user?.total_price}
                           onChange={handleInputChange}
                         />
                       </FormGroup>
@@ -280,7 +280,7 @@ const InvoiceForm = ({
                           className="form-control"
                           placeholder="Enter comment here"
                           type="textarea"
-                          value={user.comments}
+                          value={user?.comments}
                           onChange={handleInputChange}
                         />
                       </FormGroup>
