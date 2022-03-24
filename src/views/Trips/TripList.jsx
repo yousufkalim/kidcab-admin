@@ -97,18 +97,21 @@ const TripList = () => {
       if (typefilter === true || driverfilter === true) {
         setTypeFilter(false);
         setDriverFilter(false);
+        autoRefresh();
       }
       setDateFilter((prevCheck) => !prevCheck);
     } else if (e.target.name === "trip-type-filter") {
       if (datefilter === true || driverfilter === true) {
         setDateFilter(false);
         setDriverFilter(false);
+        autoRefresh();
       }
       setTypeFilter((prevCheck) => !prevCheck);
     } else if (e.target.name === "driver-filter") {
       if (datefilter === true || typefilter === true) {
         setTypeFilter(false);
         setDateFilter(false);
+        autoRefresh();
       }
       setDriverFilter((prevCheck) => !prevCheck);
     }

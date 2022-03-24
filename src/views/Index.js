@@ -80,7 +80,6 @@ const Index = (props) => {
   };
   return (
     <>
-      {console.log("v", reports)}
       <Header />
       <Container className="mt--7" fluid>
         <Row>
@@ -89,7 +88,7 @@ const Index = (props) => {
               <CardHeader className="border-0">
                 <Row className="align-items-center">
                   <div className="col">
-                    <h3 className="mb-0">Daily report</h3>
+                    <h3 className="mb-0">Weekly report</h3>
                   </div>
                 </Row>
               </CardHeader>

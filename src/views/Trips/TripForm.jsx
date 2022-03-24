@@ -331,6 +331,7 @@ const TripForm = ({
   };
   return (
     <>
+      {console.log("edit", trip)}
       <Modal isOpen={openModal} size="xl" centered>
         <ModalHeader charCode="X" toggle={handleModal}>
           {isEditing ? "Edit" : "Add"} Trip
@@ -355,15 +356,6 @@ const TripForm = ({
                     </Col>
                     <Col lg="4">
                       <FormGroup>
-                        <AddressInput
-                          label="End Address"
-                          address={endAddress}
-                          setAddress={setEndAddress}
-                        />
-                      </FormGroup>
-                    </Col>
-                    <Col lg="4">
-                      <FormGroup>
                         <AddressInputMultiple
                           multiple={true}
                           label="Add Step"
@@ -371,6 +363,15 @@ const TripForm = ({
                           setAddress={setStepAddress}
                           allAddresses={allAddresses}
                           setAllAddresses={setAllAddresses}
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col lg="4">
+                      <FormGroup>
+                        <AddressInput
+                          label="End Address"
+                          address={endAddress}
+                          setAddress={setEndAddress}
                         />
                       </FormGroup>
                     </Col>
@@ -447,10 +448,9 @@ const TripForm = ({
                               className="form-control-alternative"
                               id="input-date"
                               locale={"en-gb"}
-                              // value={selectedDays?.map((i) => i)}
                               placeholder={"Select Dates"}
                               type="date"
-                              min={disableDates()}
+                              min={!isEditing && disableDates()}
                               value={trip?.date?.split("T")[0]}
                               name="date"
                               onChange={handleInputChange}
@@ -705,7 +705,9 @@ const TripForm = ({
                                 ),
                               }))
                             }
-                            isDisabled={isEditing}
+                            isDisabled={
+                              isEditing && editTrip?.status !== "pending"
+                            }
                             name="drivers"
                             isMulti
                             className="form-control-alternative"
