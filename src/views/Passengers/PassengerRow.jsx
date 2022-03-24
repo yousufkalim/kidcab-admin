@@ -16,7 +16,6 @@ const PassengerRow = ({ user, autoRefresh }) => {
     setOpenModal((open) => !open);
     return openModal;
   };
-  console.log("user", user);
   return (
     <tr>
       <th scope="row">

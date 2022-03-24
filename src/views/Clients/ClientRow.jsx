@@ -34,19 +34,19 @@ const ClientRow = ({ user, passenger, autoRefresh }) => {
         <Media className="align-items-center">
           <Media>
             <span className="mb-0 text-sm">
-              {user.first_name + " " + user.last_name}
+              {user?.first_name + " " + user?.last_name}
             </span>
           </Media>
         </Media>
       </th>
-      <td>{user.email}</td>
+      <td>{user?.email}</td>
       <td>
         <Badge color="" className="badge-dot mr-4">
           {/* <i className="bg-warning" /> */}
-          {user.phone_number}
+          {user?.phone_number}
         </Badge>
       </td>
-      <td>{user.passengers?.length}</td>
+      <td>{user?.passengers?.length}</td>
 
       <td className="text-right">
         <UncontrolledDropdown>
