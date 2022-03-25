@@ -5,6 +5,8 @@ import classnames from "classnames";
 import Chart from "chart.js";
 // react plugin used to create charts
 import { Line, Bar } from "react-chartjs-2";
+
+import chart from "./chart";
 import * as moment from "moment";
 // reactstrap components
 import {
@@ -47,13 +49,18 @@ const Index = (props) => {
   };
   const [reports, setReports] = useState([]);
   const [trips, setTrips] = useState([]);
+
   const [pendingpayments, setPendingPayments] = useState([]);
   const [overdueInvoices, setOverdueInvoices] = useState([]);
+  const [dataSet, SetDataSet] = useState([]);
 
   useEffect(() => {
     autoRefresh();
     autoInvoice();
   }, []);
+  useEffect(() => {
+    chart(dataSet);
+  }, [dataSet]);
 
   const autoInvoice = () => {
     api("get", `invoices/`).then((res) => {
@@ -77,14 +84,20 @@ const Index = (props) => {
       let reports = res?.data?.reports;
       setReports(reports);
     });
+    api("post", `/trips/getMonthlyReport`).then((res) => {
+      SetDataSet(res?.data?.reports);
+    });
   };
   return (
     <>
       <Header />
-      <Container className="mt--7" fluid>
-        <Row>
+      <Container className="mt--20" fluid>
+        <Row className="mt-5">
           <Col className="mb-5 mb-xl-0" xl="6">
-            <Card className="shadow">
+            <Card
+              style={{ maxHeight: "300px", overflow: "scroll" }}
+              className="shadow"
+            >
               <CardHeader className="border-0">
                 <Row className="align-items-center">
                   <div className="col">
@@ -121,7 +134,10 @@ const Index = (props) => {
             </Card>
           </Col>
           <Col className="mb-5 mb-xl-0" xl="6">
-            <Card className="shadow">
+            <Card
+              style={{ maxHeight: "300px", overflow: "scroll" }}
+              className="shadow"
+            >
               <CardHeader className="border-0">
                 <Row className="align-items-center">
                   <div className="col">
@@ -163,7 +179,10 @@ const Index = (props) => {
         </Row>
         <Row className="mt-5">
           <Col className="mb-5 mb-xl-0" xl="6">
-            <Card className="shadow">
+            <Card
+              style={{ maxHeight: "300px", overflow: "scroll" }}
+              className="shadow"
+            >
               <CardHeader className="border-0">
                 <Row className="align-items-center">
                   <div className="col">
@@ -202,7 +221,10 @@ const Index = (props) => {
             </Card>
           </Col>
           <Col className="mb-5 mb-xl-0" xl="6">
-            <Card className="shadow">
+            <Card
+              style={{ maxHeight: "300px", overflow: "scroll" }}
+              className="shadow"
+            >
               <CardHeader className="border-0">
                 <Row className="align-items-center">
                   <div className="col">
@@ -238,6 +260,23 @@ const Index = (props) => {
                   </>
                 </tbody>
               </Table>
+            </Card>
+          </Col>
+        </Row>
+        <Row className="mt-5">
+          <Col className="mb-5 mb-xl-0" xl="12">
+            <Card className="shadow">
+              <CardHeader className="border-0">
+                <Row className="align-items-center">
+                  <div className="col">
+                    <h3 className="mb-0">Weekly Revenue</h3>
+                  </div>
+                </Row>
+              </CardHeader>
+
+              <div className="dashboard-item chart">
+                <canvas id="lineChart"></canvas>
+              </div>
             </Card>
           </Col>
         </Row>

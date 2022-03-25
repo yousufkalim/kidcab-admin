@@ -232,6 +232,7 @@ const TripList = () => {
                         alignItems: "center",
                         margin: "11px",
                         marginTop: "24px",
+                        position: "relative",
                       }}
                     >
                       <div style={{ width: "60%" }}>
@@ -250,9 +251,9 @@ const TripList = () => {
                       <div>
                         <UncontrolledDropdown
                           style={{
-                            marginTop: "-13px",
                             position: "absolute",
-                            right: "210px",
+                            top: "15%",
+                            right: "20%",
                           }}
                         >
                           <DropdownToggle
