@@ -235,6 +235,9 @@ const TripForm = ({
     if (trip.driver_price < 1) {
       return toast.error("Please enter valid driver price");
     }
+    if (trip.driver_price > trip.client_price) {
+      return toast.error("Client price should be greater than driver price");
+    }
 
     if (trip.passengers.length < 1) {
       return toast.error("Passenger is required");
@@ -331,7 +334,7 @@ const TripForm = ({
   };
   return (
     <>
-      {console.log("edit", trip)}
+      {console.log("edit", editTrip)}
       <Modal isOpen={openModal} size="xl" centered>
         <ModalHeader charCode="X" toggle={handleModal}>
           {isEditing ? "Edit" : "Add"} Trip
@@ -691,7 +694,10 @@ const TripForm = ({
                           htmlFor="input-fname"
                         >
                           <span style={{ color: "red" }}>
-                            {trip.invited_drivers.length > 0 ? "" : "*"}
+                            {trip.invited_drivers.length > 0 ||
+                            trip.assigned_drivers.length > 0
+                              ? ""
+                              : "*"}
                           </span>{" "}
                           Drivers Name
                         </label>
@@ -713,10 +719,15 @@ const TripForm = ({
                             className="form-control-alternative"
                             defaultValue={
                               isEditing
-                                ? editTrip?.invited_drivers.map((i) => ({
-                                    value: i?.driver?._id,
-                                    label: `${i?.driver?.first_name} ${i?.driver?.last_name}`,
-                                  }))
+                                ? editTrip.status === "pending"
+                                  ? editTrip?.invited_drivers.map((i) => ({
+                                      value: i?.driver?._id,
+                                      label: `${i?.driver?.first_name} ${i?.driver?.last_name}`,
+                                    }))
+                                  : editTrip?.assigned_drivers.map((i) => ({
+                                      value: i?._id,
+                                      label: `${i?.first_name} ${i?.last_name}`,
+                                    }))
                                 : null
                             }
                             options={drivers.map((driver) => ({
