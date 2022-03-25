@@ -114,7 +114,6 @@ function AddressInput({ label, address, setAddress, optional }) {
                 ...this.menuStyle,
                 zIndex: 1,
                 marginTop: "5px",
-                position: "relative",
               }}
               children={items}
             />
