@@ -1,21 +1,20 @@
 // Init
 import Chart from "chart.js";
+import { map } from "jquery";
 import * as moment from "moment";
 
 // Function
 const chart = (data) => {
-  console.log("data in chart");
+  console.log("data in chart", data);
   // Line Chart
   let ctx = document.getElementById("lineChart");
   new Chart(ctx, {
     type: "line",
     data: {
-      labels: data.map((i) => {
-        return moment(i._id).format("dd");
-      }),
+      labels: ["week1", "week2", "week3", "week4", "week5"],
       datasets: [
         {
-          label: ["Last  Week"],
+          label: ["Week Revenue"],
           data: data.map((i) => {
             return i.client_price;
           }),

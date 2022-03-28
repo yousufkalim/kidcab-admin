@@ -84,7 +84,7 @@ const Index = (props) => {
       let reports = res?.data?.reports;
       setReports(reports);
     });
-    api("post", `/trips/getMonthlyReport`).then((res) => {
+    api("post", `/trips/getRevenue`).then((res) => {
       SetDataSet(res?.data?.reports);
     });
   };

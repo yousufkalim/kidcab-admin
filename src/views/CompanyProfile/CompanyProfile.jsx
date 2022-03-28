@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import api from "../../api";
+import FilePicker from "../../components/Form/FilePicker";
+import View from "../../components/view";
 import {
   Modal,
   ModalBody,
@@ -54,6 +56,7 @@ const CompanyProfile = ({ openModal, handleModal }) => {
   const handleFileChange = (e) => {
     setCompany({ ...company, [e.target.name]: e.target.files[0] });
   };
+
   const handleInputChange = (e) => {
     setCompany({ ...company, [e.target.name]: e.target.value });
   };
@@ -108,14 +111,17 @@ const CompanyProfile = ({ openModal, handleModal }) => {
                             {company.logo ? "" : "*"}
                           </span>{" "}
                           Add Logo <i className="ni ni-album-2" />
+                          <View url={company?.logo} />
                         </label>
-                        <Input
-                          className="form-control-file form"
-                          id="input-image"
-                          name="logo"
-                          type="file"
+                        <FilePicker
+                          lableClassName="form-control-label"
+                          htmlFor="input-image"
+                          InputClassName="form-control-file form"
+                          InputId="input-image"
+                          InputName="logo"
+                          value={company?.logo}
                           onChange={handleFileChange}
-                        />
+                        ></FilePicker>
                       </FormGroup>
                     </Col>
                   </Row>
