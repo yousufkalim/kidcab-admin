@@ -235,7 +235,7 @@ const TripForm = ({
     if (parseInt(trip.driver_price) < 1) {
       return toast.error("Please enter valid driver price");
     }
-    if (parseInt(trip.driver_price) > parseInt(trip.client_price)) {
+    if (parseInt(trip.driver_price) >= parseInt(trip.client_price)) {
       return toast.error("Client price should be greater than driver price");
     }
 
