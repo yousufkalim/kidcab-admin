@@ -226,16 +226,16 @@ const TripForm = ({
       return toast.error("Please enter trip dates");
     }
 
-    if (trip.client_price < 1 || trip.client_price == "") {
+    if (parseInt(trip.client_price) < 1 || trip.client_price == "") {
       return toast.error("Invalid client price");
     }
     if (trip.driver_price == "") {
       return toast.error("Please enter drive price");
     }
-    if (trip.driver_price < 1) {
+    if (parseInt(trip.driver_price) < 1) {
       return toast.error("Please enter valid driver price");
     }
-    if (trip.driver_price > trip.client_price) {
+    if (parseInt(trip.driver_price) > parseInt(trip.client_price)) {
       return toast.error("Client price should be greater than driver price");
     }
 

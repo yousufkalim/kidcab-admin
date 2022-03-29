@@ -1074,7 +1074,7 @@ const DriverForm = ({
                       >
                         <label className="form-control-label">
                           Add Identity Card/Passport/Residence Permit Front Side{" "}
-                          <View url={docs.id_card_front} />
+                          <View url={docs?.id_card_front} />
                         </label>
                         <FilePicker
                           lableClassName="form-control-label"
