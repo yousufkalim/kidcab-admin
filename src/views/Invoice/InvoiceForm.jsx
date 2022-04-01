@@ -16,6 +16,7 @@ import {
   Label,
 } from "reactstrap";
 import moment from "moment";
+import TripForm from "views/Trips/TripForm";
 
 // core components
 
@@ -33,10 +34,12 @@ const InvoiceForm = ({
     status: "pending",
     comments: "",
     client: "",
+    // trip: "",
   });
 
   const [users, setUsers] = useState([]);
-
+  // const [clienttrips, setClientTrips] = useState([]);
+  // const [tripChange, setTripChange] = useState("");
   useEffect(() => {
     api("get", "users").then((res) => {
       setUsers(res.data.users);
@@ -50,6 +53,7 @@ const InvoiceForm = ({
         status: editUser?.status,
         client: editUser?.client,
         comments: editUser?.comments,
+        trip: editUser?.trip,
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -61,8 +65,16 @@ const InvoiceForm = ({
 
   const handleUserChange = (e) => {
     setUser({ ...user, client: e.value });
+    // let client = e.value;
+    // api("post", "trips/clientTrip/", client).then((res) => {
+    //   setClientTrips(res.data.trips);
+    // });
+    // setTripChange("");
   };
-
+  // const handleTripChange = (e) => {
+  //   setUser({ ...user, trip: e.value });
+  //   setTripChange(e.value);
+  // };
   const handleDelete = () => {
     let method = "delete";
     let uri = "invoices";
@@ -216,6 +228,27 @@ const InvoiceForm = ({
                         )}
                       </FormGroup>
                     </Col>
+                    {/* <Col lg="3">
+                      <FormGroup>
+                        <Label
+                          for="exampleSelect"
+                          className="form-control-label"
+                        >
+                          Select Trip
+                        </Label>
+                        <Select
+                          onChange={handleTripChange}
+                          name="trip"
+                          isDisabled={!user?.client}
+                          className="form-control-alternative"
+                          Value={tripChange ? tripChange : ""}
+                          options={clienttrips?.map((trip) => ({
+                            value: trip._id,
+                            label: trip._id,
+                          }))}
+                        />
+                      </FormGroup>
+                    </Col> */}
                     <Col lg="4">
                       <FormGroup>
                         <Label

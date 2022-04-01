@@ -392,8 +392,8 @@ const ScheduleCalendar = (props) => {
             // onSelectEvent={(e) => console.log(e)}
             views={
               props.views || {
-                week: true,
                 day: true,
+                week: true,
                 month: true,
                 agenda: true,
               }

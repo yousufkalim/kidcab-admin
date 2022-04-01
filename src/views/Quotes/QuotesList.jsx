@@ -70,7 +70,7 @@ const QuotesList = () => {
         setTypeFilter(false);
       }
       setDateFilter((prevCheck) => !prevCheck);
-    } else if (e.target.name === "trip-type-filter") {
+    } else if (e.target.name === "qoute-type-filter") {
       if (datefilter === true) {
         setDateFilter(false);
       }
@@ -200,7 +200,7 @@ const QuotesList = () => {
                           All Qoutes
                         </DropdownItem>
                         <DropdownItem
-                          name="trip-type-filter"
+                          name="qoute-type-filter"
                           onClick={filterCheck}
                         >
                           Filter By Qoute type
@@ -315,8 +315,8 @@ const QuotesList = () => {
                     <th scope="col">Status</th>
                     <th scope="col">Client</th>
                     <th scope="col">No. of Trips</th>
-                    <th scope="col">Total Price</th>
-                    <th scope="col">Total Price Including VAT</th>
+                    <th scope="col">TOTAL PRICE INCLUDING VAT</th>
+                    <th scope="col">Total Price without VAT</th>
                     <th scope="col">Start Date</th>
                     <th scope="col">End Date</th>
                     <th scope="col">Actions </th>

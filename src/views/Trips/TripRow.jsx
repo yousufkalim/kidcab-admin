@@ -46,16 +46,27 @@ const TripRow = ({ trip, autoRefresh, selectedItems, handleSelect }) => {
         </Badge>
       </th>
       <td className="text-center">
-        {trip.client ? trip.client.first_name : "No client is added"}
+        {trip.client
+          ? trip.client.first_name + " " + trip.client.last_name
+          : "No client is added"}
       </td>
       <td className="text-center">
         {trip?.passengers ? trip.passengers.length : "No Passenger is added"}
       </td>
-      <td className="text-center">
-        {trip?.invited_drivers
-          ? trip.invited_drivers.length
-          : "No Driver is Invited"}
-      </td>
+      {trip?.invited_drivers?.length > 0 ? (
+        <td className="text-center">
+          {trip.invited_drivers.map((i) => {
+            return " " + i.driver.first_name + " " + i.driver.last_name;
+          })}
+        </td>
+      ) : (
+        <td className="text-center">
+          {trip.assigned_drivers.map((i) => {
+            return " " + i.first_name + " " + i.last_name;
+          })}
+        </td>
+      )}
+
       <td className="text-center">
         {trip?.date ? trip?.date.split("T")[0] : "Date not Found"}
       </td>

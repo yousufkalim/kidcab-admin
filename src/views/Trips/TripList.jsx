@@ -39,6 +39,11 @@ const TripList = () => {
       setSelectedItems((prev) => [...prev, trip]);
     }
   };
+  const selectAll = () => {
+    trips.map((e) => {
+      setSelectedItems((prev) => [...prev, e]);
+    });
+  };
 
   const handleDeleteMany = async () => {
     const tripIds = selectedItems.map((a) => a._id);
@@ -162,6 +167,14 @@ const TripList = () => {
                 <div className="d-flex justify-content-between ">
                   <h3 className="mb-0">Trip List</h3>
                   <div>
+                    <Button
+                      color="warning"
+                      href="#pablo"
+                      size="md"
+                      onClick={selectAll}
+                    >
+                      Select All
+                    </Button>
                     {selectedItems.length > 0 && (
                       <Button
                         color="danger"
@@ -420,7 +433,7 @@ const TripList = () => {
                       Passengers
                     </th>
                     <th scope="col" className="text-center">
-                      Invited Drivers
+                      Drivers
                     </th>
                     <th scope="col" className="text-center">
                       Date
