@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { setToken } from "../../variables/auth";
+import { toast } from "react-toastify";
 // reactstrap components
 import {
   Button,
@@ -38,6 +39,16 @@ const Login = () => {
         user: admin,
       });
     }
+  };
+  const handleForget = () => {
+    api("post", "/admins/forgetPassword").then((res) => {
+      // eslint-disable-next-line eqeqeq
+      if (res.status == 200) {
+        return toast.success("Reset Password email sent");
+      } else {
+        return toast.error("Delete Error", res.data.message);
+      }
+    });
   };
   if (authorization) return <Redirect push to="/admin" />;
   return (
@@ -113,11 +124,7 @@ const Login = () => {
         </Card>
         <Row className="mt-3">
           <Col xs="6">
-            <a
-              className="text-light"
-              href="#pablo"
-              onClick={(e) => e.preventDefault()}
-            >
+            <a className="text-light" href="#pablo" onClick={handleForget}>
               <small>Forgot password?</small>
             </a>
           </Col>

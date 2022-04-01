@@ -72,7 +72,6 @@ const TripForm = ({
   let [startAddress, setStartAddress] = useState({});
   let [endAddress, setEndAddress] = useState({});
   let [stepAddress, setStepAddress] = useState([]);
-  let [addStep, setAddStep] = useState(false);
   const [drivers, setDrivers] = useState([]);
   const [passengers, setPassengers] = useState([]);
   const [allPassengers, setAllPassengers] = useState([]);
@@ -334,7 +333,6 @@ const TripForm = ({
   };
   return (
     <>
-      {console.log("edit", editTrip)}
       <Modal isOpen={openModal} size="xl" centered>
         <ModalHeader charCode="X" toggle={handleModal}>
           {isEditing ? "Edit" : "Add"} Trip

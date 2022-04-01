@@ -10,6 +10,7 @@ import {
   DropdownMenu,
   UncontrolledDropdown,
   DropdownItem,
+  Input,
   Button,
 } from "reactstrap";
 import InvoiceForm from "./InvoiceForm";
@@ -26,6 +27,11 @@ const InvoiceList = () => {
   const [dropDownItem, setDropDownItem] = useState("all");
   const [statusdropDown, setStatusDropDown] = useState("Bulk Action");
   const [selectedItems, setSelectedItems] = useState([]);
+  const [typefilter, setTypeFilter] = useState(false);
+  const [datefilter, setDateFilter] = useState(false);
+  const [filter, setFilter] = useState("");
+  const [dates, setDates] = useState([]);
+  const [filterdropDownItem, setFilterDropDownItem] = useState("all");
 
   const handleSelect = (invoice) => {
     const selected = selectedItems.filter((a) => a._id === invoice._id);
@@ -34,6 +40,10 @@ const InvoiceList = () => {
     } else {
       setSelectedItems((prev) => [...prev, invoice]);
     }
+  };
+  const handelNameFilter = (e) => {
+    e.preventDefault();
+    setFilterDropDownItem(e.target.name);
   };
   const handleDeleteMany = async () => {
     const invoiceIds = selectedItems.map((a) => a._id);
@@ -44,14 +54,40 @@ const InvoiceList = () => {
       setSelectedItems([]);
     });
   };
+  const filterCheck = (e) => {
+    e.preventDefault();
+    setDropDownItem(e.target.name);
+    if (e.target.name === "all") {
+      setTypeFilter(false);
+      setDateFilter(false);
+      setFilter("");
+      setFilterDropDownItem(e.target.name);
+      autoRefresh();
+    } else if (e.target.name == "date-filter") {
+      if (typefilter === true) {
+        setTypeFilter(false);
+        autoRefresh();
+      }
+      setDateFilter((prevCheck) => !prevCheck);
+    } else if (e.target.name === "invoice-type-filter") {
+      if (datefilter === true) {
+        setDateFilter(false);
+        autoRefresh();
+      }
+      setTypeFilter((prevCheck) => !prevCheck);
+    }
+  };
   const handleModal = () => {
     setOpenModal((open) => !open);
     return openModal;
   };
   const autoRefresh = () => {
-    api("get", `invoices/status/${dropDownItem}`).then((res) => {
+    api("get", `invoices/status/${filterdropDownItem}`).then((res) => {
       setInvoices(res.data.invoices);
     });
+  };
+  const handleInputChange = (e) => {
+    setDates({ ...dates, [e.target.name]: e.target.value });
   };
 
   const changeStatus = (e) => {
@@ -68,10 +104,32 @@ const InvoiceList = () => {
       setStatusDropDown("Bulk Action");
     });
   };
+  const handleSubmit = (e) => {
+    console.log("pressed");
+    e.preventDefault();
+    let method = "post";
+    let uri = "invoices/InvoiceByDate";
+    if (dates.start_end == "") {
+      return toast.error("Please enter start date");
+    }
+    if (dates.end_date == "") {
+      return toast.error("Please enter end date");
+    }
+    api(method, uri, {
+      ...dates,
+    }).then((res) => {
+      // eslint-disable-next-line eqeqeq
+      if (res.status == 200) {
+        setInvoices(res.data.invoices);
+      } else {
+        toast.error(" Error", res);
+      }
+    });
+  };
 
   useEffect(() => {
     autoRefresh();
-  }, [openModal, dropDownItem]);
+  }, [openModal, filterdropDownItem]);
   return (
     <>
       <Container className="mt--7" fluid>
@@ -81,8 +139,46 @@ const InvoiceList = () => {
             <Card className="shadow">
               <CardHeader className="border-0">
                 <div className="d-flex justify-content-between ">
-                  <h3 className="mb-0">Invoice List</h3>
-
+                  <div className="filter-cont" style={{ width: "20%" }}>
+                    {typefilter && (
+                      <UncontrolledDropdown>
+                        <DropdownToggle
+                          color="warning"
+                          name
+                          href="#pablo"
+                          role="button"
+                          caret
+                          style={{ textTransform: "capitalize" }}
+                        >
+                          {filterdropDownItem}
+                          &nbsp;invoices
+                        </DropdownToggle>
+                        <DropdownMenu>
+                          <DropdownItem name="all" onClick={handelNameFilter}>
+                            All Invoices
+                          </DropdownItem>
+                          <DropdownItem
+                            name="pending"
+                            onClick={handelNameFilter}
+                          >
+                            Pending Invoices
+                          </DropdownItem>
+                          <DropdownItem name="paid" onClick={handelNameFilter}>
+                            Paid Invoices
+                          </DropdownItem>
+                          <DropdownItem name="late" onClick={handelNameFilter}>
+                            Late Invoices
+                          </DropdownItem>
+                          <DropdownItem
+                            name="cancelled"
+                            onClick={handelNameFilter}
+                          >
+                            Cancelled Invoices
+                          </DropdownItem>
+                        </DropdownMenu>
+                      </UncontrolledDropdown>
+                    )}
+                  </div>
                   <div>
                     {selectedItems.length > 0 && (
                       <>
@@ -131,64 +227,33 @@ const InvoiceList = () => {
                     )}
                     <UncontrolledDropdown>
                       <DropdownToggle
-                        color="primary"
+                        color="danger"
                         name
                         href="#pablo"
                         role="button"
                         caret
-                        style={{ textTransform: "capitalize" }}
+                        size="md"
+                        style={{
+                          textTransform: "capitalize",
+                        }}
                       >
                         {dropDownItem}
-                        &nbsp;invoices
                       </DropdownToggle>
                       <DropdownMenu>
-                        <DropdownItem
-                          name="all"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            setDropDownItem(e.target.name);
-                          }}
-                        >
+                        <DropdownItem name="all" onClick={filterCheck}>
                           All Invoices
                         </DropdownItem>
                         <DropdownItem
-                          name="pending"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            setDropDownItem(e.target.name);
-                          }}
+                          name="invoice-type-filter"
+                          onClick={filterCheck}
                         >
-                          Pending Invoices
+                          Filter By Invoice type
                         </DropdownItem>
-                        <DropdownItem
-                          name="paid"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            setDropDownItem(e.target.name);
-                          }}
-                        >
-                          Paid Invoices
-                        </DropdownItem>
-                        <DropdownItem
-                          name="late"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            setDropDownItem(e.target.name);
-                          }}
-                        >
-                          Late Invoices
-                        </DropdownItem>
-                        <DropdownItem
-                          name="cancelled"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            setDropDownItem(e.target.name);
-                          }}
-                        >
-                          Cancelled Invoices
+                        <DropdownItem name="date-filter" onClick={filterCheck}>
+                          Filter By Date
                         </DropdownItem>
                       </DropdownMenu>
-                    </UncontrolledDropdown>{" "}
+                    </UncontrolledDropdown>
                     <Button
                       color="primary"
                       href="#pablo"
@@ -200,6 +265,83 @@ const InvoiceList = () => {
                     </Button>
                   </div>
                 </div>
+                {datefilter ? (
+                  <>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        width: "100%",
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: "35%",
+                        }}
+                      >
+                        <label
+                          className="form-control-label"
+                          htmlFor="input-date"
+                        >
+                          <span style={{ color: "red" }}>
+                            {dates?.start_date ? "" : "*"}
+                          </span>{" "}
+                          Start Date
+                        </label>
+                        <Input
+                          className="form-control-alternative"
+                          id="input-date"
+                          placeholder={"Select Start Date"}
+                          type="date"
+                          value={dates?.start_date}
+                          name="start_date"
+                          onChange={handleInputChange}
+                        />
+                      </div>
+                      <div
+                        style={{
+                          width: "35%",
+                          marginLeft: "20px",
+                        }}
+                      >
+                        <label
+                          className="form-control-label"
+                          htmlFor="input-date"
+                        >
+                          <span style={{ color: "red" }}>
+                            {dates?.end_date ? "" : "*"}
+                          </span>{" "}
+                          End Date
+                        </label>
+                        <Input
+                          className="form-control-alternative"
+                          id="input-date"
+                          placeholder={"Select End Date"}
+                          type="date"
+                          value={dates?.end_date}
+                          name="end_date"
+                          onChange={handleInputChange}
+                        />
+                      </div>
+                      <div style={{ marginTop: "35px" }}></div>
+                    </div>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        marginTop: "10px",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <Button color="primary" size="md" onClick={handleSubmit}>
+                        Search
+                      </Button>
+                    </div>
+                  </>
+                ) : (
+                  ""
+                )}
               </CardHeader>
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">

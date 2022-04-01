@@ -86,6 +86,17 @@ const QuotesForm = ({
   }, []);
 
   const handleInputChange = (e) => {
+    if (e.target.name == "totalPrice") {
+      let vat = (parseInt(e.target.value) / 100) * 20;
+      let unitPrice =
+        (parseInt(e.target.value) - parseInt(vat)) / parseInt(quote.totalTrips);
+      setQuote((quote) => ({
+        ...quote,
+        [e.target.name]: e.target.value,
+        vat: vat,
+        unitPrice: unitPrice,
+      }));
+    }
     setQuote((quote) => ({ ...quote, [e.target.name]: e.target.value }));
   };
 
@@ -124,8 +135,6 @@ const QuotesForm = ({
       unit_price: quote.unitPrice,
     };
 
-    let totalPrice = quote.unitPrice * quote.totalTrips;
-
     const formData = {};
     formData["quote_title"] = quote.title;
     formData["client"] = quote.client;
@@ -133,7 +142,7 @@ const QuotesForm = ({
     formData["description"] = quote.description;
     formData["quote_number"] = quote.quoteNumber;
     formData["issue_date"] = quote.issueDate;
-    formData["total_price"] = quote.unitPrice * quote.totalTrips;
+    formData["total_price"] = quote.totalPrice;
     formData["vat"] = quote.vat;
     formData["status"] = quote.status;
     formData["trip_info"] = JSON.stringify(tripInfo);
@@ -216,8 +225,6 @@ const QuotesForm = ({
       unit_price: quote.unitPrice,
     };
 
-    let totalPrice = quote.unitPrice * quote.totalTrips;
-
     const formData = {};
     formData["quote_title"] = quote.title;
     formData["client"] = quote.client._id ? quote.client._id : quote.client;
@@ -225,7 +232,7 @@ const QuotesForm = ({
     formData["description"] = quote.description ? quote.description : "";
     formData["quote_number"] = quote.quoteNumber;
     formData["issue_date"] = moment(quote.issueDate).format("YYYY-MM-DD");
-    formData["total_price"] = quote.unitPrice * quote.totalTrips;
+    formData["total_price"] = quote.totalPrice;
     formData["vat"] = quote.vat;
     formData["status"] = quote.status;
     formData["trip_info"] = JSON.stringify(tripInfo);
@@ -251,8 +258,14 @@ const QuotesForm = ({
     if (tripInfo.total_trips == "") {
       return toast.error("Please enter total number of trips");
     }
-    if (quote.unitPrice == "") {
-      return toast.error("Please enter quote price");
+    if (parseInt(tripInfo.total_trips) < 1) {
+      return toast.error("Please enter valid total number of trips");
+    }
+    if (parseInt(quote.totalPrice) == "") {
+      return toast.error("Please enter Amount with tax");
+    }
+    if (parseInt(quote.totalPrice) < 1) {
+      return toast.error("Please enter valid Amount with tax");
     }
 
     if (quote.vat == "") {
@@ -471,9 +484,9 @@ const QuotesForm = ({
                           htmlFor="input-fname"
                         >
                           <span style={{ color: "red" }}>
-                            {quote.unitPrice ? "" : "*"}
+                            {quote.totalPrice ? "" : "*"}
                           </span>{" "}
-                          Unit Price
+                          Amount with tax
                         </label>
                         <Input
                           className="form-control-alternative"
@@ -481,8 +494,9 @@ const QuotesForm = ({
                           required={true}
                           placeholder="Unit Trips"
                           type="text"
-                          value={quote.unitPrice}
-                          name="unitPrice"
+                          disabled={!quote?.totalTrips}
+                          value={quote.totalPrice}
+                          name="totalPrice"
                           onChange={handleInputChange}
                         />
                       </FormGroup>
@@ -496,13 +510,14 @@ const QuotesForm = ({
                           <span style={{ color: "red" }}>
                             {quote.vat ? "" : "*"}
                           </span>{" "}
-                          VAT
+                          Total Taxes
                         </label>
                         <Input
                           className="form-control-alternative"
                           id="input-lname"
                           placeholder="VAT"
                           type="text"
+                          readOnly
                           value={quote.vat}
                           name="vat"
                           onChange={handleInputChange}
