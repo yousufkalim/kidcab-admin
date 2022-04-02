@@ -90,6 +90,7 @@ const QuotesForm = ({
       let vat = (parseInt(e.target.value) / 100) * 20;
       let unitPrice =
         (parseInt(e.target.value) - parseInt(vat)) / parseInt(quote.totalTrips);
+
       setQuote((quote) => ({
         ...quote,
         [e.target.name]: e.target.value,

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import api from "../../api";
 import Select from "react-select";
+import AddressInput from "components/Form/AddressInput";
 import {
   Modal,
   ModalBody,
@@ -16,7 +17,6 @@ import {
   Label,
 } from "reactstrap";
 import moment from "moment";
-import TripForm from "views/Trips/TripForm";
 
 // core components
 
@@ -34,12 +34,27 @@ const InvoiceForm = ({
     status: "pending",
     comments: "",
     client: "",
-    // trip: "",
+    startDate: "",
+    endDate: "",
   });
 
   const [users, setUsers] = useState([]);
-  // const [clienttrips, setClientTrips] = useState([]);
-  // const [tripChange, setTripChange] = useState("");
+  let [startAddress, setStartAddress] = useState({
+    lat: "",
+    lng: "",
+    label: "",
+    label2: "",
+    city: "",
+    postal_code: "",
+  });
+  let [endAddress, setEndAddress] = useState({
+    lat: "",
+    lng: "",
+    label: "",
+    label2: "",
+    city: "",
+    postal_code: "",
+  });
   useEffect(() => {
     api("get", "users").then((res) => {
       setUsers(res.data.users);
@@ -53,8 +68,11 @@ const InvoiceForm = ({
         status: editUser?.status,
         client: editUser?.client,
         comments: editUser?.comments,
-        trip: editUser?.trip,
+        startDate: editUser?.trip_info?.start_date,
+        endDate: editUser?.trip_info?.end_date,
       });
+      setStartAddress(editUser?.trip_info?.start_address);
+      setEndAddress(editUser?.trip_info?.end_address);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -65,16 +83,8 @@ const InvoiceForm = ({
 
   const handleUserChange = (e) => {
     setUser({ ...user, client: e.value });
-    // let client = e.value;
-    // api("post", "trips/clientTrip/", client).then((res) => {
-    //   setClientTrips(res.data.trips);
-    // });
-    // setTripChange("");
   };
-  // const handleTripChange = (e) => {
-  //   setUser({ ...user, trip: e.value });
-  //   setTripChange(e.value);
-  // };
+
   const handleDelete = () => {
     let method = "delete";
     let uri = "invoices";
@@ -97,12 +107,32 @@ const InvoiceForm = ({
     e.preventDefault();
     let method = "post";
     let uri = "invoices";
+    const tripInfo = {
+      start_date: user.startDate,
+      end_date: user.endDate,
+      start_address: startAddress,
+      end_address: endAddress,
+    };
+    const formData = {};
+    formData["invoice_title"] = user?.invoice_title;
+    formData["issue_date"] = user?.issue_date;
+    formData["total_price"] = user?.total_price;
+    formData["status"] = user?.status;
+    formData["client"] = user?.client;
+    formData["comments"] = user?.comments;
+    formData["trip_info"] = JSON.stringify(tripInfo);
 
+    if (
+      startAddress.lat == endAddress.lat &&
+      startAddress.lng == endAddress.lng
+    ) {
+      return toast.error("Start and end address cant be same");
+    }
     if (editUser) {
       method = "put";
       uri = uri + `/${editUser._id}`;
     }
-    api(method, uri, user).then((res) => {
+    api(method, uri, formData).then((res) => {
       if (res.status === 200) {
         toast.success("Saved Successfully");
         handleModal();
@@ -134,6 +164,8 @@ const InvoiceForm = ({
 
   return (
     <>
+      {console.log(user, "user")}
+      {console.log("user", user)}
       <Modal isOpen={openModal} size="xl" centered>
         <ModalHeader charCode="X" toggle={handleModal}>
           {isEditing ? "Edit" : "Add"} Invoice
@@ -208,7 +240,7 @@ const InvoiceForm = ({
                             name="user"
                             hideSelectedOptions
                             defaultValue={
-                              user._id && {
+                              user && {
                                 value: user.client._id,
                                 label: `${
                                   user.client.first_name +
@@ -228,27 +260,7 @@ const InvoiceForm = ({
                         )}
                       </FormGroup>
                     </Col>
-                    {/* <Col lg="3">
-                      <FormGroup>
-                        <Label
-                          for="exampleSelect"
-                          className="form-control-label"
-                        >
-                          Select Trip
-                        </Label>
-                        <Select
-                          onChange={handleTripChange}
-                          name="trip"
-                          isDisabled={!user?.client}
-                          className="form-control-alternative"
-                          Value={tripChange ? tripChange : ""}
-                          options={clienttrips?.map((trip) => ({
-                            value: trip._id,
-                            label: trip._id,
-                          }))}
-                        />
-                      </FormGroup>
-                    </Col> */}
+
                     <Col lg="4">
                       <FormGroup>
                         <Label
@@ -294,6 +306,76 @@ const InvoiceForm = ({
                           type="number"
                           value={user?.total_price}
                           onChange={handleInputChange}
+                        />
+                      </FormGroup>
+                    </Col>
+                  </Row>
+                  <hr className="my-4" />
+                  <h6 className="heading-small text-muted mb-4">
+                    Trip information
+                  </h6>
+                  <Row>
+                    <Col lg="6">
+                      <FormGroup>
+                        <label
+                          className="form-control-label"
+                          htmlFor="input-lname"
+                        >
+                          <span style={{ color: "red" }}>
+                            {user.startDate ? "" : "*"}
+                          </span>{" "}
+                          Start Date
+                        </label>
+                        <Input
+                          className="form-control-alternative"
+                          id="input-lname"
+                          placeholder="Quote Number"
+                          type="date"
+                          value={user.startDate?.split("T")[0]}
+                          name="startDate"
+                          onChange={handleInputChange}
+                        />
+                      </FormGroup>
+                    </Col>{" "}
+                    <Col lg="6">
+                      <FormGroup>
+                        <label
+                          className="form-control-label"
+                          htmlFor="input-lname"
+                        >
+                          <span style={{ color: "red" }}>
+                            {user.endDate ? "" : "*"}
+                          </span>{" "}
+                          End Date
+                        </label>
+                        <Input
+                          className="form-control-alternative"
+                          id="input-lname"
+                          placeholder="Quote Number"
+                          type="date"
+                          value={user.endDate?.split("T")[0]}
+                          name="endDate"
+                          onChange={handleInputChange}
+                        />
+                      </FormGroup>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col lg="6">
+                      <FormGroup>
+                        <AddressInput
+                          label="Start Address"
+                          address={startAddress}
+                          setAddress={setStartAddress}
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col lg="6">
+                      <FormGroup>
+                        <AddressInput
+                          label="End Address"
+                          address={endAddress}
+                          setAddress={setEndAddress}
                         />
                       </FormGroup>
                     </Col>

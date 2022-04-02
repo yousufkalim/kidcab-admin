@@ -49,6 +49,7 @@ const Index = (props) => {
   };
   const [reports, setReports] = useState([]);
   const [trips, setTrips] = useState([]);
+  const [pendingTrips, setPendingTrips] = useState([]);
 
   const [pendingpayments, setPendingPayments] = useState([]);
   const [overdueInvoices, setOverdueInvoices] = useState([]);
@@ -76,8 +77,12 @@ const Index = (props) => {
   };
 
   const autoRefresh = () => {
-    api("get", `/trips/status/pending`).then((res) => {
+    api("get", `/trips`).then((res) => {
       let trips = res?.data?.trips;
+      let pendingTrips = res?.data?.trips.filter((i) => {
+        return i.status === "pending";
+      });
+      setPendingTrips(pendingTrips);
       setTrips(trips);
     });
     api("post", `/trips/getDayReport`).then((res) => {
@@ -157,8 +162,8 @@ const Index = (props) => {
                 </thead>
                 <tbody>
                   <>
-                    {trips ? (
-                      trips?.map((trip) => (
+                    {pendingTrips ? (
+                      pendingTrips?.map((trip) => (
                         <tr>
                           <td>{trip?.client?.first_name}</td>
                           <td>{trip?.passengers?.length}</td>

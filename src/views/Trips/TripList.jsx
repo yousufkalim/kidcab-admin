@@ -1,7 +1,8 @@
 // reactstrap components
 import { ExportTrips } from "components/exportTrips";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { toast } from "react-toastify";
+import ReactPaginate from "react-paginate";
 import {
   Button,
   Card,
@@ -21,6 +22,7 @@ import TripRow from "./TripRow";
 
 const TripList = () => {
   const [openModal, setOpenModal] = useState(false);
+  const pagination = useRef();
   const [trips, setTrips] = useState();
   const [dropDownItem, setDropDownItem] = useState("all");
   const [filterdropDownItem, setFilterDropDownItem] = useState("all");
@@ -30,6 +32,9 @@ const TripList = () => {
   const [datefilter, setDateFilter] = useState(false);
   const [driverfilter, setDriverFilter] = useState(false);
   const [selectedItems, setSelectedItems] = useState([]);
+  const [selectBtn, setSelectBtn] = useState(false);
+  const [page, setPage] = useState(0);
+  const [count, setCount] = useState(0);
 
   const handleSelect = (trip) => {
     const selected = selectedItems.filter((a) => a._id === trip._id);
@@ -40,9 +45,20 @@ const TripList = () => {
     }
   };
   const selectAll = () => {
-    trips.map((e) => {
-      setSelectedItems((prev) => [...prev, e]);
-    });
+    if (selectBtn == true) {
+      setSelectBtn(false);
+      setSelectedItems([]);
+    } else {
+      setSelectBtn(true);
+      trips.map((e) => {
+        setSelectedItems((prev) => [...prev, e]);
+      });
+    }
+  };
+
+  const setPageis = ({ selected }) => {
+    console.log(selected === 0 ? 1 : selected);
+    setPage(selected);
   };
 
   const handleDeleteMany = async () => {
@@ -59,8 +75,12 @@ const TripList = () => {
     return openModal;
   };
   const autoRefresh = () => {
-    api("get", `trips/status/${filterdropDownItem}`).then((res) => {
+    api("post", `trips/status/${filterdropDownItem}`, {
+      pageNumber: page,
+      pageSize: 10,
+    }).then((res) => {
       setTrips(res?.data?.trips);
+      setCount(res.data.totalResults);
     });
   };
 
@@ -155,7 +175,7 @@ const TripList = () => {
 
   useEffect(() => {
     autoRefresh();
-  }, [openModal, filterdropDownItem]);
+  }, [openModal, filterdropDownItem, page]);
 
   return (
     <>
@@ -173,7 +193,11 @@ const TripList = () => {
                       size="md"
                       onClick={selectAll}
                     >
-                      Select All
+                      {selectBtn === false ? (
+                        <>Select All</>
+                      ) : (
+                        <>De-Select all</>
+                      )}
                     </Button>
                     {selectedItems.length > 0 && (
                       <Button
@@ -186,7 +210,7 @@ const TripList = () => {
                       </Button>
                     )}
                     <ExportTrips
-                      dropDownItem={dropDownItem}
+                      dropDownItem={filterdropDownItem}
                       trips={selectedItems}
                     />
                     <UncontrolledDropdown>
@@ -467,61 +491,30 @@ const TripList = () => {
                   )}
                 </tbody>
               </Table>
-              {/* <CardFooter className="py-4">
-                <nav aria-label="...">
-                  <Pagination
-                    className="pagination justify-content-end mb-0"
-                    listClassName="justify-content-end mb-0"
-                  >
-                    <PaginationItem className="disabled">
-                      <PaginationLink
-                        href="#pablo"
-                        onClick={(e) => e.preventDefault()}
-                        tabIndex="-1"
-                      >
-                        <i className="fas fa-angle-left" />
-                        <span className="sr-only">Previous</span>
-                      </PaginationLink>
-                    </PaginationItem>
-                    <PaginationItem className="active">
-                      <PaginationLink
-                        href="#pablo"
-                        onClick={(e) => e.preventDefault()}
-                      >
-                        1
-                      </PaginationLink>
-                    </PaginationItem>
-                    <PaginationItem>
-                      <PaginationLink
-                        href="#pablo"
-                        onClick={(e) => e.preventDefault()}
-                      >
-                        2 <span className="sr-only">(current)</span>
-                      </PaginationLink>
-                    </PaginationItem>
-                    <PaginationItem>
-                      <PaginationLink
-                        href="#pablo"
-                        onClick={(e) => e.preventDefault()}
-                      >
-                        3
-                      </PaginationLink>
-                    </PaginationItem>
-                    <PaginationItem>
-                      <PaginationLink
-                        href="#pablo"
-                        onClick={(e) => e.preventDefault()}
-                      >
-                        <i className="fas fa-angle-right" />
-                        <span className="sr-only">Next</span>
-                      </PaginationLink>
-                    </PaginationItem>
-                  </Pagination>
-                </nav>
-              </CardFooter> */}
             </Card>
           </div>
         </Row>
+        <div style={{ width: "50%", margin: "auto" }}>
+          <ReactPaginate
+            ref={pagination}
+            marginPagesDisplayed={1}
+            pageCount={Math.ceil(count / 10)}
+            onPageChange={setPageis}
+            containerClassName="pagination"
+            activeClassName="active"
+            pageLinkClassName="page-link"
+            breakLinkClassName="page-link"
+            nextLinkClassName="page-link"
+            previousLinkClassName="page-link"
+            pageClassName="page-item"
+            breakClassName="page-item"
+            nextClassName="page-item"
+            previousClassName="page-item"
+            previousLabel={<>&laquo;</>}
+            nextLabel={<>&raquo;</>}
+            style={{ justifyContent: "center" }}
+          />
+        </div>
         {openModal && (
           <TripForm
             openModal={openModal}

@@ -10,6 +10,7 @@ import {
   DropdownMenu,
   UncontrolledDropdown,
   DropdownItem,
+  Button,
 } from "reactstrap";
 
 // Component
@@ -49,51 +50,45 @@ export const ExportTrips = ({ dropDownItem, trips }) => {
   };
 
   //exporting pdf
-  const handleSubmitPdf = async () => {
-    let tableRows;
-
-    if (trips.length > 0) {
-      tableRows = trips.map((item) => {
-        return [
-          new Date(item.date).toLocaleDateString(),
-          item.status,
-          item.client.first_name + " " + item.client.last_name,
-          item.quote.passengers.length,
-          item.invited_drivers.length,
-          item.assigned_drivers.length,
-          item.start_address.label,
-          item.end_address.label,
-        ];
-      });
-    } else {
-      const res = await api("get", `trips/status/${dropDownItem}`);
-      tableRows = res.data?.trips?.map((item) => {
-        return [
-          new Date(item.date).toLocaleDateString(),
-          item.status,
-          item.client.first_name + " " + item.client.last_name,
-          item.quote.passengers.length,
-          item.invited_drivers.length,
-          item.assigned_drivers.length,
-          item.start_address.label,
-          item.end_address.label,
-        ];
-      });
-    }
-
-    const doc = new jsPDF({
-      orientation: "landscape",
+  const handleExportPdf = async () => {
+    let tripsIds = trips.map((trip) => {
+      return trip._id;
     });
 
-    doc.autoTable(myHeader, tableRows, {
-      startY: 54,
-      theme: "grid",
-      styles: {
-        align: "center",
-      },
-    });
+    let method = "post";
+    let uri = "trips/export_pdf";
 
-    doc.save("trips.pdf");
+    await api(method, uri, { trips: tripsIds }).then((res) => {
+      console.log("res", res.data.filepath);
+
+      let filename = res.data.filepath.split("/").pop();
+
+      // Code to download a pdf from URL
+      const req = new XMLHttpRequest();
+      req.open("GET", res.data.filepath, true);
+      req.responseType = "blob";
+      req.onload = function () {
+        const blob = new Blob([req.response], {
+          type: "application/pdf",
+        });
+
+        const isIE = false || !!document.documentMode;
+        if (isIE) {
+          window.navigator.msSaveBlob(blob, filename);
+        } else {
+          const windowUrl = window.URL || window.webkitURL;
+          const href = windowUrl.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.setAttribute("download", filename);
+          a.setAttribute("href", href);
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+        }
+      };
+      req.send();
+      // await api("delete", "invoices/pdf", { data: { file: filename } });
+    });
   };
 
   // exporting excel
@@ -133,38 +128,51 @@ export const ExportTrips = ({ dropDownItem, trips }) => {
 
   // Render
   return (
-    <UncontrolledDropdown>
-      <DropdownToggle
-        color="success"
-        name
-        href="#pablo"
-        role="button"
-        e-caret-hide
-        style={{ textTransform: "capitalize" }}
-      >
-        <i className="ni ni-collection"></i> Export&nbsp;
-        {exportItem}
-      </DropdownToggle>
-      <DropdownMenu>
-        <DropdownItem
-          name="pdf"
-          onClick={(e) => {
-            setExportItem(e.target.name);
-            handleSubmitPdf();
-          }}
-        >
-          PDF
-        </DropdownItem>
-        <DropdownItem
-          name="excel"
-          onClick={(e) => {
-            setExportItem(e.target.name);
-            handleSubmitExcel(dropDownItem);
-          }}
-        >
-          Excel
-        </DropdownItem>
-      </DropdownMenu>
-    </UncontrolledDropdown>
+    // <UncontrolledDropdown>
+    //   <DropdownToggle
+    //     color="success"
+    //     name
+    //     href="#pablo"
+    //     role="button"
+    //     e-caret-hide
+    //     style={{ textTransform: "capitalize" }}
+    //   >
+    //     <i className="ni ni-collection"></i> Export&nbsp;
+    //     {exportItem}
+    //   </DropdownToggle>
+    //   <DropdownMenu>
+    //     <DropdownItem
+    //       name="pdf"
+    //       onClick={(e) => {
+    //         setExportItem(e.target.name);
+    //         handleSubmitPdf();
+    //       }}
+    //     >
+    //       PDF
+    //     </DropdownItem>
+    //     <DropdownItem
+    //       name="excel"
+    //       onClick={(e) => {
+    //         setExportItem(e.target.name);
+    //         handleSubmitExcel(dropDownItem);
+    //       }}
+    //     >
+    //       Excel
+    //     </DropdownItem>
+    //   </DropdownMenu>
+    // </UncontrolledDropdown>
+    <Button
+      color="success"
+      name
+      href="#pablo"
+      role="button"
+      e-caret-hide
+      style={{ textTransform: "capitalize" }}
+      onClick={(e) => {
+        handleExportPdf();
+      }}
+    >
+      <i className="ni ni-collection"></i> Export Pdf&nbsp;
+    </Button>
   );
 };
