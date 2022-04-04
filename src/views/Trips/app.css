@@ -18,3 +18,7 @@
   transition: box-shadow 0.15s ease;
   border-radius: 0.375rem;
 }
+.pagination {
+  justify-content: center !important;
+  margin-top: 20px;
+}

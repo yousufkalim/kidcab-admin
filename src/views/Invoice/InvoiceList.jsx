@@ -118,7 +118,6 @@ const InvoiceList = () => {
     api(method, uri, {
       ...dates,
     }).then((res) => {
-      // eslint-disable-next-line eqeqeq
       if (res.status == 200) {
         setInvoices(res.data.invoices);
       } else {

@@ -11,6 +11,7 @@ import {
   DropdownMenu,
   UncontrolledDropdown,
   DropdownItem,
+  Button,
 } from "reactstrap";
 
 // Component
@@ -85,7 +86,7 @@ export const ExportQuotes = ({ quotes }) => {
           }
         };
         req.send();
-        await api("delete", "quotes/pdf", { data: { file: filename } });
+        // await api("delete", "quotes/pdf", { data: { file: filename } });
       });
     });
   };
@@ -125,38 +126,51 @@ export const ExportQuotes = ({ quotes }) => {
 
   // Render
   return (
-    <UncontrolledDropdown>
-      <DropdownToggle
-        color="success"
-        name
-        href="#pablo"
-        role="button"
-        e-caret-hide
-        style={{ textTransform: "capitalize" }}
-      >
-        <i className="ni ni-collection"></i> Export&nbsp;
-        {exportItem}
-      </DropdownToggle>
-      <DropdownMenu>
-        <DropdownItem
-          name="pdf"
-          onClick={(e) => {
-            setExportItem(e.target.name);
-            handleExportPdf();
-          }}
-        >
-          PDF
-        </DropdownItem>
-        <DropdownItem
-          name="excel"
-          onClick={(e) => {
-            setExportItem(e.target.name);
-            handleSubmitExcel();
-          }}
-        >
-          Excel
-        </DropdownItem>
-      </DropdownMenu>
-    </UncontrolledDropdown>
+    // <UncontrolledDropdown>
+    //   <DropdownToggle
+    //     color="success"
+    //     name
+    //     href="#pablo"
+    //     role="button"
+    //     e-caret-hide
+    //     style={{ textTransform: "capitalize" }}
+    //   >
+    //     <i className="ni ni-collection"></i> Export&nbsp;
+    //     {exportItem}
+    //   </DropdownToggle>
+    //   <DropdownMenu>
+    //     <DropdownItem
+    //       name="pdf"
+    //       onClick={(e) => {
+    //         setExportItem(e.target.name);
+    //         handleExportPdf();
+    //       }}
+    //     >
+    //       PDF
+    //     </DropdownItem>
+    //     <DropdownItem
+    //       name="excel"
+    //       onClick={(e) => {
+    //         setExportItem(e.target.name);
+    //         handleSubmitExcel();
+    //       }}
+    //     >
+    //       Excel
+    //     </DropdownItem>
+    //   </DropdownMenu>
+    // </UncontrolledDropdown>
+    <Button
+      color="success"
+      name
+      href="#pablo"
+      role="button"
+      e-caret-hide
+      style={{ textTransform: "capitalize" }}
+      onClick={(e) => {
+        handleExportPdf();
+      }}
+    >
+      <i className="ni ni-collection"></i> Export Pdf&nbsp;
+    </Button>
   );
 };
