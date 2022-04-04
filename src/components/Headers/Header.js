@@ -40,6 +40,7 @@ const Header = () => {
                       <div className="col">
                         <CardTitle
                           tag="h5"
+                          width="5ch"
                           className="text-uppercase text-muted mb-0"
                         >
                           Total Users
@@ -64,6 +65,7 @@ const Header = () => {
                       <div className="col">
                         <CardTitle
                           tag="h5"
+                          width="5ch"
                           className="text-uppercase text-muted mb-0"
                         >
                           Total Trips
@@ -88,6 +90,7 @@ const Header = () => {
                       <div className="col">
                         <CardTitle
                           tag="h5"
+                          width="5ch"
                           className="text-uppercase text-muted mb-0"
                         >
                           Total Drivers
@@ -112,6 +115,7 @@ const Header = () => {
                       <div className="col">
                         <CardTitle
                           tag="h5"
+                          width="5ch"
                           className="text-uppercase text-muted mb-0"
                         >
                           Total Passengers

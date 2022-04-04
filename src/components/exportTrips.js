@@ -59,35 +59,34 @@ export const ExportTrips = ({ dropDownItem, trips }) => {
     let uri = "trips/export_pdf";
 
     await api(method, uri, { trips: tripsIds }).then((res) => {
-      console.log("res", res.data.filepath);
-
-      let filename = res.data.filepath.split("/").pop();
-
-      // Code to download a pdf from URL
-      const req = new XMLHttpRequest();
-      req.open("GET", res.data.filepath, true);
-      req.responseType = "blob";
-      req.onload = function () {
-        const blob = new Blob([req.response], {
-          type: "application/pdf",
-        });
-
-        const isIE = false || !!document.documentMode;
-        if (isIE) {
-          window.navigator.msSaveBlob(blob, filename);
-        } else {
-          const windowUrl = window.URL || window.webkitURL;
-          const href = windowUrl.createObjectURL(blob);
-          const a = document.createElement("a");
-          a.setAttribute("download", filename);
-          a.setAttribute("href", href);
-          document.body.appendChild(a);
-          a.click();
-          document.body.removeChild(a);
-        }
-      };
-      req.send();
-      // await api("delete", "invoices/pdf", { data: { file: filename } });
+      res.data.files.map( (file) => {
+        let filename = file.split("/").pop();
+        // Code to download a pdf from URL
+        const req = new XMLHttpRequest();
+        req.open("GET", file, true);
+        req.responseType = "blob";
+        req.onload = function () {
+          const blob = new Blob([req.response], {
+            type: "application/pdf",
+          });
+          const isIE = false || !!document.documentMode;
+          if (isIE) {
+            window.navigator.msSaveBlob(blob, filename);
+          } else {
+            const windowUrl = window.URL || window.webkitURL;
+            const href = windowUrl.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.setAttribute("download", filename);
+            a.setAttribute("href", href);
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+          }
+        };
+        req.send();
+        // await api("delete", "quotes/pdf", { data: { file: filename } });
+      });
+       
     });
   };
 
