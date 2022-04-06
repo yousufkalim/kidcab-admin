@@ -41,7 +41,10 @@ const Login = () => {
     }
   };
   const handleForget = () => {
-    api("post", "/admins/forgetPassword").then((res) => {
+    if(!login.email){
+      return toast.error("Admin email is required...!");
+    }
+    api("post", "/admins/forgetPassword",{email:login.email}).then((res) => {
       // eslint-disable-next-line eqeqeq
       if (res.status == 200) {
         return toast.success("Reset Password email sent");
