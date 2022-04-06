@@ -132,7 +132,7 @@ const InvoiceForm = ({
       method = "put";
       uri = uri + `/${editUser._id}`;
     }
-    api(method, uri, formData).then((res) => {
+    api(method, uri, formData).then(async(res) => {
       if (res.status === 200) {
         toast.success("Saved Successfully");
         handleModal();
@@ -240,12 +240,12 @@ const InvoiceForm = ({
                             name="user"
                             hideSelectedOptions
                             defaultValue={
-                              user && {
-                                value: user.client._id,
+                              editUser && {
+                                value: user?.client?._id,
                                 label: `${
-                                  user.client.first_name +
+                                  user?.client?.first_name +
                                   " " +
-                                  user.client.last_name
+                                  user?.client?.last_name
                                 }`,
                               }
                             }

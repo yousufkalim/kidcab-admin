@@ -487,7 +487,7 @@ const QuotesForm = ({
                           <span style={{ color: "red" }}>
                             {quote.totalPrice ? "" : "*"}
                           </span>{" "}
-                          Amount with tax
+                          Amount with taxes
                         </label>
                         <Input
                           className="form-control-alternative"
