@@ -8,18 +8,18 @@ const chart = (data) => {
   console.log("data in chart", data);
   let setMonday = new Date();
   setMonday.setDate(setMonday.getDate() - ((setMonday.getDay() + 6) % 7)); //set last monday
-  let Fir_week = setMonday.getTime() - 2419200000; //Fir week
-  let S_week = setMonday.getTime() - 1814400000; //second week
-  let T_week = setMonday.getTime() - 1209600000; //Third week
-  let Fo_week = setMonday.getTime() - 604800000; //Fourth week
-  let Fi_week = setMonday; //Fifth week
+  let findMonday = setMonday.getTime() - 3024000000; // 5
+  let Fir_week = setMonday.getTime() - 2419200000; //4
+  let S_week = setMonday.getTime() - 1814400000; //3
+  let T_week = setMonday.getTime() - 1209600000; //2
+  let Fo_week = setMonday.getTime() - 604800000; //1
   // Line Chart
-  console.log()
   let ctx = document.getElementById("lineChart");
   new Chart(ctx, {
     type: "line",
     data: {
       labels: [
+        moment(findMonday).format("YYYY-MM-DD"),
         moment(Fir_week).format("YYYY-MM-DD"),
         moment(S_week).format("YYYY-MM-DD"),
         moment(T_week).format("YYYY-MM-DD"),

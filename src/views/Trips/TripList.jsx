@@ -50,6 +50,7 @@ const TripList = () => {
       setSelectedItems([]);
     } else {
       setSelectBtn(true);
+      setSelectedItems([]);
       trips.map((e) => {
         setSelectedItems((prev) => [...prev, e]);
       });
@@ -209,10 +210,12 @@ const TripList = () => {
                         Delete Trips
                       </Button>
                     )}
-                    <ExportTrips
-                      dropDownItem={filterdropDownItem}
-                      trips={selectedItems}
-                    />
+                    {selectedItems.length > 0 && (
+                      <ExportTrips
+                        dropDownItem={filterdropDownItem}
+                        trips={selectedItems}
+                      />
+                    )}
                     <UncontrolledDropdown>
                       <DropdownToggle
                         color="danger"

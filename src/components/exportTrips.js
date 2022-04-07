@@ -59,7 +59,7 @@ export const ExportTrips = ({ dropDownItem, trips }) => {
     let uri = "trips/export_pdf";
 
     await api(method, uri, { trips: tripsIds }).then((res) => {
-      res.data.files.map( (file) => {
+      res.data.files.map((file) => {
         let filename = file.split("/").pop();
         // Code to download a pdf from URL
         const req = new XMLHttpRequest();
@@ -86,7 +86,6 @@ export const ExportTrips = ({ dropDownItem, trips }) => {
         req.send();
         // await api("delete", "quotes/pdf", { data: { file: filename } });
       });
-       
     });
   };
 
