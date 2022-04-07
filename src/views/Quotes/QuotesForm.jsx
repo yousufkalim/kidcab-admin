@@ -86,6 +86,11 @@ const QuotesForm = ({
   }, []);
 
   const handleInputChange = (e) => {
+    if (e.target.name === "totalTrips") {
+      if (parseInt(e.target.value) < 1) {
+        return toast.error("Trips should be greater than 1");
+      }
+    }
     if (e.target.name == "totalPrice") {
       let vat = (parseInt(e.target.value) / 100) * 20;
       let unitPrice =

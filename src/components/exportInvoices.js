@@ -84,7 +84,6 @@ export const ExportInvoices = ({ dropDownItem, invoices }) => {
           }
         };
         req.send();
-        // await api("delete", "invoices/pdf", { data: { file: filename } });
       });
     });
   };
