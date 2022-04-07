@@ -30,12 +30,15 @@ const InvoiceForm = ({
   const [user, setUser] = useState({
     invoice_title: "",
     issue_date: "",
-    total_price: "",
+    totalPrice: "",
     status: "pending",
     comments: "",
     client: "",
     startDate: "",
     endDate: "",
+    totalTrips: "",
+    unitPrice: "",
+    vat: "",
   });
 
   const [users, setUsers] = useState([]);
@@ -64,7 +67,10 @@ const InvoiceForm = ({
       setUser({
         invoice_title: editUser?.invoice_title,
         issue_date: editUser?.issue_date,
-        total_price: editUser?.total_price,
+        totalTrips: editUser?.trip_info.total_trips,
+        totalPrice: editUser?.total_price,
+        unitPrice: editUser.trip_info.unit_price,
+        vat: editUser?.vat,
         status: editUser?.status,
         client: editUser?.client,
         comments: editUser?.comments,
@@ -78,6 +84,24 @@ const InvoiceForm = ({
   }, []);
 
   const handleInputChange = (e) => {
+    if (e.target.name === "totalTrips") {
+      if (parseInt(e.target.value) < 1) {
+        return toast.error("Trips should be greater than 1");
+      }
+    }
+    if (e.target.name == "totalPrice") {
+      let Vat = (parseInt(e.target.value) / 100) * 20;
+      let UnitPrice =
+        (parseInt(e.target.value) - parseInt(Vat)) / parseInt(user?.totalTrips);
+      console.log(Vat, "Vat", UnitPrice, "UnitPrice");
+      setUser((user) => ({
+        ...user,
+        [e.target.name]: e.target.value,
+        vat: Vat,
+        unitPrice: UnitPrice,
+      }));
+      return;
+    }
     setUser({ ...user, [e.target.name]: e.target.value });
   };
 
@@ -108,18 +132,21 @@ const InvoiceForm = ({
     let method = "post";
     let uri = "invoices";
     const tripInfo = {
+      total_trips: user?.totalTrips,
       start_date: user.startDate,
       end_date: user.endDate,
       start_address: startAddress,
       end_address: endAddress,
+      unit_price: user?.unitPrice,
     };
     const formData = {};
     formData["invoice_title"] = user?.invoice_title;
+    formData["total_price"] = user?.totalPrice;
     formData["issue_date"] = user?.issue_date;
-    formData["total_price"] = user?.total_price;
     formData["status"] = user?.status;
     formData["client"] = user?.client;
     formData["comments"] = user?.comments;
+    formData["vat"] = user?.vat;
     formData["trip_info"] = JSON.stringify(tripInfo);
 
     if (
@@ -132,7 +159,7 @@ const InvoiceForm = ({
       method = "put";
       uri = uri + `/${editUser._id}`;
     }
-    api(method, uri, formData).then(async(res) => {
+    api(method, uri, formData).then(async (res) => {
       if (res.status === 200) {
         toast.success("Saved Successfully");
         handleModal();
@@ -164,8 +191,7 @@ const InvoiceForm = ({
 
   return (
     <>
-      {console.log(user, "user")}
-      {console.log("user", user)}
+      {console.log(user)}
       <Modal isOpen={openModal} size="xl" centered>
         <ModalHeader charCode="X" toggle={handleModal}>
           {isEditing ? "Edit" : "Add"} Invoice
@@ -226,7 +252,7 @@ const InvoiceForm = ({
                     </Col>
                   </Row>
                   <Row>
-                    <Col lg="4">
+                    <Col lg="6">
                       <FormGroup>
                         <Label
                           for="exampleSelect"
@@ -261,7 +287,7 @@ const InvoiceForm = ({
                       </FormGroup>
                     </Col>
 
-                    <Col lg="4">
+                    <Col lg="6">
                       <FormGroup>
                         <Label
                           for="exampleSelect"
@@ -287,33 +313,83 @@ const InvoiceForm = ({
                         </Input>
                       </FormGroup>
                     </Col>
-                    <Col lg="4">
-                      <FormGroup>
-                        <Label
-                          for="exampleSelect"
-                          className="form-control-label"
-                        >
-                          <span style={{ color: "red" }}>
-                            {user?.total_price ? "" : "*"}
-                          </span>{" "}
-                          Total Price
-                        </Label>
-                        <Input
-                          id="exampleSelect"
-                          name="total_price"
-                          className="form-control"
-                          placeholder="Enter Total Price"
-                          type="number"
-                          value={user?.total_price}
-                          onChange={handleInputChange}
-                        />
-                      </FormGroup>
-                    </Col>
                   </Row>
                   <hr className="my-4" />
                   <h6 className="heading-small text-muted mb-4">
                     Trip information
                   </h6>
+                  <Row>
+                    <Col lg="4">
+                      <FormGroup>
+                        <label
+                          className="form-control-label"
+                          htmlFor="input-fname"
+                        >
+                          <span style={{ color: "red" }}>
+                            {user.totalTrips ? "" : "*"}
+                          </span>{" "}
+                          No. of Trips
+                        </label>
+                        <Input
+                          className="form-control-alternative"
+                          id="input-fname"
+                          required={true}
+                          placeholder="Total Trips"
+                          type="number"
+                          value={user.totalTrips}
+                          name="totalTrips"
+                          onChange={handleInputChange}
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col lg="4">
+                      <FormGroup>
+                        <label
+                          className="form-control-label"
+                          htmlFor="input-fname"
+                        >
+                          <span style={{ color: "red" }}>
+                            {user.totalPrice ? "" : "*"}
+                          </span>{" "}
+                          Amount with taxes
+                        </label>
+                        <Input
+                          className="form-control-alternative"
+                          id="input-fname"
+                          required={true}
+                          placeholder="Unit Trips"
+                          type="text"
+                          disabled={!user?.totalTrips}
+                          value={user?.totalPrice}
+                          name="totalPrice"
+                          onChange={handleInputChange}
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col lg="4">
+                      <FormGroup>
+                        <label
+                          className="form-control-label"
+                          htmlFor="input-lname"
+                        >
+                          <span style={{ color: "red" }}>
+                            {user?.vat ? "" : "*"}
+                          </span>{" "}
+                          Total Taxes
+                        </label>
+                        <Input
+                          className="form-control-alternative"
+                          id="input-lname"
+                          placeholder="VAT"
+                          type="text"
+                          readOnly
+                          value={user?.vat}
+                          name="vat"
+                          onChange={handleInputChange}
+                        />
+                      </FormGroup>
+                    </Col>
+                  </Row>
                   <Row>
                     <Col lg="6">
                       <FormGroup>
