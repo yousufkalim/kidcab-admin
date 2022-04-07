@@ -140,7 +140,6 @@ const QuotesForm = ({
       end_address: endAddress,
       unit_price: quote.unitPrice,
     };
-
     const formData = {};
     formData["quote_title"] = quote.title;
     formData["client"] = quote.client;
