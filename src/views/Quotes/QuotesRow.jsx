@@ -50,8 +50,8 @@ const QuotesRow = ({ quote, autoRefresh, selectedItems, handleSelect }) => {
 
       <td>{quote?.client?.first_name + " " + quote?.client?.last_name}</td>
       <td>{quote?.trip_info && quote?.trip_info?.total_trips}</td>
-      <td>€{quote?.total_price}</td>
-      <td>€{quote?.total_price - quote?.vat}</td>
+      <td>{quote?.total_price}€</td>
+      <td>{quote?.total_price - quote?.vat}€</td>
       <td>
         <div className="d-flex align-items-center">
           {quote?.trip_info &&
