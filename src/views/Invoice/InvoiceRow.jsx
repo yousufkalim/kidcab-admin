@@ -59,15 +59,15 @@ const InvoiceRow = ({ invoice, autoRefresh, handleSelect, selectedItems }) => {
       </td>
       <td>
         <div className="d-flex align-items-center">
-          €{invoice?.trip_info?.total_trips}
+          {invoice?.trip_info?.total_trips}
         </div>
       </td>
       <td>
-        <div className="d-flex align-items-center">€{invoice?.total_price}</div>
+        <div className="d-flex align-items-center">{invoice?.total_price}€</div>
       </td>
       <td>
         <div className="d-flex align-items-center">
-          €{parseInt(invoice?.total_price) - parseInt(invoice?.vat)}
+          {parseInt(invoice?.total_price) - parseInt(invoice?.vat)}€
         </div>
       </td>
       <td className="text-left">
