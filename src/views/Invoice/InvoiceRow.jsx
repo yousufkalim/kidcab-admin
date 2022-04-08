@@ -6,9 +6,7 @@ import {
   UncontrolledDropdown,
   DropdownToggle,
 } from "reactstrap";
-import ClientAvatar from "./ClientAvatar";
 import InvoiceForm from "./InvoiceForm";
-import Form from "bootstrap";
 
 const InvoiceRow = ({ invoice, autoRefresh, handleSelect, selectedItems }) => {
   const [openModal, setOpenModal] = useState();
@@ -59,9 +57,18 @@ const InvoiceRow = ({ invoice, autoRefresh, handleSelect, selectedItems }) => {
           {invoice.status}
         </Badge>
       </td>
-
+      <td>
+        <div className="d-flex align-items-center">
+          €{invoice?.trip_info?.total_trips}
+        </div>
+      </td>
       <td>
         <div className="d-flex align-items-center">€{invoice?.total_price}</div>
+      </td>
+      <td>
+        <div className="d-flex align-items-center">
+          €{parseInt(invoice?.total_price) - parseInt(invoice?.vat)}
+        </div>
       </td>
       <td className="text-left">
         {invoice?.client?.first_name + " " + invoice?.client?.last_name}

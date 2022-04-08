@@ -298,6 +298,7 @@ const TripForm = ({
       api(method, uri, {
         ...trip,
         start_address: startAddress,
+        tripType: tripType,
         end_address: endAddress,
         dates: selectedDDays,
         addresses: allAddresses,
