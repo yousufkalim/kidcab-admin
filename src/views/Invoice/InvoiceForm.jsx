@@ -31,6 +31,8 @@ const InvoiceForm = ({
     invoice_title: "",
     issue_date: "",
     totalPrice: "",
+    type: "client",
+    driver: "",
     status: "pending",
     comments: "",
     client: "",
@@ -42,6 +44,7 @@ const InvoiceForm = ({
   });
 
   const [users, setUsers] = useState([]);
+  const [drivers, setDrivers] = useState([]);
   let [startAddress, setStartAddress] = useState({
     lat: "",
     lng: "",
@@ -62,6 +65,9 @@ const InvoiceForm = ({
     api("get", "users").then((res) => {
       setUsers(res.data.users);
     });
+    api("get", "drivers").then((res) => {
+      setDrivers(res.data.drivers);
+    });
 
     if (isEditing) {
       setUser({
@@ -71,6 +77,8 @@ const InvoiceForm = ({
         totalPrice: editUser?.total_price,
         unitPrice: editUser.trip_info.unit_price,
         vat: editUser?.vat,
+        driver: editUser?.driver,
+        type: editUser?.type,
         status: editUser?.status,
         client: editUser?.client,
         comments: editUser?.comments,
@@ -93,7 +101,6 @@ const InvoiceForm = ({
       let Vat = (parseInt(e.target.value) / 100) * 20;
       let UnitPrice =
         (parseInt(e.target.value) - parseInt(Vat)) / parseInt(user?.totalTrips);
-      console.log(Vat, "Vat", UnitPrice, "UnitPrice");
       setUser((user) => ({
         ...user,
         [e.target.name]: e.target.value,
@@ -106,7 +113,10 @@ const InvoiceForm = ({
   };
 
   const handleUserChange = (e) => {
-    setUser({ ...user, client: e.value });
+    setUser({ ...user, client: e.value, driver: "" });
+  };
+  const handleDriverChange = (e) => {
+    setUser({ ...user, driver: e.value, client: "" });
   };
 
   const handleDelete = () => {
@@ -140,11 +150,17 @@ const InvoiceForm = ({
       unit_price: user?.unitPrice,
     };
     const formData = {};
+    if (user?.type === "client") {
+      formData["client"] = user?.client;
+    }
+    if (user?.type === "driver") {
+      formData["driver"] = user?.driver;
+    }
     formData["invoice_title"] = user?.invoice_title;
     formData["total_price"] = user?.totalPrice;
     formData["issue_date"] = user?.issue_date;
     formData["status"] = user?.status;
-    formData["client"] = user?.client;
+    formData["type"] = user?.type;
     formData["comments"] = user?.comments;
     formData["vat"] = user?.vat;
     formData["trip_info"] = JSON.stringify(tripInfo);
@@ -191,7 +207,6 @@ const InvoiceForm = ({
 
   return (
     <>
-      {console.log(user)}
       <Modal isOpen={openModal} size="xl" centered>
         <ModalHeader charCode="X" toggle={handleModal}>
           {isEditing ? "Edit" : "Add"} Invoice
@@ -252,42 +267,100 @@ const InvoiceForm = ({
                     </Col>
                   </Row>
                   <Row>
-                    <Col lg="6">
+                    <Col lg="4">
                       <FormGroup>
-                        <Label
-                          for="exampleSelect"
+                        <label
                           className="form-control-label"
+                          htmlFor="input-tripType"
                         >
-                          Select Client
-                        </Label>
-                        {users && (
-                          <Select
-                            onChange={handleUserChange}
-                            name="user"
-                            hideSelectedOptions
-                            defaultValue={
-                              editUser && {
-                                value: user?.client?._id,
-                                label: `${
-                                  user?.client?.first_name +
-                                  " " +
-                                  user?.client?.last_name
-                                }`,
-                              }
-                            }
-                            className="form-control-alternative"
-                            options={users.map((user) => ({
-                              value: user._id,
-                              label: `${
-                                user?.first_name + " " + user?.last_name
-                              }`,
-                            }))}
-                          />
-                        )}
+                          Invoice Type
+                        </label>
+                        <Input
+                          id="input-trip_type"
+                          name="type"
+                          className="form-control-alternative"
+                          type="select"
+                          value={user.type}
+                          onChange={handleInputChange}
+                        >
+                          <option value="client">Client</option>
+                          <option value="driver">Driver</option>
+                        </Input>
                       </FormGroup>
                     </Col>
-
-                    <Col lg="6">
+                    {user?.type == "client" ? (
+                      <Col lg="4">
+                        <FormGroup>
+                          <Label
+                            for="exampleSelect"
+                            className="form-control-label"
+                          >
+                            Select Client
+                          </Label>
+                          {users && (
+                            <Select
+                              onChange={handleUserChange}
+                              name="user"
+                              hideSelectedOptions
+                              defaultValue={
+                                editUser && {
+                                  value: user?.client?._id,
+                                  label: `${
+                                    user?.client?.first_name +
+                                    " " +
+                                    user?.client?.last_name
+                                  }`,
+                                }
+                              }
+                              className="form-control-alternative"
+                              options={users.map((user) => ({
+                                value: user?._id,
+                                label: `${
+                                  user?.first_name + " " + user?.last_name
+                                }`,
+                              }))}
+                            />
+                          )}
+                        </FormGroup>
+                      </Col>
+                    ) : (
+                      <Col lg="4">
+                        <FormGroup>
+                          <Label
+                            for="exampleSelect"
+                            className="form-control-label"
+                          >
+                            Select Driver
+                          </Label>
+                          {drivers && (
+                            <Select
+                              onChange={handleDriverChange}
+                              name="driver"
+                              key={user?.type}
+                              hideSelectedOptions
+                              defaultValue={
+                                editUser && {
+                                  value: drivers?._id,
+                                  label: `${
+                                    user?.driver?.first_name +
+                                    " " +
+                                    user?.driver?.last_name
+                                  }`,
+                                }
+                              }
+                              className="form-control-alternative"
+                              options={drivers.map((driver) => ({
+                                value: driver?._id,
+                                label: `${
+                                  driver?.first_name + " " + driver?.last_name
+                                }`,
+                              }))}
+                            />
+                          )}
+                        </FormGroup>
+                      </Col>
+                    )}
+                    <Col lg="4">
                       <FormGroup>
                         <Label
                           for="exampleSelect"

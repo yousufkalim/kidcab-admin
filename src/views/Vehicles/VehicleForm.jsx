@@ -354,7 +354,7 @@ const VehicleForm = ({
                           <span style={{ color: "red" }}>
                             {vehicle.engine_type ? "" : "*"}
                           </span>{" "}
-                          Engine Type
+                          Number Plate
                         </Label>
                         <Input
                           id="exampleSelect"
