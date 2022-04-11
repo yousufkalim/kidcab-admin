@@ -241,7 +241,7 @@ const QuotesList = () => {
                     >
                       <div
                         style={{
-                          width: "35%",
+                          width: "40%",
                         }}
                       >
                         <label
@@ -265,7 +265,7 @@ const QuotesList = () => {
                       </div>
                       <div
                         style={{
-                          width: "35%",
+                          width: "40%",
                           marginLeft: "20px",
                         }}
                       >
@@ -288,19 +288,19 @@ const QuotesList = () => {
                           onChange={handleInputChange}
                         />
                       </div>
-                      <div style={{ marginTop: "35px" }}></div>
-                    </div>
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        marginTop: "10px",
-                        justifyContent: "center",
-                      }}
-                    >
-                      <Button color="primary" size="md" onClick={handleSubmit}>
-                        Search
-                      </Button>
+                      <div>
+                        <Button
+                          color="primary"
+                          size="sm"
+                          onClick={handleSubmit}
+                          style={{
+                            marginTop: "35px",
+                            marginLeft: "30px",
+                          }}
+                        >
+                          Search
+                        </Button>
+                      </div>
                     </div>
                   </>
                 ) : (

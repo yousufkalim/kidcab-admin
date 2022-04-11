@@ -73,6 +73,9 @@ const InvoiceRow = ({ invoice, autoRefresh, handleSelect, selectedItems }) => {
       <td className="text-left">
         {invoice?.client?.first_name + " " + invoice?.client?.last_name}
       </td>
+      <td className="text-left">
+        {invoice?.driver?.first_name + " " + invoice?.driver?.last_name}
+      </td>
 
       <td className="text-right">
         <UncontrolledDropdown>

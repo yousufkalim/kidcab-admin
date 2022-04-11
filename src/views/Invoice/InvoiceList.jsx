@@ -353,6 +353,7 @@ const InvoiceList = () => {
                     <th scope="col">Total Price inc vat</th>
                     <th scope="col">Total Price exc vat</th>
                     <th scope="col">Client</th>
+                    <th scope="col">Driver</th>
                     <th scope="col">Actions</th>
                   </tr>
                 </thead>
