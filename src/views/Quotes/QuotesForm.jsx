@@ -92,7 +92,7 @@ const QuotesForm = ({
       }
     }
     if (e.target.name == "totalPrice") {
-      let vat = (parseInt(e.target.value) / 100) * 20;
+      let vat = parseInt(e.target.value) * 0.16667;
       let unitPrice =
         (parseInt(e.target.value) - parseInt(vat)) / parseInt(quote.totalTrips);
 
@@ -491,7 +491,7 @@ const QuotesForm = ({
                           <span style={{ color: "red" }}>
                             {quote.totalPrice ? "" : "*"}
                           </span>{" "}
-                          Amount with taxes
+                          Amount including Vat
                         </label>
                         <Input
                           className="form-control-alternative"
@@ -523,7 +523,7 @@ const QuotesForm = ({
                           placeholder="VAT"
                           type="text"
                           readOnly
-                          value={quote.vat}
+                          value={parseInt(quote.vat).toFixed(2)}
                           name="vat"
                           onChange={handleInputChange}
                         />

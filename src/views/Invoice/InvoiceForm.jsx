@@ -98,7 +98,7 @@ const InvoiceForm = ({
       }
     }
     if (e.target.name == "totalPrice") {
-      let Vat = (parseInt(e.target.value) / 100) * 20;
+      let Vat = parseInt(e.target.value) * 0.16667;
       let UnitPrice =
         (parseInt(e.target.value) - parseInt(Vat)) / parseInt(user?.totalTrips);
       setUser((user) => ({
@@ -424,7 +424,7 @@ const InvoiceForm = ({
                           <span style={{ color: "red" }}>
                             {user.totalPrice ? "" : "*"}
                           </span>{" "}
-                          Amount with taxes
+                          Amount including Vat
                         </label>
                         <Input
                           className="form-control-alternative"
@@ -456,7 +456,7 @@ const InvoiceForm = ({
                           placeholder="VAT"
                           type="text"
                           readOnly
-                          value={user?.vat}
+                          value={parseInt(user?.vat).toFixed(2)}
                           name="vat"
                           onChange={handleInputChange}
                         />
