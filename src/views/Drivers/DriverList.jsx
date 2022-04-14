@@ -71,7 +71,10 @@ const DriverList = () => {
   };
 
   const handleVehicleChange = (e) => {
-    setUser((user) => ({ ...user, vehicles: [e] }));
+    setUser((user) => ({
+      ...user,
+      vehicles: e.map((vehicle) => vehicle.value),
+    }));
   };
 
   const handleRoleChange = (e) => {

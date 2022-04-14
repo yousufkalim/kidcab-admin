@@ -334,6 +334,7 @@ const TripForm = ({
   };
   return (
     <>
+      {console.log(trip, "t")}
       <Modal isOpen={openModal} size="xl" centered>
         <ModalHeader charCode="X" toggle={handleModal}>
           {isEditing ? "Edit" : "Add"} Trip
