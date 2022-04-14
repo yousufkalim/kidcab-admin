@@ -43,6 +43,7 @@ const VehicleForm = ({
     graycard: "",
     graycard_expiry_date: "",
     driver: "",
+    number_plate: "",
     registration_card: "",
   });
   const [docs, setDocs] = useState({});
@@ -60,6 +61,7 @@ const VehicleForm = ({
         graycard: editVehicle.graycard,
         graycard_expiry_date: editVehicle?.graycard_expiry_date,
         driver: editVehicle.driver,
+        number_plate: editVehicle.number_plate,
         inspection_expiry_date: editVehicle.inspection_expiry_date,
         insurance_certificate: editVehicle.insurance_certificate,
         insurance_expiry_date: editVehicle.insurance_expiry_date,
@@ -121,9 +123,6 @@ const VehicleForm = ({
     if (vehicle.model == "") {
       return toast.error("Please enter your car model");
     }
-    if (vehicle.driver == "") {
-      return toast.error("Please enter driver name");
-    }
     if (vehicle.color == "") {
       return toast.error("Please enter your car color");
     }
@@ -139,6 +138,9 @@ const VehicleForm = ({
     if (vehicle.insurance_expiry_date == "") {
       return toast.error("Please enter a valid insurance date");
     }
+    if (vehicle.number_plate == "") {
+      return toast.error("Please enter number plate");
+    }
 
     const formData = new FormData();
 
@@ -148,7 +150,10 @@ const VehicleForm = ({
     formData.append("color", vehicle.color);
     formData.append("engine_type", vehicle.engine_type);
     formData.append("inspection_date", vehicle.inspection_date);
-    formData.append("driver", JSON.stringify(vehicle.driver));
+    formData.append("number_plate", vehicle.number_plate);
+    if (vehicle.driver !== "") {
+      formData.append("driver", JSON.stringify(vehicle.driver));
+    }
 
     if (vehicle.insurance_certificate) {
       formData.append("insurance_certificate", vehicle.insurance_certificate);
@@ -266,15 +271,12 @@ const VehicleForm = ({
                     </Col>
                   </Row>
                   <Row>
-                    <Col lg="12">
+                    <Col lg="6">
                       <FormGroup>
                         <Label
                           for="exampleSelect"
                           className="form-control-label"
                         >
-                          <span style={{ color: "red" }}>
-                            {vehicle.driver ? "" : "*"}
-                          </span>{" "}
                           Select Driver
                         </Label>
                         {drivers && (
@@ -295,6 +297,30 @@ const VehicleForm = ({
                             }))}
                           />
                         )}
+                      </FormGroup>
+                    </Col>
+                    <Col lg="6">
+                      <FormGroup>
+                        <Label
+                          for="exampleSelect"
+                          className="form-control-label"
+                        >
+                          Select Engine Type
+                        </Label>
+                        <Input
+                          onChange={handleInputChange}
+                          name="engine_type"
+                          value={vehicle.engine_type}
+                          className="form-control-alternative"
+                          type="select"
+                        >
+                          <option value="Thermal" selected>
+                            thermal
+                          </option>
+                          <option value="hybrid">Hybrid</option>
+                          <option value="electric">Electric</option>
+                          <option value="hydrogen">Hydrogen</option>
+                        </Input>
                       </FormGroup>
                     </Col>
                   </Row>
@@ -352,17 +378,17 @@ const VehicleForm = ({
                           className="form-control-label"
                         >
                           <span style={{ color: "red" }}>
-                            {vehicle.engine_type ? "" : "*"}
+                            {vehicle.number_plate ? "" : "*"}
                           </span>{" "}
                           Number Plate
                         </Label>
                         <Input
                           id="exampleSelect"
-                          name="engine_type"
-                          value={vehicle.engine_type}
+                          name="number_plate"
+                          value={vehicle.number_plate}
                           onChange={handleInputChange}
                           className="form-control-alternative"
-                          placeholder="Enter Vehicle Engine Type"
+                          placeholder="Enter Number Plate"
                           type="text"
                         />
                       </FormGroup>

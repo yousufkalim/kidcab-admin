@@ -83,7 +83,10 @@ const DriverForm = ({
   const [vehicles, setVehicles] = useState();
   useEffect(() => {
     api("get", "vehicles").then((res) => {
-      setVehicles(res.data.vehicles);
+      let filteredvehicles = res.data.vehicles.filter((e) => {
+        return !e.driver;
+      });
+      setVehicles(filteredvehicles);
     });
   }, []);
 
@@ -142,7 +145,9 @@ const DriverForm = ({
         role: editUser?.role,
         bankName: editUser?.bank_info?.bank_name,
         iban: editUser?.bank_info?.iban,
-        vehicles: editUser?.vehicles,
+        vehicles: editUser?.vehicles.map((i) => {
+          return i?._id;
+        }),
         company_name: editUser?.company?.company_name,
         siret_number: editUser?.company?.siret_number,
         legal_info: editUser?.company?.legal_info,
@@ -185,7 +190,10 @@ const DriverForm = ({
   };
 
   const handleVehicle1Change = (e) => {
-    setUser((user) => ({ ...user, vehicles: [e.value] }));
+    setUser((user) => ({
+      ...user,
+      vehicles: e.map((vehicle) => vehicle.value),
+    }));
   };
 
   const handleRole1Change = (e) => {
@@ -425,6 +433,7 @@ const DriverForm = ({
 
   return (
     <>
+      {console.log(user, "d")}
       <Modal isOpen={openModal} size="xl" centered>
         <ModalHeader charCode="X" toggle={handleModal}>
           {isEditing ? "Edit" : "Add"} Driver
@@ -625,6 +634,7 @@ const DriverForm = ({
                             <Select
                               name="vehicles"
                               hideSelectedOptions
+                              isMulti
                               onChange={
                                 isEditing
                                   ? handleVehicle1Change
@@ -636,10 +646,11 @@ const DriverForm = ({
                                       value: i.value,
                                       label: i.label,
                                     }))
-                                  : user?.vehicles?.length > 0 && {
-                                      value: user?.vehicles[0]?._id,
-                                      label: user?.vehicles[0]?.vehicle_name,
-                                    }
+                                  : user?.vehicles?.length > 0 &&
+                                    editUser.vehicles?.map((i) => ({
+                                      value: i?._id,
+                                      label: i?.vehicle_name,
+                                    }))
                               }
                               className="form-control-alternative"
                               options={vehicles.map((vehicle) => ({
