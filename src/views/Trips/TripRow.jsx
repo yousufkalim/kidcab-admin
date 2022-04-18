@@ -55,14 +55,14 @@ const TripRow = ({ trip, autoRefresh, selectedItems, handleSelect }) => {
       </td>
       {trip?.invited_drivers?.length > 0 ? (
         <td className="text-center">
-          {trip.invited_drivers.map((i) => {
-            return " " + i.driver.first_name + " " + i.driver.last_name;
+          {trip?.invited_drivers.map((i) => {
+            return " " + i?.driver?.first_name + " " + i?.driver?.last_name;
           })}
         </td>
       ) : (
         <td className="text-center">
           {trip.assigned_drivers.map((i) => {
-            return " " + i.first_name + " " + i.last_name;
+            return " " + i?.first_name + " " + i?.last_name;
           })}
         </td>
       )}
