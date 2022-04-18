@@ -58,7 +58,6 @@ const TripList = () => {
   };
 
   const setPageis = ({ selected }) => {
-    console.log(selected === 0 ? 1 : selected);
     setPage(selected);
   };
 
@@ -67,6 +66,7 @@ const TripList = () => {
     api("delete", "trips/deleteMany", { data: { tripIds } }).then(() => {
       toast.success("Trips deleted successfully");
       autoRefresh();
+      setSelectBtn(false);
       setSelectedItems([]);
     });
   };
