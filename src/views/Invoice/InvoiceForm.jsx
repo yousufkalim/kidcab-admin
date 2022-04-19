@@ -96,9 +96,21 @@ const InvoiceForm = ({
       if (parseInt(e.target.value) < 1) {
         return toast.error("Trips should be greater than 1");
       }
+      if (isEditing) {
+        let UnitPrice =
+          (parseInt(user?.totalPrice) - parseInt(user?.vat)) /
+          parseInt(e.target.value);
+        console.log(UnitPrice, "UnitPrice");
+        setUser((user) => ({
+          ...user,
+          [e.target.name]: e.target.value,
+          unitPrice: UnitPrice,
+        }));
+        return;
+      }
     }
     if (e.target.name == "totalPrice") {
-      let Vat = parseInt(e.target.value) * 0.16667;
+      let Vat = parseInt(e.target.value) * 0.2;
       let UnitPrice =
         (parseInt(e.target.value) - parseInt(Vat)) / parseInt(user?.totalTrips);
       setUser((user) => ({
@@ -141,6 +153,16 @@ const InvoiceForm = ({
     e.preventDefault();
     let method = "post";
     let uri = "invoices";
+    if (parseInt(user?.totalTrips) < 1 || user?.totalTrips == "") {
+      return toast.error("Trips should be greater than 1");
+    }
+    if (parseInt(user?.totalTrips) > parseInt(user?.totalPrice)) {
+      return toast.error("Total Price should be greater  than total trips");
+    }
+    if (new Date(user?.endDate) < new Date(user?.startDate)) {
+      return toast.error("end date must be greater than start date");
+    }
+
     const tripInfo = {
       total_trips: user?.totalTrips,
       start_date: user.startDate,
@@ -171,6 +193,11 @@ const InvoiceForm = ({
     ) {
       return toast.error("Start and end address cant be same");
     }
+
+    if (startAddress.lat == "" || endAddress.lng == "") {
+      return toast.error("Adresses are mandatory");
+    }
+
     if (editUser) {
       method = "put";
       uri = uri + `/${editUser._id}`;
@@ -194,7 +221,30 @@ const InvoiceForm = ({
       user["client"] = user.client._id;
     }
     user["issue_date"] = moment(user.issue_date).format("YYYY-MM-DD");
-    api(method, uri, user).then((res) => {
+    const formData = {};
+    const tripInfo = {
+      total_trips: user?.totalTrips,
+      start_date: user.startDate,
+      end_date: user.endDate,
+      start_address: startAddress,
+      end_address: endAddress,
+      unit_price: user?.unitPrice,
+    };
+    formData["invoice_title"] = user?.invoice_title;
+    formData["total_price"] = user?.totalPrice;
+    formData["issue_date"] = user?.issue_date;
+    formData["status"] = user?.status;
+    formData["type"] = user?.type;
+    formData["comments"] = user?.comments;
+    formData["vat"] = user?.vat;
+    formData["trip_info"] = JSON.stringify(tripInfo);
+    if (user?.type === "client") {
+      formData["client"] = user?.client;
+    }
+    if (user?.type === "driver") {
+      formData["driver"] = user?.driver;
+    }
+    api(method, uri, formData).then((res) => {
       if (res.status === 200) {
         toast.success("Saved Successfully");
         handleModal();
@@ -280,6 +330,7 @@ const InvoiceForm = ({
                           name="type"
                           className="form-control-alternative"
                           type="select"
+                          disabled={isEditing}
                           value={user.type}
                           onChange={handleInputChange}
                         >
