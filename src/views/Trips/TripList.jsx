@@ -26,7 +26,8 @@ const TripList = () => {
   const [trips, setTrips] = useState();
   const [dropDownItem, setDropDownItem] = useState("all");
   const [filterdropDownItem, setFilterDropDownItem] = useState("all");
-  const [filter, setFilter] = useState("");
+  const [driverSearchfilter, setDriverSearchFilter] = useState("");
+  const [clientSearchfilter, setClientSearchFilter] = useState("");
   const [dates, setDates] = useState([]);
   const [typefilter, setTypeFilter] = useState(false);
   const [datefilter, setDateFilter] = useState(false);
@@ -34,6 +35,9 @@ const TripList = () => {
   const [selectedItems, setSelectedItems] = useState([]);
   const [selectBtn, setSelectBtn] = useState(false);
   const [page, setPage] = useState(0);
+  const [datepage, setDatePage] = useState(0);
+  const [driverpage, setDriverPage] = useState(0);
+  const [clientpage, setClientPage] = useState(0);
   const [count, setCount] = useState(0);
 
   const handleSelect = (trip) => {
@@ -58,7 +62,15 @@ const TripList = () => {
   };
 
   const setPageis = ({ selected }) => {
-    setPage(selected);
+    if (datefilter === true) {
+      setDatePage(selected);
+    } else if (driverfilter) {
+      setDriverPage(selected);
+    } else if (typefilter) {
+      setClientPage(selected);
+    } else {
+      setPage(selected);
+    }
   };
 
   const handleDeleteMany = async () => {
@@ -75,70 +87,91 @@ const TripList = () => {
     setOpenModal((open) => !open);
     return openModal;
   };
+
+  const handleDriver = () => {
+    let driver = driverSearchfilter.toLowerCase();
+    let method = "post";
+    let uri = "trips/tripsbydriver";
+    api(method, uri, {
+      driver,
+      pageNumber: page,
+      pageSize: 10,
+    }).then((res) => {
+      // eslint-disable-next-line eqeqeq
+      if (res.status == 200) {
+        setTrips(res.data.trips);
+        setCount(res.data.count);
+      } else {
+        toast.error(" Error", res);
+      }
+    });
+  };
+
+  const handleClient = () => {
+    let client = clientSearchfilter.toLowerCase();
+    let method = "post";
+    let uri = "trips/tripsbyClient";
+    api(method, uri, {
+      client,
+      status: filterdropDownItem,
+      pageNumber: page,
+      pageSize: 10,
+    }).then((res) => {
+      // eslint-disable-next-line eqeqeq
+      if (res.status == 200) {
+        setTrips(res.data.trips);
+        setCount(res.data.count);
+      } else {
+        toast.error(" Error", res);
+      }
+    });
+  };
+
   const autoRefresh = () => {
     api("post", `trips/status/${filterdropDownItem}`, {
       pageNumber: page,
       pageSize: 10,
     }).then((res) => {
       setTrips(res?.data?.trips);
-      setCount(res.data.totalResults);
+      setCount(res?.data?.totalResults);
     });
   };
-
-  const filterArr = React.useMemo(() => {
-    if (filter === "") return trips;
-    else if (typefilter === true) {
-      return trips.filter((trip) =>
-        (
-          trip.client.first_name.toLowerCase() +
-          trip.client.last_name.toLowerCase()
-        ).includes(filter.split(" ").join(""))
-      );
-    } else if (driverfilter === true) {
-      return trips
-        ?.map((trip) => {
-          let val = trip?.invited_drivers?.filter((driver) => {
-            return (
-              driver?.driver?.first_name.toLowerCase() +
-              driver?.driver?.last_name.toLowerCase()
-            ).includes(filter.split(" ").join(""));
-          });
-          return { ...trip, invited_drivers: val };
-        })
-        .filter((v) => v.invited_drivers.length > 0);
-    }
-  }, [filter, trips]);
-
   const filterCheck = (e) => {
     e.preventDefault();
     setDropDownItem(e.target.name);
     if (e.target.name === "all") {
       setTypeFilter(false);
+      setPage(0);
+      setDatePage(0);
+      setDriverPage(0);
       setDateFilter(false);
       setDriverFilter(false);
-      setFilter("");
+      setDriverSearchFilter("");
       setFilterDropDownItem(e.target.name);
-      autoRefresh();
+      setDates({ ...dates, start_date: "", end_date: "" });
     } else if (e.target.name == "date-filter") {
       if (typefilter === true || driverfilter === true) {
         setTypeFilter(false);
         setDriverFilter(false);
-        autoRefresh();
+        setDates({ ...dates, start_date: "", end_date: "" });
       }
+      setPage(0);
       setDateFilter((prevCheck) => !prevCheck);
     } else if (e.target.name === "trip-type-filter") {
       if (datefilter === true || driverfilter === true) {
         setDateFilter(false);
         setDriverFilter(false);
-        autoRefresh();
+        setDates({ ...dates, start_date: "", end_date: "" });
       }
+      setPage(0);
       setTypeFilter((prevCheck) => !prevCheck);
     } else if (e.target.name === "driver-filter") {
       if (datefilter === true || typefilter === true) {
         setTypeFilter(false);
         setDateFilter(false);
-        autoRefresh();
+        setDates({ ...dates, start_date: "", end_date: "" });
       }
+      setPage(0);
       setDriverFilter((prevCheck) => !prevCheck);
     }
   };
@@ -156,18 +189,21 @@ const TripList = () => {
     e.preventDefault();
     let method = "post";
     let uri = "trips/tripsByDate";
-    if (dates.start_end == "") {
+    if (dates?.start_end == "") {
       return toast.error("Please enter start date");
     }
-    if (dates.end_date == "") {
+    if (dates?.end_date == "") {
       return toast.error("Please enter end date");
     }
     api(method, uri, {
       ...dates,
+      pageNumber: datepage,
+      pageSize: 10,
     }).then((res) => {
       // eslint-disable-next-line eqeqeq
       if (res.status == 200) {
         setTrips(res.data.trips);
+        setCount(res.data.count);
       } else {
         toast.error(" Error", res);
       }
@@ -176,7 +212,77 @@ const TripList = () => {
 
   useEffect(() => {
     autoRefresh();
-  }, [openModal, filterdropDownItem, page]);
+  }, [openModal, page, typefilter, datefilter, driverfilter]);
+
+  useEffect(() => {
+    if (dates.length > 1) {
+      toast.error("Date criteria is empty");
+    }
+    if (datefilter === true) {
+      let method = "post";
+      let uri = "trips/tripsByDate";
+      api(method, uri, {
+        ...dates,
+        pageNumber: datepage,
+        pageSize: 10,
+      }).then((res) => {
+        // eslint-disable-next-line eqeqeq
+        if (res.status == 200) {
+          setTrips(res.data.trips);
+          setCount(res.data.count);
+        } else {
+          toast.error(" Error", res);
+        }
+      });
+    }
+  }, [datepage]);
+
+  useEffect(() => {
+    if (driverfilter === true) {
+      if (driverSearchfilter === "") {
+        return toast.error("Please Enter Search Criteria");
+      }
+      let method = "post";
+      let uri = "trips/tripsbydriver";
+      api(method, uri, {
+        driver: driverSearchfilter,
+        pageNumber: driverpage,
+        pageSize: 10,
+      }).then((res) => {
+        // eslint-disable-next-line eqeqeq
+        if (res.status == 200) {
+          setTrips(res.data.trips);
+          setCount(res.data.count);
+        } else {
+          toast.error(" Error", res);
+        }
+      });
+    }
+  }, [driverpage]);
+
+  useEffect(() => {
+    if (typefilter === true) {
+      if (clientSearchfilter === "") {
+        return toast.error("Please Enter Search Criteria");
+      }
+      let method = "post";
+      let uri = "trips/tripsbyClient";
+      api(method, uri, {
+        client: clientSearchfilter,
+        status: filterdropDownItem,
+        pageNumber: driverpage,
+        pageSize: 10,
+      }).then((res) => {
+        // eslint-disable-next-line eqeqeq
+        if (res.status == 200) {
+          setTrips(res.data.trips);
+          setCount(res.data.count);
+        } else {
+          toast.error(" Error", res);
+        }
+      });
+    }
+  }, [clientpage]);
 
   return (
     <>
@@ -284,7 +390,7 @@ const TripList = () => {
                           name="client-search"
                           style={{ border: "none", backgroundColor: "#e8f7ff" }}
                           onChange={(e) => {
-                            setFilter(e.target.value.toLowerCase());
+                            setClientSearchFilter(e.target.value.toLowerCase());
                           }}
                         />
                       </div>
@@ -340,6 +446,18 @@ const TripList = () => {
                             </DropdownItem>
                           </DropdownMenu>
                         </UncontrolledDropdown>
+                        <Button
+                          color="success"
+                          size="sm"
+                          style={{
+                            position: "absolute",
+                            top: "15%",
+                            right: "10%",
+                          }}
+                          onClick={handleClient}
+                        >
+                          Search
+                        </Button>
                       </div>
                     </div>
                   </>
@@ -427,6 +545,7 @@ const TripList = () => {
                         alignItems: "center",
                         margin: "11px",
                         marginTop: "24px",
+                        position: "relative",
                       }}
                     >
                       <div style={{ width: "60%" }}>
@@ -438,9 +557,23 @@ const TripList = () => {
                           name="driver-search"
                           style={{ border: "none", backgroundColor: "#e8f7ff" }}
                           onChange={(e) => {
-                            setFilter(e.target.value.toLowerCase());
+                            setDriverSearchFilter(e.target.value.toLowerCase());
                           }}
                         />
+                      </div>
+                      <div>
+                        <Button
+                          color="primary"
+                          size="sm"
+                          onClick={handleDriver}
+                          style={{
+                            position: "absolute",
+                            top: "15%",
+                            right: "20%",
+                          }}
+                        >
+                          Search
+                        </Button>
                       </div>
                     </div>
                   </>
@@ -477,8 +610,8 @@ const TripList = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {filterArr ? (
-                    filterArr?.map((trip) => (
+                  {trips ? (
+                    trips?.map((trip) => (
                       <TripRow
                         key={trip._id}
                         trip={trip}

@@ -62,18 +62,22 @@ const InvoiceList = () => {
       setDateFilter(false);
       setFilter("");
       setFilterDropDownItem(e.target.name);
-      autoRefresh();
+      setDates({ ...dates, start_date: "", end_date: "" });
     } else if (e.target.name == "date-filter") {
       if (typefilter === true) {
+        setFilterDropDownItem("all");
         setTypeFilter(false);
-        autoRefresh();
+        setDates({ ...dates, start_date: "", end_date: "" });
       }
+      setFilterDropDownItem("all");
       setDateFilter((prevCheck) => !prevCheck);
     } else if (e.target.name === "invoice-type-filter") {
       if (datefilter === true) {
+        setFilterDropDownItem("all");
         setDateFilter(false);
-        autoRefresh();
+        setDates({ ...dates, start_date: "", end_date: "" });
       }
+      setFilterDropDownItem("all");
       setTypeFilter((prevCheck) => !prevCheck);
     }
   };
@@ -105,11 +109,10 @@ const InvoiceList = () => {
     });
   };
   const handleSubmit = (e) => {
-    console.log("pressed");
     e.preventDefault();
     let method = "post";
     let uri = "invoices/InvoiceByDate";
-    if (dates.start_end == "") {
+    if (dates.start_date == "") {
       return toast.error("Please enter start date");
     }
     if (dates.end_date == "") {
@@ -128,7 +131,7 @@ const InvoiceList = () => {
 
   useEffect(() => {
     autoRefresh();
-  }, [openModal, filterdropDownItem]);
+  }, [openModal, filterdropDownItem, typefilter, datefilter]);
   return (
     <>
       <Container className="mt--7" fluid>
@@ -276,7 +279,7 @@ const InvoiceList = () => {
                     >
                       <div
                         style={{
-                          width: "35%",
+                          width: "40%",
                         }}
                       >
                         <label
@@ -300,7 +303,7 @@ const InvoiceList = () => {
                       </div>
                       <div
                         style={{
-                          width: "35%",
+                          width: "40%",
                           marginLeft: "20px",
                         }}
                       >
@@ -323,19 +326,19 @@ const InvoiceList = () => {
                           onChange={handleInputChange}
                         />
                       </div>
-                      <div style={{ marginTop: "35px" }}></div>
-                    </div>
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        marginTop: "10px",
-                        justifyContent: "center",
-                      }}
-                    >
-                      <Button color="primary" size="md" onClick={handleSubmit}>
-                        Search
-                      </Button>
+                      <div>
+                        <Button
+                          color="primary"
+                          size="sm"
+                          onClick={handleSubmit}
+                          style={{
+                            marginTop: "35px",
+                            marginLeft: "30px",
+                          }}
+                        >
+                          Search
+                        </Button>
+                      </div>
                     </div>
                   </>
                 ) : (

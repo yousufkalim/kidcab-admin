@@ -92,16 +92,19 @@ const ClientForm = ({
 
     const formData = new FormData();
 
-    formData.append("first_name", user.firstName);
-    formData.append("last_name", user.lastName);
+    formData.append("first_name", user.firstName.toLowerCase());
+    formData.append("last_name", user.lastName.toLowerCase());
     formData.append("email", user.email);
     formData.append("password", user.password);
-    // formData.append("gender", user.gender);
     formData.append("phone_number", user.phone_number);
-    formData.append("address", JSON.stringify(address));
+    if (address?.lat && address?.lng) {
+      formData.append("address", JSON.stringify(address));
+    }
+    if (Object.keys(bankInfo).length > 0) {
+      formData.append("bank_info", JSON.stringify(bankInfo));
+    }
     formData.append("siret_number", user.siret);
     formData.append("intra_community", user.intraCommunityNo);
-    formData.append("bank_info", JSON.stringify(bankInfo));
 
     if (user.firstName == "") {
       return toast.error("Please enter your first name");

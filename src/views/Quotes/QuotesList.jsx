@@ -65,15 +65,22 @@ const QuotesList = () => {
       setFilter("");
       setFilterDropDownItem(e.target.name);
       autoRefresh();
+      setDates({ ...dates, start_date: "", end_date: "" });
     } else if (e.target.name == "date-filter") {
       if (typefilter === true) {
+        setFilterDropDownItem("all");
         setTypeFilter(false);
+        setDates({ ...dates, start_date: "", end_date: "" });
       }
+      setFilterDropDownItem("all");
       setDateFilter((prevCheck) => !prevCheck);
     } else if (e.target.name === "qoute-type-filter") {
       if (datefilter === true) {
+        setFilterDropDownItem("all");
         setDateFilter(false);
+        setDates({ ...dates, start_date: "", end_date: "" });
       }
+      setFilterDropDownItem("all");
       setTypeFilter((prevCheck) => !prevCheck);
     }
   };
@@ -110,7 +117,7 @@ const QuotesList = () => {
 
   useEffect(() => {
     autoRefresh();
-  }, [openModal, filterdropDownItem]);
+  }, [openModal, filterdropDownItem, typefilter, datefilter]);
   return (
     <>
       <Container className="mt--7" fluid>
