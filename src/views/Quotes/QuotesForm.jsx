@@ -90,6 +90,17 @@ const QuotesForm = ({
       if (parseInt(e.target.value) < 1) {
         return toast.error("Trips should be greater than 1");
       }
+      if (isEditing) {
+        let UnitPrice =
+          (parseInt(quote?.totalPrice) - parseInt(quote?.vat)) /
+          parseInt(e.target.value);
+        setQuote((quote) => ({
+          ...quote,
+          [e.target.name]: e.target.value,
+          unitPrice: UnitPrice,
+        }));
+        return;
+      }
     }
     if (e.target.name == "totalPrice") {
       let vat = parseInt(e.target.value) * 0.16667;
@@ -129,6 +140,17 @@ const QuotesForm = ({
   };
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (new Date(quote?.endDate) < new Date(quote?.startDate)) {
+      return toast.error("end date must be greater than start date");
+    }
+    if (
+      quote?.endDate == null ||
+      quote?.endDate == " " ||
+      quote?.startDate == null ||
+      quote?.startDate == " "
+    ) {
+      return toast.error("Dates are mandatory");
+    }
     let method = "post";
     let uri = "quotes";
     const tripInfo = {

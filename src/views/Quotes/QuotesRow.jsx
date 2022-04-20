@@ -38,6 +38,11 @@ const QuotesRow = ({ quote, autoRefresh, selectedItems, handleSelect }) => {
         </Media>
       </th>
       <td>
+        <div className="d-flex align-items-center">
+          {quote && new Date(quote?.issue_date).toLocaleDateString()}
+        </div>
+      </td>
+      <td>
         <Badge color="" className="badge-dot mr-4">
           {quote.status === "accepted" ? (
             <i className="bg-success" />
@@ -51,19 +56,7 @@ const QuotesRow = ({ quote, autoRefresh, selectedItems, handleSelect }) => {
       <td>{quote?.client?.first_name + " " + quote?.client?.last_name}</td>
       <td>{quote?.trip_info && quote?.trip_info?.total_trips}</td>
       <td>{quote?.total_price}€</td>
-      <td>{quote?.total_price - quote?.vat}€</td>
-      <td>
-        <div className="d-flex align-items-center">
-          {quote?.trip_info &&
-            new Date(quote?.trip_info?.start_date).toLocaleDateString()}
-        </div>
-      </td>
-      <td>
-        <div className="d-flex align-items-center">
-          {quote?.trip_info &&
-            new Date(quote?.trip_info?.end_date).toLocaleDateString()}
-        </div>
-      </td>
+      <td>{(quote?.total_price - quote?.vat).toFixed(2)}€</td>
       <td>
         <UncontrolledDropdown>
           <DropdownToggle

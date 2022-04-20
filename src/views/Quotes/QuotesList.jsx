@@ -319,13 +319,12 @@ const QuotesList = () => {
                   <tr>
                     <th scope="col">Select</th>
                     <th scope="col">Quote Title</th>
+                    <th scope="col">Issue Date</th>
                     <th scope="col">Status</th>
                     <th scope="col">Client</th>
                     <th scope="col">No. of Trips</th>
                     <th scope="col">TOTAL PRICE INCLUDING VAT</th>
                     <th scope="col">Total Price without VAT</th>
-                    <th scope="col">Start Date</th>
-                    <th scope="col">End Date</th>
                     <th scope="col">Actions </th>
                   </tr>
                 </thead>
