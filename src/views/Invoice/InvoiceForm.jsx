@@ -100,7 +100,6 @@ const InvoiceForm = ({
         let UnitPrice =
           (parseInt(user?.totalPrice) - parseInt(user?.vat)) /
           parseInt(e.target.value);
-        console.log(UnitPrice, "UnitPrice");
         setUser((user) => ({
           ...user,
           [e.target.name]: e.target.value,
@@ -162,7 +161,14 @@ const InvoiceForm = ({
     if (new Date(user?.endDate) < new Date(user?.startDate)) {
       return toast.error("end date must be greater than start date");
     }
-
+    if (
+      user?.endDate == null ||
+      user?.endDate == " " ||
+      user?.startDate == null ||
+      user?.startDate == " "
+    ) {
+      return toast.error("Dates are mandatory");
+    }
     const tripInfo = {
       total_trips: user?.totalTrips,
       start_date: user.startDate,
@@ -257,6 +263,7 @@ const InvoiceForm = ({
 
   return (
     <>
+      {console.log(startAddress, endAddress)}
       <Modal isOpen={openModal} size="xl" centered>
         <ModalHeader charCode="X" toggle={handleModal}>
           {isEditing ? "Edit" : "Add"} Invoice
