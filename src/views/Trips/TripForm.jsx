@@ -60,7 +60,7 @@ const TripForm = ({
     client_price: "",
     driver_price: "",
     assigned_drivers: [],
-    invited_drivers: [],
+    inviteddrivers: [],
     passengers: [],
     Days: [],
     startdate: "",
@@ -111,7 +111,7 @@ const TripForm = ({
         client_price: editTrip.client_price,
         driver_price: editTrip.driver_price,
         assigned_drivers: editTrip.assigned_drivers,
-        invited_drivers: editTrip.invited_drivers.map(
+        inviteddrivers: editTrip.invited_drivers.map(
           (driver) => driver?.driver?._id
         ),
         passengers: editTrip.passengers.map((passenger) => passenger._id),
@@ -224,7 +224,11 @@ const TripForm = ({
     if (selectedDays.length == 0 && !isEditing && trip.trip_type == "simple") {
       return toast.error("Please enter trip dates");
     }
-
+    if (trip?.status == "confirmed" || trip?.status == "completed") {
+      if (trip?.inviteddrivers.length > 1) {
+        return toast.error("For this trip please select one driver only");
+      }
+    }
     if (parseInt(trip.client_price) < 1 || trip.client_price == "") {
       return toast.error("Invalid client price");
     }
@@ -295,6 +299,7 @@ const TripForm = ({
         serverDate.setMinutes(parseInt(hours[1])); //setting time for server
         return serverDate;
       });
+
       api(method, uri, {
         ...trip,
         start_address: startAddress,
@@ -334,7 +339,7 @@ const TripForm = ({
   };
   return (
     <>
-      {console.log(trip, "t")}
+      {console.log(trip)}
       <Modal isOpen={openModal} size="xl" centered>
         <ModalHeader charCode="X" toggle={handleModal}>
           {isEditing ? "Edit" : "Add"} Trip
@@ -694,7 +699,7 @@ const TripForm = ({
                           htmlFor="input-fname"
                         >
                           <span style={{ color: "red" }}>
-                            {trip.invited_drivers.length > 0 ||
+                            {trip.inviteddrivers.length > 0 ||
                             trip.assigned_drivers.length > 0
                               ? ""
                               : "*"}
@@ -706,9 +711,7 @@ const TripForm = ({
                             onChange={(e) =>
                               setTrip((user) => ({
                                 ...user,
-                                invited_drivers: e.map(
-                                  (driver) => driver.value
-                                ),
+                                inviteddrivers: e.map((driver) => driver.value),
                               }))
                             }
                             isDisabled={
