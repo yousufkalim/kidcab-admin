@@ -223,15 +223,15 @@ const InvoiceForm = ({
     e.preventDefault();
     let method = "post";
     let uri = "invoices";
-    if (user.client._id) {
+    if (user?.client?._id) {
       user["client"] = user.client._id;
     }
     user["issue_date"] = moment(user.issue_date).format("YYYY-MM-DD");
     const formData = {};
     const tripInfo = {
       total_trips: user?.totalTrips,
-      start_date: user.startDate,
-      end_date: user.endDate,
+      start_date: user?.startDate,
+      end_date: user?.endDate,
       start_address: startAddress,
       end_address: endAddress,
       unit_price: user?.unitPrice,

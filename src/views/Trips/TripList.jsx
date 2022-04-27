@@ -89,6 +89,9 @@ const TripList = () => {
   };
 
   const handleDriver = () => {
+    if (driverSearchfilter === "") {
+      return toast.error("Enter Driver name first");
+    }
     let driver = driverSearchfilter.toLowerCase();
     let method = "post";
     let uri = "trips/tripsbydriver";
@@ -108,6 +111,9 @@ const TripList = () => {
   };
 
   const handleClient = () => {
+    if (clientSearchfilter === "") {
+      return toast.error("Enter Client name first");
+    }
     let client = clientSearchfilter.toLowerCase();
     let method = "post";
     let uri = "trips/tripsbyClient";
@@ -142,6 +148,8 @@ const TripList = () => {
     if (e.target.name === "all") {
       setTypeFilter(false);
       setPage(0);
+      setDriverSearchFilter("");
+      setClientSearchFilter("");
       setDatePage(0);
       setDriverPage(0);
       setDateFilter(false);
@@ -156,6 +164,8 @@ const TripList = () => {
         setDates({ ...dates, start_date: "", end_date: "" });
       }
       setPage(0);
+      setDriverSearchFilter("");
+      setClientSearchFilter("");
       setDateFilter((prevCheck) => !prevCheck);
     } else if (e.target.name === "trip-type-filter") {
       if (datefilter === true || driverfilter === true) {
@@ -164,6 +174,7 @@ const TripList = () => {
         setDates({ ...dates, start_date: "", end_date: "" });
       }
       setPage(0);
+      setDriverSearchFilter("");
       setTypeFilter((prevCheck) => !prevCheck);
     } else if (e.target.name === "driver-filter") {
       if (datefilter === true || typefilter === true) {
@@ -172,6 +183,7 @@ const TripList = () => {
         setDates({ ...dates, start_date: "", end_date: "" });
       }
       setPage(0);
+      setClientSearchFilter("");
       setDriverFilter((prevCheck) => !prevCheck);
     }
   };
@@ -388,6 +400,7 @@ const TripList = () => {
                           placeholder="Search Client name"
                           type="search"
                           name="client-search"
+                          value={clientSearchfilter}
                           style={{ border: "none", backgroundColor: "#e8f7ff" }}
                           onChange={(e) => {
                             setClientSearchFilter(e.target.value.toLowerCase());
@@ -555,6 +568,7 @@ const TripList = () => {
                           placeholder="Search Driver name"
                           type="search"
                           name="driver-search"
+                          value={driverSearchfilter}
                           style={{ border: "none", backgroundColor: "#e8f7ff" }}
                           onChange={(e) => {
                             setDriverSearchFilter(e.target.value.toLowerCase());
