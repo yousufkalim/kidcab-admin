@@ -263,9 +263,7 @@ const QuotesForm = ({
     formData["status"] = quote.status;
     formData["trip_info"] = JSON.stringify(tripInfo);
     formData["docu_sign_link"] = quote.docuSignLink;
-
     //validations
-
     if (quote.title == "") {
       return toast.error("Please enter quote title");
     }
@@ -293,11 +291,9 @@ const QuotesForm = ({
     if (parseInt(quote.totalPrice) < 1) {
       return toast.error("Please enter valid Amount with tax");
     }
-
     if (quote.vat == "") {
       return toast.error("Please enter vat");
     }
-
     if (tripInfo.start_date == "") {
       return toast.error("Please enter start date");
     }
