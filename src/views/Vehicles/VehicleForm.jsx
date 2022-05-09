@@ -38,7 +38,7 @@ const VehicleForm = ({
     brand: "",
     model: "",
     color: "",
-    engine_type: "",
+    engine_type: "thermal",
     inspection_date: "",
     graycard: "",
     graycard_expiry_date: "",
