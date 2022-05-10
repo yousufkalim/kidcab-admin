@@ -24,10 +24,6 @@ let current = moment();
 const DriverForm = ({
   openModal,
   handleModal,
-  handleFileChange,
-  handleInputChange,
-  handleVehicleChange,
-  handleRoleChange,
   editUser,
   isEditing,
   isClose,
@@ -221,7 +217,9 @@ const DriverForm = ({
     e.preventDefault();
     let method = "post";
     let uri = "drivers";
-
+    if (user?.vehicles.length < 1) {
+      return toast.error("Vechicle is required");
+    }
     const bankInfo = {
       bank_name: user?.bankName,
       iban: user?.iban,
@@ -464,9 +462,7 @@ const DriverForm = ({
                               ? editUser.profile_pic
                               : user.profile_pic
                           }
-                          onChange={
-                            isEditing ? handleFile1Change : handleFileChange
-                          }
+                          onChange={handleFile1Change}
                         ></FilePicker>
                       </FormGroup>
                     </Col>
@@ -494,9 +490,7 @@ const DriverForm = ({
                           type="text"
                           value={user.firstName}
                           name="firstName"
-                          onChange={
-                            isEditing ? handleInput1Change : handleInputChange
-                          }
+                          onChange={handleInput1Change}
                         />
                       </FormGroup>
                     </Col>
@@ -518,9 +512,7 @@ const DriverForm = ({
                           type="email"
                           value={user.lastName}
                           name="lastName"
-                          onChange={
-                            isEditing ? handleInput1Change : handleInputChange
-                          }
+                          onChange={handleInput1Change}
                         />
                       </FormGroup>
                     </Col>
@@ -545,9 +537,7 @@ const DriverForm = ({
                             type="text"
                             value={user.email}
                             name="email"
-                            onChange={
-                              isEditing ? handleInput1Change : handleInputChange
-                            }
+                            onChange={handleInput1Change}
                           />
                         </FormGroup>
                       </Col>
@@ -569,9 +559,7 @@ const DriverForm = ({
                             type="password"
                             value={user.password}
                             name="password"
-                            onChange={
-                              isEditing ? handleInput1Change : handleInputChange
-                            }
+                            onChange={handleInput1Change}
                           />
                         </FormGroup>
                       </Col>
@@ -593,9 +581,7 @@ const DriverForm = ({
                         </Label>
 
                         <Select
-                          onChange={
-                            isEditing ? handleRole1Change : handleRoleChange
-                          }
+                          onChange={handleRole1Change}
                           name="role"
                           hideSelectedOptions
                           defaultValue={
@@ -626,7 +612,7 @@ const DriverForm = ({
                             className="form-control-label"
                           >
                             <span style={{ color: "red" }}>
-                              {user.vehicles[0] ? "" : "*"}
+                              {user?.vehicles?.length > 0 ? "" : "*"}
                             </span>{" "}
                             Select Vehicle
                           </Label>
@@ -635,11 +621,8 @@ const DriverForm = ({
                               name="vehicles"
                               hideSelectedOptions
                               isMulti
-                              onChange={
-                                isEditing
-                                  ? handleVehicle1Change
-                                  : handleVehicleChange
-                              }
+                              isDisabled={isEditing}
+                              onChange={handleVehicle1Change}
                               defaultValue={
                                 isClose
                                   ? editUser.vehicles?.map((i) => ({
@@ -668,18 +651,16 @@ const DriverForm = ({
                             className="form-control-label"
                             htmlFor="input-fname"
                           >
-                            Select Vehicles
+                            <span style={{ color: "red" }}>
+                              {user?.vehicles?.length > 0 ? "" : "*"}
+                            </span>{" "}
+                            Select Vehicle
                           </label>
-
                           {vehicles && (
                             <Select
-                              onChange={(e) =>
-                                setUser((user) => ({
-                                  ...user,
-                                  vehicles: e.map((driver) => driver.value),
-                                }))
-                              }
+                              onChange={handleVehicle1Change}
                               name="vehicles"
+                              isDisabled={isEditing}
                               isMulti
                               className="form-control-alternative"
                               defaultValue={
@@ -706,7 +687,6 @@ const DriverForm = ({
                           >
                             Select Vehicles
                           </label>
-
                           <Select
                             name="vehicles"
                             isMulti
@@ -718,16 +698,13 @@ const DriverForm = ({
                     )}
                   </Row>
                 </div>
-
                 {user.role === "fleet_manager" && (
                   <>
                     <hr className="my-4" />
-
                     {/* Contact Information */}
                     <h6 className="heading-small text-muted mb-4">
                       Company information
                     </h6>
-
                     <div className="pl-lg-4">
                       <Row>
                         <Col lg="6">
@@ -746,11 +723,7 @@ const DriverForm = ({
                               type="text"
                               value={user.company_name}
                               name="company_name"
-                              onChange={
-                                isEditing
-                                  ? handleInput1Change
-                                  : handleInputChange
-                              }
+                              onChange={handleInput1Change}
                             />
                           </FormGroup>
                         </Col>
@@ -770,11 +743,7 @@ const DriverForm = ({
                               type="text"
                               value={user.city_of_rcs}
                               name="city_of_rcs"
-                              onChange={
-                                isEditing
-                                  ? handleInput1Change
-                                  : handleInputChange
-                              }
+                              onChange={handleInput1Change}
                             />
                           </FormGroup>
                         </Col>
@@ -797,11 +766,7 @@ const DriverForm = ({
                               type="text"
                               value={user.siret_number}
                               name="siret_number"
-                              onChange={
-                                isEditing
-                                  ? handleInput1Change
-                                  : handleInputChange
-                              }
+                              onChange={handleInput1Change}
                             />
                           </FormGroup>
                         </Col>
@@ -820,11 +785,7 @@ const DriverForm = ({
                               type="text"
                               value={user.vat_number}
                               name="vat_number"
-                              onChange={
-                                isEditing
-                                  ? handleInput1Change
-                                  : handleInputChange
-                              }
+                              onChange={handleInput1Change}
                             />
                           </FormGroup>
                         </Col>
@@ -845,11 +806,7 @@ const DriverForm = ({
                               type="text"
                               value={user.social_capital}
                               name="social_capital"
-                              onChange={
-                                isEditing
-                                  ? handleInput1Change
-                                  : handleInputChange
-                              }
+                              onChange={handleInput1Change}
                             />
                           </FormGroup>
                         </Col>
@@ -868,11 +825,7 @@ const DriverForm = ({
                               type="text"
                               value={user.legal_info}
                               name="legal_info"
-                              onChange={
-                                isEditing
-                                  ? handleInput1Change
-                                  : handleInputChange
-                              }
+                              onChange={handleInput1Change}
                             />
                           </FormGroup>
                         </Col>
@@ -897,9 +850,7 @@ const DriverForm = ({
                                   ? editUser.insurance_civil_liability
                                   : user.insurance_civil_liability
                               }
-                              onChange={
-                                isEditing ? handleFile1Change : handleFileChange
-                              }
+                              onChange={handleFile1Change}
                             ></FilePicker>
                           </FormGroup>
                         </Col>
@@ -922,9 +873,7 @@ const DriverForm = ({
                                   ? editUser.professional_liability
                                   : user.professional_liability
                               }
-                              onChange={
-                                isEditing ? handleFile1Change : handleFileChange
-                              }
+                              onChange={handleFile1Change}
                             ></FilePicker>
                           </FormGroup>
                         </Col>
@@ -942,9 +891,7 @@ const DriverForm = ({
                               InputId="input-RIB"
                               InputName="rib"
                               value={editUser.rib ? editUser.rib : user.rib}
-                              onChange={
-                                isEditing ? handleFile1Change : handleFileChange
-                              }
+                              onChange={handleFile1Change}
                             ></FilePicker>
                           </FormGroup>
                         </Col>
@@ -969,9 +916,7 @@ const DriverForm = ({
                                   ? editUser.kbis_extract
                                   : user.kbis_extract
                               }
-                              onChange={
-                                isEditing ? handleFile1Change : handleFileChange
-                              }
+                              onChange={handleFile1Change}
                             ></FilePicker>
                           </FormGroup>
                         </Col>
@@ -1015,9 +960,7 @@ const DriverForm = ({
                           type="text"
                           value={user.phone}
                           name="phone"
-                          onChange={
-                            isEditing ? handleInput1Change : handleInputChange
-                          }
+                          onChange={handleInput1Change}
                           maxLength={14}
                         />
                       </FormGroup>
@@ -1044,9 +987,7 @@ const DriverForm = ({
                           type="text"
                           value={user?.bankName}
                           name="bankName"
-                          onChange={
-                            isEditing ? handleInput1Change : handleInputChange
-                          }
+                          onChange={handleInput1Change}
                         />
                       </FormGroup>
                     </Col>
@@ -1065,9 +1006,7 @@ const DriverForm = ({
                           type="text"
                           value={user.iban}
                           name="iban"
-                          onChange={
-                            isEditing ? handleInput1Change : handleInputChange
-                          }
+                          onChange={handleInput1Change}
                         />
                       </FormGroup>
                     </Col>
@@ -1098,9 +1037,7 @@ const DriverForm = ({
                               ? editUser.id_card_front
                               : user.id_front
                           }
-                          onChange={
-                            isEditing ? handleFile1Change : handleFileChange
-                          }
+                          onChange={handleFile1Change}
                         ></FilePicker>
                       </FormGroup>
                     </Col>
@@ -1122,9 +1059,7 @@ const DriverForm = ({
                               ? editUser.id_card_back
                               : user.id_back
                           }
-                          onChange={
-                            isEditing ? handleFile1Change : handleFileChange
-                          }
+                          onChange={handleFile1Change}
                         ></FilePicker>
                       </FormGroup>
                     </Col>
@@ -1148,9 +1083,7 @@ const DriverForm = ({
                               ? editUser.vtc_card_front
                               : user.vtc_front
                           }
-                          onChange={
-                            isEditing ? handleFile1Change : handleFileChange
-                          }
+                          onChange={handleFile1Change}
                         ></FilePicker>
                       </FormGroup>
                     </Col>
@@ -1172,9 +1105,7 @@ const DriverForm = ({
                               ? editUser.vtc_card_back
                               : user.vtc_back
                           }
-                          onChange={
-                            isEditing ? handleFile1Change : handleFileChange
-                          }
+                          onChange={handleFile1Change}
                         ></FilePicker>
                       </FormGroup>
                     </Col>
@@ -1198,9 +1129,7 @@ const DriverForm = ({
                               ? editUser.license_card_front
                               : user.license_front
                           }
-                          onChange={
-                            isEditing ? handleFile1Change : handleFileChange
-                          }
+                          onChange={handleFile1Change}
                         ></FilePicker>
                       </FormGroup>
                     </Col>
@@ -1222,9 +1151,7 @@ const DriverForm = ({
                               ? editUser.license_card_back
                               : user.license_back
                           }
-                          onChange={
-                            isEditing ? handleFile1Change : handleFileChange
-                          }
+                          onChange={handleFile1Change}
                         ></FilePicker>
                       </FormGroup>
                     </Col>
@@ -1248,9 +1175,7 @@ const DriverForm = ({
                               ? editUser.criminal_record_image
                               : user.criminal_record_image
                           }
-                          onChange={
-                            isEditing ? handleFile1Change : handleFileChange
-                          }
+                          onChange={handleFile1Change}
                         ></FilePicker>
                       </FormGroup>
                     </Col>
@@ -1278,9 +1203,7 @@ const DriverForm = ({
                           type="date"
                           value={user?.criminal_record_date?.split("T")[0]}
                           name="criminal_record_date"
-                          onChange={
-                            isEditing ? handleInput1Change : handleInputChange
-                          }
+                          onChange={handleInput1Change}
                           min={moment(current).format("YYYY-MM-DD")}
                         />
                       </FormGroup>
@@ -1305,9 +1228,7 @@ const DriverForm = ({
                               ? editUser.ris_image
                               : user.ris_image
                           }
-                          onChange={
-                            isEditing ? handleFile1Change : handleFileChange
-                          }
+                          onChange={handleFile1Change}
                         ></FilePicker>
                       </FormGroup>
                     </Col>
@@ -1330,9 +1251,7 @@ const DriverForm = ({
                           type="date"
                           value={user?.ris_date?.split("T")[0]}
                           name="ris_date"
-                          onChange={
-                            isEditing ? handleInput1Change : handleInputChange
-                          }
+                          onChange={handleInput1Change}
                           min={moment(current).format("YYYY-MM-DD")}
                         />
                       </FormGroup>
@@ -1356,9 +1275,7 @@ const DriverForm = ({
                               ? editUser.kbis_image
                               : user.kbis_image
                           }
-                          onChange={
-                            isEditing ? handleFile1Change : handleFileChange
-                          }
+                          onChange={handleFile1Change}
                         ></FilePicker>
                       </FormGroup>
                     </Col>
@@ -1387,9 +1304,7 @@ const DriverForm = ({
                           type="date"
                           value={user?.kbis_date?.split("T")[0]}
                           name="kbis_date"
-                          onChange={
-                            isEditing ? handleInput1Change : handleInputChange
-                          }
+                          onChange={handleInput1Change}
                           min={moment(current).format("YYYY-MM-DD")}
                         />
                       </FormGroup>
@@ -1414,9 +1329,7 @@ const DriverForm = ({
                               ? editUser.proRc_image
                               : user.proRc_image
                           }
-                          onChange={
-                            isEditing ? handleFile1Change : handleFileChange
-                          }
+                          onChange={handleFile1Change}
                         ></FilePicker>
                       </FormGroup>
                     </Col>
@@ -1443,9 +1356,7 @@ const DriverForm = ({
                           type="date"
                           value={user?.proRc_date?.split("T")[0]}
                           name="proRc_date"
-                          onChange={
-                            isEditing ? handleInput1Change : handleInputChange
-                          }
+                          onChange={handleInput1Change}
                           min={moment(current).format("YYYY-MM-DD")}
                         />
                       </FormGroup>
