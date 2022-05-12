@@ -22,13 +22,23 @@ const PassengerRow = ({ user, autoRefresh }) => {
         <Media className="align-items-center">
           <Media>
             <span className="mb-0 text-sm">
-              {user?.first_name + " " + user?.last_name}
+              {user?.first_name[0].toUpperCase() +
+                user?.first_name.substring(1) +
+                " " +
+                user?.last_name[0].toUpperCase() +
+                user?.last_name.substring(1)}
             </span>
           </Media>
         </Media>
       </th>
       <td>{user?.relationship}</td>
-      <td>{user?.client?.first_name + " " + user?.client?.last_name}</td>
+      <td>
+        {user?.client?.first_name[0].toUpperCase() +
+          user?.client?.first_name.substring(1) +
+          " " +
+          user?.client?.last_name[0].toUpperCase() +
+          user?.client?.last_name.substring(1)}
+      </td>
       <td>{user?.client?.email}</td>
       <td className="text-right">
         <UncontrolledDropdown>

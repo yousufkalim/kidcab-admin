@@ -47,7 +47,11 @@ const TripRow = ({ trip, autoRefresh, selectedItems, handleSelect }) => {
       </th>
       <td className="text-center">
         {trip.client
-          ? trip.client.first_name + " " + trip.client.last_name
+          ? trip?.client?.first_name[0].toUpperCase() +
+            trip?.client?.first_name.substring(1) +
+            " " +
+            trip.client.last_name[0].toUpperCase() +
+            trip?.client?.last_name.substring(1)
           : "No client is added"}
       </td>
       <td className="text-center">
@@ -56,13 +60,25 @@ const TripRow = ({ trip, autoRefresh, selectedItems, handleSelect }) => {
       {trip?.invited_drivers?.length > 0 ? (
         <td className="text-center">
           {trip?.invited_drivers.map((i) => {
-            return " " + i?.driver?.first_name + " " + i?.driver?.last_name;
+            return (
+              i?.driver?.first_name[0].toUpperCase() +
+              i?.driver?.first_name.substring(1) +
+              " " +
+              i?.driver?.last_name[0].toUpperCase() +
+              i?.driver.last_name.substring(1)
+            );
           })}
         </td>
       ) : (
         <td className="text-center">
           {trip.assigned_drivers.map((i) => {
-            return " " + i?.first_name + " " + i?.last_name;
+            return (
+              i?.first_name[0].toUpperCase() +
+              i?.first_name.substring(1) +
+              " " +
+              i?.last_name[0].toUpperCase() +
+              i?.last_name.substring(1)
+            );
           })}
         </td>
       )}
