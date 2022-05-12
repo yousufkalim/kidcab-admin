@@ -53,7 +53,13 @@ const QuotesRow = ({ quote, autoRefresh, selectedItems, handleSelect }) => {
         </Badge>
       </td>
 
-      <td>{quote?.client?.first_name + " " + quote?.client?.last_name}</td>
+      <td>
+        {quote?.client?.first_name[0].toUpperCase() +
+          quote?.client?.first_name.substring(1) +
+          " " +
+          quote?.client?.last_name[0].toUpperCase() +
+          quote?.client?.last_name.substring(1)}
+      </td>
       <td>{quote?.trip_info && quote?.trip_info?.total_trips}</td>
       <td>{quote?.total_price}€</td>
       <td>{(quote?.total_price - quote?.vat).toFixed(2)}€</td>
