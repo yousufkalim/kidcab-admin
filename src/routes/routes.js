@@ -8,6 +8,7 @@ import Quotes from "../views/Quotes/Quotes";
 import Vehicles from "../views/Vehicles";
 import Trips from "../views/Trips/Trips";
 import Schedule from "../views/Schedule/Schedule";
+import Requests from "views/RideRequest/Requests.js";
 
 var routes = [
   {
@@ -31,6 +32,13 @@ var routes = [
     name: "Schedule",
     icon: "fa fa-calendar text-blue",
     component: Schedule,
+    layout: "/admin",
+  },
+  {
+    path: "/request",
+    name: "Ride request",
+    icon: "ni ni-collection text-teal",
+    component: Requests,
     layout: "/admin",
   },
 
