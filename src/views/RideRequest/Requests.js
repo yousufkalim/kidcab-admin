@@ -34,6 +34,7 @@ import {
   Table,
   Container,
   Row,
+  Nav,
 } from 'reactstrap';
 
 // core components
@@ -52,6 +53,16 @@ const Requests = () => {
       setRequests(res?.data?.request);
     });
   };
+
+  const updateStatus = async (id, status, index) => {
+    await api('put', `requests/${id}`, { status }).then((res) => {
+      setRequests((prev) => {
+        prev[index] = res?.data?.request;
+        return [...prev];
+      });
+    });
+  };
+
   return (
     <>
       <Header />
@@ -66,7 +77,7 @@ const Requests = () => {
                   <h3 className="mb-0">Ride Requests</h3>
                 </div>
               </CardHeader>
-              <Table className="align-items-center table-flush">
+              <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
                   <tr>
                     <th scope="col">Name </th>
@@ -74,11 +85,12 @@ const Requests = () => {
                     <th scope="col">PickUp Address</th>
                     <th scope="col">Destination Address</th>
                     <th scope="col">Status</th>
+                    <th scope="col">Action</th>
                     <th scope="col" />
                   </tr>
                 </thead>
                 <tbody>
-                  {requests?.map((item) => {
+                  {requests?.map((item, index) => {
                     return (
                       <tr>
                         <td>{item?.first_name}</td>
@@ -87,6 +99,38 @@ const Requests = () => {
 
                         <td>{item?.destination_address ? item.destination_address.label : '_'}</td>
                         <td>{item?.status}</td>
+                        <td>
+                          <Nav className="align-items-center d-none d-md-flex" navbar>
+                            <UncontrolledDropdown nav>
+                              <DropdownToggle className="pr-0" nav>
+                                <Media className="align-items-center">
+                                  <Media className="ml-2 d-none d-lg-block">
+                                    <span className="mb-0 text-sm font-weight-bold">
+                                      <i
+                                        className="fa fa-ellipsis-v"
+                                        style={{ cursor: 'pointer' }}
+                                      />
+                                    </span>
+                                  </Media>
+                                </Media>
+                              </DropdownToggle>
+                              <DropdownMenu className="dropdown-menu-arrow" right>
+                                <DropdownItem
+                                  onClick={() => updateStatus(item._id, 'accepted', index)}
+                                >
+                                  <i className="fa fa-check text-green" />
+                                  <span>Accepted</span>
+                                </DropdownItem>
+                                <DropdownItem
+                                  onClick={() => updateStatus(item._id, 'rejected', index)}
+                                >
+                                  <i className="fa fa-times text-red" />
+                                  <span> Rejected</span>
+                                </DropdownItem>
+                              </DropdownMenu>
+                            </UncontrolledDropdown>
+                          </Nav>
+                        </td>
                         <td></td>
                       </tr>
                     );
