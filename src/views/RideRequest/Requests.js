@@ -16,11 +16,11 @@
 
 */
 // reactstrap components
-import { useState, useEffect } from "react";
-import { useHistory } from "react-router-dom";
-import api from "api";
-import { Store, UpdateStore } from "StoreContext";
-import moment from "moment";
+import { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
+import api from 'api';
+import { Store, UpdateStore } from 'StoreContext';
+import moment from 'moment';
 import {
   Badge,
   Card,
@@ -34,11 +34,11 @@ import {
   Table,
   Container,
   Row,
-} from "reactstrap";
+} from 'reactstrap';
 
 // core components
-import Header from "components/Headers/Header.js";
-import { toast } from "react-toastify";
+import Header from 'components/Headers/Header.js';
+import { toast } from 'react-toastify';
 
 const Requests = () => {
   const [requests, setRequests] = useState([]);
@@ -48,7 +48,7 @@ const Requests = () => {
   }, []);
 
   const getRequests = async () => {
-    await api("get", "request").then((res) => {
+    await api('get', 'requests').then((res) => {
       setRequests(res?.data?.request);
     });
   };
@@ -74,6 +74,8 @@ const Requests = () => {
                     <th scope="col">PickUp Address</th>
                     <th scope="col">Destination Address</th>
                     <th scope="col">Status</th>
+                    <th scope="col">PickUp Date</th>
+
                     <th scope="col" />
                   </tr>
                 </thead>
@@ -82,19 +84,12 @@ const Requests = () => {
                     return (
                       <tr>
                         <td>{item?.first_name}</td>
-                        <td>{item?.journey_type ? item.journey_type : "_"}</td>
-                        <td>
-                          {item?.pickUp_address
-                            ? item.pickUp_address.label
-                            : "_"}
-                        </td>
+                        <td>{item?.journey_type ? item.journey_type : '_'}</td>
+                        <td>{item?.pickUp_address ? item.pickUp_address.label : '_'}</td>
 
-                        <td>
-                          {item?.destination_address
-                            ? item.destination_address.label
-                            : "_"}
-                        </td>
+                        <td>{item?.destination_address ? item.destination_address.label : '_'}</td>
                         <td>{item?.status}</td>
+                        <td>{new Date(item.pickUp_date).toDateString()}</td>
                         <td></td>
                       </tr>
                     );
