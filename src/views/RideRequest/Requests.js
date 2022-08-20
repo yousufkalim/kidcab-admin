@@ -34,11 +34,11 @@ import {
   Table,
   Container,
   Row,
+  Nav,
 } from 'reactstrap';
 
 // core components
 import Header from 'components/Headers/Header.js';
-import { toast } from 'react-toastify';
 
 const Requests = () => {
   const [requests, setRequests] = useState([]);
@@ -52,6 +52,7 @@ const Requests = () => {
       setRequests(res?.data?.request);
     });
   };
+
   return (
     <>
       <Header />
@@ -66,10 +67,12 @@ const Requests = () => {
                   <h3 className="mb-0">Ride Requests</h3>
                 </div>
               </CardHeader>
-              <Table className="align-items-center table-flush">
+              <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
                   <tr>
                     <th scope="col">Name </th>
+                    <th scope="col">Phone number </th>
+                    <th scope="col">No of passengers </th>
                     <th cope="col">Journey Type</th>
                     <th scope="col">PickUp Address</th>
                     <th scope="col">Destination Address</th>
@@ -83,12 +86,33 @@ const Requests = () => {
                   {requests?.map((item) => {
                     return (
                       <tr>
-                        <td>{item?.first_name}</td>
-                        <td>{item?.journey_type ? item.journey_type : '_'}</td>
-                        <td>{item?.pickUp_address ? item.pickUp_address.label : '_'}</td>
-
-                        <td>{item?.destination_address ? item.destination_address.label : '_'}</td>
-                        <td>{item?.status}</td>
+                        <th scope="row">
+                          <Media className="align-items-center">
+                            <Media>
+                              <span className="mb-0 text-sm">
+                                {item?.first_name[0].toUpperCase() +
+                                  item?.first_name.substring(1) +
+                                  ' ' +
+                                  item?.last_name[0].toUpperCase() +
+                                  item?.last_name.substring(1)}
+                              </span>
+                            </Media>
+                          </Media>
+                        </th>
+                        <td>{item.phone || '_'}</td>
+                        <td>{item.passengers || '_'}</td>
+                        <td>{item.journey_type || '_'}</td>
+                        <td>{item.pickUp_address.label || '_'}</td>
+                        <td>{item?.destination_address?.label || '_'}</td>
+                        <td>
+                          {item?.status === 'not answer'
+                            ? 'Not Answer'
+                            : item?.status === 'pending'
+                            ? 'Pending'
+                            : item?.status === 'accepted'
+                            ? 'Accepted'
+                            : 'Decline'}
+                        </td>
                         <td>{new Date(item.pickUp_date).toDateString()}</td>
                         <td></td>
                       </tr>
