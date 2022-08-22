@@ -77,6 +77,8 @@ const Requests = () => {
                     <th scope="col">PickUp Address</th>
                     <th scope="col">Destination Address</th>
                     <th scope="col">Status</th>
+                    <th scope="col">PickUp Date</th>
+
                     <th scope="col" />
                   </tr>
                 </thead>
@@ -84,15 +86,34 @@ const Requests = () => {
                   {requests?.map((item) => {
                     return (
                       <tr>
-                        <td>
-                          {item?.first_name} {item?.last_name}
-                        </td>
+                        <th scope="row">
+                          <Media className="align-items-center">
+                            <Media>
+                              <span className="mb-0 text-sm">
+                                {item?.first_name[0].toUpperCase() +
+                                  item?.first_name.substring(1) +
+                                  ' ' +
+                                  item?.last_name[0].toUpperCase() +
+                                  item?.last_name.substring(1)}
+                              </span>
+                            </Media>
+                          </Media>
+                        </th>
                         <td>{item.phone || '_'}</td>
                         <td>{item.passengers || '_'}</td>
                         <td>{item.journey_type || '_'}</td>
                         <td>{item.pickUp_address.label || '_'}</td>
                         <td>{item?.destination_address?.label || '_'}</td>
-                        <td>{item?.status}</td>
+                        <td>
+                          {item?.status === 'not answer'
+                            ? 'Not Answer'
+                            : item?.status === 'pending'
+                            ? 'Pending'
+                            : item?.status === 'accepted'
+                            ? 'Accepted'
+                            : 'Decline'}
+                        </td>
+                        <td>{new Date(item.pickUp_date).toDateString()}</td>
                         <td></td>
                       </tr>
                     );
