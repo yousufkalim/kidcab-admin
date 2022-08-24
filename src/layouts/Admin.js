@@ -69,8 +69,8 @@ const Admin = (props) => {
         routes={routes}
         logo={{
           innerLink: '/admin/index',
-          // imgSrc: require('../assets/img/brand/kidcab.png').default,
-          imgSrc: process.env.REACT_APP_BASE_URL + company?.logo,
+           imgSrc: require('../assets/img/brand/kidcab.png').default,
+          // imgSrc: process.env.REACT_APP_BASE_URL + company?.logo,
           imgAlt: '...',
         }}
       />
