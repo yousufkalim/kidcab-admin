@@ -1,5 +1,5 @@
 // Init
-import React, { useContext, useState, createContext } from "react";
+import React, { useContext, useState, createContext } from 'react';
 
 // Initializing Create Context Hook
 const storeContext = createContext();
@@ -19,8 +19,9 @@ export function StoreProvider({ children }) {
   // Initializing State
   let [store, setStore] = useState({
     authorization: false,
-    token: "",
+    token: '',
     user: {},
+    logo: '',
   });
 
   const updateStore = (data) => {
@@ -35,9 +36,7 @@ export function StoreProvider({ children }) {
   // Render
   return (
     <storeContext.Provider value={store}>
-      <storeUpdateContext.Provider value={updateStore}>
-        {children}
-      </storeUpdateContext.Provider>
+      <storeUpdateContext.Provider value={updateStore}>{children}</storeUpdateContext.Provider>
     </storeContext.Provider>
   );
 }

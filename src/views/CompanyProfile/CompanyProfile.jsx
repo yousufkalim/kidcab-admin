@@ -1,51 +1,42 @@
-import { useState, useEffect } from "react";
-import { toast } from "react-toastify";
-import api from "../../api";
-import FilePicker from "../../components/Form/FilePicker";
-import View from "../../components/view";
-import {
-  Modal,
-  ModalBody,
-  ModalHeader,
-  ModalFooter,
-  Button,
-  FormGroup,
-  Form,
-  Input,
-  Row,
-  Col,
-} from "reactstrap";
+import { useState, useEffect } from 'react';
+import { toast } from 'react-toastify';
+import api from '../../api';
+import FilePicker from '../../components/Form/FilePicker';
+import View from '../../components/view';
+import { UpdateStore } from 'StoreContext';
+import { Modal, ModalBody, ModalHeader, ModalFooter, Button, FormGroup, Form, Input, Row, Col } from 'reactstrap';
 // core components
 
 const CompanyProfile = ({ openModal, handleModal }) => {
+  const updateStore = UpdateStore();
   const [company, setCompany] = useState({
-    logo: "",
-    address: "",
-    phoneNumber: "",
-    companyName: "",
-    siret: "",
-    vat: "",
-    legalForm: "",
-    shareCapital: "",
-    rcsCity: "",
-    bankName: "",
-    iban: "",
+    logo: '',
+    address: '',
+    phoneNumber: '',
+    companyName: '',
+    siret: '',
+    vat: '',
+    legalForm: '',
+    shareCapital: '',
+    rcsCity: '',
+    bankName: '',
+    iban: '',
   });
 
   const getCompany = async () => {
-    const { data } = await api("get", "company");
+    const { data } = await api('get', 'company');
     setCompany({
-      logo: data.company?.logo || "",
-      phoneNumber: data.company?.phone_number || "",
-      vat: data.company?.vat_number || "",
-      companyName: data.company?.company_name || "",
-      siret: data.company?.siret_number || "",
-      legalForm: data.company?.legal_form || "",
-      shareCapital: data.company?.share_capital || "",
-      rcsCity: data.company?.rcs_city || "",
-      bankName: data.company?.bank_name || "",
-      iban: data.company?.iban || "",
-      address: data.company?.address || "",
+      logo: data.company?.logo || '',
+      phoneNumber: data.company?.phone_number || '',
+      vat: data.company?.vat_number || '',
+      companyName: data.company?.company_name || '',
+      siret: data.company?.siret_number || '',
+      legalForm: data.company?.legal_form || '',
+      shareCapital: data.company?.share_capital || '',
+      rcsCity: data.company?.rcs_city || '',
+      bankName: data.company?.bank_name || '',
+      iban: data.company?.iban || '',
+      address: data.company?.address || '',
     });
   };
 
@@ -65,23 +56,27 @@ const CompanyProfile = ({ openModal, handleModal }) => {
     e.preventDefault();
 
     const formData = new FormData();
-    formData.append("phone_number", company.phoneNumber);
-    formData.append("address", company.address);
-    formData.append("company_name", company.companyName);
-    formData.append("siret_number", company.siret);
-    formData.append("vat", company.vat);
-    formData.append("legal_form", company.legalForm);
-    formData.append("share_capital", company.shareCapital);
-    formData.append("rcs_city", company.rcsCity);
-    formData.append("bank_name", company.bankName);
-    formData.append("iban", company.iban);
+    formData.append('phone_number', company.phoneNumber);
+    formData.append('address', company.address);
+    formData.append('company_name', company.companyName);
+    formData.append('siret_number', company.siret);
+    formData.append('vat', company.vat);
+    formData.append('legal_form', company.legalForm);
+    formData.append('share_capital', company.shareCapital);
+    formData.append('rcs_city', company.rcsCity);
+    formData.append('bank_name', company.bankName);
+    formData.append('iban', company.iban);
 
     if (company.logo) {
-      formData.append("logo", company.logo);
+      formData.append('logo', company.logo);
     }
 
-    api("post", "company", formData).then((res) => {
-      toast.success("company edited successfully");
+    api('post', 'company', formData).then((res) => {
+      toast.success('company edited successfully');
+      console.log(res?.data?.company?.logo, 'res?.data?.company?.logo');
+      updateStore({
+        logo: res?.data?.company?.logo,
+      });
       getCompany();
       handleModal();
     });
@@ -95,22 +90,14 @@ const CompanyProfile = ({ openModal, handleModal }) => {
           <Row>
             <Col>
               <Form>
-                <h6 className="heading-small text-muted mb-4">
-                  Company information
-                </h6>
+                <h6 className="heading-small text-muted mb-4">Company information</h6>
 
                 <div className="pl-lg-4">
                   <Row>
                     <Col lg="12">
                       <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-image"
-                        >
-                          <span style={{ color: "red" }}>
-                            {company.logo ? "" : "*"}
-                          </span>{" "}
-                          Add Logo <i className="ni ni-album-2" />
+                        <label className="form-control-label" htmlFor="input-image">
+                          <span style={{ color: 'red' }}>{company.logo ? '' : '*'}</span> Add Logo <i className="ni ni-album-2" />
                           <View url={company?.logo} />
                         </label>
                         <FilePicker
@@ -128,10 +115,7 @@ const CompanyProfile = ({ openModal, handleModal }) => {
                   <Row>
                     <Col lg="6">
                       <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-companyName"
-                        >
+                        <label className="form-control-label" htmlFor="input-companyName">
                           Company Name
                         </label>
                         <Input
@@ -147,10 +131,7 @@ const CompanyProfile = ({ openModal, handleModal }) => {
                     </Col>
                     <Col lg="6">
                       <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-rcsCity"
-                        >
+                        <label className="form-control-label" htmlFor="input-rcsCity">
                           City of RCS
                         </label>
                         <Input
@@ -168,10 +149,7 @@ const CompanyProfile = ({ openModal, handleModal }) => {
                   <Row>
                     <Col lg="6">
                       <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-legalForm"
-                        >
+                        <label className="form-control-label" htmlFor="input-legalForm">
                           Legal Form
                         </label>
                         <Input
@@ -187,10 +165,7 @@ const CompanyProfile = ({ openModal, handleModal }) => {
                     </Col>
                     <Col lg="6">
                       <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-cap"
-                        >
+                        <label className="form-control-label" htmlFor="input-cap">
                           Share Capital
                         </label>
                         <Input
@@ -211,10 +186,7 @@ const CompanyProfile = ({ openModal, handleModal }) => {
                   <Row>
                     <Col md="12">
                       <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-address"
-                        >
+                        <label className="form-control-label" htmlFor="input-address">
                           Address
                         </label>
                         <Input
@@ -232,10 +204,7 @@ const CompanyProfile = ({ openModal, handleModal }) => {
                   <Row>
                     <Col lg="4">
                       <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-phone"
-                        >
+                        <label className="form-control-label" htmlFor="input-phone">
                           Phone Number
                         </label>
                         <Input
@@ -252,10 +221,7 @@ const CompanyProfile = ({ openModal, handleModal }) => {
                     </Col>
                     <Col lg="4">
                       <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-siret"
-                        >
+                        <label className="form-control-label" htmlFor="input-siret">
                           Siret Number
                         </label>
                         <Input
@@ -271,10 +237,7 @@ const CompanyProfile = ({ openModal, handleModal }) => {
                     </Col>
                     <Col lg="4">
                       <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-vat"
-                        >
+                        <label className="form-control-label" htmlFor="input-vat">
                           VAT Number
                         </label>
                         <Input
@@ -295,10 +258,7 @@ const CompanyProfile = ({ openModal, handleModal }) => {
                   <Row>
                     <Col lg="4">
                       <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-bankName"
-                        >
+                        <label className="form-control-label" htmlFor="input-bankName">
                           Bank Name
                         </label>
                         <Input
@@ -314,10 +274,7 @@ const CompanyProfile = ({ openModal, handleModal }) => {
                     </Col>
                     <Col lg="8">
                       <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-iban"
-                        >
+                        <label className="form-control-label" htmlFor="input-iban">
                           IBAN / BIC
                         </label>
                         <Input
@@ -340,7 +297,7 @@ const CompanyProfile = ({ openModal, handleModal }) => {
         <ModalFooter>
           <Button color="primary" onClick={handleSubmit}>
             Save
-          </Button>{" "}
+          </Button>{' '}
           <Button onClick={handleModal}>Cancel</Button>
         </ModalFooter>
       </Modal>
