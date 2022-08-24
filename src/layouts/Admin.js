@@ -9,7 +9,7 @@ import Sidebar from 'components/Sidebar/Sidebar.js';
 import { getToken, getUser, SetAuthToken } from '../variables/auth';
 import api from 'api';
 import routes from 'routes/routes';
-import { UpdateStore } from 'StoreContext';
+import { UpdateStore, Store } from 'StoreContext';
 
 const Admin = (props) => {
   const mainContent = useRef(null);
@@ -17,6 +17,7 @@ const Admin = (props) => {
   const [token, setToken] = useState('');
   const [company, setCompany] = useState('');
   const updateStore = UpdateStore();
+  const store = Store();
 
   useEffect(() => {
     getCompany();
@@ -33,7 +34,10 @@ const Admin = (props) => {
 
   const getCompany = async () => {
     await api('get', '/company').then((res) => {
-      setCompany(res?.data?.company);
+      // setCompany(res?.data?.company);
+      updateStore({
+        logo: res?.data?.company.logo,
+      });
     });
   };
 
@@ -69,8 +73,8 @@ const Admin = (props) => {
         routes={routes}
         logo={{
           innerLink: '/admin/index',
-           imgSrc: require('../assets/img/brand/kidcab.png').default,
-          // imgSrc: process.env.REACT_APP_BASE_URL + company?.logo,
+          //imgSrc: require('../assets/img/brand/kidcab.png').default,
+          imgSrc: process.env.REACT_APP_BASE_URL + store?.logo,
           imgAlt: '...',
         }}
       />
