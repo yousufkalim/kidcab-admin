@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { getToken } from '../../variables/auth';
 import api from 'api';
 import { Store, UpdateStore } from 'StoreContext';
+import { baseUrl } from 'config';
+
 // reactstrap components
 import { UncontrolledCollapse, NavbarBrand, Navbar, NavItem, NavLink, Nav, Container, Row, Col } from 'reactstrap';
 
@@ -24,7 +26,7 @@ const AdminNavbar = () => {
       <Navbar className="navbar-top navbar-horizontal navbar-dark" expand="md">
         <Container className="px-4">
           <NavbarBrand to="/" tag={Link}>
-            <img alt="..." src={`${process.env.REACT_APP_BASE_URL}${store.logo}`} />
+            <img alt="..." src={`${baseUrl}${store.logo}`} />
           </NavbarBrand>
           <button className="navbar-toggler" id="navbar-collapse-main">
             <span className="navbar-toggler-icon" />
@@ -34,7 +36,7 @@ const AdminNavbar = () => {
               <Row>
                 <Col className="collapse-brand" xs="6">
                   <Link to="/">
-                    <img alt="..." src={`${process.env.REACT_APP_BASE_URL}${store.logo}`} />
+                    <img alt="..." src={`${baseUrl}${store.logo}`} />
                   </Link>
                 </Col>
                 <Col className="collapse-close" xs="6">

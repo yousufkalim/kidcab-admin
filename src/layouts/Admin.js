@@ -10,6 +10,7 @@ import { getToken, getUser, SetAuthToken } from '../variables/auth';
 import api from 'api';
 import routes from 'routes/routes';
 import { UpdateStore, Store } from 'StoreContext';
+import { baseUrl } from 'config';
 
 const Admin = (props) => {
   const mainContent = useRef(null);
@@ -74,7 +75,7 @@ const Admin = (props) => {
         logo={{
           innerLink: '/admin/index',
           //imgSrc: require('../assets/img/brand/kidcab.png').default,
-          imgSrc: process.env.REACT_APP_BASE_URL + store?.logo,
+          imgSrc: baseUrl + store?.logo,
           imgAlt: '...',
         }}
       />
