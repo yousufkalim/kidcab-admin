@@ -2,17 +2,17 @@
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { removeToken } from '../variables/auth';
-
+import { baseUrl } from '../config';
 const api = async (method = 'get', uri, body) => {
   // Default setting for production
-  if (window.location.hostname === 'localhost') {
-    axios.defaults.baseURL = 'http://localhost:5000/';
-  } else {
-    axios.defaults.baseURL = 'https://kidcab.falconit.com.pk/';
-  }
+  // if (window.location.hostname === 'localhost') {
+  //   axios.defaults.baseURL = 'http://localhost:5000/';
+  // } else {
+  //   axios.defaults.baseURL = 'https://kidcab.falconit.com.pk/';
+  // }
 
   // API Call
-  const url = 'api/' + uri;
+  const url = baseUrl + uri;
   return new Promise((resolve, reject) => {
     axios[method](url, body)
       .then((res) => {
