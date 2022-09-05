@@ -12,7 +12,7 @@ const api = async (method = 'get', uri, body) => {
   // }
 
   // API Call
-  const url = `${baseUrl}/api/${uri}`;
+  const url = `${baseUrl}api${uri}`;
   return new Promise((resolve, reject) => {
     axios[method](url, body)
       .then((res) => {
