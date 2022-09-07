@@ -1,7 +1,9 @@
 import React from "react";
 import { Button, Card, CardHeader, CardBody, Row, Col } from "reactstrap";
+import { useTranslation } from "react-i18next";
 
 const QuotesProfile = () => {
+  const { t, i18n } = useTranslation();
   return (
     <Card className="card-profile shadow">
       <Row className="justify-content-center">
@@ -28,7 +30,7 @@ const QuotesProfile = () => {
             onClick={(e) => e.preventDefault()}
             size="sm"
           >
-            Connect
+            {t("Connect")}
           </Button>
           <Button
             className="float-right"
@@ -37,7 +39,7 @@ const QuotesProfile = () => {
             onClick={(e) => e.preventDefault()}
             size="sm"
           >
-            Message
+            {t("Message")}
           </Button>
         </div>
       </CardHeader>
@@ -47,43 +49,42 @@ const QuotesProfile = () => {
             <div className="card-profile-stats d-flex justify-content-center mt-md-5">
               <div>
                 <span className="heading">22</span>
-                <span className="description">Friends</span>
+                <span className="description">{t("Friends")}</span>
               </div>
               <div>
                 <span className="heading">10</span>
-                <span className="description">Photos</span>
+                <span className="description">{t("Photos")}</span>
               </div>
               <div>
                 <span className="heading">89</span>
-                <span className="description">Comments</span>
+                <span className="description">{t("Comments")}</span>
               </div>
             </div>
           </div>
         </Row>
         <div className="text-center">
           <h3>
-            Jessica Jones
+            {t("Jessica Jones")}
             <span className="font-weight-light">, 27</span>
           </h3>
           <div className="h5 font-weight-300">
             <i className="ni location_pin mr-2" />
-            Bucharest, Romania
+            {t("Bucharest, Romania")}
           </div>
           <div className="h5 mt-4">
             <i className="ni business_briefcase-24 mr-2" />
-            Solution Manager - Creative Tim Officer
+            {t("Solution Manager - Creative Tim Officer")}
           </div>
           <div>
             <i className="ni education_hat mr-2" />
-            University of Computer Science
+            {t("University of Computer Science")}
           </div>
           <hr className="my-4" />
           <p>
-            Ryan — the name taken by Melbourne-raised, Brooklyn-based Nick
-            Murphy — writes, performs and records all of his own music.
+            {t("Ryan — the name taken by Melbourne-raised, Brooklyn-based Nick Murphy — writes, performs and records all of his own music.")}
           </p>
           <a href="#pablo" onClick={(e) => e.preventDefault()}>
-            Show more
+            {t("Show more")}
           </a>
         </div>
       </CardBody>

@@ -7,6 +7,7 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import "react-big-calendar/lib/addons/dragAndDrop/styles.css";
 import "moment/locale/fr";
 import api from "../../api/index";
+import { useTranslation } from "react-i18next";
 
 moment.locale("fr");
 moment.locale("es-es", {
@@ -74,6 +75,7 @@ const eventsStyle = (event) => {
 };
 
 const ScheduleCalendar = (props) => {
+  const { t, i18n } = useTranslation();
   const [events, setEvents] = useState([]);
   const [trips, setTrips] = useState([]);
   const [drivers, setDrivers] = useState([]);
@@ -220,9 +222,9 @@ const ScheduleCalendar = (props) => {
                   onChange={(e) => onDriverSelect(e)}
                 >
                   <option disabled={true} value="" selected>
-                    Drivers
+                    {t("Drivers")}
                   </option>
-                  <option value="all">All Drivers</option>
+                  <option value="all">{t("All Drivers")}</option>
                   {drivers.map((driver) => {
                     return (
                       <option value={driver._id}>
@@ -262,7 +264,7 @@ const ScheduleCalendar = (props) => {
                     fontSize: "12px",
                   }}
                 >
-                  Confirmed
+                  {t("Confirmed")}
                 </div>
               </div>
               <div
@@ -287,7 +289,7 @@ const ScheduleCalendar = (props) => {
                     fontSize: "12px",
                   }}
                 >
-                  Cancelled
+                  {t("Cancelled")}
                 </div>
               </div>
               <div
@@ -312,7 +314,7 @@ const ScheduleCalendar = (props) => {
                     fontSize: "12px",
                   }}
                 >
-                  Pending
+                  {t("Pending")}
                 </div>
               </div>
               <div
@@ -337,7 +339,7 @@ const ScheduleCalendar = (props) => {
                     fontSize: "12px",
                   }}
                 >
-                  Completed
+                  {t("Completed")}
                 </div>
               </div>
             </div>
@@ -361,9 +363,9 @@ const ScheduleCalendar = (props) => {
                   onChange={(e) => onClientSelect(e)}
                 >
                   <option disabled={true} value="" selected>
-                    Clients
+                    {t("Clients")}
                   </option>
-                  <option value="all">All Clients</option>
+                  <option value="all">{t("All Clients")}</option>
                   {clients.map((client) => {
                     return (
                       <option value={client._id}>

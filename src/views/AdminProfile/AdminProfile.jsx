@@ -14,9 +14,11 @@ import {
   Row,
   Col,
 } from "reactstrap";
+import { useTranslation } from "react-i18next";
 // core components
 
 const AdminProfile = ({ openModal, handleModal, user }) => {
+  const { t, i18n } = useTranslation();
   const [admin, setAdmin] = useState({
     firstName: "",
     lastName: "",
@@ -89,7 +91,7 @@ const AdminProfile = ({ openModal, handleModal, user }) => {
           <Row>
             <Col>
               <Form>
-                <h6 className="heading-small text-muted mb-4">Admin Profile</h6>
+                <h6 className="heading-small text-muted mb-4">{t("Admin Profile")}</h6>
 
                 <div className="pl-lg-4">
                   <Row>
@@ -103,7 +105,7 @@ const AdminProfile = ({ openModal, handleModal, user }) => {
                             {" "}
                             {admin.firstName ? "" : "*"}{" "}
                           </span>
-                          {""} First Name
+                          {""} {t("First Name")}
                         </label>
                         <Input
                           className="form-control-alternative"
@@ -127,7 +129,7 @@ const AdminProfile = ({ openModal, handleModal, user }) => {
                             {" "}
                             {admin.lastName ? "" : "*"}{" "}
                           </span>
-                          {""} Last Name
+                          {""} {t("Last Name")}
                         </label>
                         <Input
                           className="form-control-alternative"
@@ -150,7 +152,7 @@ const AdminProfile = ({ openModal, handleModal, user }) => {
                           <span style={{ color: "red" }}>
                             {admin.email ? "" : "*"} {""}
                           </span>
-                          Email Address
+                          {t("Email Address")}
                         </label>
                         <Input
                           type="email"
@@ -169,12 +171,12 @@ const AdminProfile = ({ openModal, handleModal, user }) => {
                           className="form-control-label"
                           htmlFor="input-password"
                         >
-                          Password
+                          {t("Password")}
                         </label>
                         <Input
                           className="form-control-alternative"
                           id="input-password"
-                          placeholder="Password"
+                          placeholder={t("Password")}
                           type="password"
                           value={admin.password}
                           name="password"
@@ -190,9 +192,9 @@ const AdminProfile = ({ openModal, handleModal, user }) => {
         </ModalBody>
         <ModalFooter>
           <Button color="primary" onClick={handleSubmit}>
-            Save
+            {t("Save")}
           </Button>{" "}
-          <Button onClick={handleModal}>Cancel</Button>
+          <Button onClick={handleModal}>{t("Cancel")}</Button>
         </ModalFooter>
       </Modal>
     </>

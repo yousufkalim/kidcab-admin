@@ -20,8 +20,10 @@ import { useEffect } from "react";
 import api from "../../api/index";
 import { ExportInvoices } from "../../components/exportInvoices";
 import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 
 const InvoiceList = () => {
+  const { t, i18n } = useTranslation();
   const [openModal, setOpenModal] = useState(false);
   const [invoices, setInvoices] = useState();
   const [dropDownItem, setDropDownItem] = useState("all");
@@ -152,30 +154,30 @@ const InvoiceList = () => {
                           caret
                           style={{ textTransform: "capitalize" }}
                         >
-                          {filterdropDownItem}
-                          &nbsp;invoices
+                          {t(filterdropDownItem)}
+                          &nbsp;{t("invoices")}
                         </DropdownToggle>
                         <DropdownMenu>
                           <DropdownItem name="all" onClick={handelNameFilter}>
-                            All Invoices
+                            {t("All Invoices")}
                           </DropdownItem>
                           <DropdownItem
                             name="pending"
                             onClick={handelNameFilter}
                           >
-                            Pending Invoices
+                            {t("Pending Invoices")}
                           </DropdownItem>
                           <DropdownItem name="paid" onClick={handelNameFilter}>
-                            Paid Invoices
+                            {t("Paid Invoices")}
                           </DropdownItem>
                           <DropdownItem name="late" onClick={handelNameFilter}>
-                            Late Invoices
+                            {t("Late Invoices")}
                           </DropdownItem>
                           <DropdownItem
                             name="cancelled"
                             onClick={handelNameFilter}
                           >
-                            Cancelled Invoices
+                            {t("Cancelled Invoices")}
                           </DropdownItem>
                         </DropdownMenu>
                       </UncontrolledDropdown>
@@ -190,7 +192,7 @@ const InvoiceList = () => {
                           onClick={handleDeleteMany}
                           size="md"
                         >
-                          Delete Invoices
+                          {t("Delete Invoices")}
                         </Button>
                         <UncontrolledDropdown>
                           <DropdownToggle
@@ -205,19 +207,19 @@ const InvoiceList = () => {
                           </DropdownToggle>
                           <DropdownMenu>
                             <DropdownItem name="pending" onClick={changeStatus}>
-                              Pending
+                              {t("Pending")}
                             </DropdownItem>
                             <DropdownItem name="paid" onClick={changeStatus}>
-                              Paid
+                              {t("Paid")}
                             </DropdownItem>
                             <DropdownItem name="late" onClick={changeStatus}>
-                              Late
+                              {t("Late")}
                             </DropdownItem>
                             <DropdownItem
                               name="cancelled"
                               onClick={changeStatus}
                             >
-                              cancel
+                              {t("cancel")}
                             </DropdownItem>
                           </DropdownMenu>
                         </UncontrolledDropdown>{" "}
@@ -239,20 +241,20 @@ const InvoiceList = () => {
                           textTransform: "capitalize",
                         }}
                       >
-                        {dropDownItem}
+                        {t(dropDownItem)}
                       </DropdownToggle>
                       <DropdownMenu>
                         <DropdownItem name="all" onClick={filterCheck}>
-                          All Invoices
+                          {t("All Invoices")}
                         </DropdownItem>
                         <DropdownItem
                           name="invoice-type-filter"
                           onClick={filterCheck}
                         >
-                          Filter By Invoice type
+                          {t("Filter By Invoice type")}
                         </DropdownItem>
                         <DropdownItem name="date-filter" onClick={filterCheck}>
-                          Filter By Date
+                          {t("Filter By Date")}
                         </DropdownItem>
                       </DropdownMenu>
                     </UncontrolledDropdown>
@@ -263,7 +265,7 @@ const InvoiceList = () => {
                       size="md"
                     >
                       <i className="ni ni-fat-add"></i>
-                      Add Invoice
+                      {t("Add Invoice")}
                     </Button>
                   </div>
                 </div>
@@ -289,7 +291,7 @@ const InvoiceList = () => {
                           <span style={{ color: "red" }}>
                             {dates?.start_date ? "" : "*"}
                           </span>{" "}
-                          Start Date
+                          {t("Start Date")}
                         </label>
                         <Input
                           className="form-control-alternative"
@@ -314,7 +316,7 @@ const InvoiceList = () => {
                           <span style={{ color: "red" }}>
                             {dates?.end_date ? "" : "*"}
                           </span>{" "}
-                          End Date
+                          {t("End Date")}
                         </label>
                         <Input
                           className="form-control-alternative"
@@ -336,7 +338,7 @@ const InvoiceList = () => {
                             marginLeft: "30px",
                           }}
                         >
-                          Search
+                          {t("Search")}
                         </Button>
                       </div>
                     </div>
@@ -348,16 +350,16 @@ const InvoiceList = () => {
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
                   <tr>
-                    <th scope="col">Select</th>
-                    <th scope="col">Title</th>
-                    <th scope="col">Issue Date</th>
-                    <th scope="col">Status</th>
-                    <th scope="col">No. of Trips</th>
-                    <th scope="col">Total Price inc vat</th>
-                    <th scope="col">Total Price exc vat</th>
-                    <th scope="col">Client</th>
-                    <th scope="col">Driver</th>
-                    <th scope="col">Actions</th>
+                    <th scope="col">{t("Select")}</th>
+                    <th scope="col">{t("Title")}</th>
+                    <th scope="col">{t("Issue Date")}</th>
+                    <th scope="col">{t("Status")}</th>
+                    <th scope="col">{t("No. of Trips")}</th>
+                    <th scope="col">{t("Total Price inc vat")}</th>
+                    <th scope="col">{t("Total Price exc vat")}</th>
+                    <th scope="col">{t("Client")}</th>
+                    <th scope="col">{t("Driver")}</th>
+                    <th scope="col">{t("Actions")}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -373,7 +375,7 @@ const InvoiceList = () => {
                     ))
                   ) : (
                     <tr className="h1 mx-lg-auto text-center">
-                      <td>No Invoice Found</td>
+                      <td>{t("No Invoice Found")}</td>
                     </tr>
                   )}
                 </tbody>

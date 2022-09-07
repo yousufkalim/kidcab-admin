@@ -34,7 +34,10 @@ import {
 
 import Header from "components/Headers/Header.js";
 import api from "../api/index";
+import { useTranslation } from "react-i18next";
+
 const Index = (props) => {
+  const { t, i18n } = useTranslation();
   const [activeNav, setActiveNav] = useState(1);
   const [chartExample1Data, setChartExample1Data] = useState("data1");
 
@@ -106,16 +109,16 @@ const Index = (props) => {
               <CardHeader className="border-0">
                 <Row className="align-items-center">
                   <div className="col">
-                    <h3 className="mb-0">Weekly report</h3>
+                    <h3 className="mb-0">{t("Weekly report")}</h3>
                   </div>
                 </Row>
               </CardHeader>
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
                   <tr>
-                    <th scope="col">Date</th>
-                    <th scope="col">Total Earning</th>
-                    <th scope="col">Total Rides</th>
+                    <th scope="col">{t("Date")}</th>
+                    <th scope="col">{t("Total Earning")}</th>
+                    <th scope="col">{t("Total Rides")}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -130,7 +133,7 @@ const Index = (props) => {
                       ))
                     ) : (
                       <tr className="h1 mx-lg-auto text-center">
-                        <td>No Report Found</td>
+                        <td>{t("No Report Found")}</td>
                       </tr>
                     )}
                   </>
@@ -146,17 +149,17 @@ const Index = (props) => {
               <CardHeader className="border-0">
                 <Row className="align-items-center">
                   <div className="col">
-                    <h3 className="mb-0">Pending Trips</h3>
+                    <h3 className="mb-0">{t("Pending Trips")}</h3>
                   </div>
                 </Row>
               </CardHeader>
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
                   <tr>
-                    <th scope="col">Client</th>
-                    <th scope="col">Passengers</th>
-                    <th scope="col">Invited Drivers</th>
-                    <th scope="col">DATE</th>
+                    <th scope="col">{t("Client")}</th>
+                    <th scope="col">{t("Passengers")}</th>
+                    <th scope="col">{t("Invited Drivers")}</th>
+                    <th scope="col">{t("DATE")}</th>
                     <th scope="col" />
                   </tr>
                 </thead>
@@ -173,7 +176,7 @@ const Index = (props) => {
                       ))
                     ) : (
                       <tr className="h1 mx-lg-auto text-center">
-                        <td>NoT Found</td>
+                        <td>{t("NoT Found")}</td>
                       </tr>
                     )}
                   </>
@@ -191,16 +194,16 @@ const Index = (props) => {
               <CardHeader className="border-0">
                 <Row className="align-items-center">
                   <div className="col">
-                    <h3 className="mb-0">Over Due Invoices</h3>
+                    <h3 className="mb-0">{t("Over Due Invoices")}</h3>
                   </div>
                 </Row>
               </CardHeader>
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
                   <tr style={{ height: "7vh" }}>
-                    <th scope="col">Invoice TiTle</th>
-                    <th scope="col">DATE </th>
-                    <th scope="col">PRICE</th>
+                    <th scope="col">{t("Invoice TiTle")}</th>
+                    <th scope="col">{t("DATE")} </th>
+                    <th scope="col">{t("PRICE")}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -217,7 +220,7 @@ const Index = (props) => {
                       ))
                     ) : (
                       <tr className="h1 mx-lg-auto text-center">
-                        <td>No Invoice Found</td>
+                        <td>{t("No Invoice Found")}</td>
                       </tr>
                     )}
                   </>
@@ -233,16 +236,16 @@ const Index = (props) => {
               <CardHeader className="border-0">
                 <Row className="align-items-center">
                   <div className="col">
-                    <h3 className="mb-0">Pending Payments</h3>
+                    <h3 className="mb-0">{t("Pending Payments")}</h3>
                   </div>
                 </Row>
               </CardHeader>
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
                   <tr style={{ height: "7vh" }}>
-                    <th scope="col">INVOICE TITLE</th>
-                    <th scope="col">DATE </th>
-                    <th scope="col">PRICE</th>
+                    <th scope="col">{t("INVOICE TITLE")}</th>
+                    <th scope="col">{t("DATE")} </th>
+                    <th scope="col">{t("PRICE")}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -259,7 +262,7 @@ const Index = (props) => {
                       ))
                     ) : (
                       <tr className="h1 mx-lg-auto text-center">
-                        <td>No Invoice Found</td>
+                        <td>{t("No Invoice Found")}</td>
                       </tr>
                     )}
                   </>
@@ -274,7 +277,7 @@ const Index = (props) => {
               <CardHeader className="border-0">
                 <Row className="align-items-center">
                   <div className="col">
-                    <h3 className="mb-0">Weekly Revenue</h3>
+                    <h3 className="mb-0">{t("Weekly Revenue")}</h3>
                   </div>
                 </Row>
               </CardHeader>

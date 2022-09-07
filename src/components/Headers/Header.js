@@ -2,7 +2,10 @@ import React, { useEffect, useState } from "react";
 import { Card, CardBody, CardTitle, Container, Row, Col } from "reactstrap";
 import ReactPaginate from "react-paginate";
 import api from "../../api/index";
+import { useTranslation } from "react-i18next";
+
 const Header = () => {
+  const { t, i18n } = useTranslation();
   const [users, setUsers] = useState(0);
   const [passengers, setPassengers] = useState(0);
   const [drivers, setDrivers] = useState(0);
@@ -43,7 +46,7 @@ const Header = () => {
                           width="5ch"
                           className="text-uppercase text-muted mb-0"
                         >
-                          Total Users
+                          {t("Total Users")}
                         </CardTitle>
                         <span className="h2 font-weight-bold mb-0">
                           {users}
@@ -68,7 +71,7 @@ const Header = () => {
                           width="5ch"
                           className="text-uppercase text-muted mb-0"
                         >
-                          Total Trips
+                          {t("Total Trips")}
                         </CardTitle>
                         <span className="h2 font-weight-bold mb-0">
                           {trips}
@@ -93,7 +96,7 @@ const Header = () => {
                           width="5ch"
                           className="text-uppercase text-muted mb-0"
                         >
-                          Total Drivers
+                          {t("Total Drivers")}
                         </CardTitle>
                         <span className="h2 font-weight-bold mb-0">
                           {drivers}
@@ -118,7 +121,7 @@ const Header = () => {
                           width="5ch"
                           className="text-uppercase text-muted mb-0"
                         >
-                          Total Passengers
+                          {t("Total Passengers")}
                         </CardTitle>
                         <span className="h2 font-weight-bold mb-0">
                           {passengers}

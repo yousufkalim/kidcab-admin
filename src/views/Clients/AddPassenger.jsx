@@ -14,9 +14,11 @@ import {
   Col,
   Label,
 } from "reactstrap";
+import { useTranslation } from "react-i18next";
 // core components
 
 const PassengerForm = ({ openModal, handleModal, clientId, autoRefresh }) => {
+  const { t, i18n } = useTranslation();
   const [user, setUser] = useState({
     firstName: "",
     lastName: "",
@@ -55,14 +57,14 @@ const PassengerForm = ({ openModal, handleModal, clientId, autoRefresh }) => {
     <>
       <Modal isOpen={openModal} size="xl" centered>
         <ModalHeader charCode="X" toggle={handleModal}>
-          Add Passenger
+          {t("Add Passenger")}
         </ModalHeader>
         <ModalBody>
           <Row>
             <Col>
               <Form>
                 <h6 className="heading-small text-muted mb-4">
-                  Passenger information
+                  {t("Passenger information")}
                 </h6>
 
                 <div className="pl-lg-4">
@@ -73,7 +75,7 @@ const PassengerForm = ({ openModal, handleModal, clientId, autoRefresh }) => {
                           className="form-control-label"
                           htmlFor="input-fname"
                         >
-                          First Name
+                          {t("First Name")}
                         </label>
                         <Input
                           className="form-control-alternative"
@@ -93,7 +95,7 @@ const PassengerForm = ({ openModal, handleModal, clientId, autoRefresh }) => {
                           className="form-control-label"
                           htmlFor="input-lname"
                         >
-                          Last Name
+                          {t("Last Name")}
                         </label>
                         <Input
                           className="form-control-alternative"
@@ -114,7 +116,7 @@ const PassengerForm = ({ openModal, handleModal, clientId, autoRefresh }) => {
                           for="exampleSelect"
                           className="form-control-label"
                         >
-                          Relationship
+                          {t("Relationship")}
                         </Label>
                         <Input
                           id="exampleSelect"
@@ -125,17 +127,17 @@ const PassengerForm = ({ openModal, handleModal, clientId, autoRefresh }) => {
                           onChange={handleInputChange}
                         >
                           <option value="self" selected>
-                            Self
+                            {t("Self")}
                           </option>
-                          <option value="son">Son</option>
-                          <option value="daughter">Daughter</option>
-                          <option value="brother">Brother</option>
-                          <option value="sister">Sister</option>
-                          <option value="father">Father</option>
-                          <option value="mother">Mother</option>
-                          <option value="uncle">Uncle</option>
-                          <option value="aunt">Aunt</option>
-                          <option value="other">other</option>
+                          <option value="son">{t("Son")}</option>
+                          <option value="daughter">{t("Daughter")}</option>
+                          <option value="brother">{t("Brother")}</option>
+                          <option value="sister">{t("Sister")}</option>
+                          <option value="father">{t("Father")}</option>
+                          <option value="mother">{t("Mother")}</option>
+                          <option value="uncle">{t("Uncle")}</option>
+                          <option value="aunt">{t("Aunt")}</option>
+                          <option value="other">{t("other")}</option>
                         </Input>
                       </FormGroup>
                     </Col>
@@ -147,9 +149,9 @@ const PassengerForm = ({ openModal, handleModal, clientId, autoRefresh }) => {
         </ModalBody>
         <ModalFooter>
           <Button color="primary" onClick={handleSubmit}>
-            Save
+            {t("Save")}
           </Button>
-          <Button onClick={handleModal}>Cancel</Button>
+          <Button onClick={handleModal}>{t("Cancel")}</Button>
         </ModalFooter>
       </Modal>
     </>
