@@ -16,6 +16,7 @@ import {
   Col,
   Label,
 } from "reactstrap";
+import { useTranslation } from "react-i18next";
 import moment from "moment";
 
 // core components
@@ -27,6 +28,7 @@ const InvoiceForm = ({
   isEditing,
   autoRefresh,
 }) => {
+  const { t, i18n } = useTranslation();
   const [user, setUser] = useState({
     invoice_title: "",
     issue_date: "",
@@ -266,14 +268,14 @@ const InvoiceForm = ({
       {console.log(startAddress, endAddress)}
       <Modal isOpen={openModal} size="xl" centered>
         <ModalHeader charCode="X" toggle={handleModal}>
-          {isEditing ? "Edit" : "Add"} Invoice
+          {isEditing ? "Edit" : "Add"} {t("Invoice")}
         </ModalHeader>
         <ModalBody>
           <Row>
             <Col>
               <Form>
                 <h6 className="heading-small text-muted mb-4">
-                  Invoice information
+                  {t("Invoice information")}
                 </h6>
 
                 <div className="pl-lg-4">
@@ -287,13 +289,13 @@ const InvoiceForm = ({
                           <span style={{ color: "red" }}>
                             {user?.invoice_title ? "" : "*"}
                           </span>{" "}
-                          Invoice Title
+                          {t("Invoice Title")}
                         </label>
                         <Input
                           className="form-control"
                           id="input-fname"
                           required={true}
-                          placeholder="Enter Invoice Title"
+                          placeholder={t("Enter Invoice Title")}
                           type="text"
                           value={user.invoice_title}
                           name="invoice_title"
@@ -310,7 +312,7 @@ const InvoiceForm = ({
                           <span style={{ color: "red" }}>
                             {user?.issue_date ? "" : "*"}
                           </span>{" "}
-                          Issue Date
+                          {t("Issue Date")}
                         </label>
                         <Input
                           className="form-control"
@@ -330,7 +332,7 @@ const InvoiceForm = ({
                           className="form-control-label"
                           htmlFor="input-tripType"
                         >
-                          Invoice Type
+                          {t("Invoice Type")}
                         </label>
                         <Input
                           id="input-trip_type"
@@ -353,10 +355,11 @@ const InvoiceForm = ({
                             for="exampleSelect"
                             className="form-control-label"
                           >
-                            Select Client
+                            {t("Select Client")}
                           </Label>
                           {users && (
                             <Select
+                            placeholder={t("Select...")}
                               onChange={handleUserChange}
                               name="user"
                               hideSelectedOptions
@@ -388,7 +391,7 @@ const InvoiceForm = ({
                             for="exampleSelect"
                             className="form-control-label"
                           >
-                            Select Driver
+                            {t("Select Driver")}
                           </Label>
                           {drivers && (
                             <Select
@@ -427,7 +430,7 @@ const InvoiceForm = ({
                           <span style={{ color: "red" }}>
                             {user.status ? "" : "*"}
                           </span>{" "}
-                          Status
+                          {t("Status")}
                         </Label>
                         <Input
                           id="exampleSelect"
@@ -437,17 +440,17 @@ const InvoiceForm = ({
                           className="form-control"
                           type="select"
                         >
-                          <option value="pending">Pending</option>
-                          <option value="paid">Paid</option>
-                          <option value="late">Late</option>
-                          <option value="cancelled">Cancelled</option>
+                          <option value="pending">{t("Pending")}</option>
+                          <option value="paid">{t("Paid")}</option>
+                          <option value="late">{t("Late")}</option>
+                          <option value="cancelled">{t("Cancelled")}</option>
                         </Input>
                       </FormGroup>
                     </Col>
                   </Row>
                   <hr className="my-4" />
                   <h6 className="heading-small text-muted mb-4">
-                    Trip information
+                    {t("Trip information")}
                   </h6>
                   <Row>
                     <Col lg="4">
@@ -459,13 +462,13 @@ const InvoiceForm = ({
                           <span style={{ color: "red" }}>
                             {user.totalTrips ? "" : "*"}
                           </span>{" "}
-                          No. of Trips
+                          {t("No. of Trips")}
                         </label>
                         <Input
                           className="form-control-alternative"
                           id="input-fname"
                           required={true}
-                          placeholder="Total Trips"
+                          placeholder={t("Total Trips")}
                           type="number"
                           value={user.totalTrips}
                           name="totalTrips"
@@ -482,13 +485,13 @@ const InvoiceForm = ({
                           <span style={{ color: "red" }}>
                             {user.totalPrice ? "" : "*"}
                           </span>{" "}
-                          Amount including Vat
+                          {t("Amount including Vat")}
                         </label>
                         <Input
                           className="form-control-alternative"
                           id="input-fname"
                           required={true}
-                          placeholder="Total Price"
+                          placeholder={t("Total Price")}
                           type="text"
                           disabled={!user?.totalTrips}
                           value={user?.totalPrice}
@@ -506,12 +509,12 @@ const InvoiceForm = ({
                           <span style={{ color: "red" }}>
                             {user?.vat ? "" : "*"}
                           </span>{" "}
-                          Total Taxes
+                          {t("Total Taxes")}
                         </label>
                         <Input
                           className="form-control-alternative"
                           id="input-lname"
-                          placeholder="VAT"
+                          placeholder={t("VAT")}
                           type="text"
                           readOnly
                           value={parseInt(user?.vat).toFixed(2)}
@@ -531,12 +534,12 @@ const InvoiceForm = ({
                           <span style={{ color: "red" }}>
                             {user.startDate ? "" : "*"}
                           </span>{" "}
-                          Start Date
+                          {t("Start Date")}
                         </label>
                         <Input
                           className="form-control-alternative"
                           id="input-lname"
-                          placeholder="Quote Number"
+                          placeholder={t("Quote Number")}
                           type="date"
                           value={user.startDate?.split("T")[0]}
                           name="startDate"
@@ -553,12 +556,12 @@ const InvoiceForm = ({
                           <span style={{ color: "red" }}>
                             {user.endDate ? "" : "*"}
                           </span>{" "}
-                          End Date
+                          {t("End Date")}
                         </label>
                         <Input
                           className="form-control-alternative"
                           id="input-lname"
-                          placeholder="Quote Number"
+                          placeholder={t("Quote Number")}
                           type="date"
                           value={user.endDate?.split("T")[0]}
                           name="endDate"
@@ -594,13 +597,13 @@ const InvoiceForm = ({
                           for="exampleSelect"
                           className="form-control-label"
                         >
-                          Comment
+                          {t("Comment")}
                         </Label>
                         <Input
                           id="exampleSelect"
                           name="comments"
                           className="form-control"
-                          placeholder="Enter comment here"
+                          placeholder={t("Enter comment here")}
                           type="textarea"
                           value={user?.comments}
                           onChange={handleInputChange}
@@ -615,19 +618,19 @@ const InvoiceForm = ({
         </ModalBody>
         <ModalFooter>
           <Button color="primary" onClick={handleSubmit}>
-            Save
+            {t("Save")}
           </Button>{" "}
           {isEditing && (
             <>
               <Button color="primary" onClick={handleDuplicate}>
-                Duplicate
+                {t("Duplicate")}
               </Button>
               <Button color="danger" onClick={handleDelete}>
-                Delete
+                {t("Delete")}
               </Button>
             </>
           )}{" "}
-          <Button onClick={handleModal}>Cancel</Button>
+          <Button onClick={handleModal}>{t("Cancel")}</Button>
         </ModalFooter>
       </Modal>
     </>

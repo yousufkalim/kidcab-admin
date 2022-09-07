@@ -14,6 +14,7 @@ import {
   Row,
   Col,
 } from "reactstrap";
+import { useTranslation } from "react-i18next";
 // core components
 
 const ClientForm = ({
@@ -23,6 +24,7 @@ const ClientForm = ({
   isEditing,
   autoRefresh,
 }) => {
+  const { t, i18n } = useTranslation();
   const [user, setUser] = useState({
     firstName: "",
     lastName: "",
@@ -147,14 +149,14 @@ const ClientForm = ({
     <>
       <Modal isOpen={openModal} size="xl" centered>
         <ModalHeader charCode="X" toggle={handleModal}>
-          {isEditing ? "Edit" : "Add"} Client
+          {isEditing ? "Edit" : "Add"} {t("Client")}
         </ModalHeader>
         <ModalBody>
           <Row>
             <Col>
               <Form>
                 <h6 className="heading-small text-muted mb-4">
-                  Client information
+                  {t("Client information")}
                 </h6>
                 <div className="pl-lg-4">
                   <Row>
@@ -168,7 +170,7 @@ const ClientForm = ({
                             {" "}
                             {user.firstName ? "" : "*"}{" "}
                           </span>
-                          {""}First Name
+                          {""}{t("First Name")}
                         </label>
                         <Input
                           className="form-control-alternative"
@@ -192,7 +194,7 @@ const ClientForm = ({
                             {user.lastName ? "" : "*"}
                           </span>{" "}
                           {""}
-                          Last Name
+                          {t("Last Name")}
                         </label>
                         <Input
                           className="form-control-alternative"
@@ -217,7 +219,7 @@ const ClientForm = ({
                             <span style={{ color: "red" }}>
                               {user.email ? "" : "*"} {""}
                             </span>
-                            Email Address
+                            {t("Email Address")}
                           </label>
                           <Input
                             type="email"
@@ -240,7 +242,7 @@ const ClientForm = ({
                             <span style={{ color: "red" }}>
                               {user.email ? "" : "*"} {""}
                             </span>
-                            Email Address
+                            {t("Email Address")}
                           </label>
                           <Input
                             type="email"
@@ -264,12 +266,12 @@ const ClientForm = ({
                             <span style={{ color: "red" }}>
                               {user.password ? "" : "*"}{" "}
                             </span>
-                            Password
+                            {t("Password")}
                           </label>
                           <Input
                             className="form-control-alternative"
                             id="input-password"
-                            placeholder="Password"
+                            placeholder={t("Password")}
                             type="password"
                             value={user.password}
                             name="password"
@@ -351,7 +353,7 @@ const ClientForm = ({
                 {/* <hr className="my-4" /> */}
                 {/* Contact Information */}
                 <h6 className="heading-small text-muted mb-4">
-                  Contact information
+                  {t("Contact information")}
                 </h6>
                 <div className="pl-lg-4">
                   <Row>
@@ -373,7 +375,7 @@ const ClientForm = ({
                           className="form-control-label"
                           htmlFor="input-phone"
                         >
-                          Phone Number
+                          {t("Phone Number")}
                         </label>
                         <Input
                           className="form-control-alternative"
@@ -393,7 +395,7 @@ const ClientForm = ({
                           className="form-control-label"
                           htmlFor="input-siret"
                         >
-                          Siret Number
+                          {t("Siret Number")}
                         </label>
                         <Input
                           className="form-control-alternative"
@@ -412,7 +414,7 @@ const ClientForm = ({
                           className="form-control-label"
                           htmlFor="input-intra"
                         >
-                          Intra Community Number
+                          {t("Intra Community Number")}
                         </label>
                         <Input
                           className="form-control-alternative"
@@ -428,7 +430,7 @@ const ClientForm = ({
                   </Row>
                 </div>
                 <h6 className="heading-small text-muted mb-4">
-                  Bank information
+                  {t("Bank information")}
                 </h6>
                 <div className="pl-lg-4">
                   <Row>
@@ -438,12 +440,12 @@ const ClientForm = ({
                           className="form-control-label"
                           htmlFor="input-bankName"
                         >
-                          Bank Name
+                          {t("Bank Name")}
                         </label>
                         <Input
                           className="form-control-alternative"
                           id="input-bankName"
-                          placeholder="Example Bank Ltd"
+                          placeholder={t("Example Bank Ltd")}
                           type="text"
                           value={user.bankName}
                           name="bankName"
@@ -457,7 +459,7 @@ const ClientForm = ({
                           className="form-control-label"
                           htmlFor="input-iban"
                         >
-                          IBAN Number
+                          {t("IBAN Number")}
                         </label>
                         <Input
                           className="form-control-alternative"
@@ -478,14 +480,14 @@ const ClientForm = ({
         </ModalBody>
         <ModalFooter>
           <Button color="primary" onClick={handleSubmit}>
-            Save
+            {t("Save")}
           </Button>{" "}
           {isEditing && (
             <Button color="danger" onClick={handleDelete}>
-              Delete
+              {t("Delete")}
             </Button>
           )}{" "}
-          <Button onClick={handleModal}>Cancel</Button>
+          <Button onClick={handleModal}>{t("Cancel")}</Button>
         </ModalFooter>
       </Modal>
     </>

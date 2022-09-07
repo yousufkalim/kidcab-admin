@@ -8,8 +8,10 @@ import {
 } from "reactstrap";
 import ClientAvatar from "./DriverAvatar";
 import PassengerForm from "./VehicleForm";
+import { useTranslation } from "react-i18next";
 
 const VehicleRow = ({ user: vehicle, autoRefresh }) => {
+  const { t, i18n } = useTranslation();
   const [openModal, setOpenModal] = useState();
 
   const handleModal = () => {
@@ -35,7 +37,7 @@ const VehicleRow = ({ user: vehicle, autoRefresh }) => {
           </div>
         ) : (
           <p className="mb-0 text-sm" href="#pablo">
-            No Driver is added.
+           {t(" No Driver is added.")}
           </p>
         )}
       </td>

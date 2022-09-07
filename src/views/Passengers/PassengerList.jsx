@@ -17,8 +17,10 @@ import PassengerRow from "./PassengerRow";
 import { useState } from "react";
 import { useEffect } from "react";
 import api from "../../api/index";
+import { useTranslation } from "react-i18next";
 
 const PassengerList = () => {
+  const { t, i18n } = useTranslation();
   const [openModal, setOpenModal] = useState(false);
   const [users, setUsers] = useState();
   const handleModal = () => {
@@ -42,7 +44,7 @@ const PassengerList = () => {
             <Card className="shadow">
               <CardHeader className="border-0">
                 <div className="d-flex justify-content-between ">
-                  <h3 className="mb-0">Passenger List</h3>
+                  <h3 className="mb-0">{t("Passenger List")}</h3>
                   <Button
                     color="primary"
                     href="#pablo"
@@ -50,17 +52,17 @@ const PassengerList = () => {
                     size="md"
                   >
                     <i className="ni ni-fat-add"></i>
-                    Add Passenger
+                    {t("Add Passenger")}
                   </Button>
                 </div>
               </CardHeader>
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
                   <tr>
-                    <th scope="col">Name</th>
-                    <th scope="col">Relationship</th>
-                    <th scope="col">Client</th>
-                    <th scope="col">Client's Email</th>
+                    <th scope="col">{t("Name")}</th>
+                    <th scope="col">{t("Relationship")}</th>
+                    <th scope="col">{t("Client")}</th>
+                    <th scope="col">{t("Client's Email")}</th>
                     <th scope="col" />
                   </tr>
                 </thead>

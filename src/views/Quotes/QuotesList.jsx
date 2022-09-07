@@ -18,8 +18,10 @@ import { useEffect } from "react";
 import api from "../../api/index";
 import { ExportQuotes } from "../../components/exportQuotes";
 import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 
 const QuotesList = () => {
+  const { t, i18n } = useTranslation();
   const [openModal, setOpenModal] = useState(false);
   const [quotes, setQuotes] = useState();
   const [selectedItems, setSelectedItems] = useState([]);
@@ -141,30 +143,30 @@ const QuotesList = () => {
                             textTransform: "capitalize",
                           }}
                         >
-                          {filterdropDownItem}
-                          &nbsp;qoutes
+                          {t(filterdropDownItem)}
+                          &nbsp;{t("qoutes")}
                         </DropdownToggle>
                         <DropdownMenu>
                           <DropdownItem name="all" onClick={handelNameFilter}>
-                            All Qoutes
+                            {t("All Qoutes")}
                           </DropdownItem>
                           <DropdownItem
                             name="pending"
                             onClick={handelNameFilter}
                           >
-                            Pending Qoutes
+                            {t("Pending Qoutes")}
                           </DropdownItem>
                           <DropdownItem
                             name="accepted"
                             onClick={handelNameFilter}
                           >
-                            Accepted Qoutes
+                            {t("Accepted Qoutes")}
                           </DropdownItem>
                           <DropdownItem
                             name="rejected"
                             onClick={handelNameFilter}
                           >
-                            Rejected Qoutes
+                            {t("Rejected Qoutes")}
                           </DropdownItem>
                         </DropdownMenu>
                       </UncontrolledDropdown>
@@ -179,7 +181,7 @@ const QuotesList = () => {
                           onClick={handleDeleteMany}
                           size="md"
                         >
-                          Delete Quotes
+                          {t("Delete Quotes")}
                         </Button>
                         <ExportQuotes
                           dropDownItem={dropDownItem}
@@ -200,20 +202,20 @@ const QuotesList = () => {
                           textTransform: "capitalize",
                         }}
                       >
-                        {dropDownItem}
+                        {t(dropDownItem)}
                       </DropdownToggle>
                       <DropdownMenu>
                         <DropdownItem name="all" onClick={filterCheck}>
-                          All Qoutes
+                          {t("All Qoutes")}
                         </DropdownItem>
                         <DropdownItem
                           name="qoute-type-filter"
                           onClick={filterCheck}
                         >
-                          Filter By Qoute type
+                          {t("Filter By Qoute type")}
                         </DropdownItem>
                         <DropdownItem name="date-filter" onClick={filterCheck}>
-                          Filter By Date
+                          {t("Filter By Date")}
                         </DropdownItem>
                       </DropdownMenu>
                     </UncontrolledDropdown>
@@ -231,7 +233,7 @@ const QuotesList = () => {
                         }}
                       >
                         <i className="ni ni-fat-add"></i>
-                        <> Add Quotes</>
+                        <> {t("Add Quotes")}</>
                       </div>
                     </Button>
                   </div>
@@ -258,7 +260,7 @@ const QuotesList = () => {
                           <span style={{ color: "red" }}>
                             {dates?.start_date ? "" : "*"}
                           </span>{" "}
-                          Start Date
+                          {t("Start Date")}
                         </label>
                         <Input
                           className="form-control-alternative"
@@ -283,7 +285,7 @@ const QuotesList = () => {
                           <span style={{ color: "red" }}>
                             {dates?.end_date ? "" : "*"}
                           </span>{" "}
-                          End Date
+                          {t("End Date")}
                         </label>
                         <Input
                           className="form-control-alternative"
@@ -305,7 +307,7 @@ const QuotesList = () => {
                             marginLeft: "30px",
                           }}
                         >
-                          Search
+                          {t("Search")}
                         </Button>
                       </div>
                     </div>
@@ -317,15 +319,15 @@ const QuotesList = () => {
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
                   <tr>
-                    <th scope="col">Select</th>
-                    <th scope="col">Quote Title</th>
-                    <th scope="col">Issue Date</th>
-                    <th scope="col">Status</th>
-                    <th scope="col">Client</th>
-                    <th scope="col">No. of Trips</th>
-                    <th scope="col">TOTAL PRICE INCLUDING VAT</th>
-                    <th scope="col">Total Price without VAT</th>
-                    <th scope="col">Actions </th>
+                    <th scope="col">{t("Select")}</th>
+                    <th scope="col">{t("Quote Title")}</th>
+                    <th scope="col">{t("Issue Date")}</th>
+                    <th scope="col">{t("Status")}</th>
+                    <th scope="col">{t("Client")}</th>
+                    <th scope="col">{t("No. of Trips")}</th>
+                    <th scope="col">{t("TOTAL PRICE INCLUDING VAT")}</th>
+                    <th scope="col">{t("Total Price without VAT")}</th>
+                    <th scope="col">{t("Actions")} </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -341,7 +343,7 @@ const QuotesList = () => {
                     ))
                   ) : (
                     <tr className="h1 mx-lg-auto text-center">
-                      <td>No Quotes Found</td>
+                      <td>{t("No Quotes Found")}</td>
                     </tr>
                   )}
                 </tbody>

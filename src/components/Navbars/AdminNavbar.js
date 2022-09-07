@@ -5,6 +5,7 @@ import { Store } from "StoreContext";
 import { getToken, removeToken } from "../../variables/auth";
 import AdminProfile from "../../views/AdminProfile/AdminProfile";
 import CompanyProfile from "../../views/CompanyProfile/CompanyProfile";
+import { useTranslation } from "react-i18next";
 
 import {
   DropdownMenu,
@@ -19,6 +20,8 @@ import {
 import { socket } from "../../App";
 
 const AdminNavbar = (props) => {
+  const { t, i18n } = useTranslation();
+  const { language } = i18n;
   const { user } = Store();
   const [openProfileModal, setOpenProfileModal] = useState(false);
   const [openCompanyModal, setOpenCompanyModal] = useState(false);
@@ -72,7 +75,7 @@ const AdminNavbar = (props) => {
             className="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block"
             to="/"
           >
-            {props.brandText}
+            {t(props.brandText)}
           </Link>
           <div
             style={{
@@ -81,6 +84,20 @@ const AdminNavbar = (props) => {
               alignItems: "center",
             }}
           >
+            <div>
+              <Link
+                className="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block"
+                onClick={() => {
+                  if (language === "fr") {
+                    i18n.changeLanguage("en");
+                  } else {
+                    i18n.changeLanguage("fr");
+                  }
+                }}
+              >
+                {t("fr")}
+              </Link>
+            </div>
             <Nav
               className="align-items-center d-none d-md-flex"
               style={{ marginRight: "20px" }}
@@ -120,7 +137,6 @@ const AdminNavbar = (props) => {
                     </Media>
                   </Media>
                 </DropdownToggle>
-
                 <DropdownMenu className="dropdown-menu-arrow" right>
                   <DropdownItem
                     onClick={markAsRead}
@@ -130,7 +146,7 @@ const AdminNavbar = (props) => {
                       color: "#46b9b5",
                     }}
                   >
-                    Mark as read
+                    {t("Mark as read")}
                   </DropdownItem>
                   {newNotifications.length > 0 ? (
                     newNotifications.map((n, index) => {
@@ -140,7 +156,7 @@ const AdminNavbar = (props) => {
                     })
                   ) : (
                     <DropdownItem disabled={true}>
-                      No new notifications
+                      {t("No new notifications")}
                     </DropdownItem>
                   )}
                 </DropdownMenu>
@@ -162,17 +178,17 @@ const AdminNavbar = (props) => {
                 <DropdownMenu className="dropdown-menu-arrow" right>
                   <DropdownItem onClick={handleProfileModal}>
                     <i className="ni ni-single-02 text-success" />
-                    <span>My profile</span>
+                    <span>{t("My profile")}</span>
                   </DropdownItem>
                   <DropdownItem onClick={handleCompanyModal}>
                     <i className="ni ni-single-02 text-success" />
-                    <span>Company profile</span>
+                    <span>{t("Company profile")}</span>
                   </DropdownItem>
 
                   <DropdownItem divider />
                   <DropdownItem onClick={handleLogout}>
                     <i className="ni ni-user-run text-danger" />
-                    <span>Logout</span>
+                    <span>{t("Logout")}</span>
                   </DropdownItem>
                 </DropdownMenu>
               </UncontrolledDropdown>

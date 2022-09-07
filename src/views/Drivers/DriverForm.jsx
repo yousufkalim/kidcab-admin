@@ -17,6 +17,7 @@ import {
   Col,
   Label,
 } from "reactstrap";
+import { useTranslation } from "react-i18next";
 // core components
 import Select from "react-select";
 import moment from "moment";
@@ -30,6 +31,7 @@ const DriverForm = ({
   autoRefresh,
   setUserData,
 }) => {
+  const { t, i18n } = useTranslation();
   const [user, setUser] = useState({
     profile_pic: "",
     id_front: "",
@@ -434,21 +436,21 @@ const DriverForm = ({
       {console.log(user, "d")}
       <Modal isOpen={openModal} size="xl" centered>
         <ModalHeader charCode="X" toggle={handleModal}>
-          {isEditing ? "Edit" : "Add"} Driver
+          {isEditing ? "Edit" : "Add"} {t("Driver")}
         </ModalHeader>
         <ModalBody>
           <Row>
             <Col>
               <Form>
                 <h6 className="heading-small text-muted mb-4">
-                  User information
+                  {t("User information")}
                 </h6>
                 <div className="pl-lg-4">
                   <Row>
                     <Col lg="12">
                       <FormGroup style={{ width: "60%" }}>
                         <label className="form-control-label">
-                          Add Profile Picture <View url={docs.profile_pic} />
+                          {t("Add Profile Picture ")}<View url={docs.profile_pic} />
                         </label>
 
                         <FilePicker
@@ -480,13 +482,13 @@ const DriverForm = ({
                           <span style={{ color: "red" }}>
                             {user.firstName ? "" : "*"}
                           </span>{" "}
-                          First Name
+                          {t("First Name")}
                         </label>
                         <Input
                           className="form-control-alternative"
                           id="input-fname"
                           required={true}
-                          placeholder="First Name"
+                          placeholder={t("First Name")}
                           type="text"
                           value={user.firstName}
                           name="firstName"
@@ -503,7 +505,7 @@ const DriverForm = ({
                           <span style={{ color: "red" }}>
                             {user.lastName ? "" : "*"}
                           </span>{" "}
-                          Last Name
+                          {t("Last Name")}
                         </label>
                         <Input
                           className="form-control-alternative"
@@ -528,7 +530,7 @@ const DriverForm = ({
                             <span style={{ color: "red" }}>
                               {user.email ? "" : "*"}
                             </span>{" "}
-                            Email Address
+                            {t("Email Address")}
                           </label>
                           <Input
                             className="form-control-alternative"
@@ -550,12 +552,12 @@ const DriverForm = ({
                             <span style={{ color: "red" }}>
                               {user.password ? "" : "*"}
                             </span>{" "}
-                            Password
+                            {t("Password")}
                           </label>
                           <Input
                             className="form-control-alternative"
                             id="input-password"
-                            placeholder="Password"
+                            placeholder={t("Password")}
                             type="password"
                             value={user.password}
                             name="password"
@@ -577,10 +579,11 @@ const DriverForm = ({
                           <span style={{ color: "red" }}>
                             {user.role ? "" : "*"}
                           </span>{" "}
-                          Select Role
+                          {t("Select Role")}
                         </Label>
 
                         <Select
+                        placeholder={t("Select...")}
                           onChange={handleRole1Change}
                           name="role"
                           hideSelectedOptions
@@ -614,10 +617,11 @@ const DriverForm = ({
                             <span style={{ color: "red" }}>
                               {user?.vehicles?.length > 0 ? "" : "*"}
                             </span>{" "}
-                            Select Vehicle
+                            {t("Select Vehicle")}
                           </Label>
                           {vehicles && (
                             <Select
+                            placeholder={t("Select...")}
                               name="vehicles"
                               hideSelectedOptions
                               isMulti
@@ -654,10 +658,11 @@ const DriverForm = ({
                             <span style={{ color: "red" }}>
                               {user?.vehicles?.length > 0 ? "" : "*"}
                             </span>{" "}
-                            Select Vehicle
+                            {t("Select Vehicle")}
                           </label>
                           {vehicles && (
                             <Select
+                            placeholder={t("Select...")}
                               onChange={handleVehicle1Change}
                               name="vehicles"
                               isDisabled={isEditing}
@@ -685,9 +690,10 @@ const DriverForm = ({
                             className="form-control-label"
                             htmlFor="input-fname"
                           >
-                            Select Vehicles
+                            {t("Select Vehicles")}
                           </label>
                           <Select
+                          placeholder={t("Select...")}
                             name="vehicles"
                             isMulti
                             className="form-control-alternative"
@@ -703,7 +709,7 @@ const DriverForm = ({
                     <hr className="my-4" />
                     {/* Contact Information */}
                     <h6 className="heading-small text-muted mb-4">
-                      Company information
+                      {t("Company information")}
                     </h6>
                     <div className="pl-lg-4">
                       <Row>
@@ -713,13 +719,13 @@ const DriverForm = ({
                               className="form-control-label"
                               htmlFor="input-fname"
                             >
-                              Company Name
+                              {t("Company Name")}
                             </label>
                             <Input
                               className="form-control-alternative"
                               id="input-fname"
                               required={true}
-                              placeholder="Enter Company Name"
+                              placeholder={t("Enter Company Name")}
                               type="text"
                               value={user.company_name}
                               name="company_name"
@@ -734,12 +740,12 @@ const DriverForm = ({
                               className="form-control-label"
                               htmlFor="input-address"
                             >
-                              City of RCS
+                              {t("City of RCS")}
                             </label>
                             <Input
                               className="form-control-alternative"
                               id="input-address"
-                              placeholder="City of RCS"
+                              placeholder={t("City of RCS")}
                               type="text"
                               value={user.city_of_rcs}
                               name="city_of_rcs"
@@ -757,7 +763,7 @@ const DriverForm = ({
                               className="form-control-label"
                               htmlFor="input-email"
                             >
-                              SIRET Number
+                              {t("SIRET Number")}
                             </label>
                             <Input
                               className="form-control-alternative"
@@ -776,12 +782,12 @@ const DriverForm = ({
                               className="form-control-label"
                               htmlFor="input-vat"
                             >
-                              VAT Number
+                              {t("VAT Number")}
                             </label>
                             <Input
                               className="form-control-alternative"
                               id="input-vat"
-                              placeholder="VAT Number"
+                              placeholder={t("VAT Number")}
                               type="text"
                               value={user.vat_number}
                               name="vat_number"
@@ -797,7 +803,7 @@ const DriverForm = ({
                               className="form-control-label"
                               htmlFor="input-account"
                             >
-                              Enter Social Capital
+                              {t("Enter Social Capital")}
                             </label>
                             <Input
                               className="form-control-alternative"
@@ -816,12 +822,12 @@ const DriverForm = ({
                               className="form-control-label"
                               htmlFor="input-bankName"
                             >
-                              Enter Legal Information
+                              {t("Enter Legal Information")}
                             </label>
                             <Input
                               className="form-control-alternative"
                               id="input-bankName"
-                              placeholder="Legal Information here..."
+                              placeholder={t("Legal Information here...")}
                               type="text"
                               value={user.legal_info}
                               name="legal_info"
@@ -834,7 +840,7 @@ const DriverForm = ({
                         <Col lg="6">
                           <FormGroup>
                             <label className="form-control-label">
-                              Add insurance civil liability{" "}
+                              {t("Add insurance civil liability")}{" "}
                               <i className="fa fa-id-card" />
                               <View url={docs.insurance_civil_liability} />
                             </label>
@@ -857,7 +863,7 @@ const DriverForm = ({
                         <Col lg="6">
                           <FormGroup>
                             <label className="form-control-label">
-                              Add Professional liability{" "}
+                              {t("Add Professional liability")}{" "}
                               <i className="fa fa-id-card" />
                               <View url={docs.professional_liability} />
                             </label>
@@ -880,7 +886,7 @@ const DriverForm = ({
                         <Col lg="6">
                           <FormGroup>
                             <label className="form-control-label">
-                              Add RIB <i className="fa fa-id-card" />
+                              {t("Add RIB")} <i className="fa fa-id-card" />
                               <View url={docs.rib} />
                             </label>
 
@@ -901,7 +907,7 @@ const DriverForm = ({
                               className="form-control-label"
                               htmlFor="input-id-front"
                             >
-                              Add Kbis extract <i className="fa fa-id-card" />
+                              {t("Add Kbis extract")} <i className="fa fa-id-card" />
                               <View url={docs.kbis_extract} />
                             </label>
 
@@ -928,7 +934,7 @@ const DriverForm = ({
                 <hr className="my-4" />
                 {/* Contact Information */}
                 <h6 className="heading-small text-muted mb-4">
-                  Contact information
+                  {t("Contact information")}
                 </h6>
                 <div className="pl-lg-4">
                   <Row>
@@ -951,7 +957,7 @@ const DriverForm = ({
                           <span style={{ color: "red" }}>
                             {user.phone ? "" : "*"}
                           </span>{" "}
-                          Phone Number
+                          {t("Phone Number")}
                         </label>
                         <Input
                           className="form-control-alternative"
@@ -968,7 +974,7 @@ const DriverForm = ({
                   </Row>
                 </div>
                 <h6 className="heading-small text-muted mb-4">
-                  Bank information
+                  {t("Bank information")}
                 </h6>
                 <div className="pl-lg-4">
                   <Row>
@@ -978,12 +984,12 @@ const DriverForm = ({
                           className="form-control-label"
                           htmlFor="input-bankName"
                         >
-                          Bank Name
+                          {t("Bank Name")}
                         </label>
                         <Input
                           className="form-control-alternative"
                           id="input-bankName"
-                          placeholder="Bank Name"
+                          placeholder={t("Bank Name")}
                           type="text"
                           value={user?.bankName}
                           name="bankName"
@@ -997,12 +1003,12 @@ const DriverForm = ({
                           className="form-control-label"
                           htmlFor="input-iban"
                         >
-                          IBAN Number
+                          {t("IBAN Number")}
                         </label>
                         <Input
                           className="form-control-alternative"
                           id="input-iban"
-                          placeholder="Example Bank Ltd"
+                          placeholder={t("Example Bank Ltd")}
                           type="text"
                           value={user.iban}
                           name="iban"
@@ -1014,7 +1020,7 @@ const DriverForm = ({
                 </div>
                 <hr className="my-4" />
                 <h6 className="heading-small text-muted mb-4">
-                  Other information
+                  {t("Other information")}
                 </h6>
                 <div className="pl-lg-4">
                   <Row>
@@ -1023,7 +1029,7 @@ const DriverForm = ({
                         style={{ display: "flex", flexDirection: "column" }}
                       >
                         <label className="form-control-label">
-                          Add Identity Card/Passport/Residence Permit Front Side{" "}
+                          {t("Add Identity Card/Passport/Residence Permit Front Side")}{" "}
                           <View url={docs?.id_card_front} />
                         </label>
                         <FilePicker
@@ -1044,7 +1050,7 @@ const DriverForm = ({
                     <Col lg="6">
                       <FormGroup>
                         <label className="form-control-label">
-                          Add Identity Card/Passport/Residence Permit Back Side{" "}
+                          {t("Add Identity Card/Passport/Residence Permit Back Side")}{" "}
                           <View url={docs.id_card_back} />
                         </label>
 
@@ -1068,7 +1074,7 @@ const DriverForm = ({
                     <Col lg="6">
                       <FormGroup>
                         <label className="form-control-label">
-                          Add VTC Card Front Side
+                          {t("Add VTC Card Front Side")}
                           <View url={docs.vtc_card_front} />
                         </label>
 
@@ -1090,7 +1096,7 @@ const DriverForm = ({
                     <Col lg="6">
                       <FormGroup>
                         <label className="form-control-label">
-                          Add VTC Card Back Side{" "}
+                          {t("Add VTC Card Back Side")}{" "}
                           <View url={docs.vtc_card_back} />
                         </label>
 
@@ -1114,7 +1120,7 @@ const DriverForm = ({
                     <Col lg="6">
                       <FormGroup>
                         <label className="form-control-label">
-                          Add License Card Front Side{" "}
+                          {t("Add License Card Front Side")}{" "}
                           <View url={docs.license_card_front} />
                         </label>
 
@@ -1160,7 +1166,7 @@ const DriverForm = ({
                     <Col lg="6">
                       <FormGroup>
                         <label className="form-control-label">
-                          Add Criminal Record{" "}
+                          {t("Add Criminal Record")}{" "}
                           <View url={docs.criminal_record_image} />
                         </label>
 
@@ -1192,14 +1198,14 @@ const DriverForm = ({
                                 : "*"
                               : ""}
                           </span>{" "}
-                          Valid Till
+                          {t("Valid Till")}
                         </label>
 
                         <Input
                           className="form-control-alternative"
                           id="input-date"
                           required={true}
-                          placeholder="Enter Company Name"
+                          placeholder={t("Enter Company Name")}
                           type="date"
                           value={user?.criminal_record_date?.split("T")[0]}
                           name="criminal_record_date"
@@ -1213,7 +1219,7 @@ const DriverForm = ({
                     <Col lg="6">
                       <FormGroup>
                         <label className="form-control-label">
-                          Add Restricted Information Statement{" "}
+                          {t("Add Restricted Information Statement")}{" "}
                           <View url={docs.ris_image} />
                         </label>
 
@@ -1241,13 +1247,13 @@ const DriverForm = ({
                           <span style={{ color: "red" }}>
                             {user.ris_image ? (user?.ris_date ? "" : "*") : ""}
                           </span>
-                          Valid Till
+                          {t("Valid Till")}
                         </label>
                         <Input
                           className="form-control-alternative"
                           id="input-date"
                           required={true}
-                          placeholder="Enter Company Name"
+                          placeholder={t("Enter Company Name")}
                           type="date"
                           value={user?.ris_date?.split("T")[0]}
                           name="ris_date"
@@ -1261,7 +1267,7 @@ const DriverForm = ({
                     <Col lg="6">
                       <FormGroup>
                         <label className="form-control-label">
-                          Add KBIS <View url={docs.kbis_image} />
+                          {t("Add KBIS")} <View url={docs.kbis_image} />
                         </label>
 
                         <FilePicker
@@ -1293,14 +1299,14 @@ const DriverForm = ({
                                 : "*"
                               : ""}
                           </span>
-                          Valid Till
+                          {t("Valid Till")}
                         </label>
 
                         <Input
                           className="form-control-alternative"
                           id="input-date"
                           required={true}
-                          placeholder="Enter Company Name"
+                          placeholder={t("Enter Company Name")}
                           type="date"
                           value={user?.kbis_date?.split("T")[0]}
                           name="kbis_date"
@@ -1314,7 +1320,7 @@ const DriverForm = ({
                     <Col lg="6">
                       <FormGroup>
                         <label className="form-control-label">
-                          Add Pro RC Insurance Certificate{" "}
+                          {t("Add Pro RC Insurance Certificate")}{" "}
                           <View url={docs.proRc_image} />
                         </label>
 
@@ -1346,13 +1352,13 @@ const DriverForm = ({
                                 : "*"
                               : ""}
                           </span>
-                          Valid Till
+                          {t("Valid Till")}
                         </label>
                         <Input
                           className="form-control-alternative"
                           id="input-date"
                           required={true}
-                          placeholder="Enter Company Name"
+                          placeholder={t("Enter Company Name")}
                           type="date"
                           value={user?.proRc_date?.split("T")[0]}
                           name="proRc_date"
@@ -1369,14 +1375,14 @@ const DriverForm = ({
         </ModalBody>
         <ModalFooter>
           <Button color="primary" onClick={handleSubmit}>
-            Save
+            {t("Save")}
           </Button>{" "}
           {isEditing && (
             <Button color="danger" onClick={handleDelete}>
-              Delete
+              {t("Delete")}
             </Button>
           )}{" "}
-          <Button onClick={handleModal}>Cancel</Button>
+          <Button onClick={handleModal}>{t("Cancel")}</Button>
         </ModalFooter>
       </Modal>
     </>

@@ -18,7 +18,9 @@ import {
 import api from "api";
 import { Store, UpdateStore } from "StoreContext";
 import { Redirect } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 const Login = () => {
+  const { t, i18n } = useTranslation();
   const [login, setLogin] = useState({
     email: "",
     password: "",
@@ -41,17 +43,19 @@ const Login = () => {
     }
   };
   const handleForget = () => {
-    if(!login.email){
+    if (!login.email) {
       return toast.error("Admin email is required...!");
     }
-    api("post", "/admins/forgetPassword",{email:login.email}).then((res) => {
-      // eslint-disable-next-line eqeqeq
-      if (res.status == 200) {
-        return toast.success("Reset Password email sent");
-      } else {
-        return toast.error("Delete Error", res.data.message);
+    api("post", "/admins/forgetPassword", { email: login.email }).then(
+      (res) => {
+        // eslint-disable-next-line eqeqeq
+        if (res.status == 200) {
+          return toast.success("Reset Password email sent");
+        } else {
+          return toast.error("Delete Error", res.data.message);
+        }
       }
-    });
+    );
   };
   if (authorization) return <Redirect push to="/admin" />;
   return (
@@ -60,7 +64,7 @@ const Login = () => {
         <Card className="bg-secondary shadow border-0">
           <CardHeader className="bg-transparent">
             <div className="text-muted text-center mt-2 mb-3">
-              <small>Sign in </small>
+              <small>{t("Sign in")} </small>
             </div>
           </CardHeader>
           <CardBody className="px-lg-5 py-lg-5">
@@ -72,7 +76,7 @@ const Login = () => {
                   </InputGroupText>
 
                   <Input
-                    placeholder="Email"
+                    placeholder={t("Email")}
                     type="email"
                     autoComplete="new-email"
                     value={login.email}
@@ -89,7 +93,7 @@ const Login = () => {
                   </InputGroupText>
 
                   <Input
-                    placeholder="Password"
+                    placeholder={t("Password")}
                     type="password"
                     autoComplete="new-password"
                     value={login.password}
@@ -109,7 +113,7 @@ const Login = () => {
                   className="custom-control-label"
                   htmlFor=" customCheckLogin"
                 >
-                  <span className="text-muted">Remember me</span>
+                  <span className="text-muted">{t("Remember me")}</span>
                 </label>
               </div>
               <div className="text-center">
@@ -119,7 +123,7 @@ const Login = () => {
                   type="button"
                   onClick={handleSubmit}
                 >
-                  Sign in
+                  {t("Sign in")}
                 </Button>
               </div>
             </Form>
@@ -128,7 +132,7 @@ const Login = () => {
         <Row className="mt-3">
           <Col xs="6">
             <a className="text-light" href="#pablo" onClick={handleForget}>
-              <small>Forgot password?</small>
+              <small>{t("Forgot password?")}</small>
             </a>
           </Col>
         </Row>

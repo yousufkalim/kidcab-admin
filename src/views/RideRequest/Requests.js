@@ -16,11 +16,11 @@
 
 */
 // reactstrap components
-import { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
-import api from 'api';
-import { Store, UpdateStore } from 'StoreContext';
-import moment from 'moment';
+import { useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
+import api from "api";
+import { Store, UpdateStore } from "StoreContext";
+import moment from "moment";
 import {
   Badge,
   Card,
@@ -35,12 +35,14 @@ import {
   Container,
   Row,
   Nav,
-} from 'reactstrap';
+} from "reactstrap";
 
 // core components
-import Header from 'components/Headers/Header.js';
+import Header from "components/Headers/Header.js";
+import { useTranslation } from "react-i18next";
 
 const Requests = () => {
+  const { t, i18n } = useTranslation();
   const [requests, setRequests] = useState([]);
 
   useEffect(() => {
@@ -48,7 +50,7 @@ const Requests = () => {
   }, []);
 
   const getRequests = async () => {
-    await api('get', 'requests').then((res) => {
+    await api("get", "requests").then((res) => {
       setRequests(res?.data?.request);
     });
   };
@@ -64,20 +66,20 @@ const Requests = () => {
             <Card className="shadow">
               <CardHeader className="border-0">
                 <div className="d-flex justify-content-between ">
-                  <h3 className="mb-0">Ride Requests</h3>
+                  <h3 className="mb-0">{t("Ride Requests")}</h3>
                 </div>
               </CardHeader>
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
                   <tr>
-                    <th scope="col">Name </th>
-                    <th scope="col">Phone number </th>
-                    <th scope="col">No of passengers </th>
-                    <th cope="col">Journey Type</th>
-                    <th scope="col">PickUp Address</th>
-                    <th scope="col">Destination Address</th>
-                    <th scope="col">Status</th>
-                    <th scope="col">PickUp Date</th>
+                    <th scope="col">{t("Name")} </th>
+                    <th scope="col">{t("Phone number")} </th>
+                    <th scope="col">{t("No of passengers")} </th>
+                    <th cope="col">{t("Journey Type")}</th>
+                    <th scope="col">{t("PickUp Address")}</th>
+                    <th scope="col">{t("Destination Address")}</th>
+                    <th scope="col">{t("Status")}</th>
+                    <th scope="col">{t("PickUp Date")}</th>
 
                     <th scope="col" />
                   </tr>
@@ -92,26 +94,26 @@ const Requests = () => {
                               <span className="mb-0 text-sm">
                                 {item?.first_name[0].toUpperCase() +
                                   item?.first_name.substring(1) +
-                                  ' ' +
+                                  " " +
                                   item?.last_name[0].toUpperCase() +
                                   item?.last_name.substring(1)}
                               </span>
                             </Media>
                           </Media>
                         </th>
-                        <td>{item.phone || '_'}</td>
-                        <td>{item.passengers || '_'}</td>
-                        <td>{item.journey_type || '_'}</td>
-                        <td>{item.pickUp_address.label || '_'}</td>
-                        <td>{item?.destination_address?.label || '_'}</td>
+                        <td>{item.phone || "_"}</td>
+                        <td>{item.passengers || "_"}</td>
+                        <td>{item.journey_type || "_"}</td>
+                        <td>{item.pickUp_address.label || "_"}</td>
+                        <td>{item?.destination_address?.label || "_"}</td>
                         <td>
-                          {item?.status === 'not answer'
-                            ? 'Not Answer'
-                            : item?.status === 'pending'
-                            ? 'Pending'
-                            : item?.status === 'accepted'
-                            ? 'Accepted'
-                            : 'Decline'}
+                          {item?.status === "not answer"
+                            ? "Not Answer"
+                            : item?.status === "pending"
+                            ? "Pending"
+                            : item?.status === "accepted"
+                            ? "Accepted"
+                            : "Decline"}
                         </td>
                         <td>{new Date(item.pickUp_date).toDateString()}</td>
                         <td></td>

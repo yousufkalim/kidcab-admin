@@ -11,6 +11,7 @@ import { Modal, ModalBody, ModalHeader, ModalFooter, Button, FormGroup, Form, In
 import Select from 'react-select';
 import DayPicker, { DateUtils } from 'react-day-picker';
 import 'react-day-picker/lib/style.css';
+import { useTranslation } from "react-i18next";
 const options = [
   { value: 1, label: 'Monday' },
   { value: 2, label: 'Tuesday' },
@@ -35,6 +36,7 @@ const disableDates = () => {
   return yyyy + '-' + mm + '-' + dd;
 };
 const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoRefresh }) => {
+  const { t, i18n } = useTranslation();
   const [trip, setTrip] = useState({
     date: '',
     status: 'pending',
@@ -316,13 +318,13 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
     <>
       <Modal isOpen={openModal} size="xl" centered>
         <ModalHeader charCode="X" toggle={handleModal}>
-          {isEditing ? 'Edit' : 'Add'} Trip
+          {isEditing ? 'Edit' : 'Add'} {t("Trip")}
         </ModalHeader>
         <ModalBody>
           <Row>
             <Col>
               <Form>
-                <h6 className="heading-small text-muted mb-4">Trip information</h6>
+                <h6 className="heading-small text-muted mb-4">{t("Trip information")}</h6>
                 <div className="pl-lg-4">
                   <Row>
                     <Col lg="4">
@@ -354,7 +356,7 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
                     <Col lg="6">
                       <FormGroup>
                         <label className="form-control-label" htmlFor="input-status">
-                          <span style={{ color: 'red' }}>{trip.status ? '' : '*'}</span> Status
+                          <span style={{ color: 'red' }}>{trip.status ? '' : '*'}</span> {t("Status")}
                         </label>
                         <Input
                           id="input-status"
@@ -364,10 +366,10 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
                           value={trip.status}
                           onChange={handleInputChange}
                         >
-                          <option value="pending">Pending</option>
-                          <option value="confirmed">Confirmed</option>
-                          <option value="cancelled">Cancelled</option>
-                          <option value="completed">Completed</option>
+                          <option value="pending">{t("Pending")}</option>
+                          <option value="confirmed">{t("Confirmed")}</option>
+                          <option value="cancelled">{t("Cancelled")}</option>
+                          <option value="completed">{t("Completed")}</option>
                         </Input>
                       </FormGroup>
                     </Col>
@@ -375,7 +377,7 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
                     <Col lg="6">
                       <FormGroup>
                         <label className="form-control-label" htmlFor="input-tripType">
-                          Trip Type
+                          {t("Trip Type")}
                         </label>
                         <Input
                           id="input-trip_type"
@@ -385,8 +387,8 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
                           value={trip.trip_type}
                           onChange={handleInputChange}
                         >
-                          <option value="simple">simple</option>
-                          <option value="recurring">recurring</option>
+                          <option value="simple">{t("simple")}</option>
+                          <option value="recurring">{t("recurring")}</option>
                         </Input>
                       </FormGroup>
                     </Col>
@@ -398,14 +400,14 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
                       <Col lg="6">
                         <FormGroup>
                           <label className="form-control-label" htmlFor="input-date">
-                            <span style={{ color: 'red' }}>{trip.date ? '' : '*'}</span> Trip Date
+                            <span style={{ color: 'red' }}>{trip.date ? '' : '*'}</span> {t("Trip Date")}
                           </label>
                           {isEditing ? (
                             <Input
                               className="form-control-alternative"
                               id="input-date"
                               locale={'en-gb'}
-                              placeholder={'Select Dates'}
+                              placeholder={t("Select Dates")}
                               type="date"
                               min={!isEditing && disableDates()}
                               value={trip?.date?.split('T')[0]}
@@ -418,7 +420,7 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
                               id="input-date"
                               value={selectedDays?.map((i) => moment(i).format('DD/MM/YYYY'))}
                               min={disableDates()}
-                              placeholder={'Select Dates'}
+                              placeholder={t('Select Dates')}
                               readonly
                               type="text"
                               onClick={() => setOpenDateModal(true)}
@@ -430,7 +432,7 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
                         <FormGroup>
                           <div className="TimePicker-ss">
                             <label className="form-control-label" htmlFor="input-time">
-                              <span style={{ color: 'red' }}></span> Select Trip Time
+                              <span style={{ color: 'red' }}></span> {t("Select Trip Time")}
                             </label>
                             <TimePicker
                               style={{ height: 'calc(1.5em + 1.25rem + 2px)' }}
@@ -453,13 +455,13 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
                         <Col lg="4">
                           <FormGroup>
                             <label className="form-control-label" htmlFor="input-date">
-                              <span style={{ color: 'red' }}>{trip.startdate ? '' : '*'}</span> Start Date
+                              <span style={{ color: 'red' }}>{trip.startdate ? '' : '*'}</span> {t("Start Date")}
                             </label>
                             <Input
                               className="form-control-alternative"
                               id="input-date"
                               // value={selectedDays?.map((i) => i)}
-                              placeholder={'Select Date'}
+                              placeholder={t('Select Date')}
                               type="date"
                               value={trip.startdate}
                               min={disableDates()}
@@ -472,14 +474,14 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
                         <Col lg="4">
                           <FormGroup>
                             <label className="form-control-label" htmlFor="input-date">
-                              <span style={{ color: 'red' }}>{trip.enddate ? '' : '*'}</span> End Date
+                              <span style={{ color: 'red' }}>{trip.enddate ? '' : '*'}</span> {t("End Date")}
                             </label>
                             <Input
                               className="form-control-alternative"
                               id="input-date"
                               min={disableDates()}
                               // value={selectedDays?.map((i) => i)}
-                              placeholder={'Select Date'}
+                              placeholder={t('Select Date')}
                               type="date"
                               value={trip.enddate}
                               name="enddate"
@@ -491,7 +493,7 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
                         <Col lg="4">
                           <FormGroup>
                             <label for="exampleSelect" className="form-control-label">
-                              <span style={{ color: 'red' }}>{trip?.Days?.length < 1 ? '' : '*'}</span> Select Days
+                              <span style={{ color: 'red' }}>{trip?.Days?.length < 1 ? '' : '*'}</span> {t("Select Days")}
                             </label>
                             <Select
                               onChange={handleDayChange}
@@ -515,7 +517,7 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
                               <Col lg="6">
                                 <FormGroup>
                                   <label className="form-control-label" htmlFor="input-Day">
-                                    Day
+                                    {t("Day")}
                                   </label>
                                   <Input id="input-Day" name="input-Day" readOnly className="input-Day" value={i.label}></Input>
                                 </FormGroup>
@@ -524,7 +526,7 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
                                 <FormGroup>
                                   <div className="TimePicker-ss">
                                     <label className="form-control-label" htmlFor="input-time">
-                                      <span style={{ color: 'red' }}></span> Select Trip Time
+                                      <span style={{ color: 'red' }}></span> {t("Select Trip Time")}
                                     </label>
                                     <TimePicker
                                       style={{
@@ -557,13 +559,13 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
                     <Col lg="6">
                       <FormGroup>
                         <label className="form-control-label" htmlFor="input-clientPrice">
-                          <span style={{ color: 'red' }}>{trip.client_price ? '' : '*'}</span> Client Price
+                          <span style={{ color: 'red' }}>{trip.client_price ? '' : '*'}</span> {t("Client Price")}
                         </label>
                         <Input
                           className="form-control-alternative"
                           id="input-clientPrice"
                           required={true}
-                          placeholder="Enter Client Price"
+                          placeholder={t("Enter Client Price")}
                           type="number"
                           value={trip.client_price}
                           name="client_price"
@@ -574,13 +576,13 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
                     <Col lg="6">
                       <FormGroup>
                         <label className="form-control-label" htmlFor="input-driverPrice">
-                          <span style={{ color: 'red' }}>{trip.driver_price ? '' : '*'}</span> Driver Price
+                          <span style={{ color: 'red' }}>{trip.driver_price ? '' : '*'}</span> {t("Driver Price")}
                         </label>
                         <Input
                           className="form-control-alternative"
                           id="input-driverPrice"
                           required={true}
-                          placeholder="Enter Driver Price"
+                          placeholder={t("Enter Driver Price")}
                           type="number"
                           value={trip.driver_price}
                           name="driver_price"
@@ -598,10 +600,11 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
                           <span style={{ color: 'red' }}>
                             {trip.inviteddrivers.length > 0 || trip.assigned_drivers.length > 0 ? '' : '*'}
                           </span>{' '}
-                          Drivers Name
+                          {t("Drivers Name")}
                         </label>
                         {drivers && (
                           <Select
+                          placeholder={t("Select...")}
                             onChange={(e) =>
                               setTrip((user) => ({
                                 ...user,
@@ -636,10 +639,11 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
                     <Col lg="4">
                       <FormGroup>
                         <label className="form-control-label" htmlFor="input-fname">
-                          <span style={{ color: 'red' }}>{trip.client ? '' : '*'}</span> Client
+                          <span style={{ color: 'red' }}>{trip.client ? '' : '*'}</span> {t("Client")}
                         </label>
                         {clients && (
                           <Select
+                          placeholder={t("Select...")}
                             onChange={handleClientChange}
                             name="clients"
                             defaultValue={
@@ -660,10 +664,11 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
                     <Col lg="4">
                       <FormGroup>
                         <label className="form-control-label" htmlFor="input-fname">
-                          Passengers
+                          {t("Passengers")}
                         </label>
                         {allPassengers && (
                           <Select
+                          placeholder={t("Select...")}
                             onChange={handlePassengerChange}
                             isDisabled={trip?.client <= 0}
                             name="passengers"
@@ -686,12 +691,12 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
                   </Row>
                   <FormGroup>
                     <label className="form-control-label" htmlFor="input-lname">
-                      Add comment
+                      {t("Add comment")}
                     </label>
                     <Input
                       className="form-control-alternative"
                       id="input-lname"
-                      placeholder="Add Comment"
+                      placeholder={t("Add Comment")}
                       type="textarea"
                       value={trip.comment}
                       name="comment"
@@ -705,26 +710,26 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
         </ModalBody>
         <ModalFooter>
           <Button color="primary" onClick={handleSubmit}>
-            Save
+            {t("Save")}
           </Button>{' '}
           {isEditing && (
             <Button color="danger" onClick={handleDelete}>
-              Delete
+              {t("Delete")}
             </Button>
           )}{' '}
-          <Button onClick={handleModal}>Cancel</Button>
+          <Button onClick={handleModal}>{t("Cancel")}</Button>
         </ModalFooter>
       </Modal>
       <Modal isOpen={openDateModal} size="sm" centered>
         <ModalHeader charCode="X" toggle={handleDateModal}>
-          {isEditing ? 'Edit' : 'Select'} Date
+          {isEditing ? 'Edit' : 'Select'} {t("Date")}
         </ModalHeader>
         <div style={{ textAlign: 'center' }}>
           <DayPicker disabledDays={{ before: new Date() }} selectedDays={selectedDays} onDayClick={handleDayClick} />
         </div>
         <ModalFooter>
           <Button color="success" onClick={handleDateModal}>
-            Ok
+            {t("Ok")}
           </Button>
         </ModalFooter>
       </Modal>

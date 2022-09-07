@@ -19,8 +19,10 @@ import {
 import api from "../../api/index";
 import TripForm from "./TripForm";
 import TripRow from "./TripRow";
+import { useTranslation } from "react-i18next";
 
 const TripList = () => {
+  const { t, i18n } = useTranslation();
   const [openModal, setOpenModal] = useState(false);
   const pagination = useRef();
   const [trips, setTrips] = useState();
@@ -304,7 +306,7 @@ const TripList = () => {
             <Card className="shadow">
               <CardHeader className="border-0">
                 <div className="d-flex justify-content-between ">
-                  <h3 className="mb-0">Trip List</h3>
+                  <h3 className="mb-0">{t("Trip List")}</h3>
                   <div>
                     <Button
                       color="warning"
@@ -313,9 +315,9 @@ const TripList = () => {
                       onClick={selectAll}
                     >
                       {selectBtn === false ? (
-                        <>Select All</>
+                        <>{t("Select All")}</>
                       ) : (
-                        <>De-Select all</>
+                        <>{t("De-Select all")}</>
                       )}
                     </Button>
                     {selectedItems.length > 0 && (
@@ -325,7 +327,7 @@ const TripList = () => {
                         onClick={handleDeleteMany}
                         size="md"
                       >
-                        Delete Trips
+                        {t("Delete Trips")}
                       </Button>
                     )}
                     {selectedItems.length > 0 && (
@@ -346,26 +348,26 @@ const TripList = () => {
                           textTransform: "capitalize",
                         }}
                       >
-                        {dropDownItem}
+                        {t(dropDownItem)}
                       </DropdownToggle>
                       <DropdownMenu>
                         <DropdownItem name="all" onClick={filterCheck}>
-                          All Trips
+                          {t("All Trips")}
                         </DropdownItem>
                         <DropdownItem
                           name="trip-type-filter"
                           onClick={filterCheck}
                         >
-                          Filter By trip type
+                          {t("Filter By trip type")}
                         </DropdownItem>
                         <DropdownItem name="date-filter" onClick={filterCheck}>
-                          Filter By Date
+                          {t("Filter By Date")}
                         </DropdownItem>
                         <DropdownItem
                           name="driver-filter"
                           onClick={filterCheck}
                         >
-                          Filter By Driver
+                          {t("Filter By Driver")}
                         </DropdownItem>
                       </DropdownMenu>
                     </UncontrolledDropdown>
@@ -376,7 +378,7 @@ const TripList = () => {
                       size="md"
                     >
                       <i className="ni ni-fat-add"></i>
-                      Add Trip
+                      {t("Add Trip")}
                     </Button>
                   </div>
                 </div>
@@ -427,35 +429,35 @@ const TripList = () => {
                             }}
                           >
                             {filterdropDownItem}
-                            &nbsp;trips
+                            &nbsp;{t("trips")}
                           </DropdownToggle>
                           <DropdownMenu>
                             <DropdownItem name="all" onClick={handelNameFilter}>
-                              All Trips
+                              {t("All Trips")}
                             </DropdownItem>
                             <DropdownItem
                               name="pending"
                               onClick={handelNameFilter}
                             >
-                              Pending Trips
+                              {t("Pending Trips")}
                             </DropdownItem>
                             <DropdownItem
                               name="confirmed"
                               onClick={handelNameFilter}
                             >
-                              Confirmed Trips
+                              {t("Confirmed Trips")}
                             </DropdownItem>
                             <DropdownItem
                               name="cancelled"
                               onClick={handelNameFilter}
                             >
-                              Cancelled Trips
+                              {t("Cancelled Trips")}
                             </DropdownItem>
                             <DropdownItem
                               name="completed"
                               onClick={handelNameFilter}
                             >
-                              Completed Trips
+                              {t("Completed Trips")}
                             </DropdownItem>
                           </DropdownMenu>
                         </UncontrolledDropdown>
@@ -469,7 +471,7 @@ const TripList = () => {
                           }}
                           onClick={handleClient}
                         >
-                          Search
+                          {t("Search")}
                         </Button>
                       </div>
                     </div>
@@ -496,7 +498,7 @@ const TripList = () => {
                           <span style={{ color: "red" }}>
                             {dates?.start_date ? "" : "*"}
                           </span>{" "}
-                          Start Date
+                          {t("Start Date")}
                         </label>
                         <Input
                           className="form-control-alternative"
@@ -521,7 +523,7 @@ const TripList = () => {
                           <span style={{ color: "red" }}>
                             {dates?.end_date ? "" : "*"}
                           </span>{" "}
-                          End Date
+                          {t("End Date")}
                         </label>
                         <Input
                           className="form-control-alternative"
@@ -543,7 +545,7 @@ const TripList = () => {
                             marginLeft: "30px",
                           }}
                         >
-                          Search
+                          {t("Search")}
                         </Button>
                       </div>
                     </div>
@@ -586,7 +588,7 @@ const TripList = () => {
                             right: "20%",
                           }}
                         >
-                          Search
+                          {t("Search")}
                         </Button>
                       </div>
                     </div>
@@ -598,28 +600,28 @@ const TripList = () => {
               <Table className="align-items-center table-flush my-3" responsive>
                 <thead className="thead-light">
                   <tr>
-                    <th scope="col">Select</th>
-                    <th scope="col">Trip Status</th>
+                    <th scope="col">{t("Select")}</th>
+                    <th scope="col">{t("Trip Status")}</th>
                     <th scope="col" className="text-center">
-                      Clients
+                      {t("Clients")}
                     </th>
                     <th scope="col" className="text-center">
-                      Passengers
+                      {t("Passengers")}
                     </th>
                     <th scope="col" className="text-center">
-                      Drivers
+                      {t("Drivers")}
                     </th>
                     <th scope="col" className="text-center">
-                      Date
+                      {t("Date")}
                     </th>
                     <th scope="col" className="text-center">
-                      Start Address
+                      {t("Start Address")}
                     </th>
                     <th scope="col" className="text-center">
-                      End Address
+                      {t("End Address")}
                     </th>
                     <th scope="col" className="text-right">
-                      Actions
+                      {t("Actions")}
                     </th>
                   </tr>
                 </thead>
@@ -636,7 +638,7 @@ const TripList = () => {
                     ))
                   ) : (
                     <tr className="h1 mx-lg-auto text-center">
-                      <td>No Trip Found</td>
+                      <td>{t("No Trip Found")}</td>
                     </tr>
                   )}
                 </tbody>
