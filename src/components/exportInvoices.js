@@ -13,9 +13,11 @@ import {
   Button,
 } from "reactstrap";
 import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 
 // Component
 export const ExportInvoices = ({ dropDownItem, invoices }) => {
+  const { t, i18n } = useTranslation();
   const [exportItem, setExportItem] = useState("");
 
   // File Type
@@ -163,7 +165,7 @@ export const ExportInvoices = ({ dropDownItem, invoices }) => {
         handleExportPdf();
       }}
     >
-      <i className="ni ni-collection"></i> Export Pdf&nbsp;
+      <i className="ni ni-collection"></i> {t("Export Pdf")}&nbsp;
     </Button>
   );
 };

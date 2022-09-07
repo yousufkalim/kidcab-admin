@@ -12,8 +12,10 @@ import {
   Col,
   Label,
 } from "reactstrap";
+import { useTranslation } from "react-i18next";
 
 function FilePicker(props) {
+  const { t, i18n } = useTranslation();
   return (
     <>
       <label
@@ -41,7 +43,7 @@ function FilePicker(props) {
             }}
           >
             <i class="fas fa-upload" style={{ marginRight: "10px" }}></i>
-            <> Add File</>
+            <> {t("Add File")}</>
           </div>
         </div>
         <div
@@ -60,7 +62,7 @@ function FilePicker(props) {
               ? props.value.name
                 ? props.value.name
                 : props.value.split("---")[1]
-              : "No File Added"}
+              : t("No File Added")}
           </div>
         </div>
       </label>

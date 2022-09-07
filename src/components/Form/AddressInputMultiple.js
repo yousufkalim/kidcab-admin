@@ -9,6 +9,7 @@ import {
   UncontrolledDropdown,
   DropdownItem,
 } from "reactstrap";
+import { useTranslation } from "react-i18next";
 
 function AddressInputMultiple({
   label,
@@ -18,6 +19,7 @@ function AddressInputMultiple({
   allAddresses,
   setAllAddresses,
 }) {
+  const { t, i18n } = useTranslation();
   let [addresses, setAddresses] = useState([]);
 
   // Get All Address in drop down List from API
@@ -130,7 +132,7 @@ function AddressInputMultiple({
         className="form-control-label"
         htmlFor={`input-address-${label.split(" ").join("")}`}
       >
-        {label}
+        {t(label)}
       </label>
 
       {/* Semi automated field for address */}
@@ -155,7 +157,7 @@ function AddressInputMultiple({
                 className="form-control form-control-alternative"
                 style={{ paddingRight: "64px" }}
                 id={`input-address-${label.split(" ").join("")}`}
-                placeholder={label}
+                placeholder={t(label)}
                 {...props}
               />
             );
@@ -229,7 +231,7 @@ function AddressInputMultiple({
               })
             ) : (
               <DropdownItem name="address" disabled={true}>
-                No address added
+                {t("No address added")}
               </DropdownItem>
             )}
           </DropdownMenu>

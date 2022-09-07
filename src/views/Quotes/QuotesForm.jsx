@@ -16,6 +16,7 @@ import {
   Label,
 } from "reactstrap";
 import moment from "moment";
+import { useTranslation } from "react-i18next";
 
 // core components
 import Select from "react-select";
@@ -26,6 +27,7 @@ const QuotesForm = ({
   isEditing,
   autoRefresh,
 }) => {
+  const { t, i18n } = useTranslation();
   const [quote, setQuote] = useState({
     title: "",
     quoteNumber: "",
@@ -330,14 +332,14 @@ const QuotesForm = ({
     <>
       <Modal isOpen={openModal} size="xl" centered>
         <ModalHeader charCode="X" toggle={handleModal}>
-          {isEditing ? "Edit" : "Add"} A Quote
+          {isEditing ? "Edit" : "Add"} {t("A Quote")}
         </ModalHeader>
         <ModalBody>
           <Row>
             <Col>
               <Form>
                 <h6 className="heading-small text-muted mb-4">
-                  Quote information
+                  {t("Quote information")}
                 </h6>
 
                 <div className="pl-lg-4">
@@ -351,13 +353,13 @@ const QuotesForm = ({
                           <span style={{ color: "red" }}>
                             {quote.title ? "" : "*"}
                           </span>{" "}
-                          Quote Title
+                          {t("Quote Title")}
                         </label>
                         <Input
                           className="form-control-alternative"
                           id="input-title"
                           required={true}
-                          placeholder="Quote Title"
+                          placeholder={t("Quote Title")}
                           type="text"
                           value={quote.title}
                           name="title"
@@ -374,12 +376,12 @@ const QuotesForm = ({
                           <span style={{ color: "red" }}>
                             {quote.quoteNumber ? "" : "*"}
                           </span>{" "}
-                          Quote Number
+                          {t("Quote Number")}
                         </label>
                         <Input
                           className="form-control-alternative"
                           id="input-qnumber"
-                          placeholder="Quote Number"
+                          placeholder={t("Quote Number")}
                           type="number"
                           value={quote.quoteNumber}
                           name="quoteNumber"
@@ -398,10 +400,11 @@ const QuotesForm = ({
                           <span style={{ color: "red" }}>
                             {quote.client ? "" : "*"}
                           </span>{" "}
-                          Select Client
+                          {t("Select Client")}
                         </Label>
                         {clients && (
                           <Select
+                          placeholder={t("Select...")}
                             onChange={handleClientChange}
                             name="client"
                             hideSelectedOptions
@@ -429,7 +432,7 @@ const QuotesForm = ({
                           <span style={{ color: "red" }}>
                             {quote.status ? "" : "*"}
                           </span>{" "}
-                          Status
+                          {t("Status")}
                         </Label>
                         <Input
                           id="exampleSelect"
@@ -440,9 +443,9 @@ const QuotesForm = ({
                           value={quote.status}
                           onChange={handleInputChange}
                         >
-                          <option value="pending">Pending</option>
-                          <option value="accepted">Accepted</option>
-                          <option value="rejected">Rejected</option>
+                          <option value="pending">{t("Pending")}</option>
+                          <option value="accepted">{t("Accepted")}</option>
+                          <option value="rejected">{t("Rejected")}</option>
                         </Input>
                       </FormGroup>
                     </Col>
@@ -455,7 +458,7 @@ const QuotesForm = ({
                           <span style={{ color: "red" }}>
                             {quote.issueDate ? "" : "*"}
                           </span>{" "}
-                          Issue Date
+                          {t("Issue Date")}
                         </label>
                         <Input
                           className="form-control-alternative"
@@ -472,7 +475,7 @@ const QuotesForm = ({
                   <hr className="my-4" />
                 </div>
                 <h6 className="heading-small text-muted mb-4">
-                  Trip information
+                  {t("Trip information")}
                 </h6>
                 <div className="pl-lg-4">
                   <Row>
@@ -485,13 +488,13 @@ const QuotesForm = ({
                           <span style={{ color: "red" }}>
                             {quote.totalTrips ? "" : "*"}
                           </span>{" "}
-                          No. of Trips
+                          {t("No. of Trips")}
                         </label>
                         <Input
                           className="form-control-alternative"
                           id="input-fname"
                           required={true}
-                          placeholder="Total Trips"
+                          placeholder={t("Total Trips")}
                           type="number"
                           value={quote.totalTrips}
                           name="totalTrips"
@@ -508,13 +511,13 @@ const QuotesForm = ({
                           <span style={{ color: "red" }}>
                             {quote.totalPrice ? "" : "*"}
                           </span>{" "}
-                          Amount including Vat
+                          {t("Amount including Vat")}
                         </label>
                         <Input
                           className="form-control-alternative"
                           id="input-fname"
                           required={true}
-                          placeholder="Total Price"
+                          placeholder={t("Total Price")}
                           type="text"
                           disabled={!quote?.totalTrips}
                           value={quote.totalPrice}
@@ -532,12 +535,12 @@ const QuotesForm = ({
                           <span style={{ color: "red" }}>
                             {quote.vat ? "" : "*"}
                           </span>{" "}
-                          Total Taxes
+                          {t("Total Taxes")}
                         </label>
                         <Input
                           className="form-control-alternative"
                           id="input-lname"
-                          placeholder="VAT"
+                          placeholder={t("VAT")}
                           type="text"
                           readOnly
                           value={parseInt(quote.vat).toFixed(2)}
@@ -557,12 +560,12 @@ const QuotesForm = ({
                           <span style={{ color: "red" }}>
                             {quote.startDate ? "" : "*"}
                           </span>{" "}
-                          Start Date
+                          {t("Start Date")}
                         </label>
                         <Input
                           className="form-control-alternative"
                           id="input-lname"
-                          placeholder="Quote Number"
+                          placeholder={t("Quote Number")}
                           type="date"
                           value={quote.startDate?.split("T")[0]}
                           name="startDate"
@@ -579,12 +582,12 @@ const QuotesForm = ({
                           <span style={{ color: "red" }}>
                             {quote.endDate ? "" : "*"}
                           </span>{" "}
-                          End Date
+                          {t("End Date")}
                         </label>
                         <Input
                           className="form-control-alternative"
                           id="input-lname"
-                          placeholder="Quote Number"
+                          placeholder={t("Quote Number")}
                           type="date"
                           value={quote.endDate?.split("T")[0]}
                           name="endDate"
@@ -620,7 +623,7 @@ const QuotesForm = ({
                           className="form-control-label"
                           htmlFor="input-lname"
                         >
-                          Docusign Link
+                          {t("Docusign Link")}
                         </label>
                         <Input
                           className="form-control-alternative"
@@ -641,12 +644,12 @@ const QuotesForm = ({
                           className="form-control-label"
                           htmlFor="input-lname"
                         >
-                          Trip Description
+                          {t("Trip Description")}
                         </label>
                         <Input
                           className="form-control-alternative"
                           id="input-lname"
-                          placeholder="Add Description"
+                          placeholder={t("Add Description")}
                           type="textarea"
                           value={quote.description}
                           name="description"
@@ -658,12 +661,12 @@ const QuotesForm = ({
                           className="form-control-label"
                           htmlFor="input-lname"
                         >
-                          Add comment
+                          {t("Add comment")}
                         </label>
                         <Input
                           className="form-control-alternative"
                           id="input-lname"
-                          placeholder="Add Comment"
+                          placeholder={t("Add Comment")}
                           type="textarea"
                           value={quote.comment}
                           name="comment"
@@ -679,19 +682,19 @@ const QuotesForm = ({
         </ModalBody>
         <ModalFooter>
           <Button color="primary" onClick={handleSubmit}>
-            Save
+            {t("Save")}
           </Button>
           {isEditing && (
             <>
               <Button color="primary" onClick={handleDuplicate}>
-                Duplicate
+                {t("Duplicate")}
               </Button>
               <Button color="danger" onClick={handleDelete}>
-                Delete
+                {t("Delete")}
               </Button>
             </>
           )}{" "}
-          <Button onClick={handleModal}>Cancel</Button>
+          <Button onClick={handleModal}>{t("Cancel")}</Button>
         </ModalFooter>
       </Modal>
     </>

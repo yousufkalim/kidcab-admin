@@ -18,6 +18,7 @@ import {
 import moment from "moment";
 import View from "../../components/view";
 import FilePicker from "../../components/Form/FilePicker";
+import { useTranslation } from "react-i18next";
 
 // core components
 let current = moment();
@@ -29,6 +30,7 @@ const VehicleForm = ({
   isEditing,
   autoRefresh,
 }) => {
+  const { t, i18n } = useTranslation();
   const [drivers, setDrivers] = useState([]);
   const [vehicle, setVehicle] = useState({
     vehicle_name: "",
@@ -190,14 +192,14 @@ const VehicleForm = ({
     <>
       <Modal isOpen={openModal} size="xl" centered>
         <ModalHeader charCode="X" toggle={handleModal}>
-          {isEditing ? "Edit" : "Add"} Vehicle
+          {isEditing ? "Edit" : "Add"} {t("Vehicle")}
         </ModalHeader>
         <ModalBody>
           <Row>
             <Col>
               <Form>
                 <h6 className="heading-small text-muted mb-4">
-                  Vehicle information
+                  {t("Vehicle information")}
                 </h6>
 
                 <div className="pl-lg-4">
@@ -211,13 +213,13 @@ const VehicleForm = ({
                           <span style={{ color: "red" }}>
                             {vehicle.vehicle_name ? "" : "*"}
                           </span>{" "}
-                          Vehicle Name
+                          {t("Vehicle Name")}
                         </label>
                         <Input
                           className="form-control-alternative"
                           id="input-fname"
                           required={true}
-                          placeholder="Vehicle Name"
+                          placeholder={t("Vehicle Name")}
                           type="text"
                           value={vehicle.vehicle_name}
                           name="vehicle_name"
@@ -234,7 +236,7 @@ const VehicleForm = ({
                           <span style={{ color: "red" }}>
                             {vehicle.brand ? "" : "*"}
                           </span>{" "}
-                          Brand
+                          {t("Brand")}
                         </Label>
                         <Input
                           id="exampleSelect"
@@ -242,7 +244,7 @@ const VehicleForm = ({
                           value={vehicle.brand}
                           onChange={handleInputChange}
                           className="form-control-alternative"
-                          placeholder="Enter Vehicle Brand"
+                          placeholder={t("Enter Vehicle Brand")}
                           type="text"
                         />
                       </FormGroup>
@@ -256,7 +258,7 @@ const VehicleForm = ({
                           <span style={{ color: "red" }}>
                             {vehicle.model ? "" : "*"}
                           </span>{" "}
-                          Model
+                          {t("Model")}
                         </Label>
                         <Input
                           id="exampleSelect"
@@ -264,7 +266,7 @@ const VehicleForm = ({
                           value={vehicle.model}
                           onChange={handleInputChange}
                           className="form-control-alternative"
-                          placeholder="Enter Vehicle Model"
+                          placeholder={t("Enter Vehicle Model")}
                           type="text"
                         />
                       </FormGroup>
@@ -277,10 +279,11 @@ const VehicleForm = ({
                           for="exampleSelect"
                           className="form-control-label"
                         >
-                          Select Driver
+                          {t("Select Driver")}
                         </Label>
                         {drivers && (
                           <Select
+                          placeholder={t("Select...")}
                             onChange={handleDriverChange}
                             name="client"
                             hideSelectedOptions
@@ -305,7 +308,7 @@ const VehicleForm = ({
                           for="exampleSelect"
                           className="form-control-label"
                         >
-                          Select Engine Type
+                          {t("Select Engine Type")}
                         </Label>
                         <Input
                           onChange={handleInputChange}
@@ -315,11 +318,11 @@ const VehicleForm = ({
                           type="select"
                         >
                           <option value="Thermal" selected>
-                            thermal
+                            {t("thermal")}
                           </option>
-                          <option value="hybrid">Hybrid</option>
-                          <option value="electric">Electric</option>
-                          <option value="hydrogen">Hydrogen</option>
+                          <option value="hybrid">{t("Hybrid")}</option>
+                          <option value="electric">{t("Electric")}</option>
+                          <option value="hydrogen">{t("Hydrogen")}</option>
                         </Input>
                       </FormGroup>
                     </Col>
@@ -334,7 +337,7 @@ const VehicleForm = ({
                           <span style={{ color: "red" }}>
                             {vehicle.color ? "" : "*"}
                           </span>{" "}
-                          Color
+                          {t("Color")}
                         </Label>
                         <Input
                           id="exampleSelect"
@@ -342,7 +345,7 @@ const VehicleForm = ({
                           value={vehicle.color}
                           onChange={handleInputChange}
                           className="form-control-alternative"
-                          placeholder="Enter Vehicle Color"
+                          placeholder={t("Enter Vehicle Color")}
                           type="text"
                         />
                       </FormGroup>
@@ -356,14 +359,14 @@ const VehicleForm = ({
                           <span style={{ color: "red" }}>
                             {vehicle.inspection_date ? "" : "*"}
                           </span>{" "}
-                          Last technical inspection
+                          {t("Last technical inspection")}
                         </Label>
                         <Input
                           className="form-control-alternative"
                           id="input-date"
                           name="inspection_date"
                           required={true}
-                          placeholder="Enter last technical inspection date"
+                          placeholder={t("Enter last technical inspection date")}
                           value={vehicle?.inspection_date?.split("T")[0]}
                           onChange={handleInputChange}
                           type="date"
@@ -380,7 +383,7 @@ const VehicleForm = ({
                           <span style={{ color: "red" }}>
                             {vehicle.number_plate ? "" : "*"}
                           </span>{" "}
-                          Number Plate
+                          {t("Number Plate")}
                         </Label>
                         <Input
                           id="exampleSelect"
@@ -388,7 +391,7 @@ const VehicleForm = ({
                           value={vehicle.number_plate}
                           onChange={handleInputChange}
                           className="form-control-alternative"
-                          placeholder="Enter Number Plate"
+                          placeholder={t("Enter Number Plate")}
                           type="text"
                         />
                       </FormGroup>
@@ -398,7 +401,7 @@ const VehicleForm = ({
                     <Col lg="6">
                       <FormGroup>
                         <label className="form-control-label">
-                          Add Gray Card <View url={docs?.graycard} />
+                          {t("Add Gray Card")} <View url={docs?.graycard} />
                         </label>
                         <FilePicker
                           lableClassName="form-control-label"
@@ -424,14 +427,14 @@ const VehicleForm = ({
                           {/* <span style={{ color: "red" }}>
                             {vehicle.inspection_expiry_date ? "" : "*"}
                           </span>{" "} */}
-                          Gray Valid Till
+                          {t("Gray Valid Till")}
                         </label>
 
                         <Input
                           className="form-control-alternative"
                           id="input-date"
                           required={true}
-                          placeholder="Enter validity date"
+                          placeholder={t("Enter validity date")}
                           type="date"
                           value={vehicle?.graycard_expiry_date?.split("T")[0]}
                           name="graycard_expiry_date"
@@ -448,7 +451,7 @@ const VehicleForm = ({
                           <span style={{ color: "red" }}>
                             {vehicle.insurance_certificate ? "" : "*"}
                           </span>{" "}
-                          Add vehicle Insurance Certificate{" "}
+                          {t("Add vehicle Insurance Certificate")}{" "}
                           <View url={docs.insurance_certificate} />
                         </label>
 
@@ -476,14 +479,14 @@ const VehicleForm = ({
                           <span style={{ color: "red" }}>
                             {vehicle.insurance_expiry_date ? "" : "*"}
                           </span>{" "}
-                          Insurance Valid Till
+                          {t("Insurance Valid Till")}
                         </label>
 
                         <Input
                           className="form-control-alternative"
                           id="input-date"
                           required={true}
-                          placeholder="Enter validity date"
+                          placeholder={t("Enter validity date")}
                           type="date"
                           value={vehicle?.insurance_expiry_date?.split("T")[0]}
                           name="insurance_expiry_date"
@@ -495,7 +498,7 @@ const VehicleForm = ({
                     <Col lg="6">
                       <FormGroup>
                         <label className="form-control-label">
-                          Add Registration Card{" "}
+                          {t("Add Registration Card")}{" "}
                           <View url={docs?.registration_card} />
                         </label>
 
@@ -522,14 +525,14 @@ const VehicleForm = ({
         </ModalBody>
         <ModalFooter>
           <Button color="primary" onClick={handleSubmit}>
-            Save
+            {t("Save")}
           </Button>{" "}
           {isEditing && (
             <Button color="danger" onClick={handleDelete}>
-              Delete
+              {t("Delete")}
             </Button>
           )}{" "}
-          <Button onClick={handleModal}>Cancel</Button>
+          <Button onClick={handleModal}>{t("Cancel")}</Button>
         </ModalFooter>
       </Modal>
     </>

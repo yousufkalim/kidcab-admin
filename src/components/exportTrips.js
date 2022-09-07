@@ -12,9 +12,11 @@ import {
   DropdownItem,
   Button,
 } from "reactstrap";
+import { useTranslation } from "react-i18next";
 
 // Component
 export const ExportTrips = ({ dropDownItem, trips }) => {
+  const { t, i18n } = useTranslation();
   const [exportItem, setExportItem] = useState("");
 
   // File Type
@@ -170,7 +172,7 @@ export const ExportTrips = ({ dropDownItem, trips }) => {
         handleExportPdf();
       }}
     >
-      <i className="ni ni-collection"></i> Export Pdf&nbsp;
+      <i className="ni ni-collection"></i> {t("Export Pdf")}&nbsp;
     </Button>
   );
 };

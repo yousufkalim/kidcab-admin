@@ -2,8 +2,10 @@ import { useState } from "react";
 import axios from "axios";
 import Autocomplete from "react-autocomplete";
 import { SetAuthToken } from "variables/auth";
+import { useTranslation } from "react-i18next";
 
 function AddressInput({ label, address, setAddress, optional }) {
+  const { t, i18n } = useTranslation();
   let [addresses, setAddresses] = useState([]);
 
   // Get All Address in drop down List from API
@@ -84,7 +86,7 @@ function AddressInput({ label, address, setAddress, optional }) {
         {!optional && (
           <span style={{ color: "red" }}>{address?.label ? "" : "*"}</span>
         )}
-        {label}
+        {t(label)}
       </label>
 
       {/* Semi automated field for address */}
@@ -101,7 +103,7 @@ function AddressInput({ label, address, setAddress, optional }) {
             <input
               className="form-control form-control-alternative"
               id={`input-address-${label.split(" ").join("")}`}
-              placeholder={label}
+              placeholder={t(label)}
               {...props}
             />
           );

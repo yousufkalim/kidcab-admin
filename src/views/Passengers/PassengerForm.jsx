@@ -14,6 +14,7 @@ import {
   Col,
   Label,
 } from "reactstrap";
+import { useTranslation } from "react-i18next";
 // core components
 
 const PassengerForm = ({
@@ -23,6 +24,7 @@ const PassengerForm = ({
   isEditing,
   autoRefresh,
 }) => {
+  const { t, i18n } = useTranslation();
   const [user, setUser] = useState({
     firstName: "",
     lastName: "",
@@ -112,14 +114,14 @@ const PassengerForm = ({
     <>
       <Modal isOpen={openModal} size="xl" centered>
         <ModalHeader charCode="X" toggle={handleModal}>
-          {isEditing ? "Edit" : "Add"} Passenger
+          {isEditing ? "Edit" : "Add"} {t("Passenger")}
         </ModalHeader>
         <ModalBody>
           <Row>
             <Col>
               <Form>
                 <h6 className="heading-small text-muted mb-4">
-                  Passenger information
+                  {t("Passenger information")}
                 </h6>
 
                 <div className="pl-lg-4">
@@ -133,13 +135,13 @@ const PassengerForm = ({
                           <span style={{ color: "red" }}>
                             {user.firstName ? "" : "*"}
                           </span>{" "}
-                          First Name
+                          {t("First Name")}
                         </label>
                         <Input
                           className="form-control-alternative"
                           id="input-fname"
                           required={true}
-                          placeholder="First Name"
+                          placeholder={t("First Name")}
                           type="text"
                           value={user.firstName}
                           name="firstName"
@@ -156,7 +158,7 @@ const PassengerForm = ({
                           <span style={{ color: "red" }}>
                             {user.lastName ? "" : "*"}
                           </span>{" "}
-                          Last Name
+                          {t("Last Name")}
                         </label>
                         <Input
                           className="form-control-alternative"
@@ -180,7 +182,7 @@ const PassengerForm = ({
                           <span style={{ color: "red" }}>
                             {user.client ? "" : "*"}
                           </span>{" "}
-                          Select Client
+                          {t("Select Client")}
                         </Label>
                         <Input
                           id="exampleSelect"
@@ -191,7 +193,7 @@ const PassengerForm = ({
                           type="select"
                         >
                           <option value="client" selected>
-                            Select One Client
+                            {t("Select One Client")}
                           </option>
                           {clients ? (
                             clients.map((client) => (
@@ -200,7 +202,7 @@ const PassengerForm = ({
                               </option>
                             ))
                           ) : (
-                            <option disabled>There is no Client</option>
+                            <option disabled>{t("There is no Client")}</option>
                           )}
                         </Input>
                       </FormGroup>
@@ -214,7 +216,7 @@ const PassengerForm = ({
                           <span style={{ color: "red" }}>
                             {user.relationship ? "" : "*"}
                           </span>{" "}
-                          Relationship
+                          {t("Relationship")}
                         </Label>
                         <Input
                           id="exampleSelect"
@@ -225,17 +227,17 @@ const PassengerForm = ({
                           onChange={handleInputChange}
                         >
                           <option value="self" selected>
-                            Self
+                            {t('Self')}
                           </option>
-                          <option value="son">Son</option>
-                          <option value="daughter">Daughter</option>
-                          <option value="brother">Brother</option>
-                          <option value="sister">Sister</option>
-                          <option value="father">Father</option>
-                          <option value="mother">Mother</option>
-                          <option value="uncle">Uncle</option>
-                          <option value="aunt">Aunt</option>
-                          <option value="other">other</option>
+                          <option value="son">{t("Son")}</option>
+                          <option value="daughter">{t("Daughter")}</option>
+                          <option value="brother">{t("Brother")}</option>
+                          <option value="sister">{t("Sister")}</option>
+                          <option value="father">{t("Father")}</option>
+                          <option value="mother">{t("Mother")}</option>
+                          <option value="uncle">{t("Uncle")}</option>
+                          <option value="aunt">{t("Aunt")}</option>
+                          <option value="other">{t("other")}</option>
                         </Input>
                       </FormGroup>
                     </Col>
@@ -247,14 +249,14 @@ const PassengerForm = ({
         </ModalBody>
         <ModalFooter>
           <Button color="primary" onClick={handleSubmit}>
-            Save
+            {t("Save")}
           </Button>{" "}
           {isEditing && (
             <Button color="danger" onClick={handleDelete}>
-              Delete
+              {t("Delete")}
             </Button>
           )}{" "}
-          <Button onClick={handleModal}>Cancel</Button>
+          <Button onClick={handleModal}>{t("Cancel")}</Button>
         </ModalFooter>
       </Modal>
     </>

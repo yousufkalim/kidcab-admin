@@ -17,8 +17,10 @@ import DriverRow from "./DriverRow";
 import { useState } from "react";
 import { useEffect } from "react";
 import api from "../../api/index";
+import { useTranslation } from "react-i18next";
 
 const DriverList = () => {
+  const { t, i18n } = useTranslation();
   const [openModal, setOpenModal] = useState(false);
   const [users, setUsers] = useState();
   const [user, setUser] = useState({
@@ -94,7 +96,7 @@ const DriverList = () => {
             <Card className="shadow">
               <CardHeader className="border-0">
                 <div className="d-flex justify-content-between ">
-                  <h3 className="mb-0">Drivers List</h3>
+                  <h3 className="mb-0">{t("Drivers List")}</h3>
                   <Button
                     color="primary"
                     href="#pablo"
@@ -102,18 +104,18 @@ const DriverList = () => {
                     size="md"
                   >
                     <i className="ni ni-fat-add"></i>
-                    Add Driver
+                    {t("Add Driver")}
                   </Button>
                 </div>
               </CardHeader>
               <Table className="align-items-center table-flush my-3" responsive>
                 <thead className="thead-light">
                   <tr>
-                    <th scope="col">Name</th>
-                    <th scope="col">Role</th>
-                    <th scope="col">Email</th>
-                    <th scope="col">Phone Number</th>
-                    <th scope="col">No. of Vehicles</th>
+                    <th scope="col">{t("Name")}</th>
+                    <th scope="col">{t("Role")}</th>
+                    <th scope="col">{t("Email")}</th>
+                    <th scope="col">{t("Phone Number")}</th>
+                    <th scope="col">{t("No. of Vehicles")}</th>
                     <th scope="col" />
                   </tr>
                 </thead>
@@ -128,7 +130,7 @@ const DriverList = () => {
                     ))
                   ) : (
                     <tr className="h1 mx-lg-auto text-center">
-                      <td>No Driver Found</td>
+                      <td>{t("No Driver Found")}</td>
                     </tr>
                   )}
                 </tbody>

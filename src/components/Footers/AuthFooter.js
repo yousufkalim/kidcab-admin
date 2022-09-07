@@ -1,7 +1,9 @@
 // reactstrap components
 import { NavItem, NavLink, Nav, Container, Row, Col } from "reactstrap";
+import { useTranslation } from "react-i18next";
 
 const Login = () => {
+  const { t, i18n } = useTranslation();
   return (
     <>
       <footer className="py-5">
@@ -35,7 +37,7 @@ const Login = () => {
                     href="https://www.creative-tim.com/presentation?ref=adr-auth-footer"
                     target="_blank"
                   >
-                    About Us
+                    {t("About Us")}
                   </NavLink>
                 </NavItem>
               </Nav>
