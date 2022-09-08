@@ -22,7 +22,7 @@ const App = () => {
 
   useEffect(() => {
     const { host } = window.location;
-    if (host === "www.kidcab.com") {
+    if (host === "admin.kidcab.fr") {
       i18n.changeLanguage("fr");
     }
   }, []);
