@@ -436,7 +436,7 @@ const DriverForm = ({
       {console.log(user, "d")}
       <Modal isOpen={openModal} size="xl" centered>
         <ModalHeader charCode="X" toggle={handleModal}>
-          {isEditing ? "Edit" : "Add"} {t("Driver")}
+          {isEditing ? t("Edit") : t("Add")} {t("Driver")}
         </ModalHeader>
         <ModalBody>
           <Row>
@@ -450,7 +450,7 @@ const DriverForm = ({
                     <Col lg="12">
                       <FormGroup style={{ width: "60%" }}>
                         <label className="form-control-label">
-                          {t("Add Profile Picture ")}<View url={docs.profile_pic} />
+                          {t("Add Profile Picture")}<View url={docs.profile_pic} />
                         </label>
 
                         <FilePicker

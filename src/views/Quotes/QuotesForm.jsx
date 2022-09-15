@@ -332,7 +332,7 @@ const QuotesForm = ({
     <>
       <Modal isOpen={openModal} size="xl" centered>
         <ModalHeader charCode="X" toggle={handleModal}>
-          {isEditing ? "Edit" : "Add"} {t("A Quote")}
+          {isEditing ? t("Edit") : t("Add")} {t("A Quote")}
         </ModalHeader>
         <ModalBody>
           <Row>
