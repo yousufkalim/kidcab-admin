@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from "react";
-import moment from "moment";
-import { Row, Col, Label, Input, Spinner, FormGroup } from "reactstrap";
-import { Calendar, momentLocalizer, Views } from "react-big-calendar";
-import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
-import "react-big-calendar/lib/css/react-big-calendar.css";
-import "react-big-calendar/lib/addons/dragAndDrop/styles.css";
-import "moment/locale/fr";
-import api from "../../api/index";
-import { useTranslation } from "react-i18next";
+import React, { useEffect, useState } from 'react';
+import moment from 'moment';
+import { Row, Col, Label, Input, Spinner, FormGroup } from 'reactstrap';
+import { Calendar, momentLocalizer, Views } from 'react-big-calendar';
+import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
+import 'react-big-calendar/lib/css/react-big-calendar.css';
+import 'react-big-calendar/lib/addons/dragAndDrop/styles.css';
+import 'moment/locale/fr';
+import api from '../../api/index';
+import { useTranslation } from 'react-i18next';
 
-moment.locale("fr");
-moment.locale("es-es", {
+moment.locale('fr');
+moment.locale('es-es', {
   week: {
     dow: 1, //Monday is the first day of the week.
   },
@@ -20,54 +20,53 @@ const DragAndDropCalendar = withDragAndDrop(Calendar);
 const localizer = momentLocalizer(moment);
 
 let formats = {
-  dateFormat: "DD",
-  monthHeaderFormat: "DD/MM/YYYY",
-  dayHeaderFormat: "DD/MM/YYYY",
-  dayRangeHeaderFormat: "DD/MM/YYYY",
-  timeGutterFormat: (date, culture, localizer) =>
-    localizer.format(date, "HH:mm", culture),
+  dateFormat: 'DD',
+  monthHeaderFormat: 'DD/MM/YYYY',
+  dayHeaderFormat: 'DD/MM/YYYY',
+  dayRangeHeaderFormat: 'DD/MM/YYYY',
+  timeGutterFormat: (date, culture, localizer) => localizer.format(date, 'HH:mm', culture),
   eventTimeRangeFormat: ({ start, end }, culture, localizer) =>
-    localizer.format(start, "HH:mm") + "-" + localizer.format(end, "HH:mm"),
+    localizer.format(start, 'HH:mm') + '-' + localizer.format(end, 'HH:mm'),
 };
 //change calender texts to french
 
 const messagesFrench = {
-  allDay: "Journée",
-  previous: "<",
-  next: ">",
+  allDay: 'Journée',
+  previous: '<',
+  next: '>',
   today: "Aujourd'hui",
-  month: "Mois",
-  week: "Semaine",
-  day: "Jour",
-  agenda: "Événements à venir",
-  date: "Date",
-  time: "Heure",
-  event: "Événement",
-  work_week: "Semaine de travail",
+  month: 'Mois',
+  week: 'Semaine',
+  day: 'Jour',
+  agenda: 'Événements à venir',
+  date: 'Date',
+  time: 'Heure',
+  event: 'Événement',
+  work_week: 'Semaine de travail',
   showMore: (total) => `+ ${total} événement(s) supplémentaire(s)`,
 };
 
 const eventsStyle = (event) => {
-  var bgcolor = "";
+  var bgcolor = '';
   // condition for setting color in divs in calendar head
-  if (event.status === "confirmed") {
-    bgcolor = "#59d455";
-  } else if (event.status === "cancelled") {
-    bgcolor = "#ff545d";
-  } else if (event.status === "pending") {
-    bgcolor = "#bababa";
-  } else if (event.status === "completed") {
-    bgcolor = "#3da8ff";
+  if (event.status === 'confirmed') {
+    bgcolor = '#59d455';
+  } else if (event.status === 'cancelled') {
+    bgcolor = '#ff545d';
+  } else if (event.status === 'pending') {
+    bgcolor = '#bababa';
+  } else if (event.status === 'completed') {
+    bgcolor = '#3da8ff';
   } else {
-    bgcolor = "#bababa";
+    bgcolor = '#bababa';
   }
   const style = {
     backgroundColor: bgcolor,
-    clear: "both",
-    display: "block",
-    borderRadius: "4px",
-    lineHeight: "16px",
-    border: "2px solid #fff",
+    clear: 'both',
+    display: 'block',
+    borderRadius: '4px',
+    lineHeight: '16px',
+    border: '2px solid #fff',
   };
   return {
     style: style,
@@ -89,7 +88,7 @@ const ScheduleCalendar = (props) => {
 
   const getAllTrips = async () => {
     try {
-      const res = await api("get", "trips");
+      const res = await api('get', 'trips');
 
       let allEvents = [];
 
@@ -103,35 +102,31 @@ const ScheduleCalendar = (props) => {
           end: end,
           status: e.status,
           clientId: e.client._id,
-          driverId: e.assigned_drivers
-            ? e.assigned_drivers.length != 0
-              ? e.assigned_drivers[0]._id
-              : ""
-            : "",
+          driverId: e.assigned_drivers ? (e.assigned_drivers.length != 0 ? e.assigned_drivers[0]._id : '') : '',
         });
       });
       setTrips(allEvents);
       setEvents(allEvents);
     } catch (error) {
-      console.log("error", error);
+      console.log('error', error);
     }
   };
 
   const getAllDrivers = async () => {
     try {
-      const res = await api("get", "drivers");
+      const res = await api('get', 'drivers');
       setDrivers(res.data.drivers);
     } catch (error) {
-      console.log("error", error);
+      console.log('error', error);
     }
   };
   const getAllClients = async () => {
     try {
-      const res = await api("get", "users");
+      const res = await api('get', 'users');
 
       setClients(res.data.users);
     } catch (error) {
-      console.log("error", error);
+      console.log('error', error);
     }
   };
 
@@ -143,15 +138,15 @@ const ScheduleCalendar = (props) => {
     nextEvents.splice(idx, 1, updatedEvent);
     setEvents(nextEvents);
     try {
-      const res = await api("put", `trips/event/${event.id}`, { date: start });
+      const res = await api('put', `trips/event/${event.id}`, { date: start });
     } catch (error) {
       setEvents(tempEvents);
-      console.log("error", error);
+      console.log('error', error);
     }
   };
 
   const onDriverSelect = (e) => {
-    if (e.target.value === "all") {
+    if (e.target.value === 'all') {
       setEvents(trips);
     } else {
       let filteredEvents = trips.map((event) => {
@@ -164,7 +159,7 @@ const ScheduleCalendar = (props) => {
   };
 
   const onClientSelect = (e) => {
-    if (e.target.value === "all") {
+    if (e.target.value === 'all') {
       setEvents(trips);
     } else {
       let filteredEvents = trips.map((event) => {
@@ -179,13 +174,13 @@ const ScheduleCalendar = (props) => {
   return (
     <div
       style={{
-        width: "100%",
-        height: "80vh",
-        paddingTop: "30px",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
+        width: '100%',
+        height: '80vh',
+        paddingTop: '30px',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
       }}
     >
       {events.length === 0 ? (
@@ -194,24 +189,24 @@ const ScheduleCalendar = (props) => {
         <>
           <div
             style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              textAlign: "center",
-              width: "98%",
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              textAlign: 'center',
+              width: '98%',
               // marginLeft: "26px",
-              marginTop: "26px",
+              marginTop: '26px',
             }}
           >
             {drivers.length > 0 && (
               <FormGroup
                 style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  margin: "20px",
-                  textAlign: "center",
-                  width: "20%",
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  margin: '20px',
+                  textAlign: 'center',
+                  width: '20%',
                 }}
               >
                 <Input
@@ -222,13 +217,17 @@ const ScheduleCalendar = (props) => {
                   onChange={(e) => onDriverSelect(e)}
                 >
                   <option disabled={true} value="" selected>
-                    {t("Drivers")}
+                    {t('Drivers')}
                   </option>
-                  <option value="all">{t("All Drivers")}</option>
+                  <option value="all">{t('All Drivers')}</option>
                   {drivers.map((driver) => {
                     return (
                       <option value={driver._id}>
-                        {driver.first_name + driver.last_name}
+                        {driver.first_name[0].toUpperCase() +
+                          driver.first_name.substring(1) +
+                          ' ' +
+                          driver.last_name[0].toUpperCase() +
+                          driver.last_name.substring(1)}
                       </option>
                     );
                   })}
@@ -238,108 +237,108 @@ const ScheduleCalendar = (props) => {
 
             <div
               style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
               }}
             >
               <div
                 style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
                 }}
               >
                 <div
                   style={{
-                    backgroundColor: "#59d455",
-                    width: "11px",
-                    height: "11px",
-                    borderRadius: "2px",
-                    marginRight: "4px",
+                    backgroundColor: '#59d455',
+                    width: '11px',
+                    height: '11px',
+                    borderRadius: '2px',
+                    marginRight: '4px',
                   }}
                 ></div>
                 <div
                   style={{
-                    fontSize: "12px",
+                    fontSize: '12px',
                   }}
                 >
-                  {t("Confirmed")}
+                  {t('Confirmed')}
                 </div>
               </div>
               <div
                 style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  marginLeft: "10px",
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  marginLeft: '10px',
                 }}
               >
                 <div
                   style={{
-                    backgroundColor: "#ff545d",
-                    width: "11px",
-                    height: "11px",
-                    borderRadius: "2px",
-                    marginRight: "4px",
+                    backgroundColor: '#ff545d',
+                    width: '11px',
+                    height: '11px',
+                    borderRadius: '2px',
+                    marginRight: '4px',
                   }}
                 ></div>
                 <div
                   style={{
-                    fontSize: "12px",
+                    fontSize: '12px',
                   }}
                 >
-                  {t("Cancelled")}
+                  {t('Cancelled')}
                 </div>
               </div>
               <div
                 style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  marginLeft: "10px",
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  marginLeft: '10px',
                 }}
               >
                 <div
                   style={{
-                    backgroundColor: "#bababa",
-                    width: "11px",
-                    height: "11px",
-                    borderRadius: "2px",
-                    marginRight: "4px",
+                    backgroundColor: '#bababa',
+                    width: '11px',
+                    height: '11px',
+                    borderRadius: '2px',
+                    marginRight: '4px',
                   }}
                 ></div>
                 <div
                   style={{
-                    fontSize: "12px",
+                    fontSize: '12px',
                   }}
                 >
-                  {t("Pending")}
+                  {t('Pending')}
                 </div>
               </div>
               <div
                 style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  marginLeft: "10px",
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  marginLeft: '10px',
                 }}
               >
                 <div
                   style={{
-                    backgroundColor: "#3da8ff ",
-                    width: "11px",
-                    height: "11px",
-                    borderRadius: "2px",
-                    marginRight: "4px",
+                    backgroundColor: '#3da8ff ',
+                    width: '11px',
+                    height: '11px',
+                    borderRadius: '2px',
+                    marginRight: '4px',
                   }}
                 ></div>
                 <div
                   style={{
-                    fontSize: "12px",
+                    fontSize: '12px',
                   }}
                 >
-                  {t("Completed")}
+                  {t('Completed')}
                 </div>
               </div>
             </div>
@@ -347,12 +346,12 @@ const ScheduleCalendar = (props) => {
             {clients.length > 0 && (
               <FormGroup
                 style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  margin: "20px",
-                  textAlign: "center",
-                  width: "20%",
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  margin: '20px',
+                  textAlign: 'center',
+                  width: '20%',
                 }}
               >
                 <Input
@@ -363,13 +362,17 @@ const ScheduleCalendar = (props) => {
                   onChange={(e) => onClientSelect(e)}
                 >
                   <option disabled={true} value="" selected>
-                    {t("Clients")}
+                    {t('Clients')}
                   </option>
-                  <option value="all">{t("All Clients")}</option>
+                  <option value="all">{t('All Clients')}</option>
                   {clients.map((client) => {
                     return (
                       <option value={client._id}>
-                        {client.first_name + client.last_name}
+                        {client.first_name[0].toUpperCase() +
+                          client.first_name.substring(1) +
+                          ' ' +
+                          client.last_name[0].toUpperCase() +
+                          client.last_name.substring(1)}
                       </option>
                     );
                   })}
@@ -387,7 +390,7 @@ const ScheduleCalendar = (props) => {
             formats={formats}
             localizer={localizer}
             defaultView={Views.WEEK}
-            style={{ width: "94%" }}
+            style={{ width: '94%' }}
             messages={messagesFrench}
             onEventDrop={(e) => moveEvent(e)}
             eventPropGetter={eventsStyle}

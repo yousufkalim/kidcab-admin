@@ -1,73 +1,55 @@
-import { useState, useEffect } from "react";
-import { toast } from "react-toastify";
-import api from "../../api";
-import Select from "react-select";
-import AddressInput from "components/Form/AddressInput";
-import {
-  Modal,
-  ModalBody,
-  ModalHeader,
-  ModalFooter,
-  Button,
-  FormGroup,
-  Form,
-  Input,
-  Row,
-  Col,
-  Label,
-} from "reactstrap";
-import { useTranslation } from "react-i18next";
-import moment from "moment";
+import { useState, useEffect } from 'react';
+import { toast } from 'react-toastify';
+import api from '../../api';
+import Select from 'react-select';
+import AddressInput from 'components/Form/AddressInput';
+import { Modal, ModalBody, ModalHeader, ModalFooter, Button, FormGroup, Form, Input, Row, Col, Label } from 'reactstrap';
+import { useTranslation } from 'react-i18next';
+import moment from 'moment';
 
 // core components
 
-const InvoiceForm = ({
-  openModal,
-  handleModal,
-  editUser,
-  isEditing,
-  autoRefresh,
-}) => {
+const InvoiceForm = ({ openModal, handleModal, editUser, isEditing, autoRefresh }) => {
   const { t, i18n } = useTranslation();
   const [user, setUser] = useState({
-    invoice_title: "",
-    issue_date: "",
-    totalPrice: "",
-    type: "client",
-    driver: "",
-    status: "pending",
-    comments: "",
-    client: "",
-    startDate: "",
-    endDate: "",
-    totalTrips: "",
-    unitPrice: "",
-    vat: "",
+    invoice_title: '',
+    issue_date: '',
+    totalPrice: '',
+    type: 'client',
+    driver: '',
+    status: 'pending',
+    comments: '',
+    client: '',
+    startDate: '',
+    endDate: '',
+    totalTrips: '',
+    unitPrice: '',
+    vat: '',
   });
 
   const [users, setUsers] = useState([]);
   const [drivers, setDrivers] = useState([]);
   let [startAddress, setStartAddress] = useState({
-    lat: "",
-    lng: "",
-    label: "",
-    label2: "",
-    city: "",
-    postal_code: "",
+    lat: '',
+    lng: '',
+    label: '',
+    label2: '',
+    city: '',
+    postal_code: '',
   });
   let [endAddress, setEndAddress] = useState({
-    lat: "",
-    lng: "",
-    label: "",
-    label2: "",
-    city: "",
-    postal_code: "",
+    lat: '',
+    lng: '',
+    label: '',
+    label2: '',
+    city: '',
+    postal_code: '',
   });
   useEffect(() => {
-    api("get", "users").then((res) => {
+    api('get', 'users').then((res) => {
       setUsers(res.data.users);
     });
-    api("get", "drivers").then((res) => {
+    api('get', 'drivers').then((res) => {
       setDrivers(res.data.drivers);
     });
 
@@ -94,14 +76,12 @@ const InvoiceForm = ({
   }, []);
 
   const handleInputChange = (e) => {
-    if (e.target.name === "totalTrips") {
+    if (e.target.name === 'totalTrips') {
       if (parseInt(e.target.value) < 1) {
-        return toast.error("Trips should be greater than 1");
+        return toast.error('Trips should be greater than 1');
       }
       if (isEditing) {
-        let UnitPrice =
-          (parseInt(user?.totalPrice) - parseInt(user?.vat)) /
-          parseInt(e.target.value);
+        let UnitPrice = (parseInt(user?.totalPrice) - parseInt(user?.vat)) / parseInt(e.target.value);
         setUser((user) => ({
           ...user,
           [e.target.name]: e.target.value,
@@ -110,10 +90,9 @@ const InvoiceForm = ({
         return;
       }
     }
-    if (e.target.name == "totalPrice") {
+    if (e.target.name == 'totalPrice') {
       let Vat = parseInt(e.target.value) * 0.2;
-      let UnitPrice =
-        (parseInt(e.target.value) - parseInt(Vat)) / parseInt(user?.totalTrips);
+      let UnitPrice = (parseInt(e.target.value) - parseInt(Vat)) / parseInt(user?.totalTrips);
       setUser((user) => ({
         ...user,
         [e.target.name]: e.target.value,
@@ -126,50 +105,45 @@ const InvoiceForm = ({
   };
 
   const handleUserChange = (e) => {
-    setUser({ ...user, client: e.value, driver: "" });
+    setUser({ ...user, client: e.value, driver: '' });
   };
   const handleDriverChange = (e) => {
-    setUser({ ...user, driver: e.value, client: "" });
+    setUser({ ...user, driver: e.value, client: '' });
   };
 
   const handleDelete = () => {
-    let method = "delete";
-    let uri = "invoices";
+    let method = 'delete';
+    let uri = 'invoices';
     if (editUser) {
-      method = "delete";
+      method = 'delete';
       uri = uri + `/${editUser._id}`;
     }
     api(method, uri).then((res) => {
       // eslint-disable-next-line eqeqeq
       if (res.status == 200) {
-        toast.success("Delete Successfully");
+        toast.success('Delete Successfully');
         handleModal();
         autoRefresh();
       } else {
-        toast.error("Delete Error", res.data.message);
+        toast.error('Delete Error', res.data.message);
       }
     });
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    let method = "post";
-    let uri = "invoices";
-    if (parseInt(user?.totalTrips) < 1 || user?.totalTrips == "") {
-      return toast.error("Trips should be greater than 1");
+    let method = 'post';
+    let uri = 'invoices';
+    if (parseInt(user?.totalTrips) < 1 || user?.totalTrips == '') {
+      return toast.error('Trips should be greater than 1');
     }
     if (parseInt(user?.totalTrips) > parseInt(user?.totalPrice)) {
-      return toast.error("Total Price should be greater  than total trips");
+      return toast.error('Total Price should be greater  than total trips');
     }
     if (new Date(user?.endDate) < new Date(user?.startDate)) {
-      return toast.error("end date must be greater than start date");
+      return toast.error('end date must be greater than start date');
     }
-    if (
-      user?.endDate == null ||
-      user?.endDate == " " ||
-      user?.startDate == null ||
-      user?.startDate == " "
-    ) {
-      return toast.error("Dates are mandatory");
+    if (user?.endDate == null || user?.endDate == ' ' || user?.startDate == null || user?.startDate == ' ') {
+      return toast.error('Dates are mandatory');
     }
     const tripInfo = {
       total_trips: user?.totalTrips,
@@ -180,55 +154,52 @@ const InvoiceForm = ({
       unit_price: user?.unitPrice,
     };
     const formData = {};
-    if (user?.type === "client") {
-      formData["client"] = user?.client;
+    if (user?.type === 'client') {
+      formData['client'] = user?.client;
     }
-    if (user?.type === "driver") {
-      formData["driver"] = user?.driver;
+    if (user?.type === 'driver') {
+      formData['driver'] = user?.driver;
     }
-    formData["invoice_title"] = user?.invoice_title;
-    formData["total_price"] = user?.totalPrice;
-    formData["issue_date"] = user?.issue_date;
-    formData["status"] = user?.status;
-    formData["type"] = user?.type;
-    formData["comments"] = user?.comments;
-    formData["vat"] = user?.vat;
-    formData["trip_info"] = JSON.stringify(tripInfo);
+    formData['invoice_title'] = user?.invoice_title;
+    formData['total_price'] = user?.totalPrice;
+    formData['issue_date'] = user?.issue_date;
+    formData['status'] = user?.status;
+    formData['type'] = user?.type;
+    formData['comments'] = user?.comments;
+    formData['vat'] = user?.vat;
+    formData['trip_info'] = JSON.stringify(tripInfo);
 
-    if (
-      startAddress.lat == endAddress.lat &&
-      startAddress.lng == endAddress.lng
-    ) {
-      return toast.error("Start and end address cant be same");
+    if (startAddress.lat == endAddress.lat && startAddress.lng == endAddress.lng) {
+      return toast.error('Start and end address cant be same');
     }
 
-    if (startAddress.lat == "" || endAddress.lng == "") {
-      return toast.error("Adresses are mandatory");
+    if (startAddress.lat == '' || endAddress.lng == '') {
+      return toast.error('Adresses are mandatory');
     }
 
     if (editUser) {
-      method = "put";
+      method = 'put';
       uri = uri + `/${editUser._id}`;
     }
     api(method, uri, formData).then(async (res) => {
       if (res.status === 200) {
-        toast.success("Saved Successfully");
+        toast.success('Saved Successfully');
         handleModal();
         autoRefresh();
       } else {
-        toast.error("Save Error", res);
+        toast.error('Save Error', res);
       }
     });
   };
 
   const handleDuplicate = (e) => {
     e.preventDefault();
-    let method = "post";
-    let uri = "invoices";
+    let method = 'post';
+    let uri = 'invoices';
     if (user?.client?._id) {
-      user["client"] = user.client._id;
+      user['client'] = user.client._id;
     }
-    user["issue_date"] = moment(user.issue_date).format("YYYY-MM-DD");
+    user['issue_date'] = moment(user.issue_date).format('YYYY-MM-DD');
     const formData = {};
     const tripInfo = {
       total_trips: user?.totalTrips,
@@ -238,27 +209,27 @@ const InvoiceForm = ({
       end_address: endAddress,
       unit_price: user?.unitPrice,
     };
-    formData["invoice_title"] = user?.invoice_title;
-    formData["total_price"] = user?.totalPrice;
-    formData["issue_date"] = user?.issue_date;
-    formData["status"] = user?.status;
-    formData["type"] = user?.type;
-    formData["comments"] = user?.comments;
-    formData["vat"] = user?.vat;
-    formData["trip_info"] = JSON.stringify(tripInfo);
-    if (user?.type === "client") {
-      formData["client"] = user?.client;
+    formData['invoice_title'] = user?.invoice_title;
+    formData['total_price'] = user?.totalPrice;
+    formData['issue_date'] = user?.issue_date;
+    formData['status'] = user?.status;
+    formData['type'] = user?.type;
+    formData['comments'] = user?.comments;
+    formData['vat'] = user?.vat;
+    formData['trip_info'] = JSON.stringify(tripInfo);
+    if (user?.type === 'client') {
+      formData['client'] = user?.client;
     }
-    if (user?.type === "driver") {
-      formData["driver"] = user?.driver;
+    if (user?.type === 'driver') {
+      formData['driver'] = user?.driver;
     }
     api(method, uri, formData).then((res) => {
       if (res.status === 200) {
-        toast.success("Saved Successfully");
+        toast.success('Saved Successfully');
         handleModal();
         autoRefresh();
       } else {
-        toast.error("Save Error", res);
+        toast.error('Save Error', res);
       }
     });
   };
@@ -268,34 +239,26 @@ const InvoiceForm = ({
       {console.log(startAddress, endAddress)}
       <Modal isOpen={openModal} size="xl" centered>
         <ModalHeader charCode="X" toggle={handleModal}>
-          {isEditing ? "Edit" : "Add"} {t("Invoice")}
+          {isEditing ? 'Edit' : 'Add'} {t('Invoice')}
         </ModalHeader>
         <ModalBody>
           <Row>
             <Col>
               <Form>
-                <h6 className="heading-small text-muted mb-4">
-                  {t("Invoice information")}
-                </h6>
+                <h6 className="heading-small text-muted mb-4">{t('Invoice information')}</h6>
 
                 <div className="pl-lg-4">
                   <Row>
                     <Col lg="6">
                       <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-fname"
-                        >
-                          <span style={{ color: "red" }}>
-                            {user?.invoice_title ? "" : "*"}
-                          </span>{" "}
-                          {t("Invoice Title")}
+                        <label className="form-control-label" htmlFor="input-fname">
+                          <span style={{ color: 'red' }}>{user?.invoice_title ? '' : '*'}</span> {t('Invoice Title')}
                         </label>
                         <Input
                           className="form-control"
                           id="input-fname"
                           required={true}
-                          placeholder={t("Enter Invoice Title")}
+                          placeholder={t('Enter Invoice Title')}
                           type="text"
                           value={user.invoice_title}
                           name="invoice_title"
@@ -305,20 +268,14 @@ const InvoiceForm = ({
                     </Col>
                     <Col lg="6">
                       <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-lname"
-                        >
-                          <span style={{ color: "red" }}>
-                            {user?.issue_date ? "" : "*"}
-                          </span>{" "}
-                          {t("Issue Date")}
+                        <label className="form-control-label" htmlFor="input-lname">
+                          <span style={{ color: 'red' }}>{user?.issue_date ? '' : '*'}</span> {t('Issue Date')}
                         </label>
                         <Input
                           className="form-control"
                           id="input-lname"
                           type="date"
-                          value={user?.issue_date?.split("T")[0]}
+                          value={user?.issue_date?.split('T')[0]}
                           name="issue_date"
                           onChange={handleInputChange}
                         />
@@ -328,11 +285,8 @@ const InvoiceForm = ({
                   <Row>
                     <Col lg="4">
                       <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-tripType"
-                        >
-                          {t("Invoice Type")}
+                        <label className="form-control-label" htmlFor="input-tripType">
+                          {t('Invoice Type')}
                         </label>
                         <Input
                           id="input-trip_type"
@@ -348,18 +302,15 @@ const InvoiceForm = ({
                         </Input>
                       </FormGroup>
                     </Col>
-                    {user?.type == "client" ? (
+                    {user?.type == 'client' ? (
                       <Col lg="4">
                         <FormGroup>
-                          <Label
-                            for="exampleSelect"
-                            className="form-control-label"
-                          >
-                            {t("Select Client")}
+                          <Label for="exampleSelect" className="form-control-label">
+                            {t('Select Client')}
                           </Label>
                           {users && (
                             <Select
-                            placeholder={t("Select...")}
+                              placeholder={t('Select...')}
                               onChange={handleUserChange}
                               name="user"
                               hideSelectedOptions
@@ -367,17 +318,15 @@ const InvoiceForm = ({
                                 editUser && {
                                   value: user?.client?._id,
                                   label: `${
-                                    user?.client?.first_name +
-                                    " " +
-                                    user?.client?.last_name
-                                  }`,
+                                    editUser?.client?.first_name[0].toUpperCase() + editUser?.client?.first_name.substring(1)
+                                  } ${editUser?.client?.last_name[0].toUpperCase() + editUser?.client?.last_name.substring(1)}`,
                                 }
                               }
                               className="form-control-alternative"
                               options={users.map((user) => ({
                                 value: user?._id,
-                                label: `${
-                                  user?.first_name + " " + user?.last_name
+                                label: `${user?.first_name[0].toUpperCase() + user?.first_name.substring(1)} ${
+                                  user?.last_name[0].toUpperCase() + user?.last_name.substring(1)
                                 }`,
                               }))}
                             />
@@ -387,11 +336,8 @@ const InvoiceForm = ({
                     ) : (
                       <Col lg="4">
                         <FormGroup>
-                          <Label
-                            for="exampleSelect"
-                            className="form-control-label"
-                          >
-                            {t("Select Driver")}
+                          <Label for="exampleSelect" className="form-control-label">
+                            {t('Select Driver')}
                           </Label>
                           {drivers && (
                             <Select
@@ -402,18 +348,16 @@ const InvoiceForm = ({
                               defaultValue={
                                 editUser && {
                                   value: drivers?._id,
-                                  label: `${
-                                    user?.driver?.first_name +
-                                    " " +
-                                    user?.driver?.last_name
+                                  label: `${user?.driver?.first_name[0].toUpperCase() + user?.driver?.first_name.substring(1)} ${
+                                    user?.driver?.last_name[0].toUpperCase() + user?.driver?.last_name.substring(1)
                                   }`,
                                 }
                               }
                               className="form-control-alternative"
                               options={drivers.map((driver) => ({
                                 value: driver?._id,
-                                label: `${
-                                  driver?.first_name + " " + driver?.last_name
+                                label: `${driver?.first_name[0].toUpperCase() + driver?.first_name.substring(1)} ${
+                                  driver?.last_name[0].toUpperCase() + driver?.last_name.substring(1)
                                 }`,
                               }))}
                             />
@@ -423,14 +367,8 @@ const InvoiceForm = ({
                     )}
                     <Col lg="4">
                       <FormGroup>
-                        <Label
-                          for="exampleSelect"
-                          className="form-control-label"
-                        >
-                          <span style={{ color: "red" }}>
-                            {user.status ? "" : "*"}
-                          </span>{" "}
-                          {t("Status")}
+                        <Label for="exampleSelect" className="form-control-label">
+                          <span style={{ color: 'red' }}>{user.status ? '' : '*'}</span> {t('Status')}
                         </Label>
                         <Input
                           id="exampleSelect"
@@ -440,35 +378,27 @@ const InvoiceForm = ({
                           className="form-control"
                           type="select"
                         >
-                          <option value="pending">{t("Pending")}</option>
-                          <option value="paid">{t("Paid")}</option>
-                          <option value="late">{t("Late")}</option>
-                          <option value="cancelled">{t("Cancelled")}</option>
+                          <option value="pending">{t('Pending')}</option>
+                          <option value="paid">{t('Paid')}</option>
+                          <option value="late">{t('Late')}</option>
+                          <option value="cancelled">{t('Cancelled')}</option>
                         </Input>
                       </FormGroup>
                     </Col>
                   </Row>
                   <hr className="my-4" />
-                  <h6 className="heading-small text-muted mb-4">
-                    {t("Trip information")}
-                  </h6>
+                  <h6 className="heading-small text-muted mb-4">{t('Trip information')}</h6>
                   <Row>
                     <Col lg="4">
                       <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-fname"
-                        >
-                          <span style={{ color: "red" }}>
-                            {user.totalTrips ? "" : "*"}
-                          </span>{" "}
-                          {t("No. of Trips")}
+                        <label className="form-control-label" htmlFor="input-fname">
+                          <span style={{ color: 'red' }}>{user.totalTrips ? '' : '*'}</span> {t('No. of Trips')}
                         </label>
                         <Input
                           className="form-control-alternative"
                           id="input-fname"
                           required={true}
-                          placeholder={t("Total Trips")}
+                          placeholder={t('Total Trips')}
                           type="number"
                           value={user.totalTrips}
                           name="totalTrips"
@@ -478,20 +408,14 @@ const InvoiceForm = ({
                     </Col>
                     <Col lg="4">
                       <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-fname"
-                        >
-                          <span style={{ color: "red" }}>
-                            {user.totalPrice ? "" : "*"}
-                          </span>{" "}
-                          {t("Amount including Vat")}
+                        <label className="form-control-label" htmlFor="input-fname">
+                          <span style={{ color: 'red' }}>{user.totalPrice ? '' : '*'}</span> {t('Amount including Vat')}
                         </label>
                         <Input
                           className="form-control-alternative"
                           id="input-fname"
                           required={true}
-                          placeholder={t("Total Price")}
+                          placeholder={t('Total Price')}
                           type="text"
                           disabled={!user?.totalTrips}
                           value={user?.totalPrice}
@@ -502,19 +426,13 @@ const InvoiceForm = ({
                     </Col>
                     <Col lg="4">
                       <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-lname"
-                        >
-                          <span style={{ color: "red" }}>
-                            {user?.vat ? "" : "*"}
-                          </span>{" "}
-                          {t("Total Taxes")}
+                        <label className="form-control-label" htmlFor="input-lname">
+                          <span style={{ color: 'red' }}>{user?.vat ? '' : '*'}</span> {t('Total Taxes')}
                         </label>
                         <Input
                           className="form-control-alternative"
                           id="input-lname"
-                          placeholder={t("VAT")}
+                          placeholder={t('VAT')}
                           type="text"
                           readOnly
                           value={parseInt(user?.vat).toFixed(2)}
@@ -527,43 +445,31 @@ const InvoiceForm = ({
                   <Row>
                     <Col lg="6">
                       <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-lname"
-                        >
-                          <span style={{ color: "red" }}>
-                            {user.startDate ? "" : "*"}
-                          </span>{" "}
-                          {t("Start Date")}
+                        <label className="form-control-label" htmlFor="input-lname">
+                          <span style={{ color: 'red' }}>{user.startDate ? '' : '*'}</span> {t('Start Date')}
                         </label>
                         <Input
                           className="form-control-alternative"
                           id="input-lname"
-                          placeholder={t("Quote Number")}
+                          placeholder={t('Quote Number')}
                           type="date"
-                          value={user.startDate?.split("T")[0]}
+                          value={user.startDate?.split('T')[0]}
                           name="startDate"
                           onChange={handleInputChange}
                         />
                       </FormGroup>
-                    </Col>{" "}
+                    </Col>{' '}
                     <Col lg="6">
                       <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-lname"
-                        >
-                          <span style={{ color: "red" }}>
-                            {user.endDate ? "" : "*"}
-                          </span>{" "}
-                          {t("End Date")}
+                        <label className="form-control-label" htmlFor="input-lname">
+                          <span style={{ color: 'red' }}>{user.endDate ? '' : '*'}</span> {t('End Date')}
                         </label>
                         <Input
                           className="form-control-alternative"
                           id="input-lname"
-                          placeholder={t("Quote Number")}
+                          placeholder={t('Quote Number')}
                           type="date"
-                          value={user.endDate?.split("T")[0]}
+                          value={user.endDate?.split('T')[0]}
                           name="endDate"
                           onChange={handleInputChange}
                         />
@@ -573,37 +479,26 @@ const InvoiceForm = ({
                   <Row>
                     <Col lg="6">
                       <FormGroup>
-                        <AddressInput
-                          label="Start Address"
-                          address={startAddress}
-                          setAddress={setStartAddress}
-                        />
+                        <AddressInput label="Start Address" address={startAddress} setAddress={setStartAddress} />
                       </FormGroup>
                     </Col>
                     <Col lg="6">
                       <FormGroup>
-                        <AddressInput
-                          label="End Address"
-                          address={endAddress}
-                          setAddress={setEndAddress}
-                        />
+                        <AddressInput label="End Address" address={endAddress} setAddress={setEndAddress} />
                       </FormGroup>
                     </Col>
                   </Row>
                   <Row>
                     <Col lg="12">
                       <FormGroup>
-                        <Label
-                          for="exampleSelect"
-                          className="form-control-label"
-                        >
-                          {t("Comment")}
+                        <Label for="exampleSelect" className="form-control-label">
+                          {t('Comment')}
                         </Label>
                         <Input
                           id="exampleSelect"
                           name="comments"
                           className="form-control"
-                          placeholder={t("Enter comment here")}
+                          placeholder={t('Enter comment here')}
                           type="textarea"
                           value={user?.comments}
                           onChange={handleInputChange}
@@ -618,19 +513,19 @@ const InvoiceForm = ({
         </ModalBody>
         <ModalFooter>
           <Button color="primary" onClick={handleSubmit}>
-            {t("Save")}
-          </Button>{" "}
+            {t('Save')}
+          </Button>{' '}
           {isEditing && (
             <>
               <Button color="primary" onClick={handleDuplicate}>
-                {t("Duplicate")}
+                {t('Duplicate')}
               </Button>
               <Button color="danger" onClick={handleDelete}>
-                {t("Delete")}
+                {t('Delete')}
               </Button>
             </>
-          )}{" "}
-          <Button onClick={handleModal}>{t("Cancel")}</Button>
+          )}{' '}
+          <Button onClick={handleModal}>{t('Cancel')}</Button>
         </ModalFooter>
       </Modal>
     </>

@@ -1,41 +1,23 @@
-import { useState, useEffect } from "react";
-import { toast } from "react-toastify";
-import api from "../../api";
-import {
-  Modal,
-  ModalBody,
-  ModalHeader,
-  ModalFooter,
-  Button,
-  FormGroup,
-  Form,
-  Input,
-  Row,
-  Col,
-  Label,
-} from "reactstrap";
-import { useTranslation } from "react-i18next";
+import { useState, useEffect } from 'react';
+import { toast } from 'react-toastify';
+import api from '../../api';
+import { Modal, ModalBody, ModalHeader, ModalFooter, Button, FormGroup, Form, Input, Row, Col, Label } from 'reactstrap';
+import { useTranslation } from 'react-i18next';
 // core components
 
-const PassengerForm = ({
-  openModal,
-  handleModal,
-  editUser,
-  isEditing,
-  autoRefresh,
-}) => {
+const PassengerForm = ({ openModal, handleModal, editUser, isEditing, autoRefresh }) => {
   const { t, i18n } = useTranslation();
   const [user, setUser] = useState({
-    firstName: "",
-    lastName: "",
-    client: "",
-    relationship: "",
+    firstName: '',
+    lastName: '',
+    client: '',
+    relationship: '',
   });
 
   const [clients, setClients] = useState([]);
 
   useEffect(() => {
-    api("get", "users").then((res) => setClients(res.data.users));
+    api('get', 'users').then((res) => setClients(res.data.users));
     if (isEditing) {
       setUser({
         firstName: editUser?.first_name,
@@ -52,60 +34,60 @@ const PassengerForm = ({
   };
 
   const handleDelete = () => {
-    let method = "delete";
-    let uri = "passengers";
+    let method = 'delete';
+    let uri = 'passengers';
     if (editUser) {
-      method = "delete";
+      method = 'delete';
       uri = uri + `/${editUser._id}`;
     }
     api(method, uri).then((res) => {
       // eslint-disable-next-line eqeqeq
       if (res.status == 200) {
-        toast.success("Delete Successfully");
+        toast.success('Delete Successfully');
         handleModal();
         autoRefresh();
       } else {
-        toast.error("Delete Error", res.data.message);
+        toast.error('Delete Error', res.data.message);
       }
     });
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    let method = "post";
-    let uri = "passengers";
+    let method = 'post';
+    let uri = 'passengers';
 
     const formData = new FormData();
 
-    formData.append("first_name", user.firstName);
-    formData.append("last_name", user.lastName);
-    formData.append("client", user.client);
-    formData.append("relationship", user.relationship);
+    formData.append('first_name', user.firstName);
+    formData.append('last_name', user.lastName);
+    formData.append('client', user.client);
+    formData.append('relationship', user.relationship);
 
     //validations
-    if (user.firstName == "") {
-      return toast.error("Please enter your first name");
+    if (user.firstName == '') {
+      return toast.error('Please enter your first name');
     }
-    if (user.lastName == "") {
-      return toast.error("Please enter your last name");
+    if (user.lastName == '') {
+      return toast.error('Please enter your last name');
     }
-    if (user.client == "") {
-      return toast.error("Please enter client name");
+    if (user.client == '') {
+      return toast.error('Please enter client name');
     }
-    if (user.relationship == "") {
+    if (user.relationship == '') {
       return toast.error("Please enter passenger's relationship with client");
     }
 
     if (editUser) {
-      method = "put";
+      method = 'put';
       uri = uri + `/${editUser._id}`;
     }
     api(method, uri, formData).then((res) => {
       if (res.status === 200) {
-        toast.success("Saved Successfully");
+        toast.success('Saved Successfully');
         handleModal();
         autoRefresh();
       } else {
-        toast.error("Save Error", res);
+        toast.error('Save Error', res);
       }
     });
   };
@@ -114,34 +96,26 @@ const PassengerForm = ({
     <>
       <Modal isOpen={openModal} size="xl" centered>
         <ModalHeader charCode="X" toggle={handleModal}>
-          {isEditing ? t("Edit") : t("Add")} {t("Passenger")}
+          {isEditing ? t('Edit') : t('Add')} {t('Passenger')}
         </ModalHeader>
         <ModalBody>
           <Row>
             <Col>
               <Form>
-                <h6 className="heading-small text-muted mb-4">
-                  {t("Passenger information")}
-                </h6>
+                <h6 className="heading-small text-muted mb-4">{t('Passenger information')}</h6>
 
                 <div className="pl-lg-4">
                   <Row>
                     <Col lg="6">
                       <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-fname"
-                        >
-                          <span style={{ color: "red" }}>
-                            {user.firstName ? "" : "*"}
-                          </span>{" "}
-                          {t("First Name")}
+                        <label className="form-control-label" htmlFor="input-fname">
+                          <span style={{ color: 'red' }}>{user.firstName ? '' : '*'}</span> {t('First Name')}
                         </label>
                         <Input
                           className="form-control-alternative"
                           id="input-fname"
                           required={true}
-                          placeholder={t("First Name")}
+                          placeholder={t('First Name')}
                           type="text"
                           value={user.firstName}
                           name="firstName"
@@ -151,14 +125,8 @@ const PassengerForm = ({
                     </Col>
                     <Col lg="6">
                       <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-lname"
-                        >
-                          <span style={{ color: "red" }}>
-                            {user.lastName ? "" : "*"}
-                          </span>{" "}
-                          {t("Last Name")}
+                        <label className="form-control-label" htmlFor="input-lname">
+                          <span style={{ color: 'red' }}>{user.lastName ? '' : '*'}</span> {t('Last Name')}
                         </label>
                         <Input
                           className="form-control-alternative"
@@ -175,14 +143,8 @@ const PassengerForm = ({
                   <Row>
                     <Col lg="6">
                       <FormGroup>
-                        <Label
-                          for="exampleSelect"
-                          className="form-control-label"
-                        >
-                          <span style={{ color: "red" }}>
-                            {user.client ? "" : "*"}
-                          </span>{" "}
-                          {t("Select Client")}
+                        <Label for="exampleSelect" className="form-control-label">
+                          <span style={{ color: 'red' }}>{user.client ? '' : '*'}</span> {t('Select Client')}
                         </Label>
                         <Input
                           id="exampleSelect"
@@ -193,30 +155,28 @@ const PassengerForm = ({
                           type="select"
                         >
                           <option value="client" selected>
-                            {t("Select One Client")}
+                            {t('Select One Client')}
                           </option>
                           {clients ? (
                             clients.map((client) => (
                               <option key={client._id} value={client._id}>
-                                {client.first_name + " " + client.last_name}
+                                {client.first_name[0].toUpperCase() +
+                                  client.first_name.substring(1) +
+                                  ' ' +
+                                  client.last_name[0].toUpperCase() +
+                                  client.last_name.substring(1)}
                               </option>
                             ))
                           ) : (
-                            <option disabled>{t("There is no Client")}</option>
+                            <option disabled>{t('There is no Client')}</option>
                           )}
                         </Input>
                       </FormGroup>
                     </Col>
                     <Col lg="6">
                       <FormGroup>
-                        <Label
-                          for="exampleSelect"
-                          className="form-control-label"
-                        >
-                          <span style={{ color: "red" }}>
-                            {user.relationship ? "" : "*"}
-                          </span>{" "}
-                          {t("Relationship")}
+                        <Label for="exampleSelect" className="form-control-label">
+                          <span style={{ color: 'red' }}>{user.relationship ? '' : '*'}</span> {t('Relationship')}
                         </Label>
                         <Input
                           id="exampleSelect"
@@ -229,15 +189,15 @@ const PassengerForm = ({
                           <option value="self" selected>
                             {t('Self')}
                           </option>
-                          <option value="son">{t("Son")}</option>
-                          <option value="daughter">{t("Daughter")}</option>
-                          <option value="brother">{t("Brother")}</option>
-                          <option value="sister">{t("Sister")}</option>
-                          <option value="father">{t("Father")}</option>
-                          <option value="mother">{t("Mother")}</option>
-                          <option value="uncle">{t("Uncle")}</option>
-                          <option value="aunt">{t("Aunt")}</option>
-                          <option value="other">{t("other")}</option>
+                          <option value="son">{t('Son')}</option>
+                          <option value="daughter">{t('Daughter')}</option>
+                          <option value="brother">{t('Brother')}</option>
+                          <option value="sister">{t('Sister')}</option>
+                          <option value="father">{t('Father')}</option>
+                          <option value="mother">{t('Mother')}</option>
+                          <option value="uncle">{t('Uncle')}</option>
+                          <option value="aunt">{t('Aunt')}</option>
+                          <option value="other">{t('other')}</option>
                         </Input>
                       </FormGroup>
                     </Col>
@@ -249,14 +209,14 @@ const PassengerForm = ({
         </ModalBody>
         <ModalFooter>
           <Button color="primary" onClick={handleSubmit}>
-            {t("Save")}
-          </Button>{" "}
+            {t('Save')}
+          </Button>{' '}
           {isEditing && (
             <Button color="danger" onClick={handleDelete}>
-              {t("Delete")}
+              {t('Delete')}
             </Button>
-          )}{" "}
-          <Button onClick={handleModal}>{t("Cancel")}</Button>
+          )}{' '}
+          <Button onClick={handleModal}>{t('Cancel')}</Button>
         </ModalFooter>
       </Modal>
     </>

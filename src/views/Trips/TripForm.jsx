@@ -11,7 +11,7 @@ import { Modal, ModalBody, ModalHeader, ModalFooter, Button, FormGroup, Form, In
 import Select from 'react-select';
 import DayPicker, { DateUtils } from 'react-day-picker';
 import 'react-day-picker/lib/style.css';
-import { useTranslation } from "react-i18next";
+import { useTranslation } from 'react-i18next';
 const options = [
   { value: 1, label: 'Monday' },
   { value: 2, label: 'Tuesday' },
@@ -318,13 +318,13 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
     <>
       <Modal isOpen={openModal} size="xl" centered>
         <ModalHeader charCode="X" toggle={handleModal}>
-          {isEditing ? 'Edit' : 'Add'} {t("Trip")}
+          {isEditing ? 'Edit' : 'Add'} {t('Trip')}
         </ModalHeader>
         <ModalBody>
           <Row>
             <Col>
               <Form>
-                <h6 className="heading-small text-muted mb-4">{t("Trip information")}</h6>
+                <h6 className="heading-small text-muted mb-4">{t('Trip information')}</h6>
                 <div className="pl-lg-4">
                   <Row>
                     <Col lg="4">
@@ -356,7 +356,7 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
                     <Col lg="6">
                       <FormGroup>
                         <label className="form-control-label" htmlFor="input-status">
-                          <span style={{ color: 'red' }}>{trip.status ? '' : '*'}</span> {t("Status")}
+                          <span style={{ color: 'red' }}>{trip.status ? '' : '*'}</span> {t('Status')}
                         </label>
                         <Input
                           id="input-status"
@@ -366,10 +366,10 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
                           value={trip.status}
                           onChange={handleInputChange}
                         >
-                          <option value="pending">{t("Pending")}</option>
-                          <option value="confirmed">{t("Confirmed")}</option>
-                          <option value="cancelled">{t("Cancelled")}</option>
-                          <option value="completed">{t("Completed")}</option>
+                          <option value="pending">{t('Pending')}</option>
+                          <option value="confirmed">{t('Confirmed')}</option>
+                          <option value="cancelled">{t('Cancelled')}</option>
+                          <option value="completed">{t('Completed')}</option>
                         </Input>
                       </FormGroup>
                     </Col>
@@ -377,7 +377,7 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
                     <Col lg="6">
                       <FormGroup>
                         <label className="form-control-label" htmlFor="input-tripType">
-                          {t("Trip Type")}
+                          {t('Trip Type')}
                         </label>
                         <Input
                           id="input-trip_type"
@@ -387,8 +387,8 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
                           value={trip.trip_type}
                           onChange={handleInputChange}
                         >
-                          <option value="simple">{t("simple")}</option>
-                          <option value="recurring">{t("recurring")}</option>
+                          <option value="simple">{t('simple')}</option>
+                          <option value="recurring">{t('recurring')}</option>
                         </Input>
                       </FormGroup>
                     </Col>
@@ -400,14 +400,14 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
                       <Col lg="6">
                         <FormGroup>
                           <label className="form-control-label" htmlFor="input-date">
-                            <span style={{ color: 'red' }}>{trip.date ? '' : '*'}</span> {t("Trip Date")}
+                            <span style={{ color: 'red' }}>{trip.date ? '' : '*'}</span> {t('Trip Date')}
                           </label>
                           {isEditing ? (
                             <Input
                               className="form-control-alternative"
                               id="input-date"
                               locale={'en-gb'}
-                              placeholder={t("Select Dates")}
+                              placeholder={t('Select Dates')}
                               type="date"
                               min={!isEditing && disableDates()}
                               value={trip?.date?.split('T')[0]}
@@ -432,7 +432,7 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
                         <FormGroup>
                           <div className="TimePicker-ss">
                             <label className="form-control-label" htmlFor="input-time">
-                              <span style={{ color: 'red' }}></span> {t("Select Trip Time")}
+                              <span style={{ color: 'red' }}></span> {t('Select Trip Time')}
                             </label>
                             <TimePicker
                               style={{ height: 'calc(1.5em + 1.25rem + 2px)' }}
@@ -455,7 +455,7 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
                         <Col lg="4">
                           <FormGroup>
                             <label className="form-control-label" htmlFor="input-date">
-                              <span style={{ color: 'red' }}>{trip.startdate ? '' : '*'}</span> {t("Start Date")}
+                              <span style={{ color: 'red' }}>{trip.startdate ? '' : '*'}</span> {t('Start Date')}
                             </label>
                             <Input
                               className="form-control-alternative"
@@ -474,7 +474,7 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
                         <Col lg="4">
                           <FormGroup>
                             <label className="form-control-label" htmlFor="input-date">
-                              <span style={{ color: 'red' }}>{trip.enddate ? '' : '*'}</span> {t("End Date")}
+                              <span style={{ color: 'red' }}>{trip.enddate ? '' : '*'}</span> {t('End Date')}
                             </label>
                             <Input
                               className="form-control-alternative"
@@ -493,7 +493,7 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
                         <Col lg="4">
                           <FormGroup>
                             <label for="exampleSelect" className="form-control-label">
-                              <span style={{ color: 'red' }}>{trip?.Days?.length < 1 ? '' : '*'}</span> {t("Select Days")}
+                              <span style={{ color: 'red' }}>{trip?.Days?.length < 1 ? '' : '*'}</span> {t('Select Days')}
                             </label>
                             <Select
                               onChange={handleDayChange}
@@ -517,7 +517,7 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
                               <Col lg="6">
                                 <FormGroup>
                                   <label className="form-control-label" htmlFor="input-Day">
-                                    {t("Day")}
+                                    {t('Day')}
                                   </label>
                                   <Input id="input-Day" name="input-Day" readOnly className="input-Day" value={i.label}></Input>
                                 </FormGroup>
@@ -526,7 +526,7 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
                                 <FormGroup>
                                   <div className="TimePicker-ss">
                                     <label className="form-control-label" htmlFor="input-time">
-                                      <span style={{ color: 'red' }}></span> {t("Select Trip Time")}
+                                      <span style={{ color: 'red' }}></span> {t('Select Trip Time')}
                                     </label>
                                     <TimePicker
                                       style={{
@@ -559,13 +559,13 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
                     <Col lg="6">
                       <FormGroup>
                         <label className="form-control-label" htmlFor="input-clientPrice">
-                          <span style={{ color: 'red' }}>{trip.client_price ? '' : '*'}</span> {t("Client Price")}
+                          <span style={{ color: 'red' }}>{trip.client_price ? '' : '*'}</span> {t('Client Price')}
                         </label>
                         <Input
                           className="form-control-alternative"
                           id="input-clientPrice"
                           required={true}
-                          placeholder={t("Enter Client Price")}
+                          placeholder={t('Enter Client Price')}
                           type="number"
                           value={trip.client_price}
                           name="client_price"
@@ -576,13 +576,13 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
                     <Col lg="6">
                       <FormGroup>
                         <label className="form-control-label" htmlFor="input-driverPrice">
-                          <span style={{ color: 'red' }}>{trip.driver_price ? '' : '*'}</span> {t("Driver Price")}
+                          <span style={{ color: 'red' }}>{trip.driver_price ? '' : '*'}</span> {t('Driver Price')}
                         </label>
                         <Input
                           className="form-control-alternative"
                           id="input-driverPrice"
                           required={true}
-                          placeholder={t("Enter Driver Price")}
+                          placeholder={t('Enter Driver Price')}
                           type="number"
                           value={trip.driver_price}
                           name="driver_price"
@@ -600,11 +600,11 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
                           <span style={{ color: 'red' }}>
                             {trip.inviteddrivers.length > 0 || trip.assigned_drivers.length > 0 ? '' : '*'}
                           </span>{' '}
-                          {t("Drivers Name")}
+                          {t('Drivers Name')}
                         </label>
                         {drivers && (
                           <Select
-                          placeholder={t("Select...")}
+                            placeholder={t('Select...')}
                             onChange={(e) =>
                               setTrip((user) => ({
                                 ...user,
@@ -620,17 +620,23 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
                                 ? editTrip.status === 'pending'
                                   ? editTrip?.invited_drivers.map((i) => ({
                                       value: i?.driver?._id,
-                                      label: `${i?.driver?.first_name} ${i?.driver?.last_name}`,
+                                      label: `${i?.first_name[0].toUpperCase() + i?.first_name.substring(1)} ${
+                                        i?.last_name[0].toUpperCase() + i?.last_name.substring(1)
+                                      }`,
                                     }))
                                   : editTrip?.assigned_drivers.map((i) => ({
                                       value: i?._id,
-                                      label: `${i?.first_name} ${i?.last_name}`,
+                                      label: `${i?.first_name[0].toUpperCase() + i?.first_name.substring(1)} ${
+                                        i?.last_name[0].toUpperCase() + i?.last_name.substring(1)
+                                      }`,
                                     }))
                                 : null
                             }
                             options={drivers.map((driver) => ({
                               value: driver?._id,
-                              label: `${driver?.first_name} ${driver?.last_name}`,
+                              label: `${driver?.first_name[0].toUpperCase() + driver?.first_name.substring(1)} ${
+                                driver?.last_name[0].toUpperCase() + driver?.last_name.substring(1)
+                              }`,
                             }))}
                           />
                         )}
@@ -639,23 +645,27 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
                     <Col lg="4">
                       <FormGroup>
                         <label className="form-control-label" htmlFor="input-fname">
-                          <span style={{ color: 'red' }}>{trip.client ? '' : '*'}</span> {t("Client")}
+                          <span style={{ color: 'red' }}>{trip.client ? '' : '*'}</span> {t('Client')}
                         </label>
                         {clients && (
                           <Select
-                          placeholder={t("Select...")}
+                            placeholder={t('Select...')}
                             onChange={handleClientChange}
                             name="clients"
                             defaultValue={
                               trip?.client?._id && {
                                 value: trip?.client?._id,
-                                label: `${trip?.client?.first_name} ${trip?.client?.last_name}`,
+                                label: `${trip?.client?.first_name[0].toUpperCase() + trip?.client?.first_name.substring(1)} ${
+                                  trip?.client?.last_name[0].toUpperCase() + trip?.client?.last_name.substring(1)
+                                }`,
                               }
                             }
                             className="form-control-alternative"
                             options={clients.map((client) => ({
                               value: client?._id,
-                              label: `${client?.first_name} ${client?.last_name}`,
+                              label: `${client?.first_name[0].toUpperCase() + client?.first_name.substring(1)} ${
+                                client?.last_name[0].toUpperCase() + client?.last_name.substring(1)
+                              }`,
                             }))}
                           />
                         )}
@@ -664,11 +674,11 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
                     <Col lg="4">
                       <FormGroup>
                         <label className="form-control-label" htmlFor="input-fname">
-                          {t("Passengers")}
+                          {t('Passengers')}
                         </label>
                         {allPassengers && (
                           <Select
-                          placeholder={t("Select...")}
+                            placeholder={t('Select...')}
                             onChange={handlePassengerChange}
                             isDisabled={trip?.client <= 0}
                             name="passengers"
@@ -681,7 +691,9 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
                             options={passengers
                               .map((passenger) => ({
                                 value: passenger?._id,
-                                label: `${passenger?.first_name} ${passenger?.last_name}`,
+                                label: `${passenger?.first_name[0].toUpperCase() + passenger?.first_name.substring(1)} ${
+                                  passenger?.last_name[0].toUpperCase() + passenger?.last_name.substring(1)
+                                }`,
                               }))
                               .filter((p) => passengerChange.findIndex((v) => v === p.label) < 0)}
                           />
@@ -691,12 +703,12 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
                   </Row>
                   <FormGroup>
                     <label className="form-control-label" htmlFor="input-lname">
-                      {t("Add comment")}
+                      {t('Add comment')}
                     </label>
                     <Input
                       className="form-control-alternative"
                       id="input-lname"
-                      placeholder={t("Add Comment")}
+                      placeholder={t('Add Comment')}
                       type="textarea"
                       value={trip.comment}
                       name="comment"
@@ -710,26 +722,26 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
         </ModalBody>
         <ModalFooter>
           <Button color="primary" onClick={handleSubmit}>
-            {t("Save")}
+            {t('Save')}
           </Button>{' '}
           {isEditing && (
             <Button color="danger" onClick={handleDelete}>
-              {t("Delete")}
+              {t('Delete')}
             </Button>
           )}{' '}
-          <Button onClick={handleModal}>{t("Cancel")}</Button>
+          <Button onClick={handleModal}>{t('Cancel')}</Button>
         </ModalFooter>
       </Modal>
       <Modal isOpen={openDateModal} size="sm" centered>
         <ModalHeader charCode="X" toggle={handleDateModal}>
-          {isEditing ? 'Edit' : 'Select'} {t("Date")}
+          {isEditing ? 'Edit' : 'Select'} {t('Date')}
         </ModalHeader>
         <div style={{ textAlign: 'center' }}>
           <DayPicker disabledDays={{ before: new Date() }} selectedDays={selectedDays} onDayClick={handleDayClick} />
         </div>
         <ModalFooter>
           <Button color="success" onClick={handleDateModal}>
-            {t("Ok")}
+            {t('Ok')}
           </Button>
         </ModalFooter>
       </Modal>
