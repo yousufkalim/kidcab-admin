@@ -620,13 +620,13 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
                                 ? editTrip.status === 'pending'
                                   ? editTrip?.invited_drivers.map((i) => ({
                                       value: i?.driver?._id,
-                                      label: `${i?.first_name[0].toUpperCase() + i?.first_name.substring(1)} ${
-                                        i?.last_name[0].toUpperCase() + i?.last_name.substring(1)
+                                      label: `${i?.driver?.first_name[0]?.toUpperCase() + i?.driver?.first_name?.substring(1)} ${
+                                        i?.driver?.last_name[0]?.toUpperCase() + i?.driver?.last_name.substring(1)
                                       }`,
                                     }))
                                   : editTrip?.assigned_drivers.map((i) => ({
                                       value: i?._id,
-                                      label: `${i?.first_name[0].toUpperCase() + i?.first_name.substring(1)} ${
+                                      label: `${i?.first_name[0]?.toUpperCase() + i?.first_name?.substring(1)} ${
                                         i?.last_name[0].toUpperCase() + i?.last_name.substring(1)
                                       }`,
                                     }))
@@ -634,8 +634,8 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
                             }
                             options={drivers.map((driver) => ({
                               value: driver?._id,
-                              label: `${driver?.first_name[0].toUpperCase() + driver?.first_name.substring(1)} ${
-                                driver?.last_name[0].toUpperCase() + driver?.last_name.substring(1)
+                              label: `${driver?.first_name[0]?.toUpperCase() + driver?.first_name?.substring(1)} ${
+                                driver?.last_name[0]?.toUpperCase() + driver?.last_name?.substring(1)
                               }`,
                             }))}
                           />
@@ -655,16 +655,16 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
                             defaultValue={
                               trip?.client?._id && {
                                 value: trip?.client?._id,
-                                label: `${trip?.client?.first_name[0].toUpperCase() + trip?.client?.first_name.substring(1)} ${
-                                  trip?.client?.last_name[0].toUpperCase() + trip?.client?.last_name.substring(1)
+                                label: `${trip?.client?.first_name[0]?.toUpperCase() + trip?.client?.first_name?.substring(1)} ${
+                                  trip?.client?.last_name[0]?.toUpperCase() + trip?.client?.last_name?.substring(1)
                                 }`,
                               }
                             }
                             className="form-control-alternative"
                             options={clients.map((client) => ({
                               value: client?._id,
-                              label: `${client?.first_name[0].toUpperCase() + client?.first_name.substring(1)} ${
-                                client?.last_name[0].toUpperCase() + client?.last_name.substring(1)
+                              label: `${client?.first_name[0]?.toUpperCase() + client?.first_name?.substring(1)} ${
+                                client?.last_name[0]?.toUpperCase() + client?.last_name?.substring(1)
                               }`,
                             }))}
                           />
@@ -691,8 +691,8 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
                             options={passengers
                               .map((passenger) => ({
                                 value: passenger?._id,
-                                label: `${passenger?.first_name[0].toUpperCase() + passenger?.first_name.substring(1)} ${
-                                  passenger?.last_name[0].toUpperCase() + passenger?.last_name.substring(1)
+                                label: `${passenger?.first_name[0]?.toUpperCase() + passenger?.first_name?.substring(1)} ${
+                                  passenger?.last_name[0]?.toUpperCase() + passenger?.last_name?.substring(1)
                                 }`,
                               }))
                               .filter((p) => passengerChange.findIndex((v) => v === p.label) < 0)}
