@@ -1,14 +1,8 @@
-import React, { useState } from "react";
-import {
-  Badge,
-  DropdownMenu,
-  DropdownItem,
-  UncontrolledDropdown,
-  DropdownToggle,
-} from "reactstrap";
-import ClientAvatar from "./DriverAvatar";
-import PassengerForm from "./VehicleForm";
-import { useTranslation } from "react-i18next";
+import React, { useState } from 'react';
+import { Badge, DropdownMenu, DropdownItem, UncontrolledDropdown, DropdownToggle } from 'reactstrap';
+import ClientAvatar from './DriverAvatar';
+import PassengerForm from './VehicleForm';
+import { useTranslation } from 'react-i18next';
 
 const VehicleRow = ({ user: vehicle, autoRefresh }) => {
   const { t, i18n } = useTranslation();
@@ -37,7 +31,7 @@ const VehicleRow = ({ user: vehicle, autoRefresh }) => {
           </div>
         ) : (
           <p className="mb-0 text-sm" href="#pablo">
-           {t(" No Driver is added.")}
+            {t(' No Driver is added.')}
           </p>
         )}
       </td>
@@ -46,13 +40,7 @@ const VehicleRow = ({ user: vehicle, autoRefresh }) => {
       </td>
       <td className="text-right">
         <UncontrolledDropdown>
-          <DropdownToggle
-            className="btn-icon-only text-dark"
-            role="button"
-            size="sm"
-            color=""
-            onClick={handleModal}
-          >
+          <DropdownToggle className="btn-icon-only text-dark" role="button" size="sm" color="" onClick={handleModal}>
             <i className="fas fa-edit" />
           </DropdownToggle>
         </UncontrolledDropdown>

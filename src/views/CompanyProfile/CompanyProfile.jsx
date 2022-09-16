@@ -5,7 +5,7 @@ import FilePicker from '../../components/Form/FilePicker';
 import View from '../../components/view';
 import { UpdateStore } from 'StoreContext';
 import { Modal, ModalBody, ModalHeader, ModalFooter, Button, FormGroup, Form, Input, Row, Col } from 'reactstrap';
-import { useTranslation } from "react-i18next";
+import { useTranslation } from 'react-i18next';
 // core components
 
 const CompanyProfile = ({ openModal, handleModal }) => {
@@ -17,7 +17,7 @@ const CompanyProfile = ({ openModal, handleModal }) => {
     phoneNumber: '',
     companyName: '',
     siret: '',
-    vat: '',
+    vat_number: '',
     legalForm: '',
     shareCapital: '',
     rcsCity: '',
@@ -30,7 +30,7 @@ const CompanyProfile = ({ openModal, handleModal }) => {
     setCompany({
       logo: data.company?.logo || '',
       phoneNumber: data.company?.phone_number || '',
-      vat: data.company?.vat_number || '',
+      vat_number: data.company?.vat_number || '',
       companyName: data.company?.company_name || '',
       siret: data.company?.siret_number || '',
       legalForm: data.company?.legal_form || '',
@@ -62,7 +62,7 @@ const CompanyProfile = ({ openModal, handleModal }) => {
     formData.append('address', company.address);
     formData.append('company_name', company.companyName);
     formData.append('siret_number', company.siret);
-    formData.append('vat', company.vat);
+    formData.append('vat_number', company.vat_number);
     formData.append('legal_form', company.legalForm);
     formData.append('share_capital', company.shareCapital);
     formData.append('rcs_city', company.rcsCity);
@@ -92,14 +92,15 @@ const CompanyProfile = ({ openModal, handleModal }) => {
           <Row>
             <Col>
               <Form>
-                <h6 className="heading-small text-muted mb-4">{t("Company information")}</h6>
+                <h6 className="heading-small text-muted mb-4">{t('Company information')}</h6>
 
                 <div className="pl-lg-4">
                   <Row>
                     <Col lg="12">
                       <FormGroup>
                         <label className="form-control-label" htmlFor="input-image">
-                          <span style={{ color: 'red' }}>{company.logo ? '' : '*'}</span> {t("Add Logo")} <i className="ni ni-album-2" />
+                          <span style={{ color: 'red' }}>{company.logo ? '' : '*'}</span> {t('Add Logo')}{' '}
+                          <i className="ni ni-album-2" />
                           <View url={company?.logo} />
                         </label>
                         <FilePicker
@@ -118,12 +119,12 @@ const CompanyProfile = ({ openModal, handleModal }) => {
                     <Col lg="6">
                       <FormGroup>
                         <label className="form-control-label" htmlFor="input-companyName">
-                          {t("Company Name")}
+                          {t('Company Name')}
                         </label>
                         <Input
                           className="form-control-alternative"
                           id="input-companyName"
-                          placeholder={t("Company Name")}
+                          placeholder={t('Company Name')}
                           type="text"
                           value={company.companyName}
                           name="companyName"
@@ -134,12 +135,12 @@ const CompanyProfile = ({ openModal, handleModal }) => {
                     <Col lg="6">
                       <FormGroup>
                         <label className="form-control-label" htmlFor="input-rcsCity">
-                          {t("City of RCS")}
+                          {t('City of RCS')}
                         </label>
                         <Input
                           className="form-control-alternative"
                           id="input-rcsCity"
-                          placeholder={t("City of RCS")}
+                          placeholder={t('City of RCS')}
                           type="text"
                           value={company.rcsCity}
                           name="rcsCity"
@@ -152,12 +153,12 @@ const CompanyProfile = ({ openModal, handleModal }) => {
                     <Col lg="6">
                       <FormGroup>
                         <label className="form-control-label" htmlFor="input-legalForm">
-                          {t("Legal Form")}
+                          {t('Legal Form')}
                         </label>
                         <Input
                           className="form-control-alternative"
                           id="input-shareCapital"
-                          placeholder={t("legal Form")}
+                          placeholder={t('legal Form')}
                           type="text"
                           value={company.legalForm}
                           name="legalForm"
@@ -168,12 +169,12 @@ const CompanyProfile = ({ openModal, handleModal }) => {
                     <Col lg="6">
                       <FormGroup>
                         <label className="form-control-label" htmlFor="input-cap">
-                          {t("Share Capital")}
+                          {t('Share Capital')}
                         </label>
                         <Input
                           className="form-control-alternative"
                           id="input-shareCapital"
-                          placeholder={t("Share Capital")}
+                          placeholder={t('Share Capital')}
                           type="text"
                           value={company.shareCapital}
                           name="shareCapital"
@@ -189,12 +190,12 @@ const CompanyProfile = ({ openModal, handleModal }) => {
                     <Col md="12">
                       <FormGroup>
                         <label className="form-control-label" htmlFor="input-address">
-                          {t("Address")}
+                          {t('Address')}
                         </label>
                         <Input
                           className="form-control-alternative"
                           id="input-address"
-                          placeholder={t("Enter your address")}
+                          placeholder={t('Enter your address')}
                           type="text"
                           value={company.address}
                           name="address"
@@ -207,7 +208,7 @@ const CompanyProfile = ({ openModal, handleModal }) => {
                     <Col lg="4">
                       <FormGroup>
                         <label className="form-control-label" htmlFor="input-phone">
-                          {t("Phone Number")}
+                          {t('Phone Number')}
                         </label>
                         <Input
                           className="form-control-alternative"
@@ -224,7 +225,7 @@ const CompanyProfile = ({ openModal, handleModal }) => {
                     <Col lg="4">
                       <FormGroup>
                         <label className="form-control-label" htmlFor="input-siret">
-                          {t("Siret Number")}
+                          {t('Siret Number')}
                         </label>
                         <Input
                           className="form-control-alternative"
@@ -240,15 +241,15 @@ const CompanyProfile = ({ openModal, handleModal }) => {
                     <Col lg="4">
                       <FormGroup>
                         <label className="form-control-label" htmlFor="input-vat">
-                          {t("VAT Number")}
+                          {t('VAT Number')}
                         </label>
                         <Input
                           className="form-control-alternative"
                           id="input-vat"
                           placeholder="123456789"
                           type="text"
-                          value={company.vat}
-                          name="vat"
+                          value={company.vat_number}
+                          name="vat_number"
                           onChange={handleInputChange}
                         />
                       </FormGroup>
@@ -261,12 +262,12 @@ const CompanyProfile = ({ openModal, handleModal }) => {
                     <Col lg="4">
                       <FormGroup>
                         <label className="form-control-label" htmlFor="input-bankName">
-                          {t("Bank Name")}
+                          {t('Bank Name')}
                         </label>
                         <Input
                           className="form-control-alternative"
                           id="input-bankName"
-                          placeholder={t("Example Bank Ltd")}
+                          placeholder={t('Example Bank Ltd')}
                           type="text"
                           value={company.bankName}
                           name="bankName"
@@ -277,7 +278,7 @@ const CompanyProfile = ({ openModal, handleModal }) => {
                     <Col lg="8">
                       <FormGroup>
                         <label className="form-control-label" htmlFor="input-iban">
-                          {t("IBAN / BIC")}
+                          {t('IBAN / BIC')}
                         </label>
                         <Input
                           className="form-control-alternative"
@@ -298,9 +299,9 @@ const CompanyProfile = ({ openModal, handleModal }) => {
         </ModalBody>
         <ModalFooter>
           <Button color="primary" onClick={handleSubmit}>
-            {t("Save")}
+            {t('Save')}
           </Button>{' '}
-          <Button onClick={handleModal}>{t("Cancel")}</Button>
+          <Button onClick={handleModal}>{t('Cancel')}</Button>
         </ModalFooter>
       </Modal>
     </>
