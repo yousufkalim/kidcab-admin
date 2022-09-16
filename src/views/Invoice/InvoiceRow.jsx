@@ -52,9 +52,7 @@ const InvoiceRow = ({ invoice, autoRefresh, handleSelect, selectedItems }) => {
       <td>
         <div className="d-flex align-items-center">{invoice?.total_price}€</div>
       </td>
-      <td>
-        <div className="d-flex align-items-center">{parseInt(invoice?.total_price) - parseInt(invoice?.vat)}€</div>
-      </td>
+
       <td className="text-left">
         {invoice.client
           ? invoice?.client?.first_name[0]?.toUpperCase() +
