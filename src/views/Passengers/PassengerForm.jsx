@@ -114,7 +114,7 @@ const PassengerForm = ({
     <>
       <Modal isOpen={openModal} size="xl" centered>
         <ModalHeader charCode="X" toggle={handleModal}>
-          {isEditing ? "Edit" : "Add"} {t("Passenger")}
+          {isEditing ? t("Edit") : t("Add")} {t("Passenger")}
         </ModalHeader>
         <ModalBody>
           <Row>
