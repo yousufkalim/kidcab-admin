@@ -16,11 +16,11 @@
 
 */
 // reactstrap components
-import { useState, useEffect } from "react";
-import { useHistory } from "react-router-dom";
-import api from "api";
-import { Store, UpdateStore } from "StoreContext";
-import moment from "moment";
+import { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
+import api from 'api';
+import { Store, UpdateStore } from 'StoreContext';
+import moment from 'moment';
 import {
   Badge,
   Card,
@@ -35,28 +35,56 @@ import {
   Container,
   Row,
   Nav,
-} from "reactstrap";
+} from 'reactstrap';
 
 // core components
-import Header from "components/Headers/Header.js";
-import { useTranslation } from "react-i18next";
-
+import Header from 'components/Headers/Header.js';
+import { useTranslation } from 'react-i18next';
+import ViewRequest from './ViewRequest';
 const Requests = () => {
   const { t, i18n } = useTranslation();
   const [requests, setRequests] = useState([]);
-
+  const [request, setRequest] = useState({});
+  const [editModal, setEditModal] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
   useEffect(() => {
     getRequests();
   }, []);
 
   const getRequests = async () => {
-    await api("get", "requests").then((res) => {
+    await api('get', 'requests').then((res) => {
       setRequests(res?.data?.request);
     });
   };
 
+  const handleEditModal = (item) => {
+    console.log('Hi');
+    if (item) {
+      setRequest({
+        _id: item._id,
+        first_name: item.first_name,
+        last_name: item.last_name,
+        phone: item.phone,
+        email: item.email,
+        passengers: item.passengers,
+        status: item.passengers,
+        journey_type: item.journey_type,
+        pickUp_date: new Date(item.pickUp_date).toDateString(),
+        distance: item.pickUp_date,
+        total_children: item.total_children,
+        total_adults: item.total_adults,
+        baby: item.baby,
+        company_name: item.company_name,
+      });
+    }
+
+    setEditModal((open) => !open);
+    return openModal;
+  };
+
   return (
     <>
+      {console.log(editModal, 'editModal')}
       <Header />
       {/* Page content */}
       <Container className="mt--7" fluid>
@@ -66,21 +94,20 @@ const Requests = () => {
             <Card className="shadow">
               <CardHeader className="border-0">
                 <div className="d-flex justify-content-between ">
-                  <h3 className="mb-0">{t("Ride Requests")}</h3>
+                  <h3 className="mb-0">{t('Ride Requests')}</h3>
                 </div>
               </CardHeader>
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
                   <tr>
-                    <th scope="col">{t("Name")} </th>
-                    <th scope="col">{t("Phone number")} </th>
-                    <th scope="col">{t("No of passengers")} </th>
-                    <th cope="col">{t("Journey Type")}</th>
-                    <th scope="col">{t("PickUp Address")}</th>
-                    <th scope="col">{t("Destination Address")}</th>
-                    <th scope="col">{t("Status")}</th>
-                    <th scope="col">{t("PickUp Date")}</th>
-
+                    <th scope="col">{t('Name')} </th>
+                    <th scope="col">{t('Phone number')} </th>
+                    <th scope="col">{t('No of passengers')} </th>
+                    <th cope="col">{t('Journey Type')}</th>
+                    <th scope="col">{t('PickUp Address')}</th>
+                    <th scope="col">{t('Destination Address')}</th>
+                    <th scope="col">{t('Status')}</th>
+                    <th scope="col">{t('PickUp Date')}</th>
                     <th scope="col" />
                   </tr>
                 </thead>
@@ -94,29 +121,47 @@ const Requests = () => {
                               <span className="mb-0 text-sm">
                                 {item?.first_name[0].toUpperCase() +
                                   item?.first_name.substring(1) +
-                                  " " +
+                                  ' ' +
                                   item?.last_name[0].toUpperCase() +
                                   item?.last_name.substring(1)}
                               </span>
                             </Media>
                           </Media>
                         </th>
-                        <td>{item.phone || "_"}</td>
-                        <td>{item.passengers || "_"}</td>
-                        <td>{item.journey_type || "_"}</td>
-                        <td>{item.pickUp_address.label || "_"}</td>
-                        <td>{item?.destination_address?.label || "_"}</td>
+                        <td>{item.phone || '_'}</td>
+                        <td>{item.passengers || '_'}</td>
+                        <td>{item.journey_type || '_'}</td>
+                        <td>{item.pickUp_address.label || '_'}</td>
+                        <td>{item?.destination_address?.label || '_'}</td>
                         <td>
-                          {item?.status === "not answer"
-                            ? "Not Answer"
-                            : item?.status === "pending"
-                            ? "Pending"
-                            : item?.status === "accepted"
-                            ? "Accepted"
-                            : "Decline"}
+                          {item?.status === 'not answer'
+                            ? 'Not Answer'
+                            : item?.status === 'pending'
+                            ? 'Pending'
+                            : item?.status === 'accepted'
+                            ? 'Accepted'
+                            : 'Decline'}
                         </td>
                         <td>{new Date(item.pickUp_date).toDateString()}</td>
-                        <td></td>
+                        <td className="text-right">
+                          <UncontrolledDropdown>
+                            <DropdownToggle
+                              className="btn-icon-only text-light"
+                              href="#pablo"
+                              role="button"
+                              size="sm"
+                              color=""
+                              onClick={(e) => e.preventDefault()}
+                            >
+                              <i className="fas fa-ellipsis-v" />
+                            </DropdownToggle>
+                            <DropdownMenu className="dropdown-menu-arrow" right>
+                              <DropdownItem href="#pablo" onClick={() => handleEditModal(item)}>
+                                {t('View Request')}
+                              </DropdownItem>
+                            </DropdownMenu>
+                          </UncontrolledDropdown>
+                        </td>
                       </tr>
                     );
                   })}
@@ -125,6 +170,7 @@ const Requests = () => {
             </Card>
           </div>
         </Row>
+        {editModal && <ViewRequest openModal={editModal} handleModal={handleEditModal} request={request} />}
       </Container>
     </>
   );
