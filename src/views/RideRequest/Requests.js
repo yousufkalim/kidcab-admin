@@ -70,6 +70,8 @@ const Requests = () => {
         status: item.passengers,
         journey_type: item.journey_type,
         pickUp_date: new Date(item.pickUp_date).toDateString(),
+        destination_address: item?.destination_address?.label,
+        pickUp_address: item?.pickUp_address?.label,
         distance: item.pickUp_date,
         total_children: item.total_children,
         total_adults: item.total_adults,

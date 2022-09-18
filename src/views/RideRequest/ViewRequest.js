@@ -112,6 +112,49 @@ const ViewRequest = ({ openModal, handleModal, request }) => {
                       </FormGroup>
                     </Col>
                   </Row>
+                  <Row>
+                    <Col lg="3" style={{ margin: 'auto' }}>
+                      <FormGroup>
+                        <label className="form-control-label">{t('PickUp Address')}</label>
+                        <Input
+                          className="form-control-alternative text-default"
+                          required={true}
+                          type="text"
+                          value={request?.pickUp_address ? request.pickUp_address : '_____'}
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col lg="3" style={{ margin: 'auto' }}>
+                      <FormGroup>
+                        <label className="form-control-label">{t('Status')}</label>
+                        <Input
+                          className="form-control-alternative text-default"
+                          required={true}
+                          type="text"
+                          value={
+                            request?.status === 'not answer'
+                              ? 'Not Answer'
+                              : request?.status === 'pending'
+                              ? 'Pending'
+                              : request?.status === 'accepted'
+                              ? 'Accepted'
+                              : 'Decline'
+                          }
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col lg="3" style={{ margin: 'auto' }}>
+                      <FormGroup>
+                        <label className="form-control-label">{t('Destination Address')}</label>
+                        <Input
+                          className="form-control-alternative text-default"
+                          required={true}
+                          type="text"
+                          value={request?.destination_address ? request.destination_address : '_____'}
+                        />
+                      </FormGroup>
+                    </Col>
+                  </Row>
                 </div>
               </Form>
             </Col>
