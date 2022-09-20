@@ -43,11 +43,11 @@ const PassengerForm = ({ openModal, handleModal, editUser, isEditing, autoRefres
     api(method, uri).then((res) => {
       // eslint-disable-next-line eqeqeq
       if (res.status == 200) {
-        toast.success('Delete Successfully');
+        toast.success(`${t('Delete Successfully')}`);
         handleModal();
         autoRefresh();
       } else {
-        toast.error('Delete Error', res.data.message);
+        toast.error(`${t('Delete Error')}`, `${t(res.data.message)}`);
       }
     });
   };
@@ -83,11 +83,11 @@ const PassengerForm = ({ openModal, handleModal, editUser, isEditing, autoRefres
     }
     api(method, uri, formData).then((res) => {
       if (res.status === 200) {
-        toast.success('Saved Successfully');
+        toast.success(`${t('Saved Successfully')}`);
         handleModal();
         autoRefresh();
       } else {
-        toast.error('Save Error', res);
+        toast.error(`${t('Save Error')}`);
       }
     });
   };
@@ -96,7 +96,7 @@ const PassengerForm = ({ openModal, handleModal, editUser, isEditing, autoRefres
     <>
       <Modal isOpen={openModal} size="xl" centered>
         <ModalHeader charCode="X" toggle={handleModal}>
-          {isEditing ? t('Edit') : t('Add')} {t('Passenger')}
+          {isEditing ? <>{t('Edit Passenger')}</> : <>{t('Add Passenger')}</>}
         </ModalHeader>
         <ModalBody>
           <Row>

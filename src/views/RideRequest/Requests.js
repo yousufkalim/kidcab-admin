@@ -121,19 +121,19 @@ const Requests = () => {
                           <Media className="align-items-center">
                             <Media>
                               <span className="mb-0 text-sm">
-                                {item?.first_name[0].toUpperCase() +
-                                  item?.first_name.substring(1) +
+                                {item?.first_name[0]?.toUpperCase() +
+                                  item?.first_name?.substring(1) +
                                   ' ' +
-                                  item?.last_name[0].toUpperCase() +
-                                  item?.last_name.substring(1)}
+                                  item?.last_name[0]?.toUpperCase() +
+                                  item?.last_name?.substring(1)}
                               </span>
                             </Media>
                           </Media>
                         </th>
-                        <td>{item.phone || '_'}</td>
-                        <td>{item.passengers || '_'}</td>
-                        <td>{item.journey_type || '_'}</td>
-                        <td>{item.pickUp_address.label || '_'}</td>
+                        <td>{item?.phone || '_'}</td>
+                        <td>{item?.passengers || '_'}</td>
+                        <td>{item?.journey_type ? <>{t(item?.journey_type)}</> : '_'}</td>
+                        <td>{item?.pickUp_address.label || '_'}</td>
                         <td>{item?.destination_address?.label || '_'}</td>
                         <td>
                           {item?.status === 'not answer'
@@ -144,7 +144,7 @@ const Requests = () => {
                             ? 'Accepted'
                             : 'Decline'}
                         </td>
-                        <td>{new Date(item.pickUp_date).toDateString()}</td>
+                        <td>{new Date(item?.pickUp_date).toDateString()}</td>
                         <td className="text-right">
                           <UncontrolledDropdown>
                             <DropdownToggle
