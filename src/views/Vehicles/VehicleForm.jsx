@@ -52,7 +52,7 @@ const VehicleForm = ({ openModal, handleModal, editUser: editVehicle, isEditing,
         engine_type: editVehicle.engine_type,
         inspection_date: new Date(editVehicle.inspection_date),
         graycard: editVehicle.graycard,
-        graycard_expiry_date: new Date(editVehicle?.graycard_expiry_date),
+        graycard_expiry_date: editVehicle?.graycard_expiry_date,
         driver: editVehicle.driver,
         number_plate: editVehicle.number_plate,
         inspection_expiry_date: new Date(editVehicle.inspection_expiry_date),
@@ -72,7 +72,7 @@ const VehicleForm = ({ openModal, handleModal, editUser: editVehicle, isEditing,
     setVehicle({ ...vehicle, inspection_date: e });
   };
   const handleDateChange1 = (e) => {
-    setVehicle({ ...vehicle, inspection_expiry_date: e });
+    setVehicle({ ...vehicle, graycard_expiry_date: e });
   };
   const handleDateChange2 = (e) => {
     setVehicle({ ...vehicle, insurance_expiry_date: e });
@@ -116,31 +116,40 @@ const VehicleForm = ({ openModal, handleModal, editUser: editVehicle, isEditing,
     let uri = 'vehicles';
     let d = new Date();
     if (vehicle.vehicle_name == '') {
-      return toast.error('Please enter vehicle name');
+     return toast.error(`${t('Please enter vehicle name')}`);
+      
     }
     if (vehicle.brand == '') {
-      return toast.error('Please enter brand name');
+      return toast.error(`${t('Please enter brand name')}`);
+      
     }
     if (vehicle.model == '') {
-      return toast.error('Please enter your car model');
+      return toast.error(`${t('Please enter your car model')}`);
+      
     }
     if (vehicle.color == '') {
-      return toast.error('Please enter your car color');
+      return toast.error(`${t('Please enter your car color')}`);
+      
     }
     if (vehicle.engine_type == '') {
-      return toast.error('Please enter your engine type');
+      return toast.error(`${t('Please enter your engine type')}`);
+      
     }
     if (vehicle.inspection_date == '') {
-      return toast.error('Please enter Last inspection_date');
+      return toast.error(`${t('Please enter Last inspection_date')}`);
+      
     }
     if (vehicle.insurance_certificate == '') {
-      return toast.error("Please enter your vehicle's insurance card");
+      
+      return toast.error(`${t('Please enter your vehicle insurance card')}`);
+      
     }
     if (vehicle.insurance_expiry_date == '') {
-      return toast.error('Please enter a valid insurance date');
+      return toast.error(`${t('Please enter a valid insurance date')}`);
+     
     }
     if (vehicle.number_plate == '') {
-      return toast.error('Please enter number plate');
+      return toast.error(`${t('Please enter number plate')}`);
     }
 
     const formData = new FormData();
@@ -189,7 +198,7 @@ const VehicleForm = ({ openModal, handleModal, editUser: editVehicle, isEditing,
 
   return (
     <>
-      {console.log(vehicle.insurance_expiry_date)}
+      {console.log(vehicle)}
       <Modal isOpen={openModal} size="xl" centered>
         <ModalHeader charCode="X" toggle={handleModal}>
           {isEditing ? <>{t('Edit Vehicle')}</> : <>{t('Add Vehicle')}</>}
@@ -386,7 +395,7 @@ const VehicleForm = ({ openModal, handleModal, editUser: editVehicle, isEditing,
                         </label>
 
                         <DatePicker
-                          selected={new Date(vehicle.inspection_expiry_date)}
+                          selected={vehicle.graycard_expiry_date ? new Date(vehicle.graycard_expiry_date) : ''}
                           placeholderText={t('mm/dd/yyyy')}
                           locale={language === 'fr' && fr}
                           // value={vehicle.inspection_expiry_date}
@@ -428,10 +437,9 @@ const VehicleForm = ({ openModal, handleModal, editUser: editVehicle, isEditing,
                         </label>
 
                         <DatePicker
-                          // selected={vehicle.insurance_expiry_date ? vehicle.insurance_expiry_date : ''}
+                          selected={vehicle.insurance_expiry_date}
                           placeholderText={t('mm/dd/yyyy')}
                           locale={language === 'fr' && fr}
-                          value={vehicle.insurance_expiry_date}
                           // onChange={handleInputChange}
                           onChange={handleDateChange2}
                           minDate={new Date(Date.now())}
