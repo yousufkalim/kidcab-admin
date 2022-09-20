@@ -7,10 +7,18 @@ import { Modal, ModalBody, ModalHeader, ModalFooter, Button, FormGroup, Form, In
 import { useTranslation } from 'react-i18next';
 import moment from 'moment';
 
+import DatePicker from 'react-datepicker';
+
+import 'react-datepicker/dist/react-datepicker.css';
+
+import fr from 'date-fns/locale/fr-CA';
+import 'react-day-picker/lib/style.css';
+
 // core components
 
 const InvoiceForm = ({ openModal, handleModal, editUser, isEditing, autoRefresh }) => {
   const { t, i18n } = useTranslation();
+  const { language } = i18n;
   const [user, setUser] = useState({
     invoice_title: '',
     issue_date: '',
@@ -56,7 +64,7 @@ const InvoiceForm = ({ openModal, handleModal, editUser, isEditing, autoRefresh 
     if (isEditing) {
       setUser({
         invoice_title: editUser?.invoice_title,
-        issue_date: editUser?.issue_date,
+        issue_date: new Date(editUser?.issue_date),
         totalTrips: editUser?.trip_info.total_trips,
         totalPrice: editUser?.total_price,
         unitPrice: editUser.trip_info.unit_price,
@@ -74,6 +82,13 @@ const InvoiceForm = ({ openModal, handleModal, editUser, isEditing, autoRefresh 
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const handleDateChange2 = (e) => {
+    setUser((user) => ({
+      ...user,
+      issue_date: e,
+    }));
+  };
 
   const handleInputChange = (e) => {
     if (e.target.name === 'totalTrips') {
@@ -121,11 +136,11 @@ const InvoiceForm = ({ openModal, handleModal, editUser, isEditing, autoRefresh 
     api(method, uri).then((res) => {
       // eslint-disable-next-line eqeqeq
       if (res.status == 200) {
-        toast.success('Delete Successfully');
+        toast.success(`${t('Delete Successfully')}`);
         handleModal();
         autoRefresh();
       } else {
-        toast.error('Delete Error', res.data.message);
+        toast.error(`${t('Delete Error')}`, `${t(res.data.message)}`);
       }
     });
   };
@@ -183,11 +198,11 @@ const InvoiceForm = ({ openModal, handleModal, editUser, isEditing, autoRefresh 
     }
     api(method, uri, formData).then(async (res) => {
       if (res.status === 200) {
-        toast.success('Saved Successfully');
+        toast.success(`${t('Saved Successfully')}`);
         handleModal();
         autoRefresh();
       } else {
-        toast.error('Save Error', res);
+        toast.error(`${t('Save Error')}`);
       }
     });
   };
@@ -225,11 +240,11 @@ const InvoiceForm = ({ openModal, handleModal, editUser, isEditing, autoRefresh 
     }
     api(method, uri, formData).then((res) => {
       if (res.status === 200) {
-        toast.success('Saved Successfully');
+        toast.success(`${t('Saved Successfully')}`);
         handleModal();
         autoRefresh();
       } else {
-        toast.error('Save Error', res);
+        toast.error(`${t('Save Error')}`);
       }
     });
   };
@@ -271,13 +286,22 @@ const InvoiceForm = ({ openModal, handleModal, editUser, isEditing, autoRefresh 
                         <label className="form-control-label" htmlFor="input-lname">
                           <span style={{ color: 'red' }}>{user?.issue_date ? '' : '*'}</span> {t('Issue Date')}
                         </label>
-                        <Input
+                        {/* <Input
                           className="form-control"
                           id="input-lname"
                           type="date"
                           value={user?.issue_date?.split('T')[0]}
                           name="issue_date"
                           onChange={handleInputChange}
+                        /> */}
+                        <DatePicker
+                          // selected={trip.date ? trip.date : editTrip.date?.split('T')[0]}
+                          // selected={trip.date}
+                          selected={user?.issue_date}
+                          locale={language === 'fr' && fr}
+                          // value={trip.date ? trip.date : editTrip.date?.split('T')[0]}
+
+                          onChange={handleDateChange2}
                         />
                       </FormGroup>
                     </Col>

@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { Card, CardBody, CardTitle, Container, Row, Col } from "reactstrap";
-import ReactPaginate from "react-paginate";
-import api from "../../api/index";
-import { useTranslation } from "react-i18next";
+import React, { useEffect, useState } from 'react';
+import { Card, CardBody, CardTitle, Container, Row, Col } from 'reactstrap';
+import ReactPaginate from 'react-paginate';
+import api from '../../api/index';
+import { useTranslation } from 'react-i18next';
 
 const Header = () => {
   const { t, i18n } = useTranslation();
@@ -16,16 +16,16 @@ const Header = () => {
   }, []);
 
   const autoRefresh = () => {
-    api("get", `users/`).then((res) => {
+    api('get', `users/`).then((res) => {
       setUsers(res?.data?.users.length);
     });
-    api("get", `trips/`).then((res) => {
+    api('get', `trips/`).then((res) => {
       setTrips(res?.data?.trips.length);
     });
-    api("get", `passengers/`).then((res) => {
+    api('get', `passengers/`).then((res) => {
       setPassengers(res?.data?.passengers.length);
     });
-    api("get", `drivers/`).then((res) => {
+    api('get', `drivers/`).then((res) => {
       setDrivers(res?.data?.drivers.length);
     });
   };
@@ -41,16 +41,10 @@ const Header = () => {
                   <CardBody>
                     <Row>
                       <div className="col">
-                        <CardTitle
-                          tag="h5"
-                          width="5ch"
-                          className="text-uppercase text-muted mb-0"
-                        >
-                          {t("Total Users")}
+                        <CardTitle tag="h5" width="5ch" className="text-uppercase text-muted mb-0">
+                          {t('Total Users')}
                         </CardTitle>
-                        <span className="h2 font-weight-bold mb-0">
-                          {users}
-                        </span>
+                        <span className="h2 font-weight-bold mb-0">{users}</span>
                       </div>
                       <Col className="col-auto">
                         <div className="icon icon-shape bg-danger text-white rounded-circle shadow">
@@ -66,16 +60,10 @@ const Header = () => {
                   <CardBody>
                     <Row>
                       <div className="col">
-                        <CardTitle
-                          tag="h5"
-                          width="5ch"
-                          className="text-uppercase text-muted mb-0"
-                        >
-                          {t("Total Trips")}
+                        <CardTitle tag="h5" width="5ch" className="text-uppercase text-muted mb-0">
+                          {t('Total Number of Trips')}
                         </CardTitle>
-                        <span className="h2 font-weight-bold mb-0">
-                          {trips}
-                        </span>
+                        <span className="h2 font-weight-bold mb-0">{trips}</span>
                       </div>
                       <Col className="col-auto">
                         <div className="icon icon-shape bg-danger text-white rounded-circle shadow">
@@ -91,16 +79,10 @@ const Header = () => {
                   <CardBody>
                     <Row>
                       <div className="col">
-                        <CardTitle
-                          tag="h5"
-                          width="5ch"
-                          className="text-uppercase text-muted mb-0"
-                        >
-                          {t("Total Drivers")}
+                        <CardTitle tag="h5" width="5ch" className="text-uppercase text-muted mb-0">
+                          {t('Total Number of Drivers')}
                         </CardTitle>
-                        <span className="h2 font-weight-bold mb-0">
-                          {drivers}
-                        </span>
+                        <span className="h2 font-weight-bold mb-0">{drivers}</span>
                       </div>
                       <Col className="col-auto">
                         <div className="icon icon-shape bg-warning text-white rounded-circle shadow">
@@ -116,16 +98,10 @@ const Header = () => {
                   <CardBody>
                     <Row>
                       <div className="col">
-                        <CardTitle
-                          tag="h5"
-                          width="5ch"
-                          className="text-uppercase text-muted mb-0"
-                        >
-                          {t("Total Passengers")}
+                        <CardTitle tag="h5" width="5ch" className="text-uppercase text-muted mb-0">
+                          {t('Total Passengers')}
                         </CardTitle>
-                        <span className="h2 font-weight-bold mb-0">
-                          {passengers}
-                        </span>
+                        <span className="h2 font-weight-bold mb-0">{passengers}</span>
                       </div>
                       <Col className="col-auto">
                         <div className="icon icon-shape bg-yellow text-white rounded-circle shadow">

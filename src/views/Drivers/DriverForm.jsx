@@ -187,11 +187,11 @@ const DriverForm = ({ openModal, handleModal, editUser, isEditing, isClose, auto
     }
     api(method, uri).then((res) => {
       if (res.status == 200) {
-        toast.success('Delete Successfully');
+        toast.success(`${t('Delete Successfully')}`);
         handleModal();
         autoRefresh();
       } else {
-        toast.error('Delete Error', res.data.message);
+        toast.error(`${t('Delete Error')}`, `${t(res.data.message)}`);
       }
     });
   };
@@ -330,7 +330,7 @@ const DriverForm = ({ openModal, handleModal, editUser, isEditing, isClose, auto
     }
     api(method, uri, formData).then((res) => {
       if (res.status == 200) {
-        toast.success('Saved Successfully');
+        toast.success(`${t('Saved Successfully')}`);
         // setUserData({
         //   profile_pic: "",
         //   id_front: "",
@@ -371,17 +371,16 @@ const DriverForm = ({ openModal, handleModal, editUser, isEditing, isClose, auto
         handleModal();
         autoRefresh();
       } else {
-        toast.error('Save Error', res);
+        toast.error(`${t('Save Error')}`);
       }
     });
   };
 
   return (
     <>
-      {console.log(user, 'd')}
       <Modal isOpen={openModal} size="xl" centered>
         <ModalHeader charCode="X" toggle={handleModal}>
-          {isEditing ? t('Edit') : t('Add')} {t('Driver')}
+          {isEditing ? <>{t('Edit Driver')}</> : <>{t('Add Driver')}</>}
         </ModalHeader>
         <ModalBody>
           <Row>

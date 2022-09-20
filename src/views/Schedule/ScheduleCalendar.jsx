@@ -97,7 +97,10 @@ const ScheduleCalendar = (props) => {
         end.setHours(end.getHours() + 1);
         allEvents.push({
           id: e._id,
-          title: e.client.first_name + e.client.last_name,
+          title:
+            `${e?.client?.first_name[0]?.toUpperCase()}${e?.client?.first_name?.substring(1)}` +
+            ' ' +
+            `${e?.client?.last_name[0]?.toUpperCase()}${e?.client?.last_name?.substring(1)}`,
           start: new Date(e.date),
           end: end,
           status: e.status,
@@ -183,7 +186,7 @@ const ScheduleCalendar = (props) => {
         alignItems: 'center',
       }}
     >
-      {events.length === 0 ? (
+      {events.length < 0 ? (
         <Spinner color="primary" />
       ) : (
         <>

@@ -8,8 +8,16 @@ import { useTranslation } from 'react-i18next';
 
 // core components
 import Select from 'react-select';
+import DayPicker, { DateUtils } from 'react-day-picker';
+import DatePicker from 'react-datepicker';
+
+import 'react-datepicker/dist/react-datepicker.css';
+
+import fr from 'date-fns/locale/fr-CA';
+import 'react-day-picker/lib/style.css';
 const QuotesForm = ({ openModal, handleModal, editQuote, isEditing, autoRefresh }) => {
   const { t, i18n } = useTranslation();
+  const { language } = i18n;
   const [quote, setQuote] = useState({
     title: '',
     quoteNumber: '',
@@ -52,13 +60,13 @@ const QuotesForm = ({ openModal, handleModal, editQuote, isEditing, autoRefresh 
         quoteNumber: editQuote.quote_number,
         client: editQuote.client,
         status: editQuote.status,
-        issueDate: editQuote.issue_date,
+        issueDate: new Date(editQuote.issue_date),
         totalTrips: editQuote.trip_info.total_trips,
         totalPrice: editQuote.total_price,
         unitPrice: editQuote.trip_info.unit_price,
         vat: editQuote.vat,
-        startDate: editQuote.trip_info.start_date,
-        endDate: editQuote.trip_info.end_date,
+        startDate: new Date(editQuote.trip_info.start_date),
+        endDate: new Date(editQuote.trip_info.end_date),
         docuSignLink: editQuote.docu_sign_link,
         comment: editQuote?.comment,
       });
@@ -68,6 +76,18 @@ const QuotesForm = ({ openModal, handleModal, editQuote, isEditing, autoRefresh 
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const handleDateChange = (e) => {
+    setQuote({ ...quote, issueDate: e });
+  };
+
+  const handleDateChange2 = (e) => {
+    setQuote({ ...quote, endDate: e });
+  };
+
+  const handleDateChange1 = (e) => {
+    setQuote({ ...quote, startDate: e });
+  };
 
   const handleInputChange = (e) => {
     if (e.target.name === 'totalTrips') {
@@ -111,11 +131,11 @@ const QuotesForm = ({ openModal, handleModal, editQuote, isEditing, autoRefresh 
     api(method, uri).then((res) => {
       // eslint-disable-next-line eqeqeq
       if (res.status == 200) {
-        toast.success('Delete Successfully');
+        toast.success(`${t('Delete Successfully')}`);
         handleModal();
         autoRefresh();
       } else {
-        toast.error('Delete Error', res.data.message);
+        toast.error(`${t('Delete Error')}`, `${t(res.data.message)}`);
       }
     });
   };
@@ -131,8 +151,8 @@ const QuotesForm = ({ openModal, handleModal, editQuote, isEditing, autoRefresh 
     let uri = 'quotes';
     const tripInfo = {
       total_trips: quote.totalTrips,
-      start_date: quote.startDate,
-      end_date: quote.endDate,
+      start_date: new Date(quote.startDate),
+      end_date: new Date(quote.endDate),
       start_address: startAddress,
       end_address: endAddress,
       unit_price: quote.unitPrice,
@@ -143,7 +163,7 @@ const QuotesForm = ({ openModal, handleModal, editQuote, isEditing, autoRefresh 
     formData['comment'] = quote.comment;
     formData['description'] = quote.description;
     formData['quote_number'] = quote.quoteNumber;
-    formData['issue_date'] = quote.issueDate;
+    formData['issue_date'] = new Date(quote.issueDate);
     formData['total_price'] = quote.totalPrice;
     formData['vat'] = quote.vat;
     formData['status'] = quote.status;
@@ -206,11 +226,11 @@ const QuotesForm = ({ openModal, handleModal, editQuote, isEditing, autoRefresh 
 
     api(method, uri, formData).then((res) => {
       if (res.status === 200) {
-        toast.success('Saved Successfully');
+        toast.success(`${t('Saved Successfully')}`);
         handleModal();
         autoRefresh();
       } else {
-        toast.error('Save Error', res);
+        toast.error(`${t('Save Error')}`, `${t(res)}`);
       }
     });
   };
@@ -293,11 +313,11 @@ const QuotesForm = ({ openModal, handleModal, editQuote, isEditing, autoRefresh 
 
     api(method, uri, formData).then((res) => {
       if (res.status === 200) {
-        toast.success('Saved Successfully');
+        toast.success(`${t('Saved Successfully')}`);
         handleModal();
         autoRefresh();
       } else {
-        toast.error('Save Error', res);
+        toast.error(`${t('Save Error')}`, `${t(res)}`);
       }
     });
   };
@@ -364,17 +384,17 @@ const QuotesForm = ({ openModal, handleModal, editQuote, isEditing, autoRefresh 
                             hideSelectedOptions
                             className="form-control-alternative"
                             defaultValue={
-                              quote?.client && {
-                                value: quote.client?._id,
-                                label: `${quote?.client?.first_name[0].toUpperCase() + quote?.client?.first_name.substring(1)} ${
-                                  quote?.client?.last_name[0].toUpperCase() + quote?.client?.last_name.substring(1)
-                                }`,
+                              editQuote?.client && {
+                                value: editQuote.client?._id,
+                                label: `${
+                                  editQuote?.client?.first_name[0]?.toUpperCase() + editQuote?.client?.first_name?.substring(1)
+                                } ${editQuote?.client?.last_name[0]?.toUpperCase() + editQuote?.client?.last_name?.substring(1)}`,
                               }
                             }
                             options={clients.map((client) => ({
-                              value: client._id,
-                              label: `${client?.first_name[0].toUpperCase() + client?.first_name.substring(1)} ${
-                                client?.last_name[0].toUpperCase() + client?.last_name.substring(1)
+                              value: client?._id,
+                              label: `${client?.first_name[0]?.toUpperCase() + client?.first_name?.substring(1)} ${
+                                client?.last_name[0]?.toUpperCase() + client?.last_name?.substring(1)
                               }`,
                             }))}
                           />
@@ -406,7 +426,7 @@ const QuotesForm = ({ openModal, handleModal, editQuote, isEditing, autoRefresh 
                         <label className="form-control-label" htmlFor="input-lname">
                           <span style={{ color: 'red' }}>{quote.issueDate ? '' : '*'}</span> {t('Issue Date')}
                         </label>
-                        <Input
+                        {/* <Input
                           className="form-control-alternative"
                           id="input-lname"
                           placeholder="Quote Number"
@@ -414,6 +434,15 @@ const QuotesForm = ({ openModal, handleModal, editQuote, isEditing, autoRefresh 
                           value={quote.issueDate?.split('T')[0]}
                           name="issueDate"
                           onChange={handleInputChange}
+                        /> */}
+                        <DatePicker
+                          // selected={trip.date ? trip.date : editTrip.date?.split('T')[0]}
+                          // selected={trip.date}
+                          selected={quote.issueDate}
+                          locale={language === 'fr' && fr}
+                          // value={trip.date ? trip.date : editTrip.date?.split('T')[0]}
+                          onChange={handleDateChange}
+                          placeholderText={t('YYYY/MM/DD')}
                         />
                       </FormGroup>
                     </Col>
@@ -482,14 +511,14 @@ const QuotesForm = ({ openModal, handleModal, editQuote, isEditing, autoRefresh 
                         <label className="form-control-label" htmlFor="input-lname">
                           <span style={{ color: 'red' }}>{quote.startDate ? '' : '*'}</span> {t('Start Date')}
                         </label>
-                        <Input
-                          className="form-control-alternative"
-                          id="input-lname"
-                          placeholder={t('Quote Number')}
-                          type="date"
-                          value={quote.startDate?.split('T')[0]}
-                          name="startDate"
-                          onChange={handleInputChange}
+                        <DatePicker
+                          // selected={trip.date ? trip.date : editTrip.date?.split('T')[0]}
+                          // selected={trip.date}
+                          selected={quote.startDate}
+                          locale={language === 'fr' && fr}
+                          // value={trip.date ? trip.date : editTrip.date?.split('T')[0]}
+                          onChange={handleDateChange1}
+                          placeholderText={t('YYYY/MM/DD')}
                         />
                       </FormGroup>
                     </Col>{' '}
@@ -498,14 +527,14 @@ const QuotesForm = ({ openModal, handleModal, editQuote, isEditing, autoRefresh 
                         <label className="form-control-label" htmlFor="input-lname">
                           <span style={{ color: 'red' }}>{quote.endDate ? '' : '*'}</span> {t('End Date')}
                         </label>
-                        <Input
-                          className="form-control-alternative"
-                          id="input-lname"
-                          placeholder={t('Quote Number')}
-                          type="date"
-                          value={quote.endDate?.split('T')[0]}
-                          name="endDate"
-                          onChange={handleInputChange}
+                        <DatePicker
+                          // selected={trip.date ? trip.date : editTrip.date?.split('T')[0]}
+                          // selected={trip.date}
+                          selected={quote.endDate}
+                          locale={language === 'fr' && fr}
+                          // value={trip.date ? trip.date : editTrip.date?.split('T')[0]}
+                          onChange={handleDateChange2}
+                          placeholderText={t('YYYY/MM/DD')}
                         />
                       </FormGroup>
                     </Col>

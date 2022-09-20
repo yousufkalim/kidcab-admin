@@ -52,7 +52,7 @@ const TripRow = ({ trip, autoRefresh, selectedItems, handleSelect }) => {
                   i?.driver?.first_name.substring(1) +
                   ' ' +
                   i?.driver?.last_name[0].toUpperCase() +
-                  i?.driver.last_name.substring(1)
+                  i?.driver?.last_name.substring(1)
                 );
               })}
             </td>

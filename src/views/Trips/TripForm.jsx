@@ -10,8 +10,14 @@ import { Modal, ModalBody, ModalHeader, ModalFooter, Button, FormGroup, Form, In
 // core components
 import Select from 'react-select';
 import DayPicker, { DateUtils } from 'react-day-picker';
+import DatePicker from 'react-datepicker';
+
+import 'react-datepicker/dist/react-datepicker.css';
+
+import fr from 'date-fns/locale/fr-CA';
 import 'react-day-picker/lib/style.css';
 import { useTranslation } from 'react-i18next';
+
 const options = [
   { value: 1, label: 'Monday' },
   { value: 2, label: 'Tuesday' },
@@ -37,6 +43,7 @@ const disableDates = () => {
 };
 const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoRefresh }) => {
   const { t, i18n } = useTranslation();
+  const { language } = i18n;
   const [trip, setTrip] = useState({
     date: '',
     status: 'pending',
@@ -90,7 +97,7 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
       setAllAddresses(editTrip.addresses);
 
       setTrip({
-        date: editTrip.date,
+        date: new Date(editTrip.date),
         status: editTrip.status,
         addresses: editTrip.addresses,
         client_price: editTrip.client_price,
@@ -129,6 +136,18 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
     }
   };
 
+  const handleDateChange = (e) => {
+    setTrip({ ...trip, enddate: e });
+  };
+
+  const handleDateChange2 = (e) => {
+    setTrip({ ...trip, date: e });
+  };
+
+  const handleDateChange1 = (e) => {
+    setTrip({ ...trip, startdate: e });
+  };
+
   const handleDayChange = (e) => {
     setTrip({ ...trip, Days: e.value });
     let data = [];
@@ -165,11 +184,11 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
       .then((res) => {
         // eslint-disable-next-line eqeqeq
         if (res.status == 200) {
-          toast.success('Delete Successfully');
+          toast.success(`${t('Delete Successfully')}`);
           handleModal();
           autoRefresh();
         } else {
-          toast.error('Delete Error', res.data.message);
+          toast.error(`${t('Delete Error')}`, `${t(res.data.message)}`);
         }
       })
       .catch((error) => {
@@ -263,11 +282,11 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
       }).then((res) => {
         // eslint-disable-next-line eqeqeq
         if (res.status == 200) {
-          toast.success('Saved Successfully');
+          toast.success(`${t('Saved Successfully')}`);
           handleModal();
           autoRefresh();
         } else {
-          toast.error('Save Error', res);
+          toast.error(t('Save Error'), `${t(res)}`);
         }
       });
     } else {
@@ -289,11 +308,12 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
       }).then((res) => {
         // eslint-disable-next-line eqeqeq
         if (res.status == 200) {
-          toast.success('Saved Successfully');
+          toast.success(`${t('Saved Successfully')}`);
           handleModal();
           autoRefresh();
         } else {
-          toast.error('Save Error', res);
+         
+          toast.error(`${t('Save Error')}`);
         }
       });
     }
@@ -314,11 +334,13 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
     setOpenDateModal((open) => !open);
     return openDateModal;
   };
+
   return (
     <>
+      {console.log(trip.date, 'd')}
       <Modal isOpen={openModal} size="xl" centered>
         <ModalHeader charCode="X" toggle={handleModal}>
-          {isEditing ? 'Edit' : 'Add'} {t('Trip')}
+          {isEditing ? <>{t('Edit Trip')}</> : <> {t('Add Trip')}</>}
         </ModalHeader>
         <ModalBody>
           <Row>
@@ -403,17 +425,31 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
                             <span style={{ color: 'red' }}>{trip.date ? '' : '*'}</span> {t('Trip Date')}
                           </label>
                           {isEditing ? (
-                            <Input
-                              className="form-control-alternative"
-                              id="input-date"
-                              locale={'en-gb'}
-                              placeholder={t('Select Dates')}
-                              type="date"
-                              min={!isEditing && disableDates()}
-                              value={trip?.date?.split('T')[0]}
-                              name="date"
-                              onChange={handleInputChange}
-                            />
+                            // <Input
+                            //   className="form-control-alternative"
+                            //   id="input-date"
+                            //   locale={'fr-CA'}
+                            //   placeholder={t('Select Dates')}
+                            //   type="date"
+                            //   min={!isEditing && disableDates()}
+                            //   value={trip?.date?.split('T')[0]}
+                            //   name="date"
+                            //   onChange={handleInputChange}
+                            // />
+                            <>
+                              {trip.date && (
+                                <DatePicker
+                                  // selected={trip.date ? trip.date : editTrip.date?.split('T')[0]}
+                                  // selected={trip.date}
+                                  selected={trip.date}
+                                  locale={language === 'fr' && fr}
+                                  // value={trip.date ? trip.date : editTrip.date?.split('T')[0]}
+
+                                  onChange={handleDateChange2}
+                                  minDate={!isEditing && new Date(Date.now())}
+                                />
+                              )}
+                            </>
                           ) : (
                             <Input
                               className="form-control-alternative"
@@ -457,17 +493,16 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
                             <label className="form-control-label" htmlFor="input-date">
                               <span style={{ color: 'red' }}>{trip.startdate ? '' : '*'}</span> {t('Start Date')}
                             </label>
-                            <Input
-                              className="form-control-alternative"
-                              id="input-date"
-                              // value={selectedDays?.map((i) => i)}
-                              placeholder={t('Select Date')}
-                              type="date"
-                              value={trip.startdate}
-                              min={disableDates()}
+
+                            <DatePicker
+                              selected={trip.startdate ? trip.startdate : ''}
                               name="startdate"
-                              onChange={handleInputChange}
-                              // onClick={() => setOpenDateModal(true)}
+                              placeholderText={t('Select Date')}
+                              locale={language === 'fr' && fr}
+                              value={trip.startdate}
+                              // onChange={handleInputChange}
+                              onChange={handleDateChange1}
+                              minDate={new Date(Date.now())}
                             />
                           </FormGroup>
                         </Col>
@@ -476,17 +511,15 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
                             <label className="form-control-label" htmlFor="input-date">
                               <span style={{ color: 'red' }}>{trip.enddate ? '' : '*'}</span> {t('End Date')}
                             </label>
-                            <Input
-                              className="form-control-alternative"
-                              id="input-date"
-                              min={disableDates()}
-                              // value={selectedDays?.map((i) => i)}
-                              placeholder={t('Select Date')}
-                              type="date"
-                              value={trip.enddate}
+
+                            <DatePicker
+                              selected={trip.enddate ? trip.enddate : ''}
                               name="enddate"
-                              onChange={handleInputChange}
-                              // onClick={() => setOpenDateModal(true)}
+                              placeholderText={t('Select Date')}
+                              locale={language === 'fr' && fr}
+                              value={trip.enddate}
+                              onChange={handleDateChange}
+                              minDate={new Date(Date.now())}
                             />
                           </FormGroup>
                         </Col>
@@ -519,7 +552,13 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
                                   <label className="form-control-label" htmlFor="input-Day">
                                     {t('Day')}
                                   </label>
-                                  <Input id="input-Day" name="input-Day" readOnly className="input-Day" value={i.label}></Input>
+                                  <Input
+                                    id="input-Day"
+                                    name="input-Day"
+                                    readOnly
+                                    className="input-Day"
+                                    value={t(i.label)}
+                                  ></Input>
                                 </FormGroup>
                               </Col>
                               <Col lg="6">
@@ -734,10 +773,15 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
       </Modal>
       <Modal isOpen={openDateModal} size="sm" centered>
         <ModalHeader charCode="X" toggle={handleDateModal}>
-          {isEditing ? 'Edit' : 'Select'} {t('Date')}
+          {isEditing ? <> {t('Edit Date')}</> : <>{t('Select Date')}</>}
         </ModalHeader>
         <div style={{ textAlign: 'center' }}>
-          <DayPicker disabledDays={{ before: new Date() }} selectedDays={selectedDays} onDayClick={handleDayClick} />
+          <DayPicker
+            disabledDays={{ before: new Date() }}
+            selectedDays={selectedDays}
+            locale="fr-CA"
+            onDayClick={handleDayClick}
+          />
         </div>
         <ModalFooter>
           <Button color="success" onClick={handleDateModal}>

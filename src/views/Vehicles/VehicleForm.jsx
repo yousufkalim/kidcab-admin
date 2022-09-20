@@ -6,6 +6,13 @@ import { Modal, ModalBody, ModalHeader, ModalFooter, Button, FormGroup, Form, In
 import moment from 'moment';
 import View from '../../components/view';
 import FilePicker from '../../components/Form/FilePicker';
+import DayPicker, { DateUtils } from 'react-day-picker';
+import DatePicker from 'react-datepicker';
+
+import 'react-datepicker/dist/react-datepicker.css';
+
+import fr from 'date-fns/locale/fr-CA';
+import 'react-day-picker/lib/style.css';
 import { useTranslation } from 'react-i18next';
 
 // core components
@@ -13,6 +20,7 @@ let current = moment();
 
 const VehicleForm = ({ openModal, handleModal, editUser: editVehicle, isEditing, autoRefresh }) => {
   const { t, i18n } = useTranslation();
+  const { language } = i18n;
   const [drivers, setDrivers] = useState([]);
   const [data, setData] = useState({});
   const [vehicle, setVehicle] = useState({
@@ -42,14 +50,14 @@ const VehicleForm = ({ openModal, handleModal, editUser: editVehicle, isEditing,
         model: editVehicle.model,
         color: editVehicle.color,
         engine_type: editVehicle.engine_type,
-        inspection_date: editVehicle.inspection_date,
+        inspection_date: new Date(editVehicle.inspection_date),
         graycard: editVehicle.graycard,
-        graycard_expiry_date: editVehicle?.graycard_expiry_date,
+        graycard_expiry_date: new Date(editVehicle?.graycard_expiry_date),
         driver: editVehicle.driver,
         number_plate: editVehicle.number_plate,
-        inspection_expiry_date: editVehicle.inspection_expiry_date,
+        inspection_expiry_date: new Date(editVehicle.inspection_expiry_date),
         insurance_certificate: editVehicle.insurance_certificate,
-        insurance_expiry_date: editVehicle.insurance_expiry_date,
+        insurance_expiry_date: new Date(editVehicle.insurance_expiry_date),
         registration_card: editVehicle.registration_card,
       });
       setDocs({
@@ -60,6 +68,15 @@ const VehicleForm = ({ openModal, handleModal, editUser: editVehicle, isEditing,
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  const handleDateChange = (e) => {
+    setVehicle({ ...vehicle, inspection_date: e });
+  };
+  const handleDateChange1 = (e) => {
+    setVehicle({ ...vehicle, inspection_expiry_date: e });
+  };
+  const handleDateChange2 = (e) => {
+    setVehicle({ ...vehicle, insurance_expiry_date: e });
+  };
   const handleFileChange = (e) => {
     setVehicle({ ...vehicle, [e.target.name]: e.target.files[0] });
   };
@@ -83,12 +100,11 @@ const VehicleForm = ({ openModal, handleModal, editUser: editVehicle, isEditing,
       .then((res) => {
         // eslint-disable-next-line eqeqeq
         if (res.status == 200) {
-          toast.success('Delete Successfully');
+          toast.success(`${t('Delete Successfully')}`);
           handleModal();
           autoRefresh();
         } else {
-          console.log('error');
-          toast.error(res.data);
+          toast.error(`${t(res.data)}`);
         }
       })
       .catch((error) => console.log(error));
@@ -161,21 +177,22 @@ const VehicleForm = ({ openModal, handleModal, editUser: editVehicle, isEditing,
     api(method, uri, formData)
       .then((res) => {
         if (res.status === 200) {
-          toast.success('Saved Successfully');
+          toast.success(`${t('Saved Successfully')}`);
           autoRefresh();
           handleModal();
         } else {
-          toast.error('Save Error', res);
+          toast.error(`${t('Save Error')}`, `${t(res)}`);
         }
       })
-      .catch((error) => toast.error(error.message));
+      .catch((error) => toast.error(`${t(error.message)}`));
   };
 
   return (
     <>
+      {console.log(vehicle.insurance_expiry_date)}
       <Modal isOpen={openModal} size="xl" centered>
         <ModalHeader charCode="X" toggle={handleModal}>
-          {isEditing ? 'Edit' : 'Add'} {t('Vehicle')}
+          {isEditing ? <>{t('Edit Vehicle')}</> : <>{t('Add Vehicle')}</>}
         </ModalHeader>
         <ModalBody>
           <Row>
@@ -313,16 +330,15 @@ const VehicleForm = ({ openModal, handleModal, editUser: editVehicle, isEditing,
                           <span style={{ color: 'red' }}>{vehicle.inspection_date ? '' : '*'}</span>{' '}
                           {t('Last technical inspection')}
                         </Label>
-                        <Input
-                          className="form-control-alternative"
-                          id="input-date"
-                          name="inspection_date"
-                          required={true}
-                          placeholder={t('Enter last technical inspection date')}
-                          value={vehicle?.inspection_date?.split('T')[0]}
-                          onChange={handleInputChange}
-                          type="date"
-                          max={moment(current).format('YYYY-MM-DD')}
+
+                        <DatePicker
+                          selected={vehicle.inspection_date}
+                          placeholderText={t('mm/dd/yyyy')}
+                          locale={language === 'fr' && fr}
+                          // value={vehicle.inspection_date}
+                          // onChange={handleInputChange}
+                          onChange={handleDateChange}
+                          maxDate={new Date(Date.now())}
                         />
                       </FormGroup>
                     </Col>
@@ -369,16 +385,14 @@ const VehicleForm = ({ openModal, handleModal, editUser: editVehicle, isEditing,
                           {t('Gray Valid Till')}
                         </label>
 
-                        <Input
-                          className="form-control-alternative"
-                          id="input-date"
-                          required={true}
-                          placeholder={t('Enter validity date')}
-                          type="date"
-                          value={vehicle?.graycard_expiry_date?.split('T')[0]}
-                          name="graycard_expiry_date"
-                          onChange={handleInputChange}
-                          min={moment(current).format('YYYY-MM-DD')}
+                        <DatePicker
+                          selected={new Date(vehicle.inspection_expiry_date)}
+                          placeholderText={t('mm/dd/yyyy')}
+                          locale={language === 'fr' && fr}
+                          // value={vehicle.inspection_expiry_date}
+                          // onChange={handleInputChange}
+                          onChange={handleDateChange1}
+                          minDate={new Date(Date.now())}
                         />
                       </FormGroup>
                     </Col>
@@ -413,16 +427,14 @@ const VehicleForm = ({ openModal, handleModal, editUser: editVehicle, isEditing,
                           {t('Insurance Valid Till')}
                         </label>
 
-                        <Input
-                          className="form-control-alternative"
-                          id="input-date"
-                          required={true}
-                          placeholder={t('Enter validity date')}
-                          type="date"
-                          value={vehicle?.insurance_expiry_date?.split('T')[0]}
-                          name="insurance_expiry_date"
-                          onChange={handleInputChange}
-                          min={moment(current).format('YYYY-MM-DD')}
+                        <DatePicker
+                          // selected={vehicle.insurance_expiry_date ? vehicle.insurance_expiry_date : ''}
+                          placeholderText={t('mm/dd/yyyy')}
+                          locale={language === 'fr' && fr}
+                          value={vehicle.insurance_expiry_date}
+                          // onChange={handleInputChange}
+                          onChange={handleDateChange2}
+                          minDate={new Date(Date.now())}
                         />
                       </FormGroup>
                     </Col>

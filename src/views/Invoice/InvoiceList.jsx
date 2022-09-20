@@ -192,7 +192,7 @@ const InvoiceList = () => {
                             caret
                             style={{ textTransform: 'capitalize' }}
                           >
-                            {statusdropDown}
+                            {t(statusdropDown)}
                           </DropdownToggle>
                           <DropdownMenu>
                             <DropdownItem name="pending" onClick={changeStatus}>

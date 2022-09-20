@@ -75,7 +75,7 @@ const ViewRequest = ({ openModal, handleModal, request }) => {
                     </Col>
                   </Row>
                   <Row>
-                    <Col lg="3" style={{ margin: 'auto' }}>
+                    <Col lg="4" style={{ margin: 'auto' }}>
                       <FormGroup>
                         <span style={{ color: 'red' }}>{request.baby ? '' : '*'} </span>
                         <label className="form-control-label">{t('Total Babies')}</label>
@@ -87,7 +87,7 @@ const ViewRequest = ({ openModal, handleModal, request }) => {
                         />
                       </FormGroup>
                     </Col>
-                    <Col lg="3" style={{ margin: 'auto' }}>
+                    <Col lg="4" style={{ margin: 'auto' }}>
                       <FormGroup>
                         <span style={{ color: 'red' }}>{request.baby ? '' : '*'} </span>
                         <label className="form-control-label">{t('Total Children')}</label>
@@ -99,7 +99,7 @@ const ViewRequest = ({ openModal, handleModal, request }) => {
                         />
                       </FormGroup>
                     </Col>
-                    <Col lg="3" style={{ margin: 'auto' }}>
+                    <Col lg="4" style={{ margin: 'auto' }}>
                       <FormGroup>
                         <span style={{ color: 'red' }}>{request.baby ? '' : '*'} </span>
                         <label className="form-control-label">{t('Total Adults')}</label>
@@ -113,7 +113,7 @@ const ViewRequest = ({ openModal, handleModal, request }) => {
                     </Col>
                   </Row>
                   <Row>
-                    <Col lg="3" style={{ margin: 'auto' }}>
+                    <Col lg="4" style={{ margin: 'auto' }}>
                       <FormGroup>
                         <label className="form-control-label">{t('PickUp Address')}</label>
                         <Input
@@ -124,7 +124,7 @@ const ViewRequest = ({ openModal, handleModal, request }) => {
                         />
                       </FormGroup>
                     </Col>
-                    <Col lg="3" style={{ margin: 'auto' }}>
+                    <Col lg="4" style={{ margin: 'auto' }}>
                       <FormGroup>
                         <label className="form-control-label">{t('Status')}</label>
                         <Input
@@ -143,7 +143,7 @@ const ViewRequest = ({ openModal, handleModal, request }) => {
                         />
                       </FormGroup>
                     </Col>
-                    <Col lg="3" style={{ margin: 'auto' }}>
+                    <Col lg="4" style={{ margin: 'auto' }}>
                       <FormGroup>
                         <label className="form-control-label">{t('Destination Address')}</label>
                         <Input
