@@ -74,7 +74,7 @@ const CompanyProfile = ({ openModal, handleModal }) => {
     }
 
     api('post', 'company', formData).then((res) => {
-      toast.success('company edited successfully');
+      toast.success(`${t('company edited successfully')}`);
       console.log(res?.data?.company?.logo, 'res?.data?.company?.logo');
       updateStore({
         logo: res?.data?.company?.logo,

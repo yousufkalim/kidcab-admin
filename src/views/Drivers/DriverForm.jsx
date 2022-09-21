@@ -78,8 +78,8 @@ const DriverForm = ({ openModal, handleModal, editUser, isEditing, isClose, auto
   useEffect(() => {
     if (isClose) {
       setUser({
-        firstName: editUser?.firstName,
-        lastName: editUser?.lastName,
+        firstName: editUser?.first_name[0].toUpperCase() + editUser?.first_name.substring(1),
+        lastName: editUser?.last_name[0].toUpperCase() + editUser?.last_name.substring(1),
         password: editUser?.password,
         email: editUser?.email,
         phone: editUser?.phone,
@@ -122,8 +122,8 @@ const DriverForm = ({ openModal, handleModal, editUser, isEditing, isClose, auto
   useEffect(() => {
     if (isEditing) {
       setUser({
-        firstName: editUser?.first_name,
-        lastName: editUser?.last_name,
+        firstName: editUser?.first_name[0].toUpperCase() + editUser?.first_name.substring(1),
+        lastName: editUser?.last_name[0].toUpperCase() + editUser?.last_name.substring(1),
         password: editUser?.password,
         email: editUser?.email,
         phone: editUser?.phone_number,
@@ -300,14 +300,26 @@ const DriverForm = ({ openModal, handleModal, editUser, isEditing, isClose, auto
     if (user.criminal_record_date) {
       formData.append('criminal_record_date', user.criminal_record_date);
     }
+    if (!user.criminal_record_date) {
+      formData.append('criminal_record_date', '');
+    }
     if (user.ris_date) {
       formData.append('ris_date', user.ris_date);
+    }
+    if (!user.ris_date) {
+      formData.append('ris_date', '');
     }
     if (user.kbis_date) {
       formData.append('kbis_date', user.kbis_date);
     }
+    if (!user.kbis_date) {
+      formData.append('kbis_date', '');
+    }
     if (user?.proRc_date) {
       formData.append('proRc_date', user.proRc_date);
+    }
+    if (!user.proRc_date) {
+      formData.append('proRc_date', '');
     }
 
     if (user.id_front) formData.append('id_card_front', user.id_front, user.id_front?.name);
