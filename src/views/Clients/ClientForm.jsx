@@ -99,23 +99,23 @@ const ClientForm = ({ openModal, handleModal, editUser, isEditing, autoRefresh }
     formData.append('intra_community', user.intraCommunityNo);
 
     if (user.firstName == '') {
-      return toast.error('Please enter your first name');
+      return toast.error(`${t('Please enter your first name')}`);
     }
     if (user.lastName == '') {
-      return toast.error('Please enter your last name');
+      return toast.error(`${t('Please enter your last name')}`);
     }
     if (user.email == '') {
-      return toast.error('Please enter email');
+      return toast.error(`${t('Please enter email')}`);
     }
     if (!(user.email.includes('.') && user.email.includes('@'))) {
-      return toast.error('Please enter a valid email');
+      return toast.error(`${t('Please enter a valid email')}`);
     }
 
     if (user.password == '') {
-      return toast.error('Password is required');
+      return toast.error(`${t('Password is required')}`);
     }
     if (user.password.length < 8) {
-      return toast.error('Passwords should be of atleast 8 letters');
+      return toast.error(`${t('Passwords should be of atleast 8 letters')}`);
     }
 
     if (editUser) {

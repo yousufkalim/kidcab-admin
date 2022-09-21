@@ -65,16 +65,16 @@ const PassengerForm = ({ openModal, handleModal, editUser, isEditing, autoRefres
 
     //validations
     if (user.firstName == '') {
-      return toast.error('Please enter your first name');
+      return toast.error(`${t('Please enter your first name')}`);
     }
     if (user.lastName == '') {
-      return toast.error('Please enter your last name');
+      return toast.error(`${t('Please enter your last name')}`);
     }
     if (user.client == '') {
-      return toast.error('Please enter client name');
+      return toast.error(`${t('Please enter client name')}`);
     }
     if (user.relationship == '') {
-      return toast.error("Please enter passenger's relationship with client");
+      return toast.error(`${t('Please enter passenger relationship with client')}`);
     }
 
     if (editUser) {

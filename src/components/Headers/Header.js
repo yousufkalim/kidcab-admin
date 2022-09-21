@@ -61,7 +61,7 @@ const Header = () => {
                     <Row>
                       <div className="col">
                         <CardTitle tag="h5" width="5ch" className="text-uppercase text-muted mb-0">
-                          {t('Total Number of Trips')}
+                          {t('Total Trips')}
                         </CardTitle>
                         <span className="h2 font-weight-bold mb-0">{trips}</span>
                       </div>
@@ -80,7 +80,7 @@ const Header = () => {
                     <Row>
                       <div className="col">
                         <CardTitle tag="h5" width="5ch" className="text-uppercase text-muted mb-0">
-                          {t('Total Number of Drivers')}
+                          {t('Total Drivers')}
                         </CardTitle>
                         <span className="h2 font-weight-bold mb-0">{drivers}</span>
                       </div>

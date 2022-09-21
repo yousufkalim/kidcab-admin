@@ -89,6 +89,18 @@ const InvoiceForm = ({ openModal, handleModal, editUser, isEditing, autoRefresh 
       issue_date: e,
     }));
   };
+  const handleDateChange = (e) => {
+    setUser((user) => ({
+      ...user,
+      startDate: e,
+    }));
+  };
+  const handleDateChange1 = (e) => {
+    setUser((user) => ({
+      ...user,
+      endDate: e,
+    }));
+  };
 
   const handleInputChange = (e) => {
     if (e.target.name === 'totalTrips') {
@@ -149,16 +161,20 @@ const InvoiceForm = ({ openModal, handleModal, editUser, isEditing, autoRefresh 
     let method = 'post';
     let uri = 'invoices';
     if (parseInt(user?.totalTrips) < 1 || user?.totalTrips == '') {
-      return toast.error('Trips should be greater than 1');
+      return toast.error(`${t("Trips should be greater than 1")}`);
+      
     }
     if (parseInt(user?.totalTrips) > parseInt(user?.totalPrice)) {
-      return toast.error('Total Price should be greater  than total trips');
+      return toast.error(`${t("Total Price should be greater  than total trips")}`);
+    
     }
     if (new Date(user?.endDate) < new Date(user?.startDate)) {
-      return toast.error('end date must be greater than start date');
+      return toast.error(`${t("end date must be greater than start date")}`);
+    
     }
     if (user?.endDate == null || user?.endDate == ' ' || user?.startDate == null || user?.startDate == ' ') {
-      return toast.error('Dates are mandatory');
+      return toast.error(`${t("Dates are mandatory")}`);
+     
     }
     const tripInfo = {
       total_trips: user?.totalTrips,
@@ -185,11 +201,13 @@ const InvoiceForm = ({ openModal, handleModal, editUser, isEditing, autoRefresh 
     formData['trip_info'] = JSON.stringify(tripInfo);
 
     if (startAddress.lat == endAddress.lat && startAddress.lng == endAddress.lng) {
-      return toast.error('Start and end address cant be same');
+      return toast.error(`${t("Start and end address cant be same")}`);
+      
     }
 
     if (startAddress.lat == '' || endAddress.lng == '') {
-      return toast.error('Adresses are mandatory');
+      return toast.error(`${t("Adresses are mandatory")}`);
+      
     }
 
     if (editUser) {
@@ -472,14 +490,13 @@ const InvoiceForm = ({ openModal, handleModal, editUser, isEditing, autoRefresh 
                         <label className="form-control-label" htmlFor="input-lname">
                           <span style={{ color: 'red' }}>{user.startDate ? '' : '*'}</span> {t('Start Date')}
                         </label>
-                        <Input
-                          className="form-control-alternative"
-                          id="input-lname"
-                          placeholder={t('Quote Number')}
-                          type="date"
-                          value={user.startDate?.split('T')[0]}
-                          name="startDate"
-                          onChange={handleInputChange}
+
+                        <DatePicker
+                          selected={user?.startDate ? new Date(user.startDate) : ''}
+                          placeholderText={t('mm/dd/yyyy')}
+                          locale={language === 'fr' && fr}
+                          // onChange={handleInputChange}
+                          onChange={handleDateChange}
                         />
                       </FormGroup>
                     </Col>{' '}
@@ -488,14 +505,13 @@ const InvoiceForm = ({ openModal, handleModal, editUser, isEditing, autoRefresh 
                         <label className="form-control-label" htmlFor="input-lname">
                           <span style={{ color: 'red' }}>{user.endDate ? '' : '*'}</span> {t('End Date')}
                         </label>
-                        <Input
-                          className="form-control-alternative"
-                          id="input-lname"
-                          placeholder={t('Quote Number')}
-                          type="date"
-                          value={user.endDate?.split('T')[0]}
-                          name="endDate"
-                          onChange={handleInputChange}
+
+                        <DatePicker
+                          selected={user?.endDate ? new Date(user.endDate) : ''}
+                          placeholderText={t('mm/dd/yyyy')}
+                          locale={language === 'fr' && fr}
+                          // onChange={handleInputChange}
+                          onChange={handleDateChange1}
                         />
                       </FormGroup>
                     </Col>

@@ -214,34 +214,34 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
         endAddress.PostalCode == stepAddress.PostalCode &&
         endAddress.city == stepAddress.city)
     ) {
-      return toast.error('Adresses cant be same');
+      return toast.error(`${t('Adresses cant be same')}`);
     }
     if (trip.status == '') {
-      return toast.error('Please enter trip status');
+      return toast.error(`${t('Please enter trip status')}`);
     }
     if (selectedDays.length == 0 && !isEditing && trip.trip_type == 'simple') {
-      return toast.error('Please enter trip dates');
+      return toast.error(`${t('Please enter trip dates')}`);
     }
     if (trip?.status == 'confirmed' || trip?.status == 'completed') {
       if (trip?.inviteddrivers.length > 1) {
-        return toast.error('For this trip please select one driver only');
+        return toast.error(`${t('For this trip please select one driver only')}`);
       }
     }
     if (parseInt(trip.client_price) < 1 || trip.client_price == '') {
-      return toast.error('Invalid client price');
+      return toast.error(`${t('Invalid client price')}`);
     }
     if (trip.driver_price == '') {
-      return toast.error('Please enter drive price');
+      return toast.error(`${t('Please enter drive price')}`);
     }
     if (parseInt(trip.driver_price) < 1) {
-      return toast.error('Please enter valid driver price');
+      return toast.error(`${t('Please enter valid driver price')}`);
     }
     if (parseInt(trip.driver_price) > parseInt(trip.client_price)) {
-      return toast.error('Client price should be greater than driver price');
+      return toast.error(`${t('Client price should be greater than driver price')}`);
     }
 
     if (trip.passengers.length < 1) {
-      return toast.error('Passenger is required');
+      return toast.error(`${t('Passenger is required')}`);
     }
     if (editTrip) {
       const serverDate = new Date(trip.date); //creating date for server
@@ -312,7 +312,6 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
           handleModal();
           autoRefresh();
         } else {
-         
           toast.error(`${t('Save Error')}`);
         }
       });

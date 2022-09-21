@@ -9,9 +9,16 @@ import { useTranslation } from 'react-i18next';
 // core components
 import Select from 'react-select';
 import moment from 'moment';
+import DatePicker from 'react-datepicker';
+
+import 'react-datepicker/dist/react-datepicker.css';
+
+import fr from 'date-fns/locale/fr-CA';
+import 'react-day-picker/lib/style.css';
 let current = moment();
 const DriverForm = ({ openModal, handleModal, editUser, isEditing, isClose, autoRefresh, setUserData }) => {
   const { t, i18n } = useTranslation();
+  const { language } = i18n;
   const [user, setUser] = useState({
     profile_pic: '',
     id_front: '',
@@ -159,6 +166,20 @@ const DriverForm = ({ openModal, handleModal, editUser, isEditing, isClose, auto
     }
   }, []);
 
+  const handleDateChange3 = (e) => {
+    setUser({ ...user, ris_date: e });
+  };
+  //user?.criminal_record_date?
+  const handleDateChange2 = (e) => {
+    setUser({ ...user, criminal_record_date: e });
+  };
+  const handleDateChange1 = (e) => {
+    setUser({ ...user, proRc_date: e });
+  };
+  const handleDateChange = (e) => {
+    setUser({ ...user, kbis_date: e });
+  };
+
   const handleFile1Change = (e) => {
     setUser({ ...user, [e.target.name]: e.target.files[0] });
   };
@@ -299,30 +320,30 @@ const DriverForm = ({ openModal, handleModal, editUser, isEditing, isClose, auto
     if (user.license_back) formData.append('license_card_back', user.license_back, user.license_back?.name);
 
     if (user.firstName == '') {
-      return toast.error('Please enter your first name');
+      return toast.error(`${t('Please enter your first name')}`);
     }
     if (user.lastName == '') {
-      return toast.error('Please enter your last name');
+      return toast.error(`${t('Please enter your last name')}`);
     }
     if (user.email == '') {
-      return toast.error('Please enter email');
+      return toast.error(`${t('Please enter email')}`);
     }
     if (!(user.email.includes('.') && user.email.includes('@'))) {
-      return toast.error('Please enter a valid email');
+      return toast.error(`${t('Please enter a valid email')}`);
     }
     if (user.password == '') {
-      return toast.error('Password is required');
+      return toast.error(`${t('Password is required')}`);
     }
     if (user.password.length < 8) {
-      return toast.error('Passwords should be of atleast 8 letters');
+      return toast.error(`${t('Passwords should be of atleast 8 letters')}`);
     }
 
     if (user.role == '') {
-      return toast.error('Please select your role');
+      return toast.error(`${t('Please select your role')}`);
     }
 
     if (user.phone == '') {
-      return toast.error('Please enter phone number');
+      return toast.error(`${t('Please enter phone number')}`);
     }
     if (isEditing) {
       method = 'put';
@@ -378,6 +399,7 @@ const DriverForm = ({ openModal, handleModal, editUser, isEditing, isClose, auto
 
   return (
     <>
+      {console.log(user, 'u')}
       <Modal isOpen={openModal} size="xl" centered>
         <ModalHeader charCode="X" toggle={handleModal}>
           {isEditing ? <>{t('Edit Driver')}</> : <>{t('Add Driver')}</>}
@@ -1017,16 +1039,13 @@ const DriverForm = ({ openModal, handleModal, editUser, isEditing, isClose, auto
                           {t('Valid Till')}
                         </label>
 
-                        <Input
-                          className="form-control-alternative"
-                          id="input-date"
-                          required={true}
-                          placeholder={t('Enter Company Name')}
-                          type="date"
-                          value={user?.criminal_record_date?.split('T')[0]}
-                          name="criminal_record_date"
-                          onChange={handleInput1Change}
-                          min={moment(current).format('YYYY-MM-DD')}
+                        <DatePicker
+                          selected={user?.criminal_record_date ? new Date(user.criminal_record_date) : ''}
+                          placeholderText={t('mm/dd/yyyy')}
+                          locale={language === 'fr' && fr}
+                          // onChange={handleInputChange}
+                          onChange={handleDateChange2}
+                          minDate={new Date(Date.now())}
                         />
                       </FormGroup>
                     </Col>
@@ -1055,16 +1074,15 @@ const DriverForm = ({ openModal, handleModal, editUser, isEditing, isClose, auto
                           <span style={{ color: 'red' }}>{user.ris_image ? (user?.ris_date ? '' : '*') : ''}</span>
                           {t('Valid Till')}
                         </label>
-                        <Input
-                          className="form-control-alternative"
-                          id="input-date"
-                          required={true}
-                          placeholder={t('Enter Company Name')}
-                          type="date"
-                          value={user?.ris_date?.split('T')[0]}
-                          name="ris_date"
-                          onChange={handleInput1Change}
-                          min={moment(current).format('YYYY-MM-DD')}
+
+                        <DatePicker
+                          // selected={user?.ris_date ? user?.ris_date : ''}
+                          selected={user?.ris_date ? new Date(user?.ris_date) : ''}
+                          placeholderText={t('mm/dd/yyyy')}
+                          locale={language === 'fr' && fr}
+                          // onChange={handleInputChange}
+                          onChange={handleDateChange3}
+                          minDate={new Date(Date.now())}
                         />
                       </FormGroup>
                     </Col>
@@ -1095,16 +1113,13 @@ const DriverForm = ({ openModal, handleModal, editUser, isEditing, isClose, auto
                           {t('Valid Till')}
                         </label>
 
-                        <Input
-                          className="form-control-alternative"
-                          id="input-date"
-                          required={true}
-                          placeholder={t('Enter Company Name')}
-                          type="date"
-                          value={user?.kbis_date?.split('T')[0]}
-                          name="kbis_date"
-                          onChange={handleInput1Change}
-                          min={moment(current).format('YYYY-MM-DD')}
+                        <DatePicker
+                          selected={user?.kbis_date ? new Date(user?.kbis_date) : ''}
+                          placeholderText={t('mm/dd/yyyy')}
+                          locale={language === 'fr' && fr}
+                          // onChange={handleInputChange}
+                          onChange={handleDateChange}
+                          minDate={new Date(Date.now())}
                         />
                       </FormGroup>
                     </Col>
@@ -1133,16 +1148,15 @@ const DriverForm = ({ openModal, handleModal, editUser, isEditing, isClose, auto
                           <span style={{ color: 'red' }}>{user.proRc_image ? (user?.proRc_date ? '' : '*') : ''}</span>
                           {t('Valid Till')}
                         </label>
-                        <Input
-                          className="form-control-alternative"
-                          id="input-date"
-                          required={true}
-                          placeholder={t('Enter Company Name')}
-                          type="date"
-                          value={user?.proRc_date?.split('T')[0]}
-                          name="proRc_date"
-                          onChange={handleInput1Change}
-                          min={moment(current).format('YYYY-MM-DD')}
+
+                        <DatePicker
+                          // selected={user?.proRc_date ? user?.proRc_date : ''}
+                          selected={user?.proRc_date ? new Date(user?.proRc_date) : ''}
+                          placeholderText={t('mm/dd/yyyy')}
+                          locale={language === 'fr' && fr}
+                          // onChange={handleInputChange}
+                          onChange={handleDateChange1}
+                          minDate={new Date(Date.now())}
                         />
                       </FormGroup>
                     </Col>
