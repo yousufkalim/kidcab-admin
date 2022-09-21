@@ -78,8 +78,8 @@ const DriverForm = ({ openModal, handleModal, editUser, isEditing, isClose, auto
   useEffect(() => {
     if (isClose) {
       setUser({
-        firstName: editUser?.firstName,
-        lastName: editUser?.lastName,
+        firstName: editUser?.first_name[0].toUpperCase() + editUser?.first_name.substring(1),
+        lastName: editUser?.last_name[0].toUpperCase() + editUser?.last_name.substring(1),
         password: editUser?.password,
         email: editUser?.email,
         phone: editUser?.phone,
@@ -122,8 +122,8 @@ const DriverForm = ({ openModal, handleModal, editUser, isEditing, isClose, auto
   useEffect(() => {
     if (isEditing) {
       setUser({
-        firstName: editUser?.first_name,
-        lastName: editUser?.last_name,
+        firstName: editUser?.first_name[0].toUpperCase() + editUser?.first_name.substring(1),
+        lastName: editUser?.last_name[0].toUpperCase() + editUser?.last_name.substring(1),
         password: editUser?.password,
         email: editUser?.email,
         phone: editUser?.phone_number,

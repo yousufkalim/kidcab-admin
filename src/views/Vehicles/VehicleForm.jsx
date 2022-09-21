@@ -163,11 +163,12 @@ const VehicleForm = ({ openModal, handleModal, editUser: editVehicle, isEditing,
 
     if (vehicle.graycard) {
       formData.append('graycard', vehicle.graycard);
-      if (!vehicle.graycard_expiry_date) {
-        formData.append('graycard_expiry_date', '');
-      } else {
-        formData.append('graycard_expiry_date', vehicle.graycard_expiry_date);
-      }
+      formData.append('graycard_expiry_date', vehicle.graycard_expiry_date);
+      // if (!vehicle.graycard_expiry_date) {
+      //   formData.append('graycard_expiry_date', '');
+      // } else {
+      //   formData.append('graycard_expiry_date', vehicle.graycard_expiry_date);
+      // }
     }
 
     if (vehicle.registration_card) {
@@ -188,7 +189,9 @@ const VehicleForm = ({ openModal, handleModal, editUser: editVehicle, isEditing,
           toast.error(`${t('Save Error')}`, `${t(res)}`);
         }
       })
-      .catch((error) => toast.error(`${t(error.message)}`));
+      .catch((error) => {
+        toast.error(`${t(error.message)}`);
+      });
   };
 
   return (

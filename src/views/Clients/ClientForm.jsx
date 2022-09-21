@@ -33,8 +33,8 @@ const ClientForm = ({ openModal, handleModal, editUser, isEditing, autoRefresh }
   useEffect(() => {
     if (isEditing) {
       setUser({
-        firstName: editUser.first_name,
-        lastName: editUser.last_name,
+        firstName: editUser?.first_name[0].toUpperCase() + editUser?.first_name.substring(1),
+        lastName: editUser?.last_name[0].toUpperCase() + editUser?.last_name.substring(1),
         password: editUser.password,
         email: editUser.email,
         phone_number: editUser.phone_number,
@@ -161,7 +161,7 @@ const ClientForm = ({ openModal, handleModal, editUser, isEditing, autoRefresh }
                           required={true}
                           placeholder="John"
                           type="text"
-                          value={user?.firstName[0]?.toUpperCase() + user?.firstName?.substring(1)}
+                          value={user?.firstName}
                           name="firstName"
                           onChange={handleInputChange}
                         />
@@ -178,7 +178,7 @@ const ClientForm = ({ openModal, handleModal, editUser, isEditing, autoRefresh }
                           id="input-lname"
                           placeholder="Doe"
                           type="text"
-                          value={user?.lastName[0]?.toUpperCase() + user?.lastName?.substring(1)}
+                          value={user?.lastName}
                           name="lastName"
                           onChange={handleInputChange}
                         />
