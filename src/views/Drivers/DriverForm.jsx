@@ -1041,7 +1041,7 @@ const DriverForm = ({ openModal, handleModal, editUser, isEditing, isClose, auto
 
                         <DatePicker
                           selected={user?.criminal_record_date ? new Date(user.criminal_record_date) : ''}
-                          placeholderText={t('mm/dd/yyyy')}
+                          placeholderText={t('dd/mm/yyyy')}
                           locale={language === 'fr' && fr}
                           // onChange={handleInputChange}
                           onChange={handleDateChange2}
@@ -1078,7 +1078,7 @@ const DriverForm = ({ openModal, handleModal, editUser, isEditing, isClose, auto
                         <DatePicker
                           // selected={user?.ris_date ? user?.ris_date : ''}
                           selected={user?.ris_date ? new Date(user?.ris_date) : ''}
-                          placeholderText={t('mm/dd/yyyy')}
+                          placeholderText={t('dd/mm/yyyy')}
                           locale={language === 'fr' && fr}
                           // onChange={handleInputChange}
                           onChange={handleDateChange3}
@@ -1115,7 +1115,7 @@ const DriverForm = ({ openModal, handleModal, editUser, isEditing, isClose, auto
 
                         <DatePicker
                           selected={user?.kbis_date ? new Date(user?.kbis_date) : ''}
-                          placeholderText={t('mm/dd/yyyy')}
+                          placeholderText={t('dd/mm/yyyy')}
                           locale={language === 'fr' && fr}
                           // onChange={handleInputChange}
                           onChange={handleDateChange}
@@ -1152,7 +1152,7 @@ const DriverForm = ({ openModal, handleModal, editUser, isEditing, isClose, auto
                         <DatePicker
                           // selected={user?.proRc_date ? user?.proRc_date : ''}
                           selected={user?.proRc_date ? new Date(user?.proRc_date) : ''}
-                          placeholderText={t('mm/dd/yyyy')}
+                          placeholderText={t('dd/mm/yyyy')}
                           locale={language === 'fr' && fr}
                           // onChange={handleInputChange}
                           onChange={handleDateChange1}

@@ -486,10 +486,12 @@ i18n
           'end date must be greater than start date': 'end date must be greater than start date',
           'Total Price should be greater  than total trips': 'Total Price should be greater  than total trips',
           'Trips should be greater than 1': 'Trips should be greater than 1',
+          'Please Select Client or Driver': 'Please Select Client or Driver',
         }, //Passenger
       },
       fr: {
         translations: {
+          'Please Select Client or Driver': 'Veuillez sélectionner un client ou un chauffeur',
           'Trips should be greater than 1': 'Les trajets doivent être supérieurs à 1',
           'Total Price should be greater  than total trips': 'Le prix total doit être supérieur au total des trajets',
           'end date must be greater than start date': 'la date de fin doit être supérieure à la date de début',

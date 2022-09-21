@@ -144,7 +144,7 @@ const QuotesForm = ({ openModal, handleModal, editQuote, isEditing, autoRefresh 
     if (new Date(quote?.endDate) < new Date(quote?.startDate)) {
       return toast.error('end date must be greater than start date');
     }
-    if (quote?.endDate == null || quote?.endDate == ' ' || quote?.startDate == null || quote?.startDate == ' ') {
+    if (!quote?.endDate || !quote?.startDate || !quote.issueDate) {
       return toast.error('Dates are mandatory');
     }
     let method = 'post';
@@ -198,10 +198,10 @@ const QuotesForm = ({ openModal, handleModal, editQuote, isEditing, autoRefresh 
       return toast.error('Please enter vat');
     }
 
-    if (tripInfo.start_date == '') {
+    if (!tripInfo.start_date) {
       return toast.error('Please enter start date');
     }
-    if (tripInfo.end_date == '') {
+    if (!tripInfo.end_date) {
       return toast.error('Please enter end date');
     }
     if (tripInfo.start_address.lat == '') {
@@ -438,11 +438,11 @@ const QuotesForm = ({ openModal, handleModal, editQuote, isEditing, autoRefresh 
                         <DatePicker
                           // selected={trip.date ? trip.date : editTrip.date?.split('T')[0]}
                           // selected={trip.date}
-                          selected={quote.issueDate}
+                          selected={quote.issueDate ? new Date(quote.issueDate) : ''}
                           locale={language === 'fr' && fr}
                           // value={trip.date ? trip.date : editTrip.date?.split('T')[0]}
                           onChange={handleDateChange}
-                          placeholderText={t('YYYY/MM/DD')}
+                          placeholderText={t('dd/mm/yyyy')}
                         />
                       </FormGroup>
                     </Col>
@@ -514,11 +514,12 @@ const QuotesForm = ({ openModal, handleModal, editQuote, isEditing, autoRefresh 
                         <DatePicker
                           // selected={trip.date ? trip.date : editTrip.date?.split('T')[0]}
                           // selected={trip.date}
-                          selected={quote.startDate}
+
+                          selected={quote.startDate ? new Date(quote.startDate) : ''}
                           locale={language === 'fr' && fr}
                           // value={trip.date ? trip.date : editTrip.date?.split('T')[0]}
                           onChange={handleDateChange1}
-                          placeholderText={t('YYYY/MM/DD')}
+                          placeholderText={t('dd/mm/yyyy')}
                         />
                       </FormGroup>
                     </Col>{' '}
@@ -530,11 +531,12 @@ const QuotesForm = ({ openModal, handleModal, editQuote, isEditing, autoRefresh 
                         <DatePicker
                           // selected={trip.date ? trip.date : editTrip.date?.split('T')[0]}
                           // selected={trip.date}
-                          selected={quote.endDate}
+
+                          selected={quote.endDate ? new Date(quote.endDate) : ''}
                           locale={language === 'fr' && fr}
                           // value={trip.date ? trip.date : editTrip.date?.split('T')[0]}
                           onChange={handleDateChange2}
-                          placeholderText={t('YYYY/MM/DD')}
+                          placeholderText={t('dd/mm/yyyy')}
                         />
                       </FormGroup>
                     </Col>
