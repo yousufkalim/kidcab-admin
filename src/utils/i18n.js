@@ -495,10 +495,12 @@ i18n
           'Please enter quote status': 'Please enter quote status',
           'Please enter quote number': 'Please enter quote number',
           'Please enter quote title': 'Please enter quote title',
+          'Internal server error': 'Internal server error',
         }, //Passenger
       },
       fr: {
         translations: {
+          'Internal server error': 'Erreur interne du serveur',
           'Please enter quote title': 'Veuillez entrer le titre du devis',
           'Please enter quote number': 'Veuillez entrer le numéro de devis',
           'Please enter quote status': 'Veuillez entrer le statut du devis',

@@ -300,14 +300,26 @@ const DriverForm = ({ openModal, handleModal, editUser, isEditing, isClose, auto
     if (user.criminal_record_date) {
       formData.append('criminal_record_date', user.criminal_record_date);
     }
+    if (!user.criminal_record_date) {
+      formData.append('criminal_record_date', '');
+    }
     if (user.ris_date) {
       formData.append('ris_date', user.ris_date);
+    }
+    if (!user.ris_date) {
+      formData.append('ris_date', '');
     }
     if (user.kbis_date) {
       formData.append('kbis_date', user.kbis_date);
     }
+    if (!user.kbis_date) {
+      formData.append('kbis_date', '');
+    }
     if (user?.proRc_date) {
       formData.append('proRc_date', user.proRc_date);
+    }
+    if (!user.proRc_date) {
+      formData.append('proRc_date', '');
     }
 
     if (user.id_front) formData.append('id_card_front', user.id_front, user.id_front?.name);

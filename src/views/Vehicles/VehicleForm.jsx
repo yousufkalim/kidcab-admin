@@ -130,13 +130,13 @@ const VehicleForm = ({ openModal, handleModal, editUser: editVehicle, isEditing,
     if (vehicle.engine_type == '') {
       return toast.error(`${t('Please enter your engine type')}`);
     }
-    if (vehicle.inspection_date == '') {
+    if (!vehicle.inspection_date) {
       return toast.error(`${t('Please enter Last inspection_date')}`);
     }
     if (vehicle.insurance_certificate == '') {
       return toast.error(`${t('Please enter your vehicle insurance card')}`);
     }
-    if (vehicle.insurance_expiry_date == '') {
+    if (!vehicle.insurance_expiry_date) {
       return toast.error(`${t('Please enter a valid insurance date')}`);
     }
     if (vehicle.number_plate == '') {
@@ -163,7 +163,11 @@ const VehicleForm = ({ openModal, handleModal, editUser: editVehicle, isEditing,
 
     if (vehicle.graycard) {
       formData.append('graycard', vehicle.graycard);
-      formData.append('graycard_expiry_date', vehicle.graycard_expiry_date);
+      if (!vehicle.graycard_expiry_date) {
+        formData.append('graycard_expiry_date', '');
+      } else {
+        formData.append('graycard_expiry_date', vehicle.graycard_expiry_date);
+      }
     }
 
     if (vehicle.registration_card) {
