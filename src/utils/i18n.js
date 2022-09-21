@@ -650,7 +650,7 @@ i18n
           Vehicles: 'Véhicules',
           Login: 'Connexion',
           //trips
-          Monday: 'french',
+
           'Select...': 'Sélectionner...',
           all: 'tout',
           trips: 'races',

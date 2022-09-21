@@ -11,22 +11,15 @@ import { Modal, ModalBody, ModalHeader, ModalFooter, Button, FormGroup, Form, In
 import Select from 'react-select';
 import DayPicker, { DateUtils } from 'react-day-picker';
 import DatePicker from 'react-datepicker';
+import MomentLocaleUtils from 'react-day-picker/moment';
 
 import 'react-datepicker/dist/react-datepicker.css';
 
 import fr from 'date-fns/locale/fr-CA';
+import 'moment/locale/fr';
 import 'react-day-picker/lib/style.css';
 import { useTranslation } from 'react-i18next';
 
-const options = [
-  { value: 1, label: 'Monday' },
-  { value: 2, label: 'Tuesday' },
-  { value: 3, label: 'Wednesday' },
-  { value: 4, label: 'Thrusday' },
-  { value: 5, label: 'Friday' },
-  { value: 6, label: 'Saturday' },
-  { value: 0, label: 'Sunday' },
-];
 const disableDates = () => {
   var today, dd, mm, yyyy;
   today = new Date();
@@ -44,6 +37,16 @@ const disableDates = () => {
 const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoRefresh }) => {
   const { t, i18n } = useTranslation();
   const { language } = i18n;
+  const options = [
+    { value: 1, label: `${t('Monday')}` },
+    { value: 2, label: `${t('Tuesday')}` },
+    { value: 3, label: `${t('Wednesday')}` },
+    { value: 4, label: `${t('Thrusday')}` },
+    { value: 5, label: `${t('Friday')}` },
+    { value: 6, label: `${t('Saturday')}` },
+    { value: 0, label: `${t('Sunday')}` },
+  ];
+
   const [trip, setTrip] = useState({
     date: '',
     status: 'pending',
@@ -779,7 +782,8 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
           <DayPicker
             disabledDays={{ before: new Date() }}
             selectedDays={selectedDays}
-            locale="fr-CA"
+            localeUtils={MomentLocaleUtils}
+            locale={language === 'fr' && 'fr'}
             onDayClick={handleDayClick}
           />
         </div>
