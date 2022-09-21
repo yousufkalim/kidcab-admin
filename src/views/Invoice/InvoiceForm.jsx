@@ -184,7 +184,7 @@ const InvoiceForm = ({ openModal, handleModal, editUser, isEditing, autoRefresh 
       end_date: user.endDate,
       start_address: startAddress,
       end_address: endAddress,
-      unit_price: user?.unitPrice,
+      unit_price: user?.unitPrice.toFixed(2),
     };
     const formData = {};
     if (user?.type === 'client') {
@@ -199,7 +199,7 @@ const InvoiceForm = ({ openModal, handleModal, editUser, isEditing, autoRefresh 
     formData['status'] = user?.status;
     formData['type'] = user?.type;
     formData['comments'] = user?.comments;
-    formData['vat'] = user?.vat;
+    formData['vat'] = user?.vat.toFixed(2);
     formData['trip_info'] = JSON.stringify(tripInfo);
 
     if (startAddress.lat == endAddress.lat && startAddress.lng == endAddress.lng) {
@@ -240,7 +240,7 @@ const InvoiceForm = ({ openModal, handleModal, editUser, isEditing, autoRefresh 
       end_date: user?.endDate,
       start_address: startAddress,
       end_address: endAddress,
-      unit_price: user?.unitPrice,
+      unit_price: user?.unitPrice.toFixed(2),
     };
     formData['invoice_title'] = user?.invoice_title;
     formData['total_price'] = user?.totalPrice;
@@ -248,7 +248,7 @@ const InvoiceForm = ({ openModal, handleModal, editUser, isEditing, autoRefresh 
     formData['status'] = user?.status;
     formData['type'] = user?.type;
     formData['comments'] = user?.comments;
-    formData['vat'] = user?.vat;
+    formData['vat'] = user?.vat.toFixed(2);
     formData['trip_info'] = JSON.stringify(tripInfo);
     if (user?.type === 'client') {
       formData['client'] = user?.client;

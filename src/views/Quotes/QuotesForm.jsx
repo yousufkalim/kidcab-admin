@@ -142,10 +142,10 @@ const QuotesForm = ({ openModal, handleModal, editQuote, isEditing, autoRefresh 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (new Date(quote?.endDate) < new Date(quote?.startDate)) {
-      return toast.error('end date must be greater than start date');
+      return toast.error(`${t('end date must be greater than start date')}`);
     }
     if (!quote?.endDate || !quote?.startDate || !quote.issueDate) {
-      return toast.error('Dates are mandatory');
+      return toast.error(`${t('Dates are mandatory')}`);
     }
     let method = 'post';
     let uri = 'quotes';
@@ -155,7 +155,7 @@ const QuotesForm = ({ openModal, handleModal, editQuote, isEditing, autoRefresh 
       end_date: new Date(quote.endDate),
       start_address: startAddress,
       end_address: endAddress,
-      unit_price: quote.unitPrice,
+      unit_price: quote.unitPrice.toFixed(2),
     };
     const formData = {};
     formData['quote_title'] = quote.title;
@@ -165,7 +165,7 @@ const QuotesForm = ({ openModal, handleModal, editQuote, isEditing, autoRefresh 
     formData['quote_number'] = quote.quoteNumber;
     formData['issue_date'] = new Date(quote.issueDate);
     formData['total_price'] = quote.totalPrice;
-    formData['vat'] = quote.vat;
+    formData['vat'] = quote.vat.toFixed(2);
     formData['status'] = quote.status;
     formData['trip_info'] = JSON.stringify(tripInfo);
     formData['docu_sign_link'] = quote.docuSignLink;
@@ -173,42 +173,36 @@ const QuotesForm = ({ openModal, handleModal, editQuote, isEditing, autoRefresh 
     //validations
 
     if (quote.title == '') {
-      return toast.error('Please enter quote title');
+      return toast.error(`${t('Please enter quote title')}`);
     }
     if (quote.quoteNumber == '') {
-      return toast.error('Please enter quote number');
+      return toast.error(`${t('Please enter quote number')}`);
     }
     if (quote.client == '') {
-      return toast.error('Please enter client name');
+      return toast.error(`${t('Please enter client name')}`);
     }
     if (quote.status == '') {
-      return toast.error('Please enter quote status');
+      return toast.error(`${t('Please enter quote status')}`);
     }
     if (quote.issueDate == '') {
-      return toast.error('Please enter issue date');
+      return toast.error(`${t('Please enter issue date')}`);
     }
     if (tripInfo.total_trips == '') {
-      return toast.error('Please enter total number of trips');
+      return toast.error(`${t('Please enter total number of trips')}`);
     }
     if (quote.unitPrice == '') {
-      return toast.error('Please enter quote price');
+      return toast.error(`${t('Please enter quote price')}`);
     }
 
     if (quote.vat == '') {
-      return toast.error('Please enter vat');
+      return toast.error(`${t('Please enter vat')}`);
     }
 
-    if (!tripInfo.start_date) {
-      return toast.error('Please enter start date');
-    }
-    if (!tripInfo.end_date) {
-      return toast.error('Please enter end date');
-    }
     if (tripInfo.start_address.lat == '') {
-      return toast.error('Please enter start address');
+      return toast.error(`${t('Please enter start address')}`);
     }
     if (tripInfo.end_address.lat == '') {
-      return toast.error('Please enter end address');
+      return toast.error(`${t('Please enter end address')}`);
     }
     if (
       startAddress.lat == endAddress.lat &&
@@ -216,7 +210,7 @@ const QuotesForm = ({ openModal, handleModal, editQuote, isEditing, autoRefresh 
       startAddress.PostalCode == endAddress.PostalCode &&
       startAddress.city == endAddress.city
     ) {
-      return toast.error('Start and end address cant be same');
+      return toast.error(`${t('Start and end address cant be same')}`);
     }
 
     if (editQuote) {
@@ -236,6 +230,12 @@ const QuotesForm = ({ openModal, handleModal, editQuote, isEditing, autoRefresh 
   };
   const handleDuplicate = (e) => {
     e.preventDefault();
+    if (new Date(quote?.endDate) < new Date(quote?.startDate)) {
+      return toast.error(`${t('end date must be greater than start date')}`);
+    }
+    if (!quote?.endDate || !quote?.startDate || !quote.issueDate) {
+      return toast.error(`${t('Dates are mandatory')}`);
+    }
     let method = 'post';
     let uri = 'quotes';
     const tripInfo = {
@@ -244,7 +244,7 @@ const QuotesForm = ({ openModal, handleModal, editQuote, isEditing, autoRefresh 
       end_date: quote.endDate,
       start_address: startAddress,
       end_address: endAddress,
-      unit_price: quote.unitPrice,
+      unit_price: quote.unitPrice.toFixed(2),
     };
 
     const formData = {};
@@ -255,52 +255,39 @@ const QuotesForm = ({ openModal, handleModal, editQuote, isEditing, autoRefresh 
     formData['quote_number'] = quote.quoteNumber;
     formData['issue_date'] = moment(quote.issueDate).format('YYYY-MM-DD');
     formData['total_price'] = quote.totalPrice;
-    formData['vat'] = quote.vat;
+    formData['vat'] = quote.vat.toFixed(2);
     formData['status'] = quote.status;
     formData['trip_info'] = JSON.stringify(tripInfo);
     formData['docu_sign_link'] = quote.docuSignLink;
     //validations
     if (quote.title == '') {
-      return toast.error('Please enter quote title');
+      return toast.error(`${t('Please enter quote title')}`);
     }
     if (quote.quoteNumber == '') {
-      return toast.error('Please enter quote number');
+      return toast.error(`${t('Please enter quote number')}`);
     }
     if (quote.client == '') {
-      return toast.error('Please enter client name');
+      return toast.error(`${t('Please enter client name')}`);
     }
     if (quote.status == '') {
-      return toast.error('Please enter quote status');
-    }
-    if (quote.issueDate == '') {
-      return toast.error('Please enter issue date');
+      return toast.error(`${t('Please enter quote status')}`);
     }
     if (tripInfo.total_trips == '') {
-      return toast.error('Please enter total number of trips');
+      return toast.error(`${t('Please enter total number of trips')}`);
     }
-    if (parseInt(tripInfo.total_trips) < 1) {
-      return toast.error('Please enter valid total number of trips');
+    if (quote.unitPrice == '') {
+      return toast.error(`${t('Please enter quote price')}`);
     }
-    if (parseInt(quote.totalPrice) == '') {
-      return toast.error('Please enter Amount with tax');
-    }
-    if (parseInt(quote.totalPrice) < 1) {
-      return toast.error('Please enter valid Amount with tax');
-    }
+
     if (quote.vat == '') {
-      return toast.error('Please enter vat');
+      return toast.error(`${t('Please enter vat')}`);
     }
-    if (tripInfo.start_date == '') {
-      return toast.error('Please enter start date');
-    }
-    if (tripInfo.end_date == '') {
-      return toast.error('Please enter end date');
-    }
+
     if (tripInfo.start_address.lat == '') {
-      return toast.error('Please enter start address');
+      return toast.error(`${t('Please enter start address')}`);
     }
     if (tripInfo.end_address.lat == '') {
-      return toast.error('Please enter end address');
+      return toast.error(`${t('Please enter end address')}`);
     }
     if (
       startAddress.lat == endAddress.lat &&
@@ -308,7 +295,7 @@ const QuotesForm = ({ openModal, handleModal, editQuote, isEditing, autoRefresh 
       startAddress.PostalCode == endAddress.PostalCode &&
       startAddress.city == endAddress.city
     ) {
-      return toast.error('Start and end address cant be same');
+      return toast.error(`${t('Start and end address cant be same')}`);
     }
 
     api(method, uri, formData).then((res) => {
