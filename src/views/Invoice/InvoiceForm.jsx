@@ -160,29 +160,31 @@ const InvoiceForm = ({ openModal, handleModal, editUser, isEditing, autoRefresh 
     e.preventDefault();
     let method = 'post';
     let uri = 'invoices';
+    if (!user?.startDate || !user?.endDate || user?.issue_date == '') {
+      return toast.error(`${t('Dates are mandatory')}`);
+    }
+
+    if (user.client === '' && user.driver === '') {
+      return toast.error('Please Select Client or Driver');
+    }
     if (parseInt(user?.totalTrips) < 1 || user?.totalTrips == '') {
-      return toast.error(`${t("Trips should be greater than 1")}`);
-      
+      return toast.error(`${t('Trips should be greater than 1')}`);
     }
     if (parseInt(user?.totalTrips) > parseInt(user?.totalPrice)) {
-      return toast.error(`${t("Total Price should be greater  than total trips")}`);
-    
+      return toast.error(`${t('Total Price should be greater  than total trips')}`);
     }
+
     if (new Date(user?.endDate) < new Date(user?.startDate)) {
-      return toast.error(`${t("end date must be greater than start date")}`);
-    
+      return toast.error(`${t('end date must be greater than start date')}`);
     }
-    if (user?.endDate == null || user?.endDate == ' ' || user?.startDate == null || user?.startDate == ' ') {
-      return toast.error(`${t("Dates are mandatory")}`);
-     
-    }
+
     const tripInfo = {
       total_trips: user?.totalTrips,
       start_date: user.startDate,
       end_date: user.endDate,
       start_address: startAddress,
       end_address: endAddress,
-      unit_price: user?.unitPrice,
+      unit_price: user?.unitPrice.toFixed(2),
     };
     const formData = {};
     if (user?.type === 'client') {
@@ -197,17 +199,15 @@ const InvoiceForm = ({ openModal, handleModal, editUser, isEditing, autoRefresh 
     formData['status'] = user?.status;
     formData['type'] = user?.type;
     formData['comments'] = user?.comments;
-    formData['vat'] = user?.vat;
+    formData['vat'] = user?.vat.toFixed(2);
     formData['trip_info'] = JSON.stringify(tripInfo);
 
     if (startAddress.lat == endAddress.lat && startAddress.lng == endAddress.lng) {
-      return toast.error(`${t("Start and end address cant be same")}`);
-      
+      return toast.error(`${t('Start and end address cant be same')}`);
     }
 
     if (startAddress.lat == '' || endAddress.lng == '') {
-      return toast.error(`${t("Adresses are mandatory")}`);
-      
+      return toast.error(`${t('Adresses are mandatory')}`);
     }
 
     if (editUser) {
@@ -240,7 +240,7 @@ const InvoiceForm = ({ openModal, handleModal, editUser, isEditing, autoRefresh 
       end_date: user?.endDate,
       start_address: startAddress,
       end_address: endAddress,
-      unit_price: user?.unitPrice,
+      unit_price: user?.unitPrice.toFixed(2),
     };
     formData['invoice_title'] = user?.invoice_title;
     formData['total_price'] = user?.totalPrice;
@@ -248,7 +248,7 @@ const InvoiceForm = ({ openModal, handleModal, editUser, isEditing, autoRefresh 
     formData['status'] = user?.status;
     formData['type'] = user?.type;
     formData['comments'] = user?.comments;
-    formData['vat'] = user?.vat;
+    formData['vat'] = user?.vat.toFixed(2);
     formData['trip_info'] = JSON.stringify(tripInfo);
     if (user?.type === 'client') {
       formData['client'] = user?.client;
@@ -318,7 +318,7 @@ const InvoiceForm = ({ openModal, handleModal, editUser, isEditing, autoRefresh 
                           selected={user?.issue_date}
                           locale={language === 'fr' && fr}
                           // value={trip.date ? trip.date : editTrip.date?.split('T')[0]}
-
+                          placeholderText={t('dd/mm/yyyy')}
                           onChange={handleDateChange2}
                         />
                       </FormGroup>
@@ -493,7 +493,7 @@ const InvoiceForm = ({ openModal, handleModal, editUser, isEditing, autoRefresh 
 
                         <DatePicker
                           selected={user?.startDate ? new Date(user.startDate) : ''}
-                          placeholderText={t('mm/dd/yyyy')}
+                          placeholderText={t('dd/mm/yyyy')}
                           locale={language === 'fr' && fr}
                           // onChange={handleInputChange}
                           onChange={handleDateChange}
@@ -508,7 +508,7 @@ const InvoiceForm = ({ openModal, handleModal, editUser, isEditing, autoRefresh 
 
                         <DatePicker
                           selected={user?.endDate ? new Date(user.endDate) : ''}
-                          placeholderText={t('mm/dd/yyyy')}
+                          placeholderText={t('dd/mm/yyyy')}
                           locale={language === 'fr' && fr}
                           // onChange={handleInputChange}
                           onChange={handleDateChange1}

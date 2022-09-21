@@ -161,7 +161,7 @@ const ClientForm = ({ openModal, handleModal, editUser, isEditing, autoRefresh }
                           required={true}
                           placeholder="John"
                           type="text"
-                          value={user.firstName}
+                          value={user?.firstName[0]?.toUpperCase() + user?.firstName?.substring(1)}
                           name="firstName"
                           onChange={handleInputChange}
                         />
@@ -178,7 +178,7 @@ const ClientForm = ({ openModal, handleModal, editUser, isEditing, autoRefresh }
                           id="input-lname"
                           placeholder="Doe"
                           type="text"
-                          value={user.lastName}
+                          value={user?.lastName[0]?.toUpperCase() + user?.lastName?.substring(1)}
                           name="lastName"
                           onChange={handleInputChange}
                         />
