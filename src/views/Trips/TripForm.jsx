@@ -445,6 +445,7 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
                                   // selected={trip.date}
                                   selected={trip.date}
                                   locale={language === 'fr' && fr}
+                                  dateFormat="dd/MM/yyyy"
                                   placeholderText={t('dd/mm/yyyy')}
                                   // value={trip.date ? trip.date : editTrip.date?.split('T')[0]}
 
@@ -503,6 +504,7 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
                               placeholderText={t('dd/mm/yyyy')}
                               locale={language === 'fr' && fr}
                               value={trip.startdate}
+                              dateFormat="dd/MM/yyyy"
                               // onChange={handleInputChange}
                               onChange={handleDateChange1}
                               minDate={new Date(Date.now())}
@@ -520,6 +522,7 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
                               name="enddate"
                               placeholderText={t('dd/mm/yyyy')}
                               locale={language === 'fr' && fr}
+                              dateFormat="dd/MM/yyyy"
                               value={trip.enddate}
                               onChange={handleDateChange}
                               minDate={new Date(Date.now())}

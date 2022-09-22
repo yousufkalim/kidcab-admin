@@ -163,12 +163,12 @@ const VehicleForm = ({ openModal, handleModal, editUser: editVehicle, isEditing,
 
     if (vehicle.graycard) {
       formData.append('graycard', vehicle.graycard);
-      formData.append('graycard_expiry_date', vehicle.graycard_expiry_date);
-      // if (!vehicle.graycard_expiry_date) {
-      //   formData.append('graycard_expiry_date', '');
-      // } else {
-      //   formData.append('graycard_expiry_date', vehicle.graycard_expiry_date);
-      // }
+      // formData.append('graycard_expiry_date', vehicle.graycard_expiry_date);
+      if (!vehicle.graycard_expiry_date) {
+        formData.append('graycard_expiry_date', '');
+      } else {
+        formData.append('graycard_expiry_date', vehicle.graycard_expiry_date);
+      }
     }
 
     if (vehicle.registration_card) {
@@ -342,6 +342,7 @@ const VehicleForm = ({ openModal, handleModal, editUser: editVehicle, isEditing,
                           selected={vehicle.inspection_date}
                           placeholderText={t('dd/mm/yyyy')}
                           locale={language === 'fr' && fr}
+                          dateFormat="dd/MM/yyyy"
                           // value={vehicle.inspection_date}
                           // onChange={handleInputChange}
                           onChange={handleDateChange}
@@ -396,6 +397,7 @@ const VehicleForm = ({ openModal, handleModal, editUser: editVehicle, isEditing,
                           selected={vehicle.graycard_expiry_date ? new Date(vehicle.graycard_expiry_date) : ''}
                           placeholderText={t('dd/mm/yyyy')}
                           locale={language === 'fr' && fr}
+                          dateFormat="dd/MM/yyyy"
                           // value={vehicle.inspection_expiry_date}
                           // onChange={handleInputChange}
                           onChange={handleDateChange1}
@@ -438,6 +440,7 @@ const VehicleForm = ({ openModal, handleModal, editUser: editVehicle, isEditing,
                           selected={vehicle.insurance_expiry_date}
                           placeholderText={t('dd/mm/yyyy')}
                           locale={language === 'fr' && fr}
+                          dateFormat="dd/MM/yyyy"
                           // onChange={handleInputChange}
                           onChange={handleDateChange2}
                           minDate={new Date(Date.now())}

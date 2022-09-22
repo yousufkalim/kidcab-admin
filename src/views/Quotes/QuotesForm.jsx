@@ -165,7 +165,7 @@ const QuotesForm = ({ openModal, handleModal, editQuote, isEditing, autoRefresh 
     formData['quote_number'] = quote.quoteNumber;
     formData['issue_date'] = new Date(quote.issueDate);
     formData['total_price'] = quote.totalPrice;
-    formData['vat'] = quote.vat.toFixed(2);
+    formData['vat'] = parseInt(quote.vat).toFixed(2);
     formData['status'] = quote.status;
     formData['trip_info'] = JSON.stringify(tripInfo);
     formData['docu_sign_link'] = quote.docuSignLink;
@@ -255,7 +255,7 @@ const QuotesForm = ({ openModal, handleModal, editQuote, isEditing, autoRefresh 
     formData['quote_number'] = quote.quoteNumber;
     formData['issue_date'] = moment(quote.issueDate).format('YYYY-MM-DD');
     formData['total_price'] = quote.totalPrice;
-    formData['vat'] = quote.vat.toFixed(2);
+    formData['vat'] = parseInt(quote.vat).toFixed(2);
     formData['status'] = quote.status;
     formData['trip_info'] = JSON.stringify(tripInfo);
     formData['docu_sign_link'] = quote.docuSignLink;
@@ -427,6 +427,7 @@ const QuotesForm = ({ openModal, handleModal, editQuote, isEditing, autoRefresh 
                           // selected={trip.date}
                           selected={quote.issueDate ? new Date(quote.issueDate) : ''}
                           locale={language === 'fr' && fr}
+                          dateFormat="dd/MM/yyyy"
                           // value={trip.date ? trip.date : editTrip.date?.split('T')[0]}
                           onChange={handleDateChange}
                           placeholderText={t('dd/mm/yyyy')}
@@ -504,6 +505,7 @@ const QuotesForm = ({ openModal, handleModal, editQuote, isEditing, autoRefresh 
 
                           selected={quote.startDate ? new Date(quote.startDate) : ''}
                           locale={language === 'fr' && fr}
+                          dateFormat="dd/MM/yyyy"
                           // value={trip.date ? trip.date : editTrip.date?.split('T')[0]}
                           onChange={handleDateChange1}
                           placeholderText={t('dd/mm/yyyy')}
@@ -521,6 +523,7 @@ const QuotesForm = ({ openModal, handleModal, editQuote, isEditing, autoRefresh 
 
                           selected={quote.endDate ? new Date(quote.endDate) : ''}
                           locale={language === 'fr' && fr}
+                          dateFormat="dd/MM/yyyy"
                           // value={trip.date ? trip.date : editTrip.date?.split('T')[0]}
                           onChange={handleDateChange2}
                           placeholderText={t('dd/mm/yyyy')}
