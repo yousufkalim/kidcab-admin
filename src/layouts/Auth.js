@@ -1,4 +1,6 @@
 import React from "react";
+// import i18n from "i18next";
+
 import { useLocation, Route, Switch, Redirect } from "react-router-dom";
 // reactstrap components
 import { Container, Row, Col } from "reactstrap";
@@ -7,9 +9,11 @@ import { Container, Row, Col } from "reactstrap";
 import AuthNavbar from "components/Navbars/AuthNavbar.js";
 import AuthFooter from "components/Footers/AuthFooter.js";
 
+import { useTranslation } from "react-i18next";
 import routes from "routes/routes";
 
 const Auth = (props) => {
+  const { i18n, t } = useTranslation();
   const mainContent = React.useRef(null);
   const location = useLocation();
 
@@ -50,7 +54,7 @@ const Auth = (props) => {
             <div className="header-body text-center mb-7">
               <Row className="justify-content-center">
                 <Col lg="5" md="6">
-                  <h1 className="text-white">Welcome!</h1>
+                  <h1 className="text-white">{t("Welcome!")}</h1>
                 </Col>
               </Row>
             </div>

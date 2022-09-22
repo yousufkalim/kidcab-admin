@@ -1,15 +1,11 @@
-import React, { useState } from "react";
-import {
-  Badge,
-  DropdownMenu,
-  DropdownItem,
-  UncontrolledDropdown,
-  DropdownToggle,
-} from "reactstrap";
-import ClientAvatar from "./DriverAvatar";
-import PassengerForm from "./VehicleForm";
+import React, { useState } from 'react';
+import { Badge, DropdownMenu, DropdownItem, UncontrolledDropdown, DropdownToggle } from 'reactstrap';
+import ClientAvatar from './DriverAvatar';
+import PassengerForm from './VehicleForm';
+import { useTranslation } from 'react-i18next';
 
 const VehicleRow = ({ user: vehicle, autoRefresh }) => {
+  const { t, i18n } = useTranslation();
   const [openModal, setOpenModal] = useState();
 
   const handleModal = () => {
@@ -35,7 +31,7 @@ const VehicleRow = ({ user: vehicle, autoRefresh }) => {
           </div>
         ) : (
           <p className="mb-0 text-sm" href="#pablo">
-            No Driver is added.
+            {t(' No Driver is added.')}
           </p>
         )}
       </td>
@@ -44,21 +40,9 @@ const VehicleRow = ({ user: vehicle, autoRefresh }) => {
       </td>
       <td className="text-right">
         <UncontrolledDropdown>
-          <DropdownToggle
-            className="btn-icon-only text-light"
-            href="#pablo"
-            role="button"
-            size="sm"
-            color=""
-            onClick={(e) => e.preventDefault()}
-          >
-            <i className="fas fa-ellipsis-v" />
+          <DropdownToggle className="btn-icon-only text-dark" role="button" size="sm" color="" onClick={handleModal}>
+            <i className="fas fa-edit" />
           </DropdownToggle>
-          <DropdownMenu className="dropdown-menu-arrow" right>
-            <DropdownItem href="#pablo" onClick={handleModal}>
-              Edit Vehicle
-            </DropdownItem>
-          </DropdownMenu>
         </UncontrolledDropdown>
       </td>
       <PassengerForm

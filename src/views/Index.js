@@ -1,10 +1,13 @@
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 // node.js library that concatenates classes (strings)
 import classnames from "classnames";
 // javascipt plugin for creating charts
 import Chart from "chart.js";
 // react plugin used to create charts
 import { Line, Bar } from "react-chartjs-2";
+
+import chart from "./chart";
+import * as moment from "moment";
 // reactstrap components
 import {
   Button,
@@ -30,8 +33,11 @@ import {
 } from "variables/charts.js";
 
 import Header from "components/Headers/Header.js";
+import api from "../api/index";
+import { useTranslation } from "react-i18next";
 
 const Index = (props) => {
+  const { t, i18n } = useTranslation();
   const [activeNav, setActiveNav] = useState(1);
   const [chartExample1Data, setChartExample1Data] = useState("data1");
 
@@ -44,272 +50,241 @@ const Index = (props) => {
     setActiveNav(index);
     setChartExample1Data("data" + index);
   };
+  const [reports, setReports] = useState([]);
+  const [trips, setTrips] = useState([]);
+  const [pendingTrips, setPendingTrips] = useState([]);
+
+  const [pendingpayments, setPendingPayments] = useState([]);
+  const [overdueInvoices, setOverdueInvoices] = useState([]);
+  const [dataSet, SetDataSet] = useState([]);
+
+  useEffect(() => {
+    autoRefresh();
+    autoInvoice();
+  }, []);
+  useEffect(() => {
+    chart(dataSet);
+  }, [dataSet]);
+
+  const autoInvoice = () => {
+    api("get", `invoices/`).then((res) => {
+      let pendingPayment = res?.data?.invoices.filter(
+        (a) => a.status == "pending"
+      );
+      let overdueinvoices = res?.data?.invoices.filter(
+        (a) => a.status == "late"
+      );
+      setOverdueInvoices(overdueinvoices);
+      setPendingPayments(pendingPayment);
+    });
+  };
+
+  const autoRefresh = () => {
+    api("get", `/trips`).then((res) => {
+      let trips = res?.data?.trips;
+      let pendingTrips = res?.data?.trips.filter((i) => {
+        return i.status === "pending";
+      });
+      setPendingTrips(pendingTrips);
+      setTrips(trips);
+    });
+    api("post", `/trips/getDayReport`).then((res) => {
+      let reports = res?.data?.reports;
+      setReports(reports);
+    });
+    api("post", `/trips/getRevenue`).then((res) => {
+      SetDataSet(res?.data?.reports);
+    });
+  };
   return (
     <>
       <Header />
-      {/* Page content */}
-      <Container className="mt--7" fluid>
-        <Row>
-          <Col className="mb-5 mb-xl-0" xl="8">
-            <Card className="bg-gradient-default shadow">
-              <CardHeader className="bg-transparent">
-                <Row className="align-items-center">
-                  <div className="col">
-                    <h6 className="text-uppercase text-light ls-1 mb-1">
-                      Overview
-                    </h6>
-                    <h2 className="text-white mb-0">Sales value</h2>
-                  </div>
-                  <div className="col">
-                    <Nav className="justify-content-end" pills>
-                      <NavItem>
-                        <NavLink
-                          className={classnames("py-2 px-3", {
-                            active: activeNav === 1,
-                          })}
-                          href="#pablo"
-                          onClick={(e) => toggleNavs(e, 1)}
-                        >
-                          <span className="d-none d-md-block">Month</span>
-                          <span className="d-md-none">M</span>
-                        </NavLink>
-                      </NavItem>
-                      <NavItem>
-                        <NavLink
-                          className={classnames("py-2 px-3", {
-                            active: activeNav === 2,
-                          })}
-                          data-toggle="tab"
-                          href="#pablo"
-                          onClick={(e) => toggleNavs(e, 2)}
-                        >
-                          <span className="d-none d-md-block">Week</span>
-                          <span className="d-md-none">W</span>
-                        </NavLink>
-                      </NavItem>
-                    </Nav>
-                  </div>
-                </Row>
-              </CardHeader>
-              <CardBody>
-                {/* Chart */}
-                <div className="chart">
-                  <Line
-                    data={chartExample1[chartExample1Data]}
-                    options={chartExample1.options}
-                    getDatasetAtEvent={(e) => console.log(e)}
-                  />
-                </div>
-              </CardBody>
-            </Card>
-          </Col>
-          <Col xl="4">
-            <Card className="shadow">
-              <CardHeader className="bg-transparent">
-                <Row className="align-items-center">
-                  <div className="col">
-                    <h6 className="text-uppercase text-muted ls-1 mb-1">
-                      Performance
-                    </h6>
-                    <h2 className="mb-0">Total orders</h2>
-                  </div>
-                </Row>
-              </CardHeader>
-              <CardBody>
-                {/* Chart */}
-                <div className="chart">
-                  <Bar
-                    data={chartExample2.data}
-                    options={chartExample2.options}
-                  />
-                </div>
-              </CardBody>
-            </Card>
-          </Col>
-        </Row>
+      <Container className="mt--20" fluid>
         <Row className="mt-5">
-          <Col className="mb-5 mb-xl-0" xl="8">
-            <Card className="shadow">
+          <Col className="mb-5 mb-xl-0" xl="6">
+            <Card
+              style={{ maxHeight: "300px", overflow: "scroll" }}
+              className="shadow"
+            >
               <CardHeader className="border-0">
                 <Row className="align-items-center">
                   <div className="col">
-                    <h3 className="mb-0">Page visits</h3>
-                  </div>
-                  <div className="col text-right">
-                    <Button
-                      color="primary"
-                      href="#pablo"
-                      onClick={(e) => e.preventDefault()}
-                      size="sm"
-                    >
-                      See all
-                    </Button>
+                    <h3 className="mb-0">{t("Weekly report")}</h3>
                   </div>
                 </Row>
               </CardHeader>
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
                   <tr>
-                    <th scope="col">Page name</th>
-                    <th scope="col">Visitors</th>
-                    <th scope="col">Unique users</th>
-                    <th scope="col">Bounce rate</th>
+                    <th scope="col">{t("Date")}</th>
+                    <th scope="col">{t("Total Earning")}</th>
+                    <th scope="col">{t("Total Rides")}</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <th scope="row">/kidcab/</th>
-                    <td>4,569</td>
-                    <td>340</td>
-                    <td>
-                      <i className="fas fa-arrow-up text-success mr-3" /> 46,53%
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">/kidcab/users</th>
-                    <td>3,985</td>
-                    <td>319</td>
-                    <td>
-                      <i className="fas fa-arrow-down text-warning mr-3" />{" "}
-                      46,53%
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">/kidcab/quotes</th>
-                    <td>3,513</td>
-                    <td>294</td>
-                    <td>
-                      <i className="fas fa-arrow-down text-warning mr-3" />{" "}
-                      36,49%
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">/kidcab/trips</th>
-                    <td>2,050</td>
-                    <td>147</td>
-                    <td>
-                      <i className="fas fa-arrow-up text-success mr-3" /> 50,87%
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">/kidcab/drivers</th>
-                    <td>1,795</td>
-                    <td>190</td>
-                    <td>
-                      <i className="fas fa-arrow-down text-danger mr-3" />{" "}
-                      46,53%
-                    </td>
-                  </tr>
+                  <>
+                    {reports ? (
+                      reports?.map((report) => (
+                        <tr>
+                          <td>{report?._id}</td>
+                          <td>{report?.driver_price}</td>
+                          <td>{report?.turnover}</td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr className="h1 mx-lg-auto text-center">
+                        <td>{t("No Report Found")}</td>
+                      </tr>
+                    )}
+                  </>
                 </tbody>
               </Table>
             </Card>
           </Col>
-          <Col xl="4">
-            <Card className="shadow">
+          <Col className="mb-5 mb-xl-0" xl="6">
+            <Card
+              style={{ maxHeight: "300px", overflow: "scroll" }}
+              className="shadow"
+            >
               <CardHeader className="border-0">
                 <Row className="align-items-center">
                   <div className="col">
-                    <h3 className="mb-0">Social traffic</h3>
-                  </div>
-                  <div className="col text-right">
-                    <Button
-                      color="primary"
-                      href="#pablo"
-                      onClick={(e) => e.preventDefault()}
-                      size="sm"
-                    >
-                      See all
-                    </Button>
+                    <h3 className="mb-0">{t("Pending Trips")}</h3>
                   </div>
                 </Row>
               </CardHeader>
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
                   <tr>
-                    <th scope="col">Referral</th>
-                    <th scope="col">Visitors</th>
+                    <th scope="col">{t("Client")}</th>
+                    <th scope="col">{t("Passengers")}</th>
+                    <th scope="col">{t("Invited Drivers")}</th>
+                    <th scope="col">{t("DATE")}</th>
                     <th scope="col" />
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <th scope="row">Facebook</th>
-                    <td>1,480</td>
-                    <td>
-                      <div className="d-flex align-items-center">
-                        <span className="mr-2">60%</span>
-                        <div>
-                          <Progress
-                            max="100"
-                            value="60"
-                            barClassName="bg-gradient-danger"
-                          />
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">Facebook</th>
-                    <td>5,480</td>
-                    <td>
-                      <div className="d-flex align-items-center">
-                        <span className="mr-2">70%</span>
-                        <div>
-                          <Progress
-                            max="100"
-                            value="70"
-                            barClassName="bg-gradient-success"
-                          />
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">Google</th>
-                    <td>4,807</td>
-                    <td>
-                      <div className="d-flex align-items-center">
-                        <span className="mr-2">80%</span>
-                        <div>
-                          <Progress max="100" value="80" />
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">Instagram</th>
-                    <td>3,678</td>
-                    <td>
-                      <div className="d-flex align-items-center">
-                        <span className="mr-2">75%</span>
-                        <div>
-                          <Progress
-                            max="100"
-                            value="75"
-                            barClassName="bg-gradient-info"
-                          />
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">twitter</th>
-                    <td>2,645</td>
-                    <td>
-                      <div className="d-flex align-items-center">
-                        <span className="mr-2">30%</span>
-                        <div>
-                          <Progress
-                            max="100"
-                            value="30"
-                            barClassName="bg-gradient-warning"
-                          />
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
+                  <>
+                    {pendingTrips ? (
+                      pendingTrips?.map((trip) => (
+                        <tr>
+                          <td>{trip?.client?.first_name}</td>
+                          <td>{trip?.passengers?.length}</td>
+                          <td>{trip?.invited_drivers?.length}</td>
+                          <td>{moment(trip.date).format("DD/MM/YYYY")}</td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr className="h1 mx-lg-auto text-center">
+                        <td>{t("NoT Found")}</td>
+                      </tr>
+                    )}
+                  </>
                 </tbody>
               </Table>
+            </Card>
+          </Col>
+        </Row>
+        <Row className="mt-5">
+          <Col className="mb-5 mb-xl-0" xl="6">
+            <Card
+              style={{ maxHeight: "300px", overflow: "scroll" }}
+              className="shadow"
+            >
+              <CardHeader className="border-0">
+                <Row className="align-items-center">
+                  <div className="col">
+                    <h3 className="mb-0">{t("Over Due Invoices")}</h3>
+                  </div>
+                </Row>
+              </CardHeader>
+              <Table className="align-items-center table-flush" responsive>
+                <thead className="thead-light">
+                  <tr style={{ height: "7vh" }}>
+                    <th scope="col">{t("Invoice TiTle")}</th>
+                    <th scope="col">{t("DATE")} </th>
+                    <th scope="col">{t("PRICE")}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <>
+                    {overdueInvoices ? (
+                      overdueInvoices?.map((invoice) => (
+                        <tr>
+                          <td>{invoice?.invoice_title}</td>
+                          <td>
+                            {moment(invoice.issue_date).format("DD/MM/YYYY")}
+                          </td>
+                          <td>{invoice?.total_price}</td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr className="h1 mx-lg-auto text-center">
+                        <td>{t("No Invoice Found")}</td>
+                      </tr>
+                    )}
+                  </>
+                </tbody>
+              </Table>
+            </Card>
+          </Col>
+          <Col className="mb-5 mb-xl-0" xl="6">
+            <Card
+              style={{ maxHeight: "300px", overflow: "scroll" }}
+              className="shadow"
+            >
+              <CardHeader className="border-0">
+                <Row className="align-items-center">
+                  <div className="col">
+                    <h3 className="mb-0">{t("Pending Payments")}</h3>
+                  </div>
+                </Row>
+              </CardHeader>
+              <Table className="align-items-center table-flush" responsive>
+                <thead className="thead-light">
+                  <tr style={{ height: "7vh" }}>
+                    <th scope="col">{t("INVOICE TITLE")}</th>
+                    <th scope="col">{t("DATE")} </th>
+                    <th scope="col">{t("PRICE")}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <>
+                    {pendingpayments ? (
+                      pendingpayments?.map((invoice) => (
+                        <tr>
+                          <td>{invoice?.invoice_title}</td>
+                          <td>
+                            {moment(invoice.issue_date).format("DD/MM/YYYY")}
+                          </td>
+                          <td>{invoice?.total_price}</td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr className="h1 mx-lg-auto text-center">
+                        <td>{t("No Invoice Found")}</td>
+                      </tr>
+                    )}
+                  </>
+                </tbody>
+              </Table>
+            </Card>
+          </Col>
+        </Row>
+        <Row className="mt-5">
+          <Col className="mb-5 mb-xl-0" xl="12">
+            <Card className="shadow">
+              <CardHeader className="border-0">
+                <Row className="align-items-center">
+                  <div className="col">
+                    <h3 className="mb-0">{t("Weekly Revenue")}</h3>
+                  </div>
+                </Row>
+              </CardHeader>
+
+              <div className="dashboard-item chart">
+                <canvas id="lineChart"></canvas>
+              </div>
             </Card>
           </Col>
         </Row>

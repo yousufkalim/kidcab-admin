@@ -17,8 +17,10 @@ import ClientRow from "./ClientRow";
 import { useState } from "react";
 import { useEffect } from "react";
 import api from "../../api/index";
+import { useTranslation } from "react-i18next";
 
 const ClientList = () => {
+  const { t, i18n } = useTranslation();
   const [openModal, setOpenModal] = useState(false);
   const [users, setUsers] = useState();
   const handleModal = () => {
@@ -26,14 +28,15 @@ const ClientList = () => {
     return openModal;
   };
   const autoRefresh = () => {
-    api("get", "users").then((res) => setUsers(res.data.users));
+    api("get", "users").then((res) => {
+      console.log(res.data.users, "res");
+      setUsers(res.data.users);
+    });
   };
 
   useEffect(() => {
-    // api("get", "users").then((res) => setUsers(res.data.users));
     autoRefresh();
   }, [openModal]);
-
   return (
     <>
       <Container className="mt--7" fluid>
@@ -43,7 +46,7 @@ const ClientList = () => {
             <Card className="shadow">
               <CardHeader className="border-0">
                 <div className="d-flex justify-content-between ">
-                  <h3 className="mb-0">Clients List</h3>
+                  <h3 className="mb-0">{t("Clients List")}</h3>
                   <Button
                     color="primary"
                     href="#pablo"
@@ -51,17 +54,17 @@ const ClientList = () => {
                     size="md"
                   >
                     <i className="ni ni-fat-add"></i>
-                    Add Client
+                    {t("Add Client")}
                   </Button>
                 </div>
               </CardHeader>
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
                   <tr>
-                    <th scope="col">Name</th>
-                    <th scope="col">Email</th>
-                    <th scope="col">Phone Number</th>
-                    <th scope="col">Passengers</th>
+                    <th scope="col">{t("Name")}</th>
+                    <th scope="col">{t("Email")}</th>
+                    <th scope="col">{t("Phone Number")}</th>
+                    <th scope="col">{t("Passengers")}</th>
                     <th scope="col" />
                   </tr>
                 </thead>
@@ -76,7 +79,7 @@ const ClientList = () => {
                     ))
                   ) : (
                     <tr className="h1 mx-lg-auto text-center">
-                      <td>No User Found</td>
+                      <td>{t("No User Found")}</td>
                     </tr>
                   )}
                 </tbody>

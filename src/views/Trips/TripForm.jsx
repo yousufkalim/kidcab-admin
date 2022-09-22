@@ -1,112 +1,197 @@
-import { useState, useEffect } from "react";
-import { toast } from "react-toastify";
-import api from "../../api";
-import AddressInput from "components/Form/AddressInput";
-import {
-  Modal,
-  ModalBody,
-  ModalHeader,
-  ModalFooter,
-  Button,
-  FormGroup,
-  Form,
-  Input,
-  Row,
-  Col,
-} from "reactstrap";
+import { useState, useEffect } from 'react';
+import { toast } from 'react-toastify';
+import api from '../../api';
+import AddressInput from 'components/Form/AddressInput';
+import AddressInputMultiple from 'components/Form/AddressInputMultiple';
+import TimePicker from 'react-time-picker';
+import '../Trips/app.css';
+import * as moment from 'moment';
+import { Modal, ModalBody, ModalHeader, ModalFooter, Button, FormGroup, Form, Input, Row, Col } from 'reactstrap';
 // core components
-import Select from "react-select";
-import DayPicker, { DateUtils } from "react-day-picker";
-import "react-day-picker/lib/style.css";
+import Select from 'react-select';
+import DayPicker, { DateUtils } from 'react-day-picker';
+import DatePicker from 'react-datepicker';
+import MomentLocaleUtils from 'react-day-picker/moment';
 
-const TripForm = ({
-  openModal,
-  handleModal,
-  editUser: editTrip,
-  isEditing,
-  autoRefresh,
-}) => {
+import 'react-datepicker/dist/react-datepicker.css';
+
+import fr from 'date-fns/locale/fr-CA';
+import 'moment/locale/fr';
+import 'react-day-picker/lib/style.css';
+import { useTranslation } from 'react-i18next';
+
+const disableDates = () => {
+  var today, dd, mm, yyyy;
+  today = new Date();
+  dd = today.getDate();
+  mm = today.getMonth() + 1;
+  yyyy = today.getFullYear();
+  if (mm < 10) {
+    mm = '0' + mm;
+  }
+  if (dd < 10) {
+    dd = '0';
+  }
+  return yyyy + '-' + mm + '-' + dd;
+};
+const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoRefresh }) => {
+  const { t, i18n } = useTranslation();
+  const { language } = i18n;
+  const options = [
+    { value: 1, label: `${t('Monday')}` },
+    { value: 2, label: `${t('Tuesday')}` },
+    { value: 3, label: `${t('Wednesday')}` },
+    { value: 4, label: `${t('Thrusday')}` },
+    { value: 5, label: `${t('Friday')}` },
+    { value: 6, label: `${t('Saturday')}` },
+    { value: 0, label: `${t('Sunday')}` },
+  ];
+
   const [trip, setTrip] = useState({
-    date: "",
-    status: "pending",
+    date: '',
+    status: 'pending',
+    trip_type: '',
     addresses: null,
-    client_price: "",
-    driver_price: "",
-    required_drivers: "",
+    client_price: '',
+    driver_price: '',
     assigned_drivers: [],
-    invited_drivers: [],
+    inviteddrivers: [],
+    passengers: [],
+    Days: [],
+    startdate: '',
+    enddate: '',
     rides: null,
-    client: "",
-    quote: {},
+    client: '',
+    comment: '',
   });
   let [startAddress, setStartAddress] = useState({});
   let [endAddress, setEndAddress] = useState({});
-  const [drivers, setDrivers] = useState();
+  let [stepAddress, setStepAddress] = useState([]);
+  const [drivers, setDrivers] = useState([]);
+  const [passengers, setPassengers] = useState([]);
+  const [allPassengers, setAllPassengers] = useState([]);
   const [clients, setClients] = useState();
-  const [allQuotes, setAllQuotes] = useState([]);
-  const [quotes, setQuotes] = useState([]);
-
+  const [value, onChange] = useState('12:00');
+  const [daysLength, setDaysLength] = useState([]);
+  const [tripType, setTriptype] = useState('simple');
   const [selectedDays, setSelectedDays] = useState([]);
   const [openDateModal, setOpenDateModal] = useState(false);
+  const [passengerChange, setPassengerChange] = useState([]);
+  let [allAddresses, setAllAddresses] = useState([]);
 
   useEffect(() => {
-    api("get", "drivers").then((res) => {
+    api('get', 'drivers').then((res) => {
       setDrivers(res.data.drivers);
     });
-    api("get", "users").then((res) => {
+    api('get', 'users').then((res) => {
       setClients(res.data.users);
     });
-    api("get", "quotes").then((res) => {
-      setAllQuotes(res.data.quotes?.filter((a) => a.status === "accepted"));
+    api('get', `passengers`).then((res) => {
+      setAllPassengers(res.data.passengers);
     });
   }, []);
   useEffect(() => {
     if (isEditing) {
+      var date = new Date(editTrip.date);
+      var hours = date.getHours();
+      var minutes = date.getMinutes();
+      var time = `${hours}:${minutes}`;
+      onChange(time);
+      setAllAddresses(editTrip.addresses);
+
       setTrip({
-        date: editTrip.date,
+        date: new Date(editTrip.date),
         status: editTrip.status,
         addresses: editTrip.addresses,
         client_price: editTrip.client_price,
         driver_price: editTrip.driver_price,
-        required_drivers: editTrip.required_drivers,
         assigned_drivers: editTrip.assigned_drivers,
-        invited_drivers: editTrip.invited_drivers.map((driver) => driver._id),
+        inviteddrivers: editTrip.invited_drivers.map((driver) => driver?.driver?._id),
+        passengers: editTrip.passengers.map((passenger) => passenger._id),
         rides: editTrip.rides,
         client: editTrip.client,
-        quote: editTrip.quote,
+        quote: editTrip?.quote,
+        time: editTrip.time,
+        comment: editTrip?.comment,
       });
+      api('get', `passengers`).then((res) => {
+        setPassengers(res.data.passengers.filter((a) => a.client._id === editTrip?.client?._id));
+      });
+
+      let p = editTrip.passengers.map((passenger) => {
+        return {
+          label: passenger.first_name + ' ' + passenger.last_name,
+          value: passenger._id,
+        };
+      });
+      setPassengerChange(p);
       setStartAddress(editTrip.start_address);
       setEndAddress(editTrip.end_address);
+      setStepAddress(editTrip.addresses);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleInputChange = (e) => {
     setTrip({ ...trip, [e.target.name]: e.target.value });
+    if (e.target.name === 'trip_type') {
+      setTriptype(e.target.value);
+    }
   };
 
+  const handleDateChange = (e) => {
+    setTrip({ ...trip, enddate: e });
+  };
+
+  const handleDateChange2 = (e) => {
+    setTrip({ ...trip, date: e });
+  };
+
+  const handleDateChange1 = (e) => {
+    setTrip({ ...trip, startdate: e });
+  };
+
+  const handleDayChange = (e) => {
+    setTrip({ ...trip, Days: e.value });
+    let data = [];
+    let time = [];
+    e.map((i) => {
+      data.push(i);
+      time.push('10:00');
+    });
+    onChange(time);
+    setDaysLength(data);
+  };
   const handleClientChange = (e) => {
-    setTrip((user) => ({ ...user, client: e.value }));
-    setQuotes(allQuotes.filter((a) => a.client?._id === e.value));
-    // setPassengers(clients.filter((a) => a._id === e.value)[0]?.passengers);
+    setTrip((user) => ({ ...user, client: e.value, passengers: [] }));
+    setPassengers(allPassengers.filter((a) => a?.client?._id === e.value));
+    setPassengerChange([]);
+  };
+  const handlePassengerChange = (e) => {
+    setTrip((user) => ({
+      ...user,
+      passengers: e.map((passenger) => passenger.value),
+    }));
+    setPassengerChange(e.map((passenger) => passenger));
   };
 
   const handleDelete = () => {
-    let method = "delete";
-    let uri = "trips";
+    let method = 'delete';
+    let uri = 'trips';
     if (editTrip) {
-      method = "delete";
+      method = 'delete';
       uri = uri + `/${editTrip._id}`;
     }
+
     api(method, uri)
       .then((res) => {
         // eslint-disable-next-line eqeqeq
         if (res.status == 200) {
-          toast.success("Delete Successfully");
+          toast.success(`${t('Delete Successfully')}`);
           handleModal();
           autoRefresh();
         } else {
-          toast.error("Delete Error", res.data.message);
+          toast.error(`${t('Delete Error')}`, `${t(res.data.message)}`);
         }
       })
       .catch((error) => {
@@ -116,108 +201,186 @@ const TripForm = ({
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    let method = "post";
-    let uri = "trips";
-
-    if (trip.status == "") {
-      return toast.error("Please enter quote status");
+    let method = 'post';
+    let uri = 'trips';
+    if (
+      (startAddress.lat == endAddress.lat &&
+        startAddress.lng == endAddress.lng &&
+        startAddress.PostalCode == endAddress.PostalCode &&
+        startAddress.city == endAddress.city) ||
+      (startAddress.lat == stepAddress.lat &&
+        startAddress.lng == stepAddress.lng &&
+        startAddress.PostalCode == stepAddress.PostalCode &&
+        startAddress.city == stepAddress.city) ||
+      (endAddress.lat == stepAddress.lat &&
+        endAddress.lng == stepAddress.lng &&
+        endAddress.PostalCode == stepAddress.PostalCode &&
+        endAddress.city == stepAddress.city)
+    ) {
+      return toast.error(`${t('Adresses cant be same')}`);
+    }
+    if (trip.status == '') {
+      return toast.error(`${t('Please enter trip status')}`);
+    }
+    if (selectedDays.length == 0 && !isEditing && trip.trip_type == 'simple') {
+      return toast.error(`${t('Please enter trip dates')}`);
+    }
+    if (trip?.status == 'confirmed' || trip?.status == 'completed') {
+      if (trip?.inviteddrivers.length > 1) {
+        return toast.error(`${t('For this trip please select one driver only')}`);
+      }
+    }
+    if (parseInt(trip.client_price) < 1 || trip.client_price == '') {
+      return toast.error(`${t('Invalid client price')}`);
+    }
+    if (trip.driver_price == '') {
+      return toast.error(`${t('Please enter drive price')}`);
+    }
+    if (parseInt(trip.driver_price) < 1) {
+      return toast.error(`${t('Please enter valid driver price')}`);
+    }
+    if (parseInt(trip.driver_price) > parseInt(trip.client_price)) {
+      return toast.error(`${t('Client price should be greater than driver price')}`);
     }
 
-    // if (trip.date == "" ) {
-    //   return toast.error("Please enter trip date");
-    // }
-    if (selectedDays.length == 0 && !isEditing) {
-      return toast.error("Please enter trip dates");
-    }
-
-    if (trip.client_price == "") {
-      return toast.error("Please enter client price");
-    }
-    if (trip.driver_price == "") {
-      return toast.error("Please enter drive price");
+    if (trip.passengers.length < 1) {
+      return toast.error(`${t('Passenger is required')}`);
     }
     if (editTrip) {
-      method = "put";
+      const serverDate = new Date(trip.date); //creating date for server
+      var hours = value.split(':'); //split hours and minutes
+      serverDate.setHours(parseInt(hours[0])); //setting time for server
+      serverDate.setMinutes(parseInt(hours[1])); //setting time for server
+      trip.date = serverDate; //Setting Trip Date
+      method = 'put';
       uri = uri + `/${editTrip._id}`;
     }
-    api(method, uri, {
-      ...trip,
-      start_address: startAddress,
-      end_address: endAddress,
-      dates: selectedDays,
-    }).then((res) => {
-      // eslint-disable-next-line eqeqeq
-      if (res.status == 200) {
-        toast.success("Saved Successfully");
-        handleModal();
-        autoRefresh();
-      } else {
-        toast.error("Save Error", res);
+
+    if (trip.trip_type === 'recurring') {
+      let selectedDDays = [];
+      const s_date = new Date(trip.startdate); //start date
+      const e_date = new Date(trip.enddate); //end date
+      let j = s_date;
+      //setting loop index
+      for (let i = 0; i < daysLength.length; i++) {
+        //this loop will run for each day
+        for (; j <= e_date; j.setDate(j.getDate() + 1)) {
+          //this loop will work from start to end date and find when date is repeating
+          if (daysLength[i].value === j.getDay()) {
+            let serverDate = new Date(j); //taking date coming from request
+            var hours = value[i].split(':'); //split hours and minutes
+            serverDate.setHours(parseInt(hours[0]));
+            serverDate.setMinutes(parseInt(hours[1]));
+            selectedDDays.push(serverDate);
+          }
+        }
+        j = new Date(trip.startdate); //After inner loop break this will reinitalize loop from start date
       }
-    });
-    // .catch((error) => toast.error(error.message));
+      api(method, uri, {
+        ...trip,
+        start_address: startAddress,
+        end_address: endAddress,
+        dates: selectedDDays,
+        addresses: allAddresses,
+      }).then((res) => {
+        // eslint-disable-next-line eqeqeq
+        if (res.status == 200) {
+          toast.success(`${t('Saved Successfully')}`);
+          handleModal();
+          autoRefresh();
+        } else {
+          toast.error(t('Save Error'), `${t(res)}`);
+        }
+      });
+    } else {
+      let selectedDDays = selectedDays.map((date) => {
+        const serverDate = new Date(date); //creating date for server
+        var hours = value.split(':'); //split hours and minutes
+        serverDate.setHours(parseInt(hours[0])); //setting time for server
+        serverDate.setMinutes(parseInt(hours[1])); //setting time for server
+        return serverDate;
+      });
+
+      api(method, uri, {
+        ...trip,
+        start_address: startAddress,
+        tripType: tripType,
+        end_address: endAddress,
+        dates: selectedDDays,
+        addresses: allAddresses,
+      }).then((res) => {
+        // eslint-disable-next-line eqeqeq
+        if (res.status == 200) {
+          toast.success(`${t('Saved Successfully')}`);
+          handleModal();
+          autoRefresh();
+        } else {
+          toast.error(`${t('Save Error')}`);
+        }
+      });
+    }
   };
 
   const handleDayClick = (day, { selected }) => {
     if (selected) {
-      const selectedIndex = selectedDays.findIndex((selectedDay) =>
-        DateUtils.isSameDay(selectedDay, day)
-      );
+      const selectedIndex = selectedDays.findIndex((selectedDay) => DateUtils.isSameDay(selectedDay, day));
       let newis = selectedDays.filter((item, i) => i != selectedIndex);
       setSelectedDays(newis);
     } else {
+      if (!moment(day).isBefore(new Date())) moment(day).format('LL');
       setSelectedDays([...selectedDays, day]);
     }
   };
+
   const handleDateModal = () => {
     setOpenDateModal((open) => !open);
     return openDateModal;
   };
+
   return (
     <>
+      {console.log(trip.date, 'd')}
       <Modal isOpen={openModal} size="xl" centered>
         <ModalHeader charCode="X" toggle={handleModal}>
-          {isEditing ? "Edit" : "Add"} Trip
+          {isEditing ? <>{t('Edit Trip')}</> : <> {t('Add Trip')}</>}
         </ModalHeader>
         <ModalBody>
           <Row>
             <Col>
               <Form>
-                <h6 className="heading-small text-muted mb-4">
-                  Trip information
-                </h6>
+                <h6 className="heading-small text-muted mb-4">{t('Trip information')}</h6>
                 <div className="pl-lg-4">
                   <Row>
-                    <Col lg="6">
+                    <Col lg="4">
                       <FormGroup>
-                        <AddressInput
-                          label="Start Address"
-                          address={startAddress}
-                          setAddress={setStartAddress}
+                        <AddressInput label="Start Address" address={startAddress} setAddress={setStartAddress} />
+                      </FormGroup>
+                    </Col>
+                    <Col lg="4">
+                      <FormGroup>
+                        <AddressInputMultiple
+                          multiple={true}
+                          label="Add Step"
+                          address={stepAddress}
+                          setAddress={setStepAddress}
+                          allAddresses={allAddresses}
+                          setAllAddresses={setAllAddresses}
                         />
                       </FormGroup>
                     </Col>
-                    <Col lg="6">
+                    <Col lg="4">
                       <FormGroup>
-                        <AddressInput
-                          label="End Address"
-                          address={endAddress}
-                          setAddress={setEndAddress}
-                        />
+                        <AddressInput label="End Address" address={endAddress} setAddress={setEndAddress} />
                       </FormGroup>
                     </Col>
                   </Row>
                 </div>
-
                 <div className="pl-lg-4">
                   <Row>
                     <Col lg="6">
                       <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-status"
-                        >
-                          Status
+                        <label className="form-control-label" htmlFor="input-status">
+                          <span style={{ color: 'red' }}>{trip.status ? '' : '*'}</span> {t('Status')}
                         </label>
                         <Input
                           id="input-status"
@@ -227,65 +390,224 @@ const TripForm = ({
                           value={trip.status}
                           onChange={handleInputChange}
                         >
-                          <option value="pending">Pending</option>
-                          <option value="confirmed">Confirmed</option>
-                          <option value="cancelled">Cancelled</option>
-                          <option value="completed">Completed</option>
+                          <option value="pending">{t('Pending')}</option>
+                          <option value="confirmed">{t('Confirmed')}</option>
+                          <option value="cancelled">{t('Cancelled')}</option>
+                          <option value="completed">{t('Completed')}</option>
                         </Input>
                       </FormGroup>
                     </Col>
+
                     <Col lg="6">
                       <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-date"
-                        >
-                          Trip Date
+                        <label className="form-control-label" htmlFor="input-tripType">
+                          {t('Trip Type')}
                         </label>
-                        {console.log("Date ---> ", trip.date)}
-                        {isEditing ? <Input
+                        <Input
+                          id="input-trip_type"
+                          name="trip_type"
                           className="form-control-alternative"
-                          id="input-date"
-                          value={selectedDays?.map((i) => i)}
-                          placeholder={"Select Dates"}
-                          readonly
-                          type="date"
-                          value={trip?.date?.split("T")[0]}
-                          name="date"
+                          type="select"
+                          value={trip.trip_type}
                           onChange={handleInputChange}
-                        // onClick={() => setOpenDateModal(true)}
-                        /> : <Input
-                          className="form-control-alternative"
-                          id="input-date"
-                          value={selectedDays?.map((i) => i)}
-                          placeholder={"Select Dates"}
-                          readonly
-                          type="text"
-                          // value={trip?.date?.split("T")[0]}
-                          // name="date"
-                          // onChange={handleInputChange}
-                          onClick={() => setOpenDateModal(true)}
-                        />}
-
+                        >
+                          <option value="simple">{t('simple')}</option>
+                          <option value="recurring">{t('recurring')}</option>
+                        </Input>
                       </FormGroup>
                     </Col>
                   </Row>
                 </div>
+                {tripType == 'simple' ? (
+                  <div className="pl-lg-4">
+                    <Row>
+                      <Col lg="6">
+                        <FormGroup>
+                          <label className="form-control-label" htmlFor="input-date">
+                            <span style={{ color: 'red' }}>{trip.date ? '' : '*'}</span> {t('Trip Date')}
+                          </label>
+                          {isEditing ? (
+                            // <Input
+                            //   className="form-control-alternative"
+                            //   id="input-date"
+                            //   locale={'fr-CA'}
+                            //   placeholder={t('Select Dates')}
+                            //   type="date"
+                            //   min={!isEditing && disableDates()}
+                            //   value={trip?.date?.split('T')[0]}
+                            //   name="date"
+                            //   onChange={handleInputChange}
+                            // />
+                            <>
+                              {trip.date && (
+                                <DatePicker
+                                  // selected={trip.date ? trip.date : editTrip.date?.split('T')[0]}
+                                  // selected={trip.date}
+                                  selected={trip.date}
+                                  locale={language === 'fr' && fr}
+                                  placeholderText={t('dd/mm/yyyy')}
+                                  // value={trip.date ? trip.date : editTrip.date?.split('T')[0]}
+
+                                  onChange={handleDateChange2}
+                                  minDate={!isEditing && new Date(Date.now())}
+                                />
+                              )}
+                            </>
+                          ) : (
+                            <Input
+                              className="form-control-alternative"
+                              id="input-date"
+                              value={selectedDays?.map((i) => moment(i).format('DD/MM/YYYY'))}
+                              min={disableDates()}
+                              placeholder={t('Select Dates')}
+                              readonly
+                              type="text"
+                              onClick={() => setOpenDateModal(true)}
+                            />
+                          )}
+                        </FormGroup>
+                      </Col>
+                      <Col lg="6">
+                        <FormGroup>
+                          <div className="TimePicker-ss">
+                            <label className="form-control-label" htmlFor="input-time">
+                              <span style={{ color: 'red' }}></span> {t('Select Trip Time')}
+                            </label>
+                            <TimePicker
+                              style={{ height: 'calc(1.5em + 1.25rem + 2px)' }}
+                              name="time"
+                              disableClock={true}
+                              clockIcon={null}
+                              amPmAriaLabel={true}
+                              value={value}
+                              onChange={onChange}
+                            />
+                          </div>
+                        </FormGroup>
+                      </Col>
+                    </Row>
+                  </div>
+                ) : (
+                  <>
+                    <div className="pl-lg-4">
+                      <Row>
+                        <Col lg="4">
+                          <FormGroup>
+                            <label className="form-control-label" htmlFor="input-date">
+                              <span style={{ color: 'red' }}>{trip.startdate ? '' : '*'}</span> {t('Start Date')}
+                            </label>
+
+                            <DatePicker
+                              selected={trip.startdate ? trip.startdate : ''}
+                              name="startdate"
+                              placeholderText={t('dd/mm/yyyy')}
+                              locale={language === 'fr' && fr}
+                              value={trip.startdate}
+                              // onChange={handleInputChange}
+                              onChange={handleDateChange1}
+                              minDate={new Date(Date.now())}
+                            />
+                          </FormGroup>
+                        </Col>
+                        <Col lg="4">
+                          <FormGroup>
+                            <label className="form-control-label" htmlFor="input-date">
+                              <span style={{ color: 'red' }}>{trip.enddate ? '' : '*'}</span> {t('End Date')}
+                            </label>
+
+                            <DatePicker
+                              selected={trip.enddate ? trip.enddate : ''}
+                              name="enddate"
+                              placeholderText={t('dd/mm/yyyy')}
+                              locale={language === 'fr' && fr}
+                              value={trip.enddate}
+                              onChange={handleDateChange}
+                              minDate={new Date(Date.now())}
+                            />
+                          </FormGroup>
+                        </Col>
+                        <Col lg="4">
+                          <FormGroup>
+                            <label for="exampleSelect" className="form-control-label">
+                              <span style={{ color: 'red' }}>{trip?.Days?.length < 1 ? '' : '*'}</span> {t('Select Days')}
+                            </label>
+                            <Select
+                              onChange={handleDayChange}
+                              name="Days"
+                              isMulti
+                              hideSelectedOptions
+                              className="form-control-alternative"
+                              value={trip.Days}
+                              defaultValue={null}
+                              options={options}
+                            />
+                          </FormGroup>
+                        </Col>
+                      </Row>
+                    </div>
+                    <div className="pl-lg-4">
+                      <Row>
+                        {daysLength.map((i, index) => {
+                          return (
+                            <>
+                              <Col lg="6">
+                                <FormGroup>
+                                  <label className="form-control-label" htmlFor="input-Day">
+                                    {t('Day')}
+                                  </label>
+                                  <Input
+                                    id="input-Day"
+                                    name="input-Day"
+                                    readOnly
+                                    className="input-Day"
+                                    value={t(i.label)}
+                                  ></Input>
+                                </FormGroup>
+                              </Col>
+                              <Col lg="6">
+                                <FormGroup>
+                                  <div className="TimePicker-ss">
+                                    <label className="form-control-label" htmlFor="input-time">
+                                      <span style={{ color: 'red' }}></span> {t('Select Trip Time')}
+                                    </label>
+                                    <TimePicker
+                                      style={{
+                                        height: 'calc(1.5em + 1.25rem + 2px)',
+                                      }}
+                                      name="time"
+                                      disableClock={true}
+                                      clockIcon={null}
+                                      amPmAriaLabel={true}
+                                      value={value[index]}
+                                      onChange={(value) => {
+                                        onChange((prev) => {
+                                          prev[index] = value;
+                                          return [...prev];
+                                        });
+                                      }}
+                                    />
+                                  </div>
+                                </FormGroup>
+                              </Col>
+                            </>
+                          );
+                        })}
+                      </Row>
+                    </div>
+                  </>
+                )}
                 <div className="pl-lg-4">
                   <Row>
                     <Col lg="6">
                       <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-clientPrice"
-                        >
-                          Client Price
+                        <label className="form-control-label" htmlFor="input-clientPrice">
+                          <span style={{ color: 'red' }}>{trip.client_price ? '' : '*'}</span> {t('Client Price')}
                         </label>
                         <Input
                           className="form-control-alternative"
                           id="input-clientPrice"
                           required={true}
-                          placeholder="Enter Client Price"
+                          placeholder={t('Enter Client Price')}
                           type="number"
                           value={trip.client_price}
                           name="client_price"
@@ -295,17 +617,14 @@ const TripForm = ({
                     </Col>
                     <Col lg="6">
                       <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-driverPrice"
-                        >
-                          Driver Price
+                        <label className="form-control-label" htmlFor="input-driverPrice">
+                          <span style={{ color: 'red' }}>{trip.driver_price ? '' : '*'}</span> {t('Driver Price')}
                         </label>
                         <Input
                           className="form-control-alternative"
                           id="input-driverPrice"
                           required={true}
-                          placeholder="Enter Driver Price"
+                          placeholder={t('Enter Driver Price')}
                           type="number"
                           value={trip.driver_price}
                           name="driver_price"
@@ -317,153 +636,127 @@ const TripForm = ({
                 </div>
                 <div className="pl-lg-4">
                   <Row>
-                    <Col lg="6">
+                    <Col lg="4">
                       <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-rd"
-                        >
-                          Required Drivers
-                        </label>
-                        <Input
-                          className="form-control-alternative"
-                          id="input-rd"
-                          required={true}
-                          placeholder="Enter Required Drivers"
-                          type="number"
-                          value={trip.required_drivers}
-                          name="required_drivers"
-                          onChange={handleInputChange}
-                        />
-                      </FormGroup>
-                    </Col>
-                    <Col lg="6">
-                      <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-fname"
-                        >
-                          Invite Drivers
+                        <label className="form-control-label" htmlFor="input-fname">
+                          <span style={{ color: 'red' }}>
+                            {trip.inviteddrivers.length > 0 || trip.assigned_drivers.length > 0 ? '' : '*'}
+                          </span>{' '}
+                          {t('Drivers Name')}
                         </label>
                         {drivers && (
                           <Select
+                            placeholder={t('Select...')}
                             onChange={(e) =>
                               setTrip((user) => ({
                                 ...user,
-                                invited_drivers: e.map(
-                                  (driver) => driver.value
-                                ),
+                                inviteddrivers: e.map((driver) => driver.value),
                               }))
                             }
-                            isDisabled={
-                              trip?.required_drivers <= 0 ||
-                              trip?.required_drivers ===
-                              trip?.assigned_drivers?.length
-                            }
+                            isDisabled={isEditing && editTrip?.status !== 'pending'}
                             name="drivers"
                             isMulti
                             className="form-control-alternative"
+                            defaultValue={
+                              isEditing
+                                ? editTrip.status === 'pending'
+                                  ? editTrip?.invited_drivers.map((i) => ({
+                                      value: i?.driver?._id,
+                                      label: `${i?.driver?.first_name[0]?.toUpperCase() + i?.driver?.first_name?.substring(1)} ${
+                                        i?.driver?.last_name[0]?.toUpperCase() + i?.driver?.last_name.substring(1)
+                                      }`,
+                                    }))
+                                  : editTrip?.assigned_drivers.map((i) => ({
+                                      value: i?._id,
+                                      label: `${i?.first_name[0]?.toUpperCase() + i?.first_name?.substring(1)} ${
+                                        i?.last_name[0].toUpperCase() + i?.last_name.substring(1)
+                                      }`,
+                                    }))
+                                : null
+                            }
                             options={drivers.map((driver) => ({
                               value: driver?._id,
-                              label: `${driver?.first_name} ${driver?.last_name}`,
+                              label: `${driver?.first_name[0]?.toUpperCase() + driver?.first_name?.substring(1)} ${
+                                driver?.last_name[0]?.toUpperCase() + driver?.last_name?.substring(1)
+                              }`,
                             }))}
                           />
                         )}
                       </FormGroup>
                     </Col>
-                    {/* <Col lg="6">
+                    <Col lg="4">
                       <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-fname"
-                        >
-                          Assigned Drivers
-                        </label>
-                        {drivers && (
-                          <Select
-                            isDisabled
-                            onChange={(e) =>
-                              setTrip((user) => ({
-                                ...user,
-                                invited_drivers: e.map(
-                                  (driver) => driver.value
-                                ),
-                              }))
-                            }
-                            name="assignedDrivers"
-                            isMulti
-                            className="form-control-alternative"
-                            options={editTrip?.invited_drivers?.map(
-                              (driver) => ({
-                                value: driver?._id,
-                                label: `${driver?.first_name} ${driver?.last_name}`,
-                              })
-                            )}
-                          />
-                        )}
-                      </FormGroup>
-                    </Col> */}
-                  </Row>
-                </div>
-                <div className="pl-lg-4">
-                  <Row>
-                    <Col lg="6">
-                      <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-fname"
-                        >
-                          Client
+                        <label className="form-control-label" htmlFor="input-fname">
+                          <span style={{ color: 'red' }}>{trip.client ? '' : '*'}</span> {t('Client')}
                         </label>
                         {clients && (
                           <Select
+                            placeholder={t('Select...')}
                             onChange={handleClientChange}
                             name="clients"
                             defaultValue={
                               trip?.client?._id && {
                                 value: trip?.client?._id,
-                                label: `${trip?.client?.first_name} ${trip?.client?.last_name}`,
+                                label: `${trip?.client?.first_name[0]?.toUpperCase() + trip?.client?.first_name?.substring(1)} ${
+                                  trip?.client?.last_name[0]?.toUpperCase() + trip?.client?.last_name?.substring(1)
+                                }`,
                               }
                             }
                             className="form-control-alternative"
                             options={clients.map((client) => ({
                               value: client?._id,
-                              label: `${client?.first_name} ${client?.last_name}`,
+                              label: `${client?.first_name[0]?.toUpperCase() + client?.first_name?.substring(1)} ${
+                                client?.last_name[0]?.toUpperCase() + client?.last_name?.substring(1)
+                              }`,
                             }))}
                           />
                         )}
                       </FormGroup>
                     </Col>
-                    <Col lg="6">
+                    <Col lg="4">
                       <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-fname"
-                        >
-                          Quote
+                        <label className="form-control-label" htmlFor="input-fname">
+                          {t('Passengers')}
                         </label>
-                        {quotes && (
+                        {allPassengers && (
                           <Select
-                            onChange={(e) =>
-                              setTrip((user) => ({ ...user, quote: e.value }))
-                            }
-                            name="quotes"
-                            defaultValue={
-                              trip.quote?._id && {
-                                value: trip?.quote?._id,
-                                label: `${trip?.quote?.quote_title}`,
-                              }
-                            }
+                            placeholder={t('Select...')}
+                            onChange={handlePassengerChange}
+                            isDisabled={trip?.client <= 0}
+                            name="passengers"
+                            isMulti
                             className="form-control-alternative"
-                            options={quotes.map((quote) => ({
-                              value: quote?._id,
-                              label: `${quote?.quote_title}`,
+                            value={passengerChange?.map((i) => ({
+                              value: i.value,
+                              label: i.label,
                             }))}
+                            options={passengers
+                              .map((passenger) => ({
+                                value: passenger?._id,
+                                label: `${passenger?.first_name[0]?.toUpperCase() + passenger?.first_name?.substring(1)} ${
+                                  passenger?.last_name[0]?.toUpperCase() + passenger?.last_name?.substring(1)
+                                }`,
+                              }))
+                              .filter((p) => passengerChange.findIndex((v) => v === p.label) < 0)}
                           />
                         )}
                       </FormGroup>
                     </Col>
                   </Row>
+                  <FormGroup>
+                    <label className="form-control-label" htmlFor="input-lname">
+                      {t('Add comment')}
+                    </label>
+                    <Input
+                      className="form-control-alternative"
+                      id="input-lname"
+                      placeholder={t('Add Comment')}
+                      type="textarea"
+                      value={trip.comment}
+                      name="comment"
+                      onChange={handleInputChange}
+                    />
+                  </FormGroup>
                 </div>
               </Form>
             </Col>
@@ -471,23 +764,34 @@ const TripForm = ({
         </ModalBody>
         <ModalFooter>
           <Button color="primary" onClick={handleSubmit}>
-            Save
-          </Button>{" "}
+            {t('Save')}
+          </Button>{' '}
           {isEditing && (
             <Button color="danger" onClick={handleDelete}>
-              Delete
+              {t('Delete')}
             </Button>
-          )}{" "}
-          <Button onClick={handleModal}>Cancel</Button>
+          )}{' '}
+          <Button onClick={handleModal}>{t('Cancel')}</Button>
         </ModalFooter>
       </Modal>
       <Modal isOpen={openDateModal} size="sm" centered>
         <ModalHeader charCode="X" toggle={handleDateModal}>
-          {isEditing ? "Edit" : "Select"} Date
+          {isEditing ? <> {t('Edit Date')}</> : <>{t('Select Date')}</>}
         </ModalHeader>
-        <div style={{ textAlign: "center" }}>
-          <DayPicker selectedDays={selectedDays} onDayClick={handleDayClick} />
+        <div style={{ textAlign: 'center' }}>
+          <DayPicker
+            disabledDays={{ before: new Date() }}
+            selectedDays={selectedDays}
+            localeUtils={MomentLocaleUtils}
+            locale={language === 'fr' && 'fr'}
+            onDayClick={handleDayClick}
+          />
         </div>
+        <ModalFooter>
+          <Button color="success" onClick={handleDateModal}>
+            {t('Ok')}
+          </Button>
+        </ModalFooter>
       </Modal>
     </>
   );

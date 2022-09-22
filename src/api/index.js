@@ -1,18 +1,18 @@
 // Init
-import axios from "axios";
-import { toast } from "react-toastify";
-import { removeToken } from "../variables/auth";
-
-const api = async (method = "get", uri, body) => {
+import axios from 'axios';
+import { toast } from 'react-toastify';
+import { removeToken } from '../variables/auth';
+import { baseUrl } from '../config';
+const api = async (method = 'get', uri, body) => {
   // Default setting for production
-  if (window.location.hostname === "localhost") {
-    axios.defaults.baseURL = "http://localhost:5000/";
-  } else {
-    axios.defaults.baseURL = "https://kidcab.falconit.com.pk/";
-  }
+  // if (window.location.hostname === 'localhost') {
+  //   axios.defaults.baseURL = 'http://localhost:5000/';
+  // } else {
+  //   axios.defaults.baseURL = 'https://kidcab.falconit.com.pk/';
+  // }
 
   // API Call
-  const url = "api/" + uri;
+  const url = `${baseUrl}api/${uri}`;
   return new Promise((resolve, reject) => {
     axios[method](url, body)
       .then((res) => {
@@ -21,15 +21,12 @@ const api = async (method = "get", uri, body) => {
       .catch((err) => {
         if (err?.response?.status === 401) {
           removeToken();
-          toast.warning("Token is expired Please Login Again");
-          window.location = "/login";
+          toast.warning('Token is expired Please Login Again');
+          window.location = '/login';
         } else {
-          console.log("API Error --------> ", { ...err });
-
-          toast.error(
-            err?.response?.data ? err.response.data.message?.msg : err?.message
-          );
-
+          console.log('API Error --------> ', { ...err });
+          // toast.error(err?.response?.data ? `${t(err.response.data?.message)}` : `${t(err?.message)}`);
+          toast.error(err?.response?.data ? err.response.data?.message : err?.message);
           reject(err);
         }
       });

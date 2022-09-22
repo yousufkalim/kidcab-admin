@@ -1,24 +1,15 @@
 // reactstrap components
 
-import {
-  Card,
-  CardHeader,
-  CardFooter,
-  Pagination,
-  PaginationItem,
-  PaginationLink,
-  Table,
-  Container,
-  Row,
-  Button,
-} from "reactstrap";
-import PassengerForm from "./VehicleForm";
-import PassengerRow from "./VehicleRow";
-import { useState } from "react";
-import { useEffect } from "react";
-import api from "../../api/index";
+import { Card, CardHeader, Table, Container, Row, Button } from 'reactstrap';
+import PassengerForm from './VehicleForm';
+import PassengerRow from './VehicleRow';
+import { useState } from 'react';
+import { useEffect } from 'react';
+import api from '../../api/index';
+import { useTranslation } from 'react-i18next';
 
 const VehicleList = () => {
+  const { t, i18n } = useTranslation();
   const [openModal, setOpenModal] = useState(false);
   const [vehicles, setVehicles] = useState();
   const handleModal = () => {
@@ -26,10 +17,11 @@ const VehicleList = () => {
     return openModal;
   };
   const autoRefresh = () => {
-    api("get", "vehicles").then((res) => {
+    api('get', 'vehicles').then((res) => {
       setVehicles(res.data.vehicles);
     });
   };
+
   useEffect(() => {
     autoRefresh();
   }, [openModal]);
@@ -42,41 +34,30 @@ const VehicleList = () => {
             <Card className="shadow">
               <CardHeader className="border-0">
                 <div className="d-flex justify-content-between ">
-                  <h3 className="mb-0">Vehicles List</h3>
-                  <Button
-                    color="primary"
-                    href="#pablo"
-                    onClick={handleModal}
-                    size="md"
-                  >
+                  <h3 className="mb-0">{t('Vehicles List')}</h3>
+                  <Button color="primary" href="#pablo" onClick={handleModal} size="md">
                     <i className="ni ni-fat-add"></i>
-                    Add Vehicle
+                    {t('Add Vehicle')}
                   </Button>
                 </div>
               </CardHeader>
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
                   <tr>
-                    <th scope="col">Name</th>
-                    <th scope="col">Model</th>
-                    <th scope="col">Color</th>
-                    <th scope="col">Driver</th>
+                    <th scope="col">{t('Name')}</th>
+                    <th scope="col">{t('Model')}</th>
+                    <th scope="col">{t('Color')}</th>
+                    <th scope="col">{t('Driver')}</th>
                     <th scope="col"></th>
                     <th scope="col" />
                   </tr>
                 </thead>
                 <tbody>
                   {vehicles ? (
-                    vehicles.map((user) => (
-                      <PassengerRow
-                        key={user._id}
-                        user={user}
-                        autoRefresh={autoRefresh}
-                      />
-                    ))
+                    vehicles.map((user) => <PassengerRow key={user._id} user={user} autoRefresh={autoRefresh} />)
                   ) : (
                     <tr className="h1 mx-lg-auto text-center">
-                      <td>No Vehicle Found</td>
+                      <td>{t('No Vehicle Found')}</td>
                     </tr>
                   )}
                 </tbody>

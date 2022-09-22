@@ -2,8 +2,10 @@ import { useState } from "react";
 import axios from "axios";
 import Autocomplete from "react-autocomplete";
 import { SetAuthToken } from "variables/auth";
+import { useTranslation } from "react-i18next";
 
-function AddressInput({ label, address, setAddress }) {
+function AddressInput({ label, address, setAddress, optional }) {
+  const { t, i18n } = useTranslation();
   let [addresses, setAddresses] = useState([]);
 
   // Get All Address in drop down List from API
@@ -34,8 +36,8 @@ function AddressInput({ label, address, setAddress }) {
         }`,
         city: res?.data?.features[i].properties.city,
         PostalCode: res?.data?.features[i].properties.postcode,
-        lat: res?.data?.features[0].geometry.coordinates[1],
-        lng: res?.data?.features[0].geometry.coordinates[0],
+        lat: res?.data?.features[i].geometry.coordinates[1],
+        lng: res?.data?.features[i].geometry.coordinates[0],
       });
     }
     if (addressToSet.length === res?.data?.features.length) {
@@ -48,7 +50,6 @@ function AddressInput({ label, address, setAddress }) {
     if (item) {
       for (var i = 0; i < addresses.length; i++) {
         if (addresses[i].label2 === item) {
-          console.log("Address found ---> ", addresses[i]);
           var postal_code = addresses[i].PostalCode;
           var lat = addresses[i].lat;
           var lng = addresses[i].lng;
@@ -82,7 +83,10 @@ function AddressInput({ label, address, setAddress }) {
         className="form-control-label"
         htmlFor={`input-address-${label.split(" ").join("")}`}
       >
-        {label}
+        {!optional && (
+          <span style={{ color: "red" }}>{address?.label ? "" : "*"}</span>
+        )}
+        {t(label)}
       </label>
 
       {/* Semi automated field for address */}
@@ -99,7 +103,7 @@ function AddressInput({ label, address, setAddress }) {
             <input
               className="form-control form-control-alternative"
               id={`input-address-${label.split(" ").join("")}`}
-              placeholder={label}
+              placeholder={t(label)}
               {...props}
             />
           );

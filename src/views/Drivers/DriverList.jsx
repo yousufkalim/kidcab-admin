@@ -17,13 +17,70 @@ import DriverRow from "./DriverRow";
 import { useState } from "react";
 import { useEffect } from "react";
 import api from "../../api/index";
+import { useTranslation } from "react-i18next";
 
 const DriverList = () => {
+  const { t, i18n } = useTranslation();
   const [openModal, setOpenModal] = useState(false);
   const [users, setUsers] = useState();
+  const [user, setUser] = useState({
+    profile_pic: "",
+    id_front: "",
+    id_back: "",
+    vtc_front: "",
+    vtc_back: "",
+    criminal_record_image: "",
+    criminal_record_date: "",
+    ris_image: "",
+    ris_date: "",
+    kbis_image: "",
+    kbis_date: "",
+    proRc_image: "",
+    address: "",
+    proRc_date: "",
+    license_front: "",
+    license_back: "",
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+    phone: "",
+    bankName: "",
+    iban: "",
+    role: "",
+    vehicles: [],
+    company_name: "",
+    siret_number: "",
+    legal_info: "",
+    social_capital: "",
+    vat_number: "",
+    city_of_rcs: "",
+    kbis_extract: "",
+    rib: "",
+    professional_liability: "",
+    insurance_civil_liability: "",
+  });
   const handleModal = () => {
     setOpenModal((open) => !open);
     return openModal;
+  };
+  const handleFileChange = (e) => {
+    setUser({ ...user, [e.target.name]: e.target.files[0] });
+  };
+
+  const handleInputChange = (e) => {
+    setUser({ ...user, [e.target.name]: e.target.value });
+  };
+
+  const handleVehicleChange = (e) => {
+    setUser((user) => ({
+      ...user,
+      vehicles: e.map((vehicle) => vehicle.value),
+    }));
+  };
+
+  const handleRoleChange = (e) => {
+    setUser((user) => ({ ...user, role: e.value }));
   };
   const autoRefresh = () => {
     api("get", "drivers").then((res) => setUsers(res.data.drivers));
@@ -39,7 +96,7 @@ const DriverList = () => {
             <Card className="shadow">
               <CardHeader className="border-0">
                 <div className="d-flex justify-content-between ">
-                  <h3 className="mb-0">Drivers List</h3>
+                  <h3 className="mb-0">{t("Drivers List")}</h3>
                   <Button
                     color="primary"
                     href="#pablo"
@@ -47,18 +104,18 @@ const DriverList = () => {
                     size="md"
                   >
                     <i className="ni ni-fat-add"></i>
-                    Add Driver
+                    {t("Add Driver")}
                   </Button>
                 </div>
               </CardHeader>
               <Table className="align-items-center table-flush my-3" responsive>
                 <thead className="thead-light">
                   <tr>
-                    <th scope="col">Name</th>
-                    <th scope="col">Role</th>
-                    <th scope="col">Email</th>
-                    <th scope="col">Phone Number</th>
-                    <th scope="col">No. of Vehicles</th>
+                    <th scope="col">{t("Name")}</th>
+                    <th scope="col">{t("Role")}</th>
+                    <th scope="col">{t("Email")}</th>
+                    <th scope="col">{t("Phone Number")}</th>
+                    <th scope="col">{t("No. of Vehicles")}</th>
                     <th scope="col" />
                   </tr>
                 </thead>
@@ -73,7 +130,7 @@ const DriverList = () => {
                     ))
                   ) : (
                     <tr className="h1 mx-lg-auto text-center">
-                      <td>No Driver Found</td>
+                      <td>{t("No Driver Found")}</td>
                     </tr>
                   )}
                 </tbody>
@@ -137,8 +194,13 @@ const DriverList = () => {
           <DriverForm
             openModal={openModal}
             handleModal={handleModal}
-            user={undefined}
-            isEditing={false}
+            handleFileChange={handleFileChange}
+            handleInputChange={handleInputChange}
+            handleVehicleChange={handleVehicleChange}
+            handleRoleChange={handleRoleChange}
+            editUser={user}
+            setUserData={setUser}
+            isClose={true}
             autoRefresh={autoRefresh}
           />
         )}

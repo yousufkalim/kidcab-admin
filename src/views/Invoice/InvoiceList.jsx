@@ -3,42 +3,137 @@
 import {
   Card,
   CardHeader,
-  CardFooter,
-  Pagination,
-  PaginationItem,
-  PaginationLink,
   Table,
   Container,
   Row,
-  ButtonDropdown,
   DropdownToggle,
   DropdownMenu,
   UncontrolledDropdown,
   DropdownItem,
+  Input,
   Button,
-} from "reactstrap";
-import InvoiceForm from "./InvoiceForm";
-import InvoiceRow from "./InvoiceRow";
-import { useState } from "react";
-import { useEffect } from "react";
-import api from "../../api/index";
+} from 'reactstrap';
+import InvoiceForm from './InvoiceForm';
+import InvoiceRow from './InvoiceRow';
+import { useState } from 'react';
+import { useEffect } from 'react';
+import api from '../../api/index';
+import { ExportInvoices } from '../../components/exportInvoices';
+import { toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
 
 const InvoiceList = () => {
+  const { t, i18n } = useTranslation();
   const [openModal, setOpenModal] = useState(false);
   const [invoices, setInvoices] = useState();
-  const [dropDownItem, setDropDownItem] = useState("all");
+  const [dropDownItem, setDropDownItem] = useState('all');
+  const [statusdropDown, setStatusDropDown] = useState('Bulk Action');
+  const [selectedItems, setSelectedItems] = useState([]);
+  const [typefilter, setTypeFilter] = useState(false);
+  const [datefilter, setDateFilter] = useState(false);
+  const [filter, setFilter] = useState('');
+  const [dates, setDates] = useState([]);
+  const [filterdropDownItem, setFilterDropDownItem] = useState('all');
+
+  const handleSelect = (invoice) => {
+    const selected = selectedItems.filter((a) => a._id === invoice._id);
+    if (selected.length > 0) {
+      setSelectedItems((prev) => prev.filter((a) => a._id !== invoice._id));
+    } else {
+      setSelectedItems((prev) => [...prev, invoice]);
+    }
+  };
+  const handelNameFilter = (e) => {
+    e.preventDefault();
+    setFilterDropDownItem(e.target.name);
+  };
+  const handleDeleteMany = async () => {
+    const invoiceIds = selectedItems.map((a) => a._id);
+
+    api('delete', 'invoices/deleteMany', { data: { invoiceIds } }).then(() => {
+      toast.success('Invoices deleted successfully');
+      autoRefresh();
+      setSelectedItems([]);
+    });
+  };
+  const filterCheck = (e) => {
+    e.preventDefault();
+    setDropDownItem(e.target.name);
+    if (e.target.name === 'all') {
+      setTypeFilter(false);
+      setDateFilter(false);
+      setFilter('');
+      setFilterDropDownItem(e.target.name);
+      setDates({ ...dates, start_date: '', end_date: '' });
+    } else if (e.target.name == 'date-filter') {
+      if (typefilter === true) {
+        setFilterDropDownItem('all');
+        setTypeFilter(false);
+        setDates({ ...dates, start_date: '', end_date: '' });
+      }
+      setFilterDropDownItem('all');
+      setDateFilter((prevCheck) => !prevCheck);
+    } else if (e.target.name === 'invoice-type-filter') {
+      if (datefilter === true) {
+        setFilterDropDownItem('all');
+        setDateFilter(false);
+        setDates({ ...dates, start_date: '', end_date: '' });
+      }
+      setFilterDropDownItem('all');
+      setTypeFilter((prevCheck) => !prevCheck);
+    }
+  };
   const handleModal = () => {
     setOpenModal((open) => !open);
     return openModal;
   };
   const autoRefresh = () => {
-    api("get", `invoices/status/${dropDownItem}`).then((res) => {
+    api('get', `invoices/status/${filterdropDownItem}`).then((res) => {
       setInvoices(res.data.invoices);
     });
   };
+  const handleInputChange = (e) => {
+    setDates({ ...dates, [e.target.name]: e.target.value });
+  };
+
+  const changeStatus = (e) => {
+    e.preventDefault();
+    setStatusDropDown(e.target.name);
+    let value = e.target.name;
+    api('post', `invoices/setstatus`, {
+      invoices: selectedItems,
+      value: value,
+    }).then((res) => {
+      autoRefresh();
+      toast.success('Status Updated successfully');
+      setSelectedItems([]);
+      setStatusDropDown('Bulk Action');
+    });
+  };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    let method = 'post';
+    let uri = 'invoices/InvoiceByDate';
+    if (dates.start_date == '') {
+      return toast.error('Please enter start date');
+    }
+    if (dates.end_date == '') {
+      return toast.error('Please enter end date');
+    }
+    api(method, uri, {
+      ...dates,
+    }).then((res) => {
+      if (res.status == 200) {
+        setInvoices(res.data.invoices);
+      } else {
+        toast.error(' Error', res);
+      }
+    });
+  };
+
   useEffect(() => {
     autoRefresh();
-  }, [openModal, dropDownItem]);
+  }, [openModal, filterdropDownItem, typefilter, datefilter]);
   return (
     <>
       <Container className="mt--7" fluid>
@@ -48,93 +143,186 @@ const InvoiceList = () => {
             <Card className="shadow">
               <CardHeader className="border-0">
                 <div className="d-flex justify-content-between ">
-                  <h3 className="mb-0">Invoice List</h3>
-
+                  <div className="filter-cont" style={{ width: '20%' }}>
+                    {typefilter && (
+                      <UncontrolledDropdown>
+                        <DropdownToggle
+                          color="warning"
+                          name
+                          href="#pablo"
+                          role="button"
+                          caret
+                          style={{ textTransform: 'capitalize' }}
+                        >
+                          {t(filterdropDownItem)}
+                          &nbsp;{t('invoices')}
+                        </DropdownToggle>
+                        <DropdownMenu>
+                          <DropdownItem name="all" onClick={handelNameFilter}>
+                            {t('All Invoices')}
+                          </DropdownItem>
+                          <DropdownItem name="pending" onClick={handelNameFilter}>
+                            {t('Pending Invoices')}
+                          </DropdownItem>
+                          <DropdownItem name="paid" onClick={handelNameFilter}>
+                            {t('Paid Invoices')}
+                          </DropdownItem>
+                          <DropdownItem name="late" onClick={handelNameFilter}>
+                            {t('Late Invoices')}
+                          </DropdownItem>
+                          <DropdownItem name="cancelled" onClick={handelNameFilter}>
+                            {t('Cancelled Invoices')}
+                          </DropdownItem>
+                        </DropdownMenu>
+                      </UncontrolledDropdown>
+                    )}
+                  </div>
                   <div>
-                    {" "}
+                    {selectedItems.length > 0 && (
+                      <>
+                        <Button color="danger" href="#pablo" onClick={handleDeleteMany} size="md">
+                          {t('Delete Invoices')}
+                        </Button>
+                        <UncontrolledDropdown>
+                          <DropdownToggle
+                            color="primary"
+                            name
+                            href="#pablo"
+                            role="button"
+                            caret
+                            style={{ textTransform: 'capitalize' }}
+                          >
+                            {t(statusdropDown)}
+                          </DropdownToggle>
+                          <DropdownMenu>
+                            <DropdownItem name="pending" onClick={changeStatus}>
+                              {t('Pending')}
+                            </DropdownItem>
+                            <DropdownItem name="paid" onClick={changeStatus}>
+                              {t('Paid')}
+                            </DropdownItem>
+                            <DropdownItem name="late" onClick={changeStatus}>
+                              {t('Late')}
+                            </DropdownItem>
+                            <DropdownItem name="cancelled" onClick={changeStatus}>
+                              {t('cancel')}
+                            </DropdownItem>
+                          </DropdownMenu>
+                        </UncontrolledDropdown>{' '}
+                        <ExportInvoices dropDownItem={dropDownItem} invoices={selectedItems} />
+                      </>
+                    )}
                     <UncontrolledDropdown>
                       <DropdownToggle
-                        color="primary"
+                        color="danger"
                         name
                         href="#pablo"
                         role="button"
                         caret
-                        style={{ textTransform: "capitalize" }}
+                        size="md"
+                        style={{
+                          textTransform: 'capitalize',
+                        }}
                       >
-                        {dropDownItem}
-                        &nbsp;invoices
+                        {t(dropDownItem)}
                       </DropdownToggle>
                       <DropdownMenu>
-                        <DropdownItem
-                          name="all"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            setDropDownItem(e.target.name);
-                          }}
-                        >
-                          All Invoices
+                        <DropdownItem name="all" onClick={filterCheck}>
+                          {t('All Invoices')}
                         </DropdownItem>
-                        <DropdownItem
-                          name="pending"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            setDropDownItem(e.target.name);
-                          }}
-                        >
-                          Pending Invoices
+                        <DropdownItem name="invoice-type-filter" onClick={filterCheck}>
+                          {t('Filter By Invoice type')}
                         </DropdownItem>
-                        <DropdownItem
-                          name="paid"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            setDropDownItem(e.target.name);
-                          }}
-                        >
-                          Paid Invoices
-                        </DropdownItem>
-                        <DropdownItem
-                          name="late"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            setDropDownItem(e.target.name);
-                          }}
-                        >
-                          Late Invoices
-                        </DropdownItem>
-                        <DropdownItem
-                          name="cancelled"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            setDropDownItem(e.target.name);
-                          }}
-                        >
-                          Cancelled Invoices
+                        <DropdownItem name="date-filter" onClick={filterCheck}>
+                          {t('Filter By Date')}
                         </DropdownItem>
                       </DropdownMenu>
-                    </UncontrolledDropdown>{" "}
-                    <Button
-                      color="primary"
-                      href="#pablo"
-                      onClick={handleModal}
-                      size="md"
-                    >
+                    </UncontrolledDropdown>
+                    <Button color="primary" href="#pablo" onClick={handleModal} size="md">
                       <i className="ni ni-fat-add"></i>
-                      Add Invoice
+                      {t('Add Invoice')}
                     </Button>
                   </div>
                 </div>
+                {datefilter ? (
+                  <>
+                    <div
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        width: '100%',
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: '40%',
+                        }}
+                      >
+                        <label className="form-control-label" htmlFor="input-date">
+                          <span style={{ color: 'red' }}>{dates?.start_date ? '' : '*'}</span> {t('Start Date')}
+                        </label>
+                        <Input
+                          className="form-control-alternative"
+                          id="input-date"
+                          placeholder={'Select Start Date'}
+                          type="date"
+                          value={dates?.start_date}
+                          name="start_date"
+                          onChange={handleInputChange}
+                        />
+                      </div>
+                      <div
+                        style={{
+                          width: '40%',
+                          marginLeft: '20px',
+                        }}
+                      >
+                        <label className="form-control-label" htmlFor="input-date">
+                          <span style={{ color: 'red' }}>{dates?.end_date ? '' : '*'}</span> {t('End Date')}
+                        </label>
+                        <Input
+                          className="form-control-alternative"
+                          id="input-date"
+                          placeholder={'Select End Date'}
+                          type="date"
+                          value={dates?.end_date}
+                          name="end_date"
+                          onChange={handleInputChange}
+                        />
+                      </div>
+                      <div>
+                        <Button
+                          color="primary"
+                          size="sm"
+                          onClick={handleSubmit}
+                          style={{
+                            marginTop: '35px',
+                            marginLeft: '30px',
+                          }}
+                        >
+                          {t('Search')}
+                        </Button>
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  ''
+                )}
               </CardHeader>
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
                   <tr>
-                    <th scope="col">Title</th>
-                    <th scope="col">Issue Date</th>
-                    <th scope="col">Status</th>
-                    <th scope="col">Total Price</th>
-                    <th scope="col">Trip</th>
-                    <th scope="col" className="text-right">
-                      Actions
-                    </th>
+                    <th scope="col">{t('Select')}</th>
+                    <th scope="col">{t('Title')}</th>
+                    <th scope="col">{t('Issue Date')}</th>
+                    <th scope="col">{t('Status')}</th>
+                    <th scope="col">{t('No. of Trips')}</th>
+                    <th scope="col">{t('Total Price inc vat')}</th>
+
+                    <th scope="col">{t('Client')}</th>
+                    <th scope="col">{t('Driver')}</th>
+                    <th scope="col">{t('Actions')}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -143,68 +331,18 @@ const InvoiceList = () => {
                       <InvoiceRow
                         key={invoice._id}
                         invoice={invoice}
+                        selectedItems={selectedItems}
+                        handleSelect={handleSelect}
                         autoRefresh={autoRefresh}
                       />
                     ))
                   ) : (
                     <tr className="h1 mx-lg-auto text-center">
-                      <td>No Invoice Found</td>
+                      <td>{t('No Invoice Found')}</td>
                     </tr>
                   )}
                 </tbody>
               </Table>
-              {/* <CardFooter className="py-4">
-                <nav aria-label="...">
-                  <Pagination
-                    className="pagination justify-content-end mb-0"
-                    listClassName="justify-content-end mb-0"
-                  >
-                    <PaginationItem className="disabled">
-                      <PaginationLink
-                        href="#pablo"
-                        onClick={(e) => e.preventDefault()}
-                        tabIndex="-1"
-                      >
-                        <i className="fas fa-angle-left" />
-                        <span className="sr-only">Previous</span>
-                      </PaginationLink>
-                    </PaginationItem>
-                    <PaginationItem className="active">
-                      <PaginationLink
-                        href="#pablo"
-                        onClick={(e) => e.preventDefault()}
-                      >
-                        1
-                      </PaginationLink>
-                    </PaginationItem>
-                    <PaginationItem>
-                      <PaginationLink
-                        href="#pablo"
-                        onClick={(e) => e.preventDefault()}
-                      >
-                        2 <span className="sr-only">(current)</span>
-                      </PaginationLink>
-                    </PaginationItem>
-                    <PaginationItem>
-                      <PaginationLink
-                        href="#pablo"
-                        onClick={(e) => e.preventDefault()}
-                      >
-                        3
-                      </PaginationLink>
-                    </PaginationItem>
-                    <PaginationItem>
-                      <PaginationLink
-                        href="#pablo"
-                        onClick={(e) => e.preventDefault()}
-                      >
-                        <i className="fas fa-angle-right" />
-                        <span className="sr-only">Next</span>
-                      </PaginationLink>
-                    </PaginationItem>
-                  </Pagination>
-                </nav>
-              </CardFooter> */}
             </Card>
           </div>
         </Row>

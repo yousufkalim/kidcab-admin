@@ -1,37 +1,125 @@
 import {
   Card,
   CardHeader,
-  CardFooter,
-  Pagination,
-  PaginationItem,
-  PaginationLink,
   Table,
   Container,
+  Input,
   Row,
   Button,
+  DropdownToggle,
+  DropdownMenu,
+  UncontrolledDropdown,
+  DropdownItem,
 } from "reactstrap";
 import PassengerForm from "./QuotesForm";
 import PassengerRow from "./QuotesRow";
 import { useState } from "react";
 import { useEffect } from "react";
 import api from "../../api/index";
+import { ExportQuotes } from "../../components/exportQuotes";
+import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 
 const QuotesList = () => {
+  const { t, i18n } = useTranslation();
   const [openModal, setOpenModal] = useState(false);
   const [quotes, setQuotes] = useState();
+  const [selectedItems, setSelectedItems] = useState([]);
+  const [dropDownItem, setDropDownItem] = useState("all");
+  const [filterdropDownItem, setFilterDropDownItem] = useState("all");
+  const [filter, setFilter] = useState("");
+  const [dates, setDates] = useState([]);
+  const [typefilter, setTypeFilter] = useState(false);
+  const [datefilter, setDateFilter] = useState(false);
+
+  const handleSelect = (quote) => {
+    const selected = selectedItems.filter((a) => a._id === quote._id);
+    if (selected.length > 0) {
+      setSelectedItems((prev) => prev.filter((a) => a._id !== quote._id));
+    } else {
+      setSelectedItems((prev) => [...prev, quote]);
+    }
+  };
+  const handleDeleteMany = async () => {
+    const quotesIds = selectedItems.map((a) => a._id);
+
+    api("delete", "quotes/deleteMany", { data: { quotesIds } }).then(() => {
+      toast.success("Quotes deleted successfully");
+      autoRefresh();
+      setSelectedItems([]);
+    });
+  };
   const handleModal = () => {
     setOpenModal((open) => !open);
     return openModal;
   };
   const autoRefresh = () => {
-    api("get", "quotes").then((res) => {
+    api("get", `/quotes/status/${filterdropDownItem}`).then((res) => {
       setQuotes(res.data.quotes);
-      console.log(res.data.quotes);
     });
   };
+  const filterCheck = (e) => {
+    e.preventDefault();
+    setDropDownItem(e.target.name);
+    if (e.target.name === "all") {
+      setTypeFilter(false);
+      setDateFilter(false);
+      setFilter("");
+      setFilterDropDownItem(e.target.name);
+      autoRefresh();
+      setDates({ ...dates, start_date: "", end_date: "" });
+    } else if (e.target.name == "date-filter") {
+      if (typefilter === true) {
+        setFilterDropDownItem("all");
+        setTypeFilter(false);
+        setDates({ ...dates, start_date: "", end_date: "" });
+      }
+      setFilterDropDownItem("all");
+      setDateFilter((prevCheck) => !prevCheck);
+    } else if (e.target.name === "qoute-type-filter") {
+      if (datefilter === true) {
+        setFilterDropDownItem("all");
+        setDateFilter(false);
+        setDates({ ...dates, start_date: "", end_date: "" });
+      }
+      setFilterDropDownItem("all");
+      setTypeFilter((prevCheck) => !prevCheck);
+    }
+  };
+  const handelNameFilter = (e) => {
+    e.preventDefault();
+    setFilterDropDownItem(e.target.name);
+  };
+
+  const handleInputChange = (e) => {
+    setDates({ ...dates, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    let method = "post";
+    let uri = "quotes/QuotesByDate";
+    if (dates.start_end == "") {
+      return toast.error("Please enter start date");
+    }
+    if (dates.end_date == "") {
+      return toast.error("Please enter end date");
+    }
+    api(method, uri, {
+      ...dates,
+    }).then((res) => {
+      // eslint-disable-next-line eqeqeq
+      if (res.status == 200) {
+        setQuotes(res.data.qoutes);
+      } else {
+        toast.error(" Error", res);
+      }
+    });
+  };
+
   useEffect(() => {
     autoRefresh();
-  }, [openModal]);
+  }, [openModal, filterdropDownItem, typefilter, datefilter]);
   return (
     <>
       <Container className="mt--7" fluid>
@@ -41,29 +129,205 @@ const QuotesList = () => {
             <Card className="shadow">
               <CardHeader className="border-0">
                 <div className="d-flex justify-content-between ">
-                  <h3 className="mb-0">Quotes List</h3>
-                  <Button
-                    color="primary"
-                    href="#pablo"
-                    onClick={handleModal}
-                    size="md"
-                  >
-                    <i className="ni ni-fat-add"></i>
-                    Add Quotes
-                  </Button>
+                  <div className="filter-cont" style={{ width: "20%" }}>
+                    {typefilter && (
+                      <UncontrolledDropdown>
+                        <DropdownToggle
+                          color="dark"
+                          name
+                          href="#pablo"
+                          role="button"
+                          caret
+                          size="md"
+                          style={{
+                            textTransform: "capitalize",
+                          }}
+                        >
+                          {t(filterdropDownItem)}
+                          &nbsp;{t("qoutes")}
+                        </DropdownToggle>
+                        <DropdownMenu>
+                          <DropdownItem name="all" onClick={handelNameFilter}>
+                            {t("All Qoutes")}
+                          </DropdownItem>
+                          <DropdownItem
+                            name="pending"
+                            onClick={handelNameFilter}
+                          >
+                            {t("Pending Qoutes")}
+                          </DropdownItem>
+                          <DropdownItem
+                            name="accepted"
+                            onClick={handelNameFilter}
+                          >
+                            {t("Accepted Qoutes")}
+                          </DropdownItem>
+                          <DropdownItem
+                            name="rejected"
+                            onClick={handelNameFilter}
+                          >
+                            {t("Rejected Qoutes")}
+                          </DropdownItem>
+                        </DropdownMenu>
+                      </UncontrolledDropdown>
+                    )}
+                  </div>
+                  <div>
+                    {selectedItems.length > 0 && (
+                      <>
+                        <Button
+                          color="danger"
+                          href="#pablo"
+                          onClick={handleDeleteMany}
+                          size="md"
+                        >
+                          {t("Delete Quotes")}
+                        </Button>
+                        <ExportQuotes
+                          dropDownItem={dropDownItem}
+                          quotes={selectedItems}
+                        />
+                      </>
+                    )}
+
+                    <UncontrolledDropdown>
+                      <DropdownToggle
+                        color="danger"
+                        name
+                        href="#pablo"
+                        role="button"
+                        caret
+                        size="md"
+                        style={{
+                          textTransform: "capitalize",
+                        }}
+                      >
+                        {t(dropDownItem)}
+                      </DropdownToggle>
+                      <DropdownMenu>
+                        <DropdownItem name="all" onClick={filterCheck}>
+                          {t("All Qoutes")}
+                        </DropdownItem>
+                        <DropdownItem
+                          name="qoute-type-filter"
+                          onClick={filterCheck}
+                        >
+                          {t("Filter By Qoute type")}
+                        </DropdownItem>
+                        <DropdownItem name="date-filter" onClick={filterCheck}>
+                          {t("Filter By Date")}
+                        </DropdownItem>
+                      </DropdownMenu>
+                    </UncontrolledDropdown>
+                    <Button
+                      color="primary"
+                      href="#pablo"
+                      onClick={handleModal}
+                      size="md"
+                    >
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                      >
+                        <i className="ni ni-fat-add"></i>
+                        <> {t("Add Quotes")}</>
+                      </div>
+                    </Button>
+                  </div>
                 </div>
+                {datefilter ? (
+                  <>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        width: "100%",
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: "40%",
+                        }}
+                      >
+                        <label
+                          className="form-control-label"
+                          htmlFor="input-date"
+                        >
+                          <span style={{ color: "red" }}>
+                            {dates?.start_date ? "" : "*"}
+                          </span>{" "}
+                          {t("Start Date")}
+                        </label>
+                        <Input
+                          className="form-control-alternative"
+                          id="input-date"
+                          placeholder={"Select Start Date"}
+                          type="date"
+                          value={dates?.start_date}
+                          name="start_date"
+                          onChange={handleInputChange}
+                        />
+                      </div>
+                      <div
+                        style={{
+                          width: "40%",
+                          marginLeft: "20px",
+                        }}
+                      >
+                        <label
+                          className="form-control-label"
+                          htmlFor="input-date"
+                        >
+                          <span style={{ color: "red" }}>
+                            {dates?.end_date ? "" : "*"}
+                          </span>{" "}
+                          {t("End Date")}
+                        </label>
+                        <Input
+                          className="form-control-alternative"
+                          id="input-date"
+                          placeholder={"Select End Date"}
+                          type="date"
+                          value={dates?.end_date}
+                          name="end_date"
+                          onChange={handleInputChange}
+                        />
+                      </div>
+                      <div>
+                        <Button
+                          color="primary"
+                          size="sm"
+                          onClick={handleSubmit}
+                          style={{
+                            marginTop: "35px",
+                            marginLeft: "30px",
+                          }}
+                        >
+                          {t("Search")}
+                        </Button>
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  ""
+                )}
               </CardHeader>
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
                   <tr>
-                    <th scope="col">Quote Title</th>
-                    <th scope="col">Status</th>
-                    <th scope="col">Client</th>
-                    <th scope="col">Passengers</th>
-                    <th scope="col">No. of Trips</th>
-                    <th scope="col">Start Date</th>
-                    <th scope="col">End Date</th>
-                    <th scope="col">Actions </th>
+                    <th scope="col">{t("Select")}</th>
+                    <th scope="col">{t("Quote Title")}</th>
+                    <th scope="col">{t("Issue Date")}</th>
+                    <th scope="col">{t("Status")}</th>
+                    <th scope="col">{t("Client")}</th>
+                    <th scope="col">{t("No. of Trips")}</th>
+                    <th scope="col">{t("TOTAL PRICE INCLUDING VAT")}</th>
+                    <th scope="col">{t("Total Price without VAT")}</th>
+                    <th scope="col">{t("Actions")} </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -72,68 +336,18 @@ const QuotesList = () => {
                       <PassengerRow
                         key={quote._id}
                         quote={quote}
+                        selectedItems={selectedItems}
+                        handleSelect={handleSelect}
                         autoRefresh={autoRefresh}
                       />
                     ))
                   ) : (
                     <tr className="h1 mx-lg-auto text-center">
-                      <td>No Quotes Found</td>
+                      <td>{t("No Quotes Found")}</td>
                     </tr>
                   )}
                 </tbody>
               </Table>
-              {/* <CardFooter className="py-4">
-                <nav aria-label="...">
-                  <Pagination
-                    className="pagination justify-content-end mb-0"
-                    listClassName="justify-content-end mb-0"
-                  >
-                    <PaginationItem className="disabled">
-                      <PaginationLink
-                        href="#pablo"
-                        onClick={(e) => e.preventDefault()}
-                        tabIndex="-1"
-                      >
-                        <i className="fas fa-angle-left" />
-                        <span className="sr-only">Previous</span>
-                      </PaginationLink>
-                    </PaginationItem>
-                    <PaginationItem className="active">
-                      <PaginationLink
-                        href="#pablo"
-                        onClick={(e) => e.preventDefault()}
-                      >
-                        1
-                      </PaginationLink>
-                    </PaginationItem>
-                    <PaginationItem>
-                      <PaginationLink
-                        href="#pablo"
-                        onClick={(e) => e.preventDefault()}
-                      >
-                        2 <span className="sr-only">(current)</span>
-                      </PaginationLink>
-                    </PaginationItem>
-                    <PaginationItem>
-                      <PaginationLink
-                        href="#pablo"
-                        onClick={(e) => e.preventDefault()}
-                      >
-                        3
-                      </PaginationLink>
-                    </PaginationItem>
-                    <PaginationItem>
-                      <PaginationLink
-                        href="#pablo"
-                        onClick={(e) => e.preventDefault()}
-                      >
-                        <i className="fas fa-angle-right" />
-                        <span className="sr-only">Next</span>
-                      </PaginationLink>
-                    </PaginationItem>
-                  </Pagination>
-                </nav>
-              </CardFooter> */}
             </Card>
           </div>
         </Row>

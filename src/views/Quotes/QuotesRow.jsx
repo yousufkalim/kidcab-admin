@@ -3,7 +3,7 @@ import { Badge, UncontrolledDropdown, DropdownToggle, Media } from "reactstrap";
 import ClientAvatar from "./ClientAvatar";
 import QuotesForm from "./QuotesForm";
 
-const QuotesRow = ({ quote, autoRefresh }) => {
+const QuotesRow = ({ quote, autoRefresh, selectedItems, handleSelect }) => {
   const [openModal, setOpenModal] = useState(false);
   const handleModal = () => {
     setOpenModal((open) => !open);
@@ -12,6 +12,24 @@ const QuotesRow = ({ quote, autoRefresh }) => {
 
   return (
     <tr>
+      <td scope="row">
+        <div className="custom-control custom-checkbox mb-3">
+          <input
+            className="custom-control-input"
+            id={`customCheck1${quote._id}`}
+            type="checkbox"
+            value={quote._id}
+            checked={
+              selectedItems.filter((a) => a._id === quote._id).length > 0
+            }
+            onClick={() => handleSelect(quote)}
+          />
+          <label
+            className="custom-control-label"
+            htmlFor={`customCheck1${quote._id}`}
+          ></label>
+        </div>
+      </td>
       <th scope="row">
         <Media className="align-items-center">
           <Media>
@@ -19,6 +37,11 @@ const QuotesRow = ({ quote, autoRefresh }) => {
           </Media>
         </Media>
       </th>
+      <td>
+        <div className="d-flex align-items-center">
+          {quote && new Date(quote?.issue_date).toLocaleDateString()}
+        </div>
+      </td>
       <td>
         <Badge color="" className="badge-dot mr-4">
           {quote.status === "accepted" ? (
@@ -30,21 +53,16 @@ const QuotesRow = ({ quote, autoRefresh }) => {
         </Badge>
       </td>
 
-      <td>{quote?.client?.first_name + " " + quote?.client?.last_name}</td>
-      <td>{quote?.passengers?.length}</td>
+      <td>
+        {quote?.client?.first_name[0].toUpperCase() +
+          quote?.client?.first_name.substring(1) +
+          " " +
+          quote?.client?.last_name[0].toUpperCase() +
+          quote?.client?.last_name.substring(1)}
+      </td>
       <td>{quote?.trip_info && quote?.trip_info?.total_trips}</td>
-      <td>
-        <div className="d-flex align-items-center">
-          {quote?.trip_info &&
-            new Date(quote?.trip_info?.start_date).toLocaleDateString()}
-        </div>
-      </td>
-      <td>
-        <div className="d-flex align-items-center">
-          {quote?.trip_info &&
-            new Date(quote?.trip_info?.end_date).toLocaleDateString()}
-        </div>
-      </td>
+      <td>{quote?.total_price}€</td>
+      <td>{(quote?.total_price - quote?.vat).toFixed(2)}€</td>
       <td>
         <UncontrolledDropdown>
           <DropdownToggle

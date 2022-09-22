@@ -6,22 +6,44 @@ import { Container } from "reactstrap";
 import AdminNavbar from "components/Navbars/AdminNavbar.js";
 import AdminFooter from "components/Footers/AdminFooter.js";
 import Sidebar from "components/Sidebar/Sidebar.js";
-import { getToken, SetAuthToken } from "../variables/auth";
-
+import { getToken, getUser, SetAuthToken } from "../variables/auth";
+import api from "api";
 import routes from "routes/routes";
+import { UpdateStore, Store } from "StoreContext";
+import { baseUrl } from "config";
+import { useTranslation } from "react-i18next";
 
 const Admin = (props) => {
+  const { t, i18n } = useTranslation();
+
   const mainContent = useRef(null);
   const location = useLocation();
   const [token, setToken] = useState("");
+  const [company, setCompany] = useState("");
+  const updateStore = UpdateStore();
+  const store = Store();
+
   useEffect(() => {
+    getCompany();
     setToken(getToken());
-    if (getToken()) {
+    if (getToken() && getUser()) {
       SetAuthToken(token);
+      updateStore({
+        user: JSON.parse(getUser()),
+      });
     } else {
       window.location.replace("/auth/login");
     }
   }, [token]);
+
+  const getCompany = async () => {
+    await api("get", "/company").then((res) => {
+      // setCompany(res?.data?.company);
+      updateStore({
+        logo: res?.data?.company.logo,
+      });
+    });
+  };
 
   useEffect(() => {
     document.documentElement.scrollTop = 0;
@@ -64,13 +86,14 @@ const Admin = (props) => {
         routes={routes}
         logo={{
           innerLink: "/admin/index",
-          imgSrc: require("../assets/img/brand/kidcab.png").default,
+          //imgSrc: require('../assets/img/brand/kidcab.png').default,
+          imgSrc: baseUrl + store?.logo,
           imgAlt: "...",
         }}
       />
       <div className="main-content" ref={mainContent}>
         <AdminNavbar
-          {...props}
+          // {...props}
           brandText={getBrandText(props.location.pathname)}
         />
         <Switch>

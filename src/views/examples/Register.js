@@ -13,15 +13,17 @@ import {
   Row,
   Col,
 } from "reactstrap";
+import { useTranslation } from "react-i18next";
 
 const Register = () => {
+  const { t, i18n } = useTranslation();
   return (
     <>
       <Col lg="6" md="8">
         <Card className="bg-secondary shadow border-0">
           <CardHeader className="bg-transparent pb-5">
             <div className="text-muted text-center mt-2">
-              <small>Sign up</small>
+              <small>{t("Sign up")}</small>
             </div>
           </CardHeader>
           <CardBody className="px-lg-5 py-lg-5">
@@ -66,8 +68,10 @@ const Register = () => {
               </FormGroup>
               <div className="text-muted font-italic">
                 <small>
-                  password strength:{" "}
-                  <span className="text-success font-weight-700">strong</span>
+                  {t("password strength")}:{" "}
+                  <span className="text-success font-weight-700">
+                    {t("strong")}
+                  </span>
                 </small>
               </div>
               <Row className="my-4">
@@ -83,9 +87,9 @@ const Register = () => {
                       htmlFor="customCheckRegister"
                     >
                       <span className="text-muted">
-                        I agree with the{" "}
+                        {t("I agree with the")}{" "}
                         <a href="#pablo" onClick={(e) => e.preventDefault()}>
-                          Privacy Policy
+                          {t("Privacy Policy")}
                         </a>
                       </span>
                     </label>
@@ -94,7 +98,7 @@ const Register = () => {
               </Row>
               <div className="text-center">
                 <Button className="mt-4" color="primary" type="button">
-                  Create account
+                  {t("Create account")}
                 </Button>
               </div>
             </Form>

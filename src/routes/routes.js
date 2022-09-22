@@ -7,6 +7,8 @@ import Invoices from "../views/Invoice/Invoices";
 import Quotes from "../views/Quotes/Quotes";
 import Vehicles from "../views/Vehicles";
 import Trips from "../views/Trips/Trips";
+import Schedule from "../views/Schedule/Schedule";
+import Requests from "views/RideRequest/Requests.js";
 
 var routes = [
   {
@@ -14,6 +16,45 @@ var routes = [
     name: "Dashboard",
     icon: "ni ni-tv-2 text-primary",
     component: Index,
+    layout: "/admin",
+  },
+
+  {
+    path: "/trips",
+    name: "Trips",
+    icon: "fas fa-suitcase-rolling text-pink",
+    component: Trips,
+    layout: "/admin",
+  },
+
+  {
+    path: "/schedule",
+    name: "Schedule",
+    icon: "fa fa-calendar text-blue",
+    component: Schedule,
+    layout: "/admin",
+  },
+  {
+    path: "/request",
+    name: "Ride request",
+    icon: "ni ni-collection text-teal",
+    component: Requests,
+    layout: "/admin",
+  },
+
+  {
+    path: "/quotes",
+    name: "Quotes",
+    icon: "ni ni-ruler-pencil text-info",
+    component: Quotes,
+    layout: "/admin",
+  },
+
+  {
+    path: "/invoice",
+    name: "Invoices",
+    icon: "fa fa-calendar-check text-yellow",
+    component: Invoices,
     layout: "/admin",
   },
   {
@@ -30,13 +71,15 @@ var routes = [
     component: Passengers,
     layout: "/admin",
   },
-  {
-    path: "/quotes",
-    name: "Quotes",
-    icon: "ni ni-ruler-pencil text-info",
-    component: Quotes,
-    layout: "/admin",
-  },
+
+  // {
+  //   path: "/",
+  //   name: "Payment",
+  //   icon: "fas fa-money-check-alt text-pink",
+  //   component: "",
+  //   layout: "/payment",
+  // },
+
   {
     path: "/driver",
     name: "Drivers",
@@ -49,20 +92,6 @@ var routes = [
     name: "Vehicles",
     icon: "fa fa-taxi text-green",
     component: Vehicles,
-    layout: "/admin",
-  },
-  {
-    path: "/trips",
-    name: "Trips",
-    icon: "fa fa-calendar text-pink",
-    component: Trips,
-    layout: "/admin",
-  },
-  {
-    path: "/invoice",
-    name: "Invoices",
-    icon: "fa fa-calendar-check text-yellow",
-    component: Invoices,
     layout: "/admin",
   },
   {

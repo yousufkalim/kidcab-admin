@@ -1,43 +1,47 @@
-import { useState } from "react";
-import { setToken } from "../../variables/auth";
+import { useState } from 'react';
+import { setToken } from '../../variables/auth';
+import { toast } from 'react-toastify';
 // reactstrap components
-import {
-  Button,
-  Card,
-  CardHeader,
-  CardBody,
-  FormGroup,
-  Form,
-  Input,
-  InputGroupText,
-  InputGroup,
-  Row,
-  Col,
-} from "reactstrap";
-import api from "api";
-import { Store, UpdateStore } from "StoreContext";
-import { Redirect } from "react-router-dom";
+import { Button, Card, CardHeader, CardBody, FormGroup, Form, Input, InputGroupText, InputGroup, Row, Col } from 'reactstrap';
+import api from 'api';
+import { Store, UpdateStore } from 'StoreContext';
+import { Redirect } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 const Login = () => {
+  const { t, i18n } = useTranslation();
   const [login, setLogin] = useState({
-    email: "",
-    password: "",
+    email: '',
+    password: '',
   });
   const { authorization } = Store();
 
   const updateStore = UpdateStore();
   const handleSubmit = async () => {
-    let result = await api("post", "admins/login", login);
+    let result = await api('post', 'admins/login', login);
     const token = result.data.token;
     const admin = result.data.admin;
     if (token && result.status === 200) {
+      localStorage.setItem('user', JSON.stringify(admin));
       setToken(token);
       updateStore({
         token: token,
         authorization: true,
         user: admin,
       });
-      console.log("Authorized");
     }
+  };
+  const handleForget = () => {
+    if (!login.email) {
+      return toast.error('Admin email is required...!');
+    }
+    api('post', '/admins/forgetPassword', { email: login.email }).then((res) => {
+      // eslint-disable-next-line eqeqeq
+      if (res.status == 200) {
+        return toast.success('Reset Password email sent');
+      } else {
+        return toast.error('Delete Error', res.data.message);
+      }
+    });
   };
   if (authorization) return <Redirect push to="/admin" />;
   return (
@@ -46,7 +50,7 @@ const Login = () => {
         <Card className="bg-secondary shadow border-0">
           <CardHeader className="bg-transparent">
             <div className="text-muted text-center mt-2 mb-3">
-              <small>Sign in </small>
+              <small>{t('Sign in')} </small>
             </div>
           </CardHeader>
           <CardBody className="px-lg-5 py-lg-5">
@@ -58,13 +62,11 @@ const Login = () => {
                   </InputGroupText>
 
                   <Input
-                    placeholder="Email"
+                    placeholder={t('Email')}
                     type="email"
                     autoComplete="new-email"
                     value={login.email}
-                    onChange={(e) =>
-                      setLogin({ ...login, email: e.target.value })
-                    }
+                    onChange={(e) => setLogin({ ...login, email: e.target.value })}
                   />
                 </InputGroup>
               </FormGroup>
@@ -75,37 +77,23 @@ const Login = () => {
                   </InputGroupText>
 
                   <Input
-                    placeholder="Password"
+                    placeholder={t('Password')}
                     type="password"
                     autoComplete="new-password"
                     value={login.password}
-                    onChange={(e) =>
-                      setLogin({ ...login, password: e.target.value })
-                    }
+                    onChange={(e) => setLogin({ ...login, password: e.target.value })}
                   />
                 </InputGroup>
               </FormGroup>
               <div className="custom-control custom-control-alternative custom-checkbox">
-                <input
-                  className="custom-control-input"
-                  id=" customCheckLogin"
-                  type="checkbox"
-                />
-                <label
-                  className="custom-control-label"
-                  htmlFor=" customCheckLogin"
-                >
-                  <span className="text-muted">Remember me</span>
+                <input className="custom-control-input" id=" customCheckLogin" type="checkbox" />
+                <label className="custom-control-label" htmlFor=" customCheckLogin">
+                  <span className="text-muted">{t('Remember me')}</span>
                 </label>
               </div>
               <div className="text-center">
-                <Button
-                  className="my-4"
-                  color="primary"
-                  type="button"
-                  onClick={handleSubmit}
-                >
-                  Sign in
+                <Button className="my-4" color="primary" type="button" onClick={handleSubmit}>
+                  {t('Sign in')}
                 </Button>
               </div>
             </Form>
@@ -113,12 +101,8 @@ const Login = () => {
         </Card>
         <Row className="mt-3">
           <Col xs="6">
-            <a
-              className="text-light"
-              href="#pablo"
-              onClick={(e) => e.preventDefault()}
-            >
-              <small>Forgot password?</small>
+            <a className="text-light" href="#pablo" onClick={handleForget}>
+              <small>{t('Forgot password?')}</small>
             </a>
           </Col>
         </Row>

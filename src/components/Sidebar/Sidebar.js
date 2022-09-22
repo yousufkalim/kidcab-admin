@@ -3,6 +3,7 @@ import { useState } from "react";
 import { NavLink as NavLinkRRD, Link } from "react-router-dom";
 // nodejs library to set properties for components
 import { PropTypes } from "prop-types";
+import { useTranslation } from "react-i18next";
 
 // reactstrap components
 import {
@@ -38,6 +39,8 @@ import {
 var ps;
 
 const Sidebar = (props) => {
+  const { t, i18n } = useTranslation();
+  const { language } = i18n;
   const [collapseOpen, setCollapseOpen] = useState();
   // verifies if routeName is the one active (in browser input)
   const activeRoute = (routeName) => {
@@ -64,7 +67,7 @@ const Sidebar = (props) => {
               activeClassName="active"
             >
               <i className={prop.icon} />
-              {prop.name}
+              {t(prop.name)}
             </NavLink>
           </NavItem>
         )
@@ -105,6 +108,7 @@ const Sidebar = (props) => {
         {logo ? (
           <NavbarBrand className="pt-0" {...navbarBrandProps}>
             <img
+              style={{ marginTop: "20px" }}
               alt={logo.imgAlt}
               className="navbar-brand-img"
               src={logo.imgSrc}
@@ -114,6 +118,22 @@ const Sidebar = (props) => {
         {/* User */}
         <Nav className="align-items-center d-md-none">
           <UncontrolledDropdown nav>
+            <DropdownToggle nav>
+              <Link
+                className="text-uppercase"
+                onClick={() => {
+                  if (language === "fr") {
+                    i18n.changeLanguage("en");
+                  } else {
+                    i18n.changeLanguage("fr");
+                  }
+                }}
+              >
+                {t("fr")}
+              </Link>
+            </DropdownToggle>
+          </UncontrolledDropdown>
+          <UncontrolledDropdown nav>
             <DropdownToggle nav className="nav-link-icon">
               <i className="ni ni-bell-55" />
             </DropdownToggle>
@@ -122,10 +142,10 @@ const Sidebar = (props) => {
               className="dropdown-menu-arrow"
               right
             >
-              <DropdownItem>Action</DropdownItem>
-              <DropdownItem>Another action</DropdownItem>
+              <DropdownItem>{t("Action")}</DropdownItem>
+              <DropdownItem>{t("Another action")}</DropdownItem>
               <DropdownItem divider />
-              <DropdownItem>Something else here</DropdownItem>
+              <DropdownItem>{t("Something else here")}</DropdownItem>
             </DropdownMenu>
           </UncontrolledDropdown>
           <UncontrolledDropdown nav>
@@ -144,28 +164,28 @@ const Sidebar = (props) => {
             </DropdownToggle>
             <DropdownMenu className="dropdown-menu-arrow" right>
               <DropdownItem className="noti-title" header tag="div">
-                <h6 className="text-overflow m-0">Welcome!</h6>
+                <h6 className="text-overflow m-0">{t("Welcome!")}</h6>
               </DropdownItem>
               <DropdownItem to="/admin/user-profile" tag={Link}>
                 <i className="ni ni-single-02" />
-                <span>My profile</span>
+                <span>{t("My profile")}</span>
               </DropdownItem>
               <DropdownItem to="/admin/user-profile" tag={Link}>
                 <i className="ni ni-settings-gear-65" />
-                <span>Settings</span>
+                <span>{t("Settings")}</span>
               </DropdownItem>
               <DropdownItem to="/admin/user-profile" tag={Link}>
                 <i className="ni ni-calendar-grid-58" />
-                <span>Activity</span>
+                <span>{t("Activity")}</span>
               </DropdownItem>
               <DropdownItem to="/admin/user-profile" tag={Link}>
                 <i className="ni ni-support-16" />
-                <span>Support</span>
+                <span>{t("Support")}</span>
               </DropdownItem>
               <DropdownItem divider />
               <DropdownItem href="#pablo" onClick={(e) => e.preventDefault()}>
                 <i className="ni ni-user-run" />
-                <span>Logout</span>
+                <span>{t("Logout")}</span>
               </DropdownItem>
             </DropdownMenu>
           </UncontrolledDropdown>
