@@ -20,9 +20,15 @@ import api from '../../api/index';
 import TripForm from './TripForm';
 import TripRow from './TripRow';
 import { useTranslation } from 'react-i18next';
+import DatePicker from 'react-datepicker';
+import MomentLocaleUtils from 'react-day-picker/moment';
 
+import 'react-datepicker/dist/react-datepicker.css';
+
+import fr from 'date-fns/locale/fr-CA';
 const TripList = () => {
   const { t, i18n } = useTranslation();
+  const { language } = i18n;
   const [openModal, setOpenModal] = useState(false);
   const pagination = useRef();
   const [trips, setTrips] = useState();
@@ -78,7 +84,7 @@ const TripList = () => {
   const handleDeleteMany = async () => {
     const tripIds = selectedItems.map((a) => a._id);
     api('delete', 'trips/deleteMany', { data: { tripIds } }).then(() => {
-      toast.success('Trips deleted successfully');
+      toast.success(`${t('Delete Successfully')}`);
       autoRefresh();
       setSelectBtn(false);
       setSelectedItems([]);
@@ -92,7 +98,7 @@ const TripList = () => {
 
   const handleDriver = () => {
     if (driverSearchfilter === '') {
-      return toast.error('Enter Driver name first');
+      return toast.error(`${t('Enter Driver name first')}`);
     }
     let driver = driverSearchfilter.toLowerCase();
     let method = 'post';
@@ -107,14 +113,14 @@ const TripList = () => {
         setTrips(res.data.trips);
         setCount(res.data.count);
       } else {
-        toast.error(' Error', res);
+        return toast.error(`${t('Error')}`);
       }
     });
   };
 
   const handleClient = () => {
     if (clientSearchfilter === '') {
-      return toast.error('Enter Client name first');
+      return toast.error(`${t('Enter Client name first')}`);
     }
     let client = clientSearchfilter.toLowerCase();
     let method = 'post';
@@ -130,7 +136,7 @@ const TripList = () => {
         setTrips(res.data.trips);
         setCount(res.data.count);
       } else {
-        toast.error(' Error', res);
+        return toast.error(`${t('Error')}`);
       }
     });
   };
@@ -199,15 +205,24 @@ const TripList = () => {
     setFilterDropDownItem(e.target.name);
   };
 
+  const handleDateChange = (e) => {
+    setDates({ ...dates, start_date: e });
+  };
+
+  const handleDateChange1 = (e) => {
+    setDates({ ...dates, end_date: e });
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     let method = 'post';
     let uri = 'trips/tripsByDate';
-    if (dates?.start_end == '') {
-      return toast.error('Please enter start date');
+
+    if (!dates?.start_date) {
+      return toast.error(`${t('Please enter start date')}`);
     }
-    if (dates?.end_date == '') {
-      return toast.error('Please enter end date');
+    if (!dates?.end_date) {
+      return toast.error(`${t('Please enter end date')}`);
     }
     api(method, uri, {
       ...dates,
@@ -219,7 +234,7 @@ const TripList = () => {
         setTrips(res.data.trips);
         setCount(res.data.count);
       } else {
-        toast.error(' Error', res);
+        return toast.error(`${t('Error')}`);
       }
     });
   };
@@ -245,7 +260,7 @@ const TripList = () => {
           setTrips(res.data.trips);
           setCount(res.data.count);
         } else {
-          toast.error(' Error', res);
+          return toast.error(`${t('Error')}`);
         }
       });
     }
@@ -268,7 +283,7 @@ const TripList = () => {
           setTrips(res.data.trips);
           setCount(res.data.count);
         } else {
-          toast.error(' Error', res);
+          return toast.error(`${t('Error')}`);
         }
       });
     }
@@ -292,7 +307,7 @@ const TripList = () => {
           setTrips(res.data.trips);
           setCount(res.data.count);
         } else {
-          toast.error(' Error', res);
+          return toast.error(`${t('Error')}`);
         }
       });
     }
@@ -452,14 +467,12 @@ const TripList = () => {
                         <label className="form-control-label" htmlFor="input-date">
                           <span style={{ color: 'red' }}>{dates?.start_date ? '' : '*'}</span> {t('Start Date')}
                         </label>
-                        <Input
-                          className="form-control-alternative"
-                          id="input-date"
-                          placeholder={'Select Start Date'}
-                          type="date"
-                          value={dates?.start_date}
-                          name="start_date"
-                          onChange={handleInputChange}
+
+                        <DatePicker
+                          selected={dates?.start_date ? dates?.start_date : ''}
+                          locale={language === 'fr' && fr}
+                          placeholderText={t('dd/mm/yyyy')}
+                          onChange={handleDateChange}
                         />
                       </div>
                       <div
@@ -471,14 +484,12 @@ const TripList = () => {
                         <label className="form-control-label" htmlFor="input-date">
                           <span style={{ color: 'red' }}>{dates?.end_date ? '' : '*'}</span> {t('End Date')}
                         </label>
-                        <Input
-                          className="form-control-alternative"
-                          id="input-date"
-                          placeholder={'Select End Date'}
-                          type="date"
-                          value={dates?.end_date}
-                          name="end_date"
-                          onChange={handleInputChange}
+
+                        <DatePicker
+                          selected={dates?.end_date ? dates?.end_date : ''}
+                          locale={language === 'fr' && fr}
+                          placeholderText={t('dd/mm/yyyy')}
+                          onChange={handleDateChange1}
                         />
                       </div>
                       <div>

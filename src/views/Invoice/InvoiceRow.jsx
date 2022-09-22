@@ -54,7 +54,7 @@ const InvoiceRow = ({ invoice, autoRefresh, handleSelect, selectedItems }) => {
       </td>
 
       <td className="text-left">
-        {invoice.client
+        {invoice?.client?.first_name
           ? invoice?.client?.first_name[0]?.toUpperCase() +
             invoice?.client?.first_name?.substring(1) +
             ' ' +
@@ -63,12 +63,12 @@ const InvoiceRow = ({ invoice, autoRefresh, handleSelect, selectedItems }) => {
           : '_'}
       </td>
       <td className="text-left">
-        {invoice.driver
+        {invoice?.driver?.first_name
           ? invoice?.driver?.first_name[0]?.toUpperCase() +
             invoice?.driver?.first_name?.substring(1) +
             ' ' +
-            invoice?.driver?.last_name[0].toUpperCase() +
-            invoice?.driver?.last_name.substring(1)
+            invoice?.driver?.last_name[0]?.toUpperCase() +
+            invoice?.driver?.last_name?.substring(1)
           : '_'}
       </td>
 

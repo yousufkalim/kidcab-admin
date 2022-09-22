@@ -21,9 +21,15 @@ import api from '../../api/index';
 import { ExportInvoices } from '../../components/exportInvoices';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
+import DatePicker from 'react-datepicker';
+import MomentLocaleUtils from 'react-day-picker/moment';
 
+import 'react-datepicker/dist/react-datepicker.css';
+
+import fr from 'date-fns/locale/fr-CA';
 const InvoiceList = () => {
   const { t, i18n } = useTranslation();
+  const { language } = i18n;
   const [openModal, setOpenModal] = useState(false);
   const [invoices, setInvoices] = useState();
   const [dropDownItem, setDropDownItem] = useState('all');
@@ -47,11 +53,18 @@ const InvoiceList = () => {
     e.preventDefault();
     setFilterDropDownItem(e.target.name);
   };
+  const handleDateChange = (e) => {
+    setDates({ ...dates, start_date: e });
+  };
+
+  const handleDateChange1 = (e) => {
+    setDates({ ...dates, end_date: e });
+  };
   const handleDeleteMany = async () => {
     const invoiceIds = selectedItems.map((a) => a._id);
 
     api('delete', 'invoices/deleteMany', { data: { invoiceIds } }).then(() => {
-      toast.success('Invoices deleted successfully');
+      toast.success(`${t('Delete Successfully')}`);
       autoRefresh();
       setSelectedItems([]);
     });
@@ -105,7 +118,8 @@ const InvoiceList = () => {
       value: value,
     }).then((res) => {
       autoRefresh();
-      toast.success('Status Updated successfully');
+
+      toast.success(`${t('Status Updated successfully')}`);
       setSelectedItems([]);
       setStatusDropDown('Bulk Action');
     });
@@ -114,11 +128,11 @@ const InvoiceList = () => {
     e.preventDefault();
     let method = 'post';
     let uri = 'invoices/InvoiceByDate';
-    if (dates.start_date == '') {
-      return toast.error('Please enter start date');
+    if (!dates?.start_date) {
+      return toast.error(`${t('Please enter start date')}`);
     }
-    if (dates.end_date == '') {
-      return toast.error('Please enter end date');
+    if (!dates?.end_date) {
+      return toast.error(`${t('Please enter end date')}`);
     }
     api(method, uri, {
       ...dates,
@@ -126,7 +140,7 @@ const InvoiceList = () => {
       if (res.status == 200) {
         setInvoices(res.data.invoices);
       } else {
-        toast.error(' Error', res);
+        return toast.error(`${t('Error')}`);
       }
     });
   };
@@ -262,14 +276,12 @@ const InvoiceList = () => {
                         <label className="form-control-label" htmlFor="input-date">
                           <span style={{ color: 'red' }}>{dates?.start_date ? '' : '*'}</span> {t('Start Date')}
                         </label>
-                        <Input
-                          className="form-control-alternative"
-                          id="input-date"
-                          placeholder={'Select Start Date'}
-                          type="date"
-                          value={dates?.start_date}
-                          name="start_date"
-                          onChange={handleInputChange}
+
+                        <DatePicker
+                          selected={dates?.start_date ? dates?.start_date : ''}
+                          locale={language === 'fr' && fr}
+                          placeholderText={t('dd/mm/yyyy')}
+                          onChange={handleDateChange}
                         />
                       </div>
                       <div
@@ -281,14 +293,12 @@ const InvoiceList = () => {
                         <label className="form-control-label" htmlFor="input-date">
                           <span style={{ color: 'red' }}>{dates?.end_date ? '' : '*'}</span> {t('End Date')}
                         </label>
-                        <Input
-                          className="form-control-alternative"
-                          id="input-date"
-                          placeholder={'Select End Date'}
-                          type="date"
-                          value={dates?.end_date}
-                          name="end_date"
-                          onChange={handleInputChange}
+
+                        <DatePicker
+                          selected={dates?.end_date ? dates?.end_date : ''}
+                          locale={language === 'fr' && fr}
+                          placeholderText={t('dd/mm/yyyy')}
+                          onChange={handleDateChange1}
                         />
                       </div>
                       <div>

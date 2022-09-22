@@ -498,10 +498,22 @@ i18n
           'Internal server error': 'Internal server error',
           'Request failed with status code 500': 'Request failed with status code 500',
           'company edited successfully': 'company edited successfully',
+          'Enter Driver name first': 'Enter Driver name first',
+          'Enter Client name first': 'Enter Client name first',
+          'Please enter end date': 'Please enter end date',
+          'Please enter start date': 'Please enter start date',
+          Error: 'Error',
+          'Status Updated successfully': 'Status Updated successfully',
         }, //Passenger
       },
       fr: {
         translations: {
+          'Status Updated successfully': 'Statut mis à jour avec succès',
+          Error: 'Erreur',
+          'Please enter start date': 'Veuillez entrer la date de début',
+          'Please enter end date': 'Veuillez entrer la date de fin',
+          'Enter Client name first': "Entrez d'abord le nom du client",
+          'Enter Driver name first': "Entrez d'abord le nom du conducteur",
           'company edited successfully': 'société éditée avec succès',
           'Request failed with status code 500': "La demande a échoué avec le code d'état 500",
           'Internal server error': 'Erreur interne du serveur',
