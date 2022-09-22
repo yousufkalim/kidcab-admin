@@ -62,6 +62,7 @@ const InvoiceForm = ({ openModal, handleModal, editUser, isEditing, autoRefresh 
     });
 
     if (isEditing) {
+      
       setUser({
         invoice_title: editUser?.invoice_title,
         issue_date: new Date(editUser?.issue_date),
@@ -74,8 +75,8 @@ const InvoiceForm = ({ openModal, handleModal, editUser, isEditing, autoRefresh 
         status: editUser?.status,
         client: editUser?.client,
         comments: editUser?.comments,
-        startDate: editUser?.trip_info?.start_date,
-        endDate: editUser?.trip_info?.end_date,
+        startDate: new Date(editUser?.trip_info?.start_date),
+        endDate: new Date(editUser?.trip_info?.end_date),
       });
       setStartAddress(editUser?.trip_info?.start_address);
       setEndAddress(editUser?.trip_info?.end_address);
@@ -155,6 +156,7 @@ const InvoiceForm = ({ openModal, handleModal, editUser, isEditing, autoRefresh 
         toast.error(`${t('Delete Error')}`, `${t(res.data.message)}`);
       }
     });
+      
   };
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -177,6 +179,7 @@ const InvoiceForm = ({ openModal, handleModal, editUser, isEditing, autoRefresh 
     if (new Date(user?.endDate) < new Date(user?.startDate)) {
       return toast.error(`${t('end date must be greater than start date')}`);
     }
+    console.log("user for new or for edit",user)
 
     const tripInfo = {
       total_trips: user?.totalTrips,
@@ -193,13 +196,14 @@ const InvoiceForm = ({ openModal, handleModal, editUser, isEditing, autoRefresh 
     if (user?.type === 'driver') {
       formData['driver'] = user?.driver;
     }
+    
     formData['invoice_title'] = user?.invoice_title;
     formData['total_price'] = user?.totalPrice;
     formData['issue_date'] = user?.issue_date;
     formData['status'] = user?.status;
     formData['type'] = user?.type;
     formData['comments'] = user?.comments;
-    formData['vat'] = user?.vat.toFixed(2);
+    formData['vat'] = parseInt(user?.vat).toFixed(2);
     formData['trip_info'] = JSON.stringify(tripInfo);
 
     if (startAddress.lat == endAddress.lat && startAddress.lng == endAddress.lng) {
@@ -225,14 +229,21 @@ const InvoiceForm = ({ openModal, handleModal, editUser, isEditing, autoRefresh 
     });
   };
 
-  const handleDuplicate = (e) => {
+  const handleDuplicate = (e) => { 
     e.preventDefault();
     let method = 'post';
     let uri = 'invoices';
     if (user?.client?._id) {
       user['client'] = user.client._id;
     }
-    user['issue_date'] = moment(user.issue_date).format('YYYY-MM-DD');
+    // console.log("user in duplicate",user) 
+    
+    // user['issue_date'] = moment(user.issue_date).format('YYYY-MM-DD');
+    user['issue_date'] = new Date(user.issue_date)
+    user['startDate'] = new Date(user.startDate)
+    user['endDate'] = new Date(user.endDate)
+  
+    console.log("user in duplicate2",user) 
     const formData = {};
     const tripInfo = {
       total_trips: user?.totalTrips,
@@ -241,14 +252,17 @@ const InvoiceForm = ({ openModal, handleModal, editUser, isEditing, autoRefresh 
       start_address: startAddress,
       end_address: endAddress,
       unit_price: user?.unitPrice.toFixed(2),
-    };
+    };  
+     
     formData['invoice_title'] = user?.invoice_title;
     formData['total_price'] = user?.totalPrice;
     formData['issue_date'] = user?.issue_date;
     formData['status'] = user?.status;
     formData['type'] = user?.type;
     formData['comments'] = user?.comments;
-    formData['vat'] = user?.vat.toFixed(2);
+    
+    // formData['vat'] = user?.vat
+    formData['vat'] = parseInt(user?.vat).toFixed(2);
     formData['trip_info'] = JSON.stringify(tripInfo);
     if (user?.type === 'client') {
       formData['client'] = user?.client;
@@ -256,8 +270,10 @@ const InvoiceForm = ({ openModal, handleModal, editUser, isEditing, autoRefresh 
     if (user?.type === 'driver') {
       formData['driver'] = user?.driver;
     }
+    
     api(method, uri, formData).then((res) => {
       if (res.status === 200) {
+        console.log("response",res.status)
         toast.success(`${t('Saved Successfully')}`);
         handleModal();
         autoRefresh();
@@ -269,7 +285,7 @@ const InvoiceForm = ({ openModal, handleModal, editUser, isEditing, autoRefresh 
 
   return (
     <>
-      {console.log(startAddress, endAddress)}
+      {/* {console.log(startAddress, endAddress)} */}
       <Modal isOpen={openModal} size="xl" centered>
         <ModalHeader charCode="X" toggle={handleModal}>
           {isEditing ? 'Edit' : 'Add'} {t('Invoice')}
@@ -316,6 +332,7 @@ const InvoiceForm = ({ openModal, handleModal, editUser, isEditing, autoRefresh 
                           // selected={trip.date ? trip.date : editTrip.date?.split('T')[0]}
                           // selected={trip.date}
                           selected={user?.issue_date}
+                          dateFormat="dd/MM/yyyy"
                           locale={language === 'fr' && fr}
                           // value={trip.date ? trip.date : editTrip.date?.split('T')[0]}
                           placeholderText={t('dd/mm/yyyy')}
@@ -495,6 +512,7 @@ const InvoiceForm = ({ openModal, handleModal, editUser, isEditing, autoRefresh 
                           selected={user?.startDate ? new Date(user.startDate) : ''}
                           placeholderText={t('dd/mm/yyyy')}
                           locale={language === 'fr' && fr}
+                          dateFormat="dd/MM/yyyy"
                           // onChange={handleInputChange}
                           onChange={handleDateChange}
                         />
@@ -510,6 +528,7 @@ const InvoiceForm = ({ openModal, handleModal, editUser, isEditing, autoRefresh 
                           selected={user?.endDate ? new Date(user.endDate) : ''}
                           placeholderText={t('dd/mm/yyyy')}
                           locale={language === 'fr' && fr}
+                          dateFormat="dd/MM/yyyy"
                           // onChange={handleInputChange}
                           onChange={handleDateChange1}
                         />

@@ -75,55 +75,55 @@ const DriverForm = ({ openModal, handleModal, editUser, isEditing, isClose, auto
     });
   }, []);
 
-  useEffect(() => {
-    if (isClose) {
-      setUser({
-        firstName: editUser?.first_name[0].toUpperCase() + editUser?.first_name.substring(1),
-        lastName: editUser?.last_name[0].toUpperCase() + editUser?.last_name.substring(1),
-        password: editUser?.password,
-        email: editUser?.email,
-        phone: editUser?.phone,
-        role: editUser?.role,
-        bankName: editUser?.bankName,
-        iban: editUser?.iban,
-        vehicles: editUser?.vehicles.map((i) => {
-          return i.value;
-        }),
-        company_name: editUser?.company_name,
-        siret_number: editUser?.siret_number,
-        legal_info: editUser?.legal_info,
-        social_capital: editUser?.social_capital,
-        vat_number: editUser?.vat_number,
-        city_of_rcs: editUser?.city_of_rcs,
-        profile_pic: editUser?.profile_pic,
-        criminal_record_image: editUser?.criminal_record_image,
-        criminal_record_date: editUser?.criminal_record_date,
-        ris_image: editUser?.ris_image,
-        ris_date: editUser?.ris_date,
-        kbis_image: editUser?.kbis_image,
-        kbis_date: editUser?.kbis_date,
-        proRc_image: editUser.proRc_image,
-        proRc_date: editUser.proRc_date,
-        id_front: editUser?.id_front,
-        id_back: editUser?.id_back,
-        vtc_front: editUser?.vtc_front,
-        vtc_back: editUser?.vtc_back,
-        license_front: editUser?.license_front,
-        license_back: editUser?.license_back,
-        kbis_extract: editUser?.kbis_extract,
-        rib: editUser?.rib,
-        professional_liability: editUser?.professional_liability,
-        insurance_civil_liability: editUser?.insurance_civil_liability,
-        address: editUser?.address,
-      });
-    }
-  }, [editUser]);
+  // useEffect(() => {
+  //   if (isClose) {
+  //     setUser({
+  //       firstName: editUser?.first_name[0]?.toUpperCase() + editUser?.first_name?.substring(1),
+  //       lastName: editUser?.last_name[0]?.toUpperCase() + editUser?.last_name?.substring(1),
+  //       password: editUser?.password,
+  //       email: editUser?.email,
+  //       phone: editUser?.phone,
+  //       role: editUser?.role,
+  //       bankName: editUser?.bankName,
+  //       iban: editUser?.iban,
+  //       vehicles: editUser?.vehicles.map((i) => {
+  //         return i.value;
+  //       }),
+  //       company_name: editUser?.company_name,
+  //       siret_number: editUser?.siret_number,
+  //       legal_info: editUser?.legal_info,
+  //       social_capital: editUser?.social_capital,
+  //       vat_number: editUser?.vat_number,
+  //       city_of_rcs: editUser?.city_of_rcs,
+  //       profile_pic: editUser?.profile_pic,
+  //       criminal_record_image: editUser?.criminal_record_image,
+  //       criminal_record_date: editUser?.criminal_record_date,
+  //       ris_image: editUser?.ris_image,
+  //       ris_date: editUser?.ris_date,
+  //       kbis_image: editUser?.kbis_image,
+  //       kbis_date: editUser?.kbis_date,
+  //       proRc_image: editUser.proRc_image,
+  //       proRc_date: editUser.proRc_date,
+  //       id_front: editUser?.id_front,
+  //       id_back: editUser?.id_back,
+  //       vtc_front: editUser?.vtc_front,
+  //       vtc_back: editUser?.vtc_back,
+  //       license_front: editUser?.license_front,
+  //       license_back: editUser?.license_back,
+  //       kbis_extract: editUser?.kbis_extract,
+  //       rib: editUser?.rib,
+  //       professional_liability: editUser?.professional_liability,
+  //       insurance_civil_liability: editUser?.insurance_civil_liability,
+  //       address: editUser?.address,
+  //     });
+  //   }
+  // }, [editUser]);
 
   useEffect(() => {
     if (isEditing) {
       setUser({
-        firstName: editUser?.first_name[0].toUpperCase() + editUser?.first_name.substring(1),
-        lastName: editUser?.last_name[0].toUpperCase() + editUser?.last_name.substring(1),
+        firstName: editUser?.first_name[0]?.toUpperCase() + editUser?.first_name?.substring(1),
+        lastName: editUser?.last_name[0]?.toUpperCase() + editUser?.last_name.substring(1),
         password: editUser?.password,
         email: editUser?.email,
         phone: editUser?.phone_number,
@@ -1055,6 +1055,7 @@ const DriverForm = ({ openModal, handleModal, editUser, isEditing, isClose, auto
                           selected={user?.criminal_record_date ? new Date(user.criminal_record_date) : ''}
                           placeholderText={t('dd/mm/yyyy')}
                           locale={language === 'fr' && fr}
+                          dateFormat="dd/MM/yyyy"
                           // onChange={handleInputChange}
                           onChange={handleDateChange2}
                           minDate={new Date(Date.now())}
@@ -1092,6 +1093,7 @@ const DriverForm = ({ openModal, handleModal, editUser, isEditing, isClose, auto
                           selected={user?.ris_date ? new Date(user?.ris_date) : ''}
                           placeholderText={t('dd/mm/yyyy')}
                           locale={language === 'fr' && fr}
+                          dateFormat="dd/MM/yyyy"
                           // onChange={handleInputChange}
                           onChange={handleDateChange3}
                           minDate={new Date(Date.now())}
@@ -1129,6 +1131,7 @@ const DriverForm = ({ openModal, handleModal, editUser, isEditing, isClose, auto
                           selected={user?.kbis_date ? new Date(user?.kbis_date) : ''}
                           placeholderText={t('dd/mm/yyyy')}
                           locale={language === 'fr' && fr}
+                          dateFormat="dd/MM/yyyy"
                           // onChange={handleInputChange}
                           onChange={handleDateChange}
                           minDate={new Date(Date.now())}
@@ -1166,6 +1169,7 @@ const DriverForm = ({ openModal, handleModal, editUser, isEditing, isClose, auto
                           selected={user?.proRc_date ? new Date(user?.proRc_date) : ''}
                           placeholderText={t('dd/mm/yyyy')}
                           locale={language === 'fr' && fr}
+                          dateFormat="dd/MM/yyyy"
                           // onChange={handleInputChange}
                           onChange={handleDateChange1}
                           minDate={new Date(Date.now())}

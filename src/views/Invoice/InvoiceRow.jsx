@@ -3,7 +3,7 @@ import { Badge, DropdownMenu, DropdownItem, UncontrolledDropdown, DropdownToggle
 import InvoiceForm from './InvoiceForm';
 
 const InvoiceRow = ({ invoice, autoRefresh, handleSelect, selectedItems }) => {
-  const [openModal, setOpenModal] = useState();
+  const [openModal, setOpenModal] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
 
   const handleOnChange = () => {
@@ -11,6 +11,7 @@ const InvoiceRow = ({ invoice, autoRefresh, handleSelect, selectedItems }) => {
   };
 
   const handleModal = () => {
+    console.log("openModal",openModal)
     setOpenModal((open) => !open);
     return openModal;
   };
