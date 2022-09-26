@@ -369,7 +369,7 @@ const TripList = () => {
                         <Input
                           aria-label="Search"
                           className="form-control-rounded "
-                          placeholder="Search Client name"
+                          placeholder={t('Search Client name')}
                           type="search"
                           name="client-search"
                           value={clientSearchfilter}
@@ -398,7 +398,8 @@ const TripList = () => {
                               textTransform: 'capitalize',
                             }}
                           >
-                            {filterdropDownItem}
+                            {t(filterdropDownItem)}
+                            {console.log("filterdropDownItem",filterdropDownItem)}
                             &nbsp;{t('trips')}
                           </DropdownToggle>
                           <DropdownMenu>

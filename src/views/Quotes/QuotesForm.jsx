@@ -69,6 +69,8 @@ const QuotesForm = ({ openModal, handleModal, editQuote, isEditing, autoRefresh 
         endDate: new Date(editQuote.trip_info.end_date),
         docuSignLink: editQuote.docu_sign_link,
         comment: editQuote?.comment,
+        description: editQuote?.description,
+        
       });
 
       setStartAddress(editQuote.trip_info.start_address);

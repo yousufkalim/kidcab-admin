@@ -51,12 +51,13 @@ const CompanyProfile = ({ openModal, handleModal }) => {
   };
 
   const handleInputChange = (e) => {
+    
     setCompany({ ...company, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
+    console.log("phone_number",company.phoneNumber)
     const formData = new FormData();
     formData.append('phone_number', company.phoneNumber);
     formData.append('address', company.address);

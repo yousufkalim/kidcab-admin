@@ -3,8 +3,10 @@ import { DropdownMenu, DropdownItem, UncontrolledDropdown, DropdownToggle, Badge
 
 import TripForm from './TripForm';
 import ManagerAvatar from './ManagerAvatar';
+import { useTranslation } from 'react-i18next';
 
 const TripRow = ({ trip, autoRefresh, selectedItems, handleSelect }) => {
+  const { t, i18n } = useTranslation();
   const [openModal, setOpenModal] = useState(false);
   const handleModal = () => {
     setOpenModal((open) => !open);
@@ -14,7 +16,7 @@ const TripRow = ({ trip, autoRefresh, selectedItems, handleSelect }) => {
   return (
     <tr>
       <td scope="row">
-        <div className="custom-control custom-checkbox mb-3">
+        <div className="custom-control custom-checkbox mb-3"> 
           <input
             className="custom-control-input"
             id={`customCheck1${trip._id}`}
@@ -29,7 +31,7 @@ const TripRow = ({ trip, autoRefresh, selectedItems, handleSelect }) => {
       <th scope="row">
         <Badge color="" className="badge-dot mr-4">
           {trip.status === 'cancelled' ? <i className="bg-warning" /> : <i className="bg-success" />}
-          {trip.status.toUpperCase()}
+          {t(trip.status).toUpperCase()}
         </Badge>
       </th>
       <td className="text-center">

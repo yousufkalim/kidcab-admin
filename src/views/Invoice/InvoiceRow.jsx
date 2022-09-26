@@ -44,7 +44,8 @@ const InvoiceRow = ({ invoice, autoRefresh, handleSelect, selectedItems }) => {
           ) : invoice.status === 'paid' ? (
             <i className="bg-success" />
           ) : null}
-          {invoice.status}
+          {invoice.status[0]?.toUpperCase() +
+            invoice.status?.substring(1)}
         </Badge>
       </td>
       <td>

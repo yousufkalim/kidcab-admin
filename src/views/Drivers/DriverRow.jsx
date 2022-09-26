@@ -7,10 +7,12 @@ import {
   DropdownToggle,
   Media,
 } from "reactstrap";
+import { useTranslation } from 'react-i18next';
 
 import DriverForm from "./DriverForm";
 
 const DriverRow = ({ user, autoRefresh }) => {
+  const { t, i18n } = useTranslation();
   const [openModal, setOpenModal] = useState(false);
   const handleModal = () => {
     setOpenModal((open) => !open);
@@ -31,7 +33,7 @@ const DriverRow = ({ user, autoRefresh }) => {
           </Media>
         </Media>
       </th>
-      <td>{user.role}</td>
+      <td>{t(user.role)}</td>
       <td>{user.email}</td>
       <td>
         <Badge color="" className="badge-dot mr-4">
