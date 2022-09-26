@@ -119,7 +119,8 @@ const InvoiceForm = ({ openModal, handleModal, editUser, isEditing, autoRefresh 
       }
     }
     if (e.target.name == 'totalPrice') {
-      let Vat = parseInt(e.target.value) * 0.2;
+      let Vat =  parseInt(e.target.value)- (parseInt(e.target.value) /1.2);
+      console.log("vat is ",Vat)
       let UnitPrice = (parseInt(e.target.value) - parseInt(Vat)) / parseInt(user?.totalTrips);
       setUser((user) => ({
         ...user,
@@ -288,7 +289,7 @@ const InvoiceForm = ({ openModal, handleModal, editUser, isEditing, autoRefresh 
       {/* {console.log(startAddress, endAddress)} */}
       <Modal isOpen={openModal} size="xl" centered>
         <ModalHeader charCode="X" toggle={handleModal}>
-          {isEditing ? 'Edit' : 'Add'} {t('Invoice')}
+          {isEditing ? t('Edit') : t('Add')} {t('Invoice')} 
         </ModalHeader>
         <ModalBody>
           <Row>
@@ -488,13 +489,15 @@ const InvoiceForm = ({ openModal, handleModal, editUser, isEditing, autoRefresh 
                         <label className="form-control-label" htmlFor="input-lname">
                           <span style={{ color: 'red' }}>{user?.vat ? '' : '*'}</span> {t('Total Taxes')}
                         </label>
+                        
                         <Input
                           className="form-control-alternative"
                           id="input-lname"
                           placeholder={t('VAT')}
                           type="text"
                           readOnly
-                          value={parseInt(user?.vat).toFixed(2)}
+                          //  value={user?.vat}
+                          value={parseFloat(user?.vat).toFixed(2)}
                           name="vat"
                           onChange={handleInputChange}
                         />

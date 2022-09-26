@@ -558,12 +558,12 @@ const DriverForm = ({ openModal, handleModal, editUser, isEditing, isClose, auto
                           className="form-control-alternative"
                           options={[
                             {
-                              value: 'individual',
-                              label: 'individual',
+                              value: 'individual', 
+                              label: t('individual'),
                             },
                             {
-                              value: 'fleet_manager',
-                              label: 'fleet_manager',
+                              value: 'fleet_manager', 
+                              label: t('fleet_manager'),
                             },
                           ]}
                         />
