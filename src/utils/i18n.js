@@ -820,7 +820,7 @@ i18n
           'Invoice Type': 'Type de facture',
 
           'Select Client': 'Sélectionner le client',
-          'Select Driver': 'Sélectionnez le conducteur',
+          'Select Driver': 'Sélectionner le chauffeur',
           Cancelled: 'Annulé',
           'Trip information': 'Informations sur la trajet',
           'Amount including Vat': 'Montant TTC',
@@ -937,7 +937,7 @@ i18n
           'Vehicle Name': 'Nom du véhicule',
           Brand: 'Marque',
           Model: 'Modèle',
-          'Select Driver': 'Sélectionnez le conducteur',
+          'Select Driver': 'Sélectionner le chauffeur',
           'Select Engine Type': 'Sélectionnez le type de moteur',
           thermal: 'thermique',
           Hybrid: 'Hybride',
