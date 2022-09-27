@@ -4,7 +4,19 @@ import api from '../../api';
 import AddressInput from 'components/Form/AddressInput';
 import View from '../../components/view';
 import FilePicker from '../../components/Form/FilePicker';
-import { Modal, ModalBody, ModalHeader, ModalFooter, Button, FormGroup, Form, Input, Row, Col, Label } from 'reactstrap';
+import {
+  Modal,
+  ModalBody,
+  ModalHeader,
+  ModalFooter,
+  Button,
+  FormGroup,
+  Form,
+  Input,
+  Row,
+  Col,
+  Label,
+} from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 // core components
 import Select from 'react-select';
@@ -16,7 +28,15 @@ import 'react-datepicker/dist/react-datepicker.css';
 import fr from 'date-fns/locale/fr-CA';
 import 'react-day-picker/lib/style.css';
 let current = moment();
-const DriverForm = ({ openModal, handleModal, editUser, isEditing, isClose, autoRefresh, setUserData }) => {
+const DriverForm = ({
+  openModal,
+  handleModal,
+  editUser,
+  isEditing,
+  isClose,
+  autoRefresh,
+  setUserData,
+}) => {
   const { t, i18n } = useTranslation();
   const { language } = i18n;
   const [user, setUser] = useState({
@@ -229,7 +249,8 @@ const DriverForm = ({ openModal, handleModal, editUser, isEditing, isClose, auto
     };
 
     const formData = new FormData();
-    if (user?.profile_pic) formData.append('profile_pic', user?.profile_pic, user?.profile_pic?.name);
+    if (user?.profile_pic)
+      formData.append('profile_pic', user?.profile_pic, user?.profile_pic?.name);
     formData.append('first_name', user.firstName.toLowerCase());
     formData.append('last_name', user.lastName.toLowerCase());
     formData.append('email', user.email);
@@ -263,11 +284,19 @@ const DriverForm = ({ openModal, handleModal, editUser, isEditing, isClose, auto
       }
 
       if (user.professional_liability) {
-        formData.append('professional_liability', user.professional_liability, user.professional_liability?.name);
+        formData.append(
+          'professional_liability',
+          user.professional_liability,
+          user.professional_liability?.name
+        );
       }
 
       if (user.insurance_civil_liability) {
-        formData.append('insurance_civil_liability', user.insurance_civil_liability, user.insurance_civil_liability?.name);
+        formData.append(
+          'insurance_civil_liability',
+          user.insurance_civil_liability,
+          user.insurance_civil_liability?.name
+        );
       }
     }
 
@@ -275,7 +304,11 @@ const DriverForm = ({ openModal, handleModal, editUser, isEditing, isClose, auto
       if (!user.criminal_record_date) {
         return toast.error('Please enter criminal_record expirty date');
       }
-      formData.append('criminal_record_image', user.criminal_record_image, user.criminal_record_image?.name);
+      formData.append(
+        'criminal_record_image',
+        user.criminal_record_image,
+        user.criminal_record_image?.name
+      );
     }
 
     if (user.ris_image) {
@@ -328,8 +361,10 @@ const DriverForm = ({ openModal, handleModal, editUser, isEditing, isClose, auto
     if (user.vtc_front) formData.append('vtc_card_front', user.vtc_front, user.vtc_front?.name);
     if (user.vtc_back) formData.append('vtc_card_back', user.vtc_back, user.vtc_back?.name);
 
-    if (user.license_front) formData.append('license_card_front', user.license_front, user.license_front?.name);
-    if (user.license_back) formData.append('license_card_back', user.license_back, user.license_back?.name);
+    if (user.license_front)
+      formData.append('license_card_front', user.license_front, user.license_front?.name);
+    if (user.license_back)
+      formData.append('license_card_back', user.license_back, user.license_back?.name);
 
     if (user.firstName == '') {
       return toast.error(`${t('Please enter your first name')}`);
@@ -449,7 +484,8 @@ const DriverForm = ({ openModal, handleModal, editUser, isEditing, isClose, auto
                     <Col lg="6">
                       <FormGroup>
                         <label className="form-control-label" htmlFor="input-fname">
-                          <span style={{ color: 'red' }}>{user.firstName ? '' : '*'}</span> {t('First Name')}
+                          <span style={{ color: 'red' }}>{user.firstName ? '' : '*'}</span>{' '}
+                          {t('First Name')}
                         </label>
                         <Input
                           className="form-control-alternative"
@@ -466,7 +502,8 @@ const DriverForm = ({ openModal, handleModal, editUser, isEditing, isClose, auto
                     <Col lg="6">
                       <FormGroup>
                         <label className="form-control-label" htmlFor="input-lname">
-                          <span style={{ color: 'red' }}>{user.lastName ? '' : '*'}</span> {t('Last Name')}
+                          <span style={{ color: 'red' }}>{user.lastName ? '' : '*'}</span>{' '}
+                          {t('Last Name')}
                         </label>
                         <Input
                           className="form-control-alternative"
@@ -485,7 +522,8 @@ const DriverForm = ({ openModal, handleModal, editUser, isEditing, isClose, auto
                       <Col lg="6" style={{ margin: 'auto' }}>
                         <FormGroup>
                           <label className="form-control-label" htmlFor="input-email">
-                            <span style={{ color: 'red' }}>{user.email ? '' : '*'}</span> {t('Email Address')}
+                            <span style={{ color: 'red' }}>{user.email ? '' : '*'}</span>{' '}
+                            {t('Email Address')}
                           </label>
                           <Input
                             className="form-control-alternative"
@@ -504,7 +542,8 @@ const DriverForm = ({ openModal, handleModal, editUser, isEditing, isClose, auto
                       <Col lg="6">
                         <FormGroup>
                           <label className="form-control-label" htmlFor="input-email">
-                            <span style={{ color: 'red' }}>{user.email ? '' : '*'}</span> {t('Email Address')}
+                            <span style={{ color: 'red' }}>{user.email ? '' : '*'}</span>{' '}
+                            {t('Email Address')}
                           </label>
                           <Input
                             className="form-control-alternative"
@@ -520,7 +559,8 @@ const DriverForm = ({ openModal, handleModal, editUser, isEditing, isClose, auto
                       <Col lg="6">
                         <FormGroup>
                           <label className="form-control-label" htmlFor="input-password">
-                            <span style={{ color: 'red' }}>{user.password ? '' : '*'}</span> {t('Password')}
+                            <span style={{ color: 'red' }}>{user.password ? '' : '*'}</span>{' '}
+                            {t('Password')}
                           </label>
                           <Input
                             className="form-control-alternative"
@@ -541,7 +581,8 @@ const DriverForm = ({ openModal, handleModal, editUser, isEditing, isClose, auto
                     <Col lg="6">
                       <FormGroup>
                         <Label for="exampleSelect" className="form-control-label">
-                          <span style={{ color: 'red' }}>{user.role ? '' : '*'}</span> {t('Select Role')}
+                          <span style={{ color: 'red' }}>{user.role ? '' : '*'}</span>{' '}
+                          {t('Select Role')}
                         </Label>
 
                         <Select
@@ -558,11 +599,11 @@ const DriverForm = ({ openModal, handleModal, editUser, isEditing, isClose, auto
                           className="form-control-alternative"
                           options={[
                             {
-                              value: 'individual', 
+                              value: 'individual',
                               label: t('individual'),
                             },
                             {
-                              value: 'fleet_manager', 
+                              value: 'fleet_manager',
                               label: t('fleet_manager'),
                             },
                           ]}
@@ -573,7 +614,10 @@ const DriverForm = ({ openModal, handleModal, editUser, isEditing, isClose, auto
                       <Col lg="6">
                         <FormGroup>
                           <Label for="exampleSelect" className="form-control-label">
-                            <span style={{ color: 'red' }}>{user?.vehicles?.length > 0 ? '' : '*'}</span> {t('Select Vehicle')}
+                            <span style={{ color: 'red' }}>
+                              {user?.vehicles?.length > 0 ? '' : '*'}
+                            </span>{' '}
+                            {t('Select Vehicle')}
                           </Label>
                           {vehicles && (
                             <Select
@@ -608,7 +652,10 @@ const DriverForm = ({ openModal, handleModal, editUser, isEditing, isClose, auto
                       <Col lg="6">
                         <FormGroup>
                           <label className="form-control-label" htmlFor="input-fname">
-                            <span style={{ color: 'red' }}>{user?.vehicles?.length > 0 ? '' : '*'}</span> {t('Select Vehicle')}
+                            <span style={{ color: 'red' }}>
+                              {user?.vehicles?.length > 0 ? '' : '*'}
+                            </span>{' '}
+                            {t('Select Vehicle')}
                           </label>
                           {vehicles && (
                             <Select
@@ -800,7 +847,9 @@ const DriverForm = ({ openModal, handleModal, editUser, isEditing, isClose, auto
                               InputId="input-Professional-liability"
                               InputName="professional_liability"
                               value={
-                                editUser.professional_liability ? editUser.professional_liability : user.professional_liability
+                                editUser.professional_liability
+                                  ? editUser.professional_liability
+                                  : user.professional_liability
                               }
                               onChange={handleFile1Change}
                             ></FilePicker>
@@ -837,7 +886,9 @@ const DriverForm = ({ openModal, handleModal, editUser, isEditing, isClose, auto
                               InputClassName="form-control-file form"
                               InputId="input-kbis-extract"
                               InputName="kbis_extract"
-                              value={editUser.kbis_extract ? editUser.kbis_extract : user.kbis_extract}
+                              value={
+                                editUser.kbis_extract ? editUser.kbis_extract : user.kbis_extract
+                              }
                               onChange={handleFile1Change}
                             ></FilePicker>
                           </FormGroup>
@@ -854,13 +905,19 @@ const DriverForm = ({ openModal, handleModal, editUser, isEditing, isClose, auto
                   <Row>
                     <Col md="6">
                       <FormGroup>
-                        <AddressInput label="Address" optional={true} address={address} setAddress={setAddress} />
+                        <AddressInput
+                          label="Address"
+                          optional={true}
+                          address={address}
+                          setAddress={setAddress}
+                        />
                       </FormGroup>
                     </Col>
                     <Col lg="6">
                       <FormGroup>
                         <label className="form-control-label" htmlFor="input-phone">
-                          <span style={{ color: 'red' }}>{user.phone ? '' : '*'}</span> {t('Phone Number')}
+                          <span style={{ color: 'red' }}>{user.phone ? '' : '*'}</span>{' '}
+                          {t('Phone Number')}
                         </label>
                         <Input
                           className="form-control-alternative"
@@ -920,7 +977,8 @@ const DriverForm = ({ openModal, handleModal, editUser, isEditing, isClose, auto
                     <Col lg="6">
                       <FormGroup style={{ display: 'flex', flexDirection: 'column' }}>
                         <label className="form-control-label">
-                          {t('Add Identity Card/Passport/Residence Permit Front Side')} <View url={docs?.id_card_front} />
+                          {t('Add Identity Card/Passport/Residence Permit Front Side')}{' '}
+                          <View url={docs?.id_card_front} />
                         </label>
                         <FilePicker
                           lableClassName="form-control-label"
@@ -936,7 +994,8 @@ const DriverForm = ({ openModal, handleModal, editUser, isEditing, isClose, auto
                     <Col lg="6">
                       <FormGroup>
                         <label className="form-control-label">
-                          {t('Add Identity Card/Passport/Residence Permit Back Side')} <View url={docs.id_card_back} />
+                          {t('Add Identity Card/Passport/Residence Permit Back Side')}{' '}
+                          <View url={docs.id_card_back} />
                         </label>
 
                         <FilePicker
@@ -1001,7 +1060,11 @@ const DriverForm = ({ openModal, handleModal, editUser, isEditing, isClose, auto
                           InputClassName="form-control-file form"
                           InputId="input-license-front"
                           InputName="license_front"
-                          value={editUser.license_card_front ? editUser.license_card_front : user.license_front}
+                          value={
+                            editUser.license_card_front
+                              ? editUser.license_card_front
+                              : user.license_front
+                          }
                           onChange={handleFile1Change}
                         ></FilePicker>
                       </FormGroup>
@@ -1009,7 +1072,7 @@ const DriverForm = ({ openModal, handleModal, editUser, isEditing, isClose, auto
                     <Col lg="6">
                       <FormGroup>
                         <label className="form-control-label">
-                          Add License Card Back Side <View url={docs.license_card_back} />
+                          {t('Add License Card Back Side')} <View url={docs.license_card_back} />
                         </label>
 
                         <FilePicker
@@ -1018,7 +1081,11 @@ const DriverForm = ({ openModal, handleModal, editUser, isEditing, isClose, auto
                           InputClassName="form-control-file form"
                           InputId="input-license-back"
                           InputName="license_back"
-                          value={editUser.license_card_back ? editUser.license_card_back : user.license_back}
+                          value={
+                            editUser.license_card_back
+                              ? editUser.license_card_back
+                              : user.license_back
+                          }
                           onChange={handleFile1Change}
                         ></FilePicker>
                       </FormGroup>
@@ -1037,7 +1104,11 @@ const DriverForm = ({ openModal, handleModal, editUser, isEditing, isClose, auto
                           InputClassName="form-control-file form"
                           InputId="input-criminal-record"
                           InputName="criminal_record_image"
-                          value={editUser.criminal_record_image ? editUser.criminal_record_image : user.criminal_record_image}
+                          value={
+                            editUser.criminal_record_image
+                              ? editUser.criminal_record_image
+                              : user.criminal_record_image
+                          }
                           onChange={handleFile1Change}
                         ></FilePicker>
                       </FormGroup>
@@ -1046,13 +1117,19 @@ const DriverForm = ({ openModal, handleModal, editUser, isEditing, isClose, auto
                       <FormGroup>
                         <label className="form-control-label" htmlFor="input-date">
                           <span style={{ color: 'red' }}>
-                            {user.criminal_record_image ? (user?.criminal_record_date ? '' : '*') : ''}
+                            {user.criminal_record_image
+                              ? user?.criminal_record_date
+                                ? ''
+                                : '*'
+                              : ''}
                           </span>{' '}
                           {t('Valid Till')}
                         </label>
 
                         <DatePicker
-                          selected={user?.criminal_record_date ? new Date(user.criminal_record_date) : ''}
+                          selected={
+                            user?.criminal_record_date ? new Date(user.criminal_record_date) : ''
+                          }
                           placeholderText={t('dd/mm/yyyy')}
                           locale={language === 'fr' && fr}
                           dateFormat="dd/MM/yyyy"
@@ -1084,7 +1161,9 @@ const DriverForm = ({ openModal, handleModal, editUser, isEditing, isClose, auto
                     <Col lg="6">
                       <FormGroup>
                         <label className="form-control-label" htmlFor="input-date">
-                          <span style={{ color: 'red' }}>{user.ris_image ? (user?.ris_date ? '' : '*') : ''}</span>
+                          <span style={{ color: 'red' }}>
+                            {user.ris_image ? (user?.ris_date ? '' : '*') : ''}
+                          </span>
                           {t('Valid Till')}
                         </label>
 
@@ -1123,7 +1202,9 @@ const DriverForm = ({ openModal, handleModal, editUser, isEditing, isClose, auto
                     <Col lg="6">
                       <FormGroup>
                         <label className="form-control-label" htmlFor="input-date">
-                          <span style={{ color: 'red' }}>{user.kbis_image ? (user?.kbis_date ? '' : '*') : ''}</span>
+                          <span style={{ color: 'red' }}>
+                            {user.kbis_image ? (user?.kbis_date ? '' : '*') : ''}
+                          </span>
                           {t('Valid Till')}
                         </label>
 
@@ -1160,7 +1241,9 @@ const DriverForm = ({ openModal, handleModal, editUser, isEditing, isClose, auto
                     <Col lg="6">
                       <FormGroup>
                         <label className="form-control-label" htmlFor="input-date">
-                          <span style={{ color: 'red' }}>{user.proRc_image ? (user?.proRc_date ? '' : '*') : ''}</span>
+                          <span style={{ color: 'red' }}>
+                            {user.proRc_image ? (user?.proRc_date ? '' : '*') : ''}
+                          </span>
                           {t('Valid Till')}
                         </label>
 

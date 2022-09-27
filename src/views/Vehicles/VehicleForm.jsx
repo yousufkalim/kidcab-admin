@@ -2,7 +2,19 @@ import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import api from '../../api';
 import Select from 'react-select';
-import { Modal, ModalBody, ModalHeader, ModalFooter, Button, FormGroup, Form, Input, Row, Col, Label } from 'reactstrap';
+import {
+  Modal,
+  ModalBody,
+  ModalHeader,
+  ModalFooter,
+  Button,
+  FormGroup,
+  Form,
+  Input,
+  Row,
+  Col,
+  Label,
+} from 'reactstrap';
 import moment from 'moment';
 import View from '../../components/view';
 import FilePicker from '../../components/Form/FilePicker';
@@ -212,7 +224,8 @@ const VehicleForm = ({ openModal, handleModal, editUser: editVehicle, isEditing,
                     <Col lg="4">
                       <FormGroup>
                         <label className="form-control-label" htmlFor="input-fname">
-                          <span style={{ color: 'red' }}>{vehicle.vehicle_name ? '' : '*'}</span> {t('Vehicle Name')}
+                          <span style={{ color: 'red' }}>{vehicle.vehicle_name ? '' : '*'}</span>{' '}
+                          {t('Vehicle Name')}
                         </label>
                         <Input
                           className="form-control-alternative"
@@ -229,7 +242,8 @@ const VehicleForm = ({ openModal, handleModal, editUser: editVehicle, isEditing,
                     <Col lg="4">
                       <FormGroup>
                         <Label for="exampleSelect" className="form-control-label">
-                          <span style={{ color: 'red' }}>{vehicle.brand ? '' : '*'}</span> {t('Brand')}
+                          <span style={{ color: 'red' }}>{vehicle.brand ? '' : '*'}</span>{' '}
+                          {t('Brand')}
                         </Label>
                         <Input
                           id="exampleSelect"
@@ -245,7 +259,8 @@ const VehicleForm = ({ openModal, handleModal, editUser: editVehicle, isEditing,
                     <Col lg="4">
                       <FormGroup>
                         <Label for="exampleSelect" className="form-control-label">
-                          <span style={{ color: 'red' }}>{vehicle.model ? '' : '*'}</span> {t('Model')}
+                          <span style={{ color: 'red' }}>{vehicle.model ? '' : '*'}</span>{' '}
+                          {t('Model')}
                         </Label>
                         <Input
                           id="exampleSelect"
@@ -275,16 +290,21 @@ const VehicleForm = ({ openModal, handleModal, editUser: editVehicle, isEditing,
                               editVehicle?.driver && {
                                 value: editVehicle?.driver?._id,
                                 label: `${
-                                  editVehicle?.driver?.first_name[0].toUpperCase() + editVehicle?.driver?.first_name.substring(1)
+                                  editVehicle?.driver?.first_name[0].toUpperCase() +
+                                  editVehicle?.driver?.first_name.substring(1)
                                 } ${
-                                  editVehicle?.driver?.last_name[0].toUpperCase() + editVehicle?.driver?.last_name.substring(1)
+                                  editVehicle?.driver?.last_name[0].toUpperCase() +
+                                  editVehicle?.driver?.last_name.substring(1)
                                 }`,
                               }
                             }
                             className="form-control-alternative"
                             options={drivers.map((driver) => ({
                               value: driver._id,
-                              label: `${driver?.first_name[0].toUpperCase() + driver?.first_name.substring(1)} ${
+                              label: `${
+                                driver?.first_name[0].toUpperCase() +
+                                driver?.first_name.substring(1)
+                              } ${
                                 driver?.last_name[0].toUpperCase() + driver?.last_name.substring(1)
                               }`,
                             }))}
@@ -318,7 +338,8 @@ const VehicleForm = ({ openModal, handleModal, editUser: editVehicle, isEditing,
                     <Col lg="4">
                       <FormGroup>
                         <Label for="exampleSelect" className="form-control-label">
-                          <span style={{ color: 'red' }}>{vehicle.color ? '' : '*'}</span> {t('Color')}
+                          <span style={{ color: 'red' }}>{vehicle.color ? '' : '*'}</span>{' '}
+                          {t('Color')}
                         </Label>
                         <Input
                           id="exampleSelect"
@@ -353,7 +374,8 @@ const VehicleForm = ({ openModal, handleModal, editUser: editVehicle, isEditing,
                     <Col lg="4">
                       <FormGroup>
                         <Label for="exampleSelect" className="form-control-label">
-                          <span style={{ color: 'red' }}>{vehicle.number_plate ? '' : '*'}</span> {t('Number Plate')}
+                          <span style={{ color: 'red' }}>{vehicle.number_plate ? '' : '*'}</span>{' '}
+                          {t('Number Plate')}
                         </Label>
                         <Input
                           id="exampleSelect"
@@ -394,7 +416,11 @@ const VehicleForm = ({ openModal, handleModal, editUser: editVehicle, isEditing,
                         </label>
 
                         <DatePicker
-                          selected={vehicle.graycard_expiry_date ? new Date(vehicle.graycard_expiry_date) : ''}
+                          selected={
+                            vehicle.graycard_expiry_date
+                              ? new Date(vehicle.graycard_expiry_date)
+                              : ''
+                          }
                           placeholderText={t('dd/mm/yyyy')}
                           locale={language === 'fr' && fr}
                           dateFormat="dd/MM/yyyy"
@@ -410,8 +436,11 @@ const VehicleForm = ({ openModal, handleModal, editUser: editVehicle, isEditing,
                     <Col lg="6">
                       <FormGroup>
                         <label className="form-control-label">
-                          <span style={{ color: 'red' }}>{vehicle.insurance_certificate ? '' : '*'}</span>{' '}
-                          {t('Add vehicle Insurance Certificate')} <View url={docs.insurance_certificate} />
+                          <span style={{ color: 'red' }}>
+                            {vehicle.insurance_certificate ? '' : '*'}
+                          </span>{' '}
+                          {t('Add vehicle Insurance Certificate')}{' '}
+                          <View url={docs.insurance_certificate} />
                         </label>
 
                         <FilePicker
@@ -432,7 +461,9 @@ const VehicleForm = ({ openModal, handleModal, editUser: editVehicle, isEditing,
                     <Col lg="6">
                       <FormGroup>
                         <label className="form-control-label" htmlFor="input-date">
-                          <span style={{ color: 'red' }}>{vehicle.insurance_expiry_date ? '' : '*'}</span>{' '}
+                          <span style={{ color: 'red' }}>
+                            {vehicle.insurance_expiry_date ? '' : '*'}
+                          </span>{' '}
                           {t('Insurance Valid Till')}
                         </label>
 
@@ -459,7 +490,11 @@ const VehicleForm = ({ openModal, handleModal, editUser: editVehicle, isEditing,
                           InputClassName="form-control-file form"
                           InputId="input-number-plate"
                           InputName="registration_card"
-                          value={editVehicle?.registration_card ? editVehicle?.registration_card : vehicle?.registration_card}
+                          value={
+                            editVehicle?.registration_card
+                              ? editVehicle?.registration_card
+                              : vehicle?.registration_card
+                          }
                           onChange={handleFileChange}
                         ></FilePicker>
                       </FormGroup>
