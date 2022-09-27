@@ -25,6 +25,7 @@ i18n
           VEHICLES: 'VEHICLES',
           confirmed: 'confirmed',
           'Search Driver name': 'Search Driver name',
+          'date-filter':  'date-filter',
           //navbar
           'Mark as read': 'Mark as read',
           'No new notifications': 'No new notifications',
