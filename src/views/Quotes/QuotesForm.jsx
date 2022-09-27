@@ -2,7 +2,19 @@ import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import api from '../../api';
 import AddressInput from 'components/Form/AddressInput';
-import { Modal, ModalBody, ModalHeader, ModalFooter, Button, FormGroup, Form, Input, Row, Col, Label } from 'reactstrap';
+import {
+  Modal,
+  ModalBody,
+  ModalHeader,
+  ModalFooter,
+  Button,
+  FormGroup,
+  Form,
+  Input,
+  Row,
+  Col,
+  Label,
+} from 'reactstrap';
 import moment from 'moment';
 import { useTranslation } from 'react-i18next';
 
@@ -70,7 +82,6 @@ const QuotesForm = ({ openModal, handleModal, editQuote, isEditing, autoRefresh 
         docuSignLink: editQuote.docu_sign_link,
         comment: editQuote?.comment,
         description: editQuote?.description,
-        
       });
 
       setStartAddress(editQuote.trip_info.start_address);
@@ -97,7 +108,8 @@ const QuotesForm = ({ openModal, handleModal, editQuote, isEditing, autoRefresh 
         return toast.error('Trips should be greater than 1');
       }
       if (isEditing) {
-        let UnitPrice = (parseInt(quote?.totalPrice) - parseInt(quote?.vat)) / parseInt(e.target.value);
+        let UnitPrice =
+          (parseInt(quote?.totalPrice) - parseInt(quote?.vat)) / parseInt(e.target.value);
         setQuote((quote) => ({
           ...quote,
           [e.target.name]: e.target.value,
@@ -328,7 +340,8 @@ const QuotesForm = ({ openModal, handleModal, editQuote, isEditing, autoRefresh 
                     <Col lg="6">
                       <FormGroup>
                         <label className="form-control-label" htmlFor="input-title">
-                          <span style={{ color: 'red' }}>{quote.title ? '' : '*'}</span> {t('Quote Title')}
+                          <span style={{ color: 'red' }}>{quote.title ? '' : '*'}</span>{' '}
+                          {t('Quote Title')}
                         </label>
                         <Input
                           className="form-control-alternative"
@@ -345,7 +358,8 @@ const QuotesForm = ({ openModal, handleModal, editQuote, isEditing, autoRefresh 
                     <Col lg="6">
                       <FormGroup>
                         <label className="form-control-label" htmlFor="input-qnumber">
-                          <span style={{ color: 'red' }}>{quote.quoteNumber ? '' : '*'}</span> {t('Quote Number')}
+                          <span style={{ color: 'red' }}>{quote.quoteNumber ? '' : '*'}</span>{' '}
+                          {t('Quote Number')}
                         </label>
                         <Input
                           className="form-control-alternative"
@@ -363,7 +377,8 @@ const QuotesForm = ({ openModal, handleModal, editQuote, isEditing, autoRefresh 
                     <Col lg="4">
                       <FormGroup>
                         <Label for="exampleSelect" className="form-control-label">
-                          <span style={{ color: 'red' }}>{quote.client ? '' : '*'}</span> {t('Select Client')}
+                          <span style={{ color: 'red' }}>{quote.client ? '' : '*'}</span>{' '}
+                          {t('Select Client')}
                         </Label>
                         {clients && (
                           <Select
@@ -376,14 +391,22 @@ const QuotesForm = ({ openModal, handleModal, editQuote, isEditing, autoRefresh 
                               editQuote?.client && {
                                 value: editQuote.client?._id,
                                 label: `${
-                                  editQuote?.client?.first_name[0]?.toUpperCase() + editQuote?.client?.first_name?.substring(1)
-                                } ${editQuote?.client?.last_name[0]?.toUpperCase() + editQuote?.client?.last_name?.substring(1)}`,
+                                  editQuote?.client?.first_name[0]?.toUpperCase() +
+                                  editQuote?.client?.first_name?.substring(1)
+                                } ${
+                                  editQuote?.client?.last_name[0]?.toUpperCase() +
+                                  editQuote?.client?.last_name?.substring(1)
+                                }`,
                               }
                             }
                             options={clients.map((client) => ({
                               value: client?._id,
-                              label: `${client?.first_name[0]?.toUpperCase() + client?.first_name?.substring(1)} ${
-                                client?.last_name[0]?.toUpperCase() + client?.last_name?.substring(1)
+                              label: `${
+                                client?.first_name[0]?.toUpperCase() +
+                                client?.first_name?.substring(1)
+                              } ${
+                                client?.last_name[0]?.toUpperCase() +
+                                client?.last_name?.substring(1)
                               }`,
                             }))}
                           />
@@ -393,7 +416,8 @@ const QuotesForm = ({ openModal, handleModal, editQuote, isEditing, autoRefresh 
                     <Col lg="4">
                       <FormGroup>
                         <Label for="exampleSelect" className="form-control-label">
-                          <span style={{ color: 'red' }}>{quote.status ? '' : '*'}</span> {t('Status')}
+                          <span style={{ color: 'red' }}>{quote.status ? '' : '*'}</span>{' '}
+                          {t('Status')}
                         </Label>
                         <Input
                           id="exampleSelect"
@@ -413,7 +437,8 @@ const QuotesForm = ({ openModal, handleModal, editQuote, isEditing, autoRefresh 
                     <Col lg="4">
                       <FormGroup>
                         <label className="form-control-label" htmlFor="input-lname">
-                          <span style={{ color: 'red' }}>{quote.issueDate ? '' : '*'}</span> {t('Issue Date')}
+                          <span style={{ color: 'red' }}>{quote.issueDate ? '' : '*'}</span>{' '}
+                          {t('Issue Date')}
                         </label>
                         {/* <Input
                           className="form-control-alternative"
@@ -445,7 +470,8 @@ const QuotesForm = ({ openModal, handleModal, editQuote, isEditing, autoRefresh 
                     <Col lg="4">
                       <FormGroup>
                         <label className="form-control-label" htmlFor="input-fname">
-                          <span style={{ color: 'red' }}>{quote.totalTrips ? '' : '*'}</span> {t('No. of Trips')}
+                          <span style={{ color: 'red' }}>{quote.totalTrips ? '' : '*'}</span>{' '}
+                          {t('No. of Trips')}
                         </label>
                         <Input
                           className="form-control-alternative"
@@ -462,7 +488,8 @@ const QuotesForm = ({ openModal, handleModal, editQuote, isEditing, autoRefresh 
                     <Col lg="4">
                       <FormGroup>
                         <label className="form-control-label" htmlFor="input-fname">
-                          <span style={{ color: 'red' }}>{quote.totalPrice ? '' : '*'}</span> {t('Amount including Vat')}
+                          <span style={{ color: 'red' }}>{quote.totalPrice ? '' : '*'}</span>{' '}
+                          {t('Amount including Vat')}
                         </label>
                         <Input
                           className="form-control-alternative"
@@ -480,7 +507,8 @@ const QuotesForm = ({ openModal, handleModal, editQuote, isEditing, autoRefresh 
                     <Col lg="4">
                       <FormGroup>
                         <label className="form-control-label" htmlFor="input-lname">
-                          <span style={{ color: 'red' }}>{quote.vat ? '' : '*'}</span> {t('Total Taxes')}
+                          <span style={{ color: 'red' }}>{quote.vat ? '' : '*'}</span>{' '}
+                          {t('Total Taxes')}
                         </label>
                         <Input
                           className="form-control-alternative"
@@ -488,7 +516,7 @@ const QuotesForm = ({ openModal, handleModal, editQuote, isEditing, autoRefresh 
                           placeholder={t('VAT')}
                           type="text"
                           readOnly
-                          value={parseInt(quote.vat).toFixed(2)}
+                          value={parseFloat(quote.vat).toFixed(2)}
                           name="vat"
                           onChange={handleInputChange}
                         />
@@ -499,7 +527,8 @@ const QuotesForm = ({ openModal, handleModal, editQuote, isEditing, autoRefresh 
                     <Col lg="6">
                       <FormGroup>
                         <label className="form-control-label" htmlFor="input-lname">
-                          <span style={{ color: 'red' }}>{quote.startDate ? '' : '*'}</span> {t('Start Date')}
+                          <span style={{ color: 'red' }}>{quote.startDate ? '' : '*'}</span>{' '}
+                          {t('Start Date')}
                         </label>
                         <DatePicker
                           // selected={trip.date ? trip.date : editTrip.date?.split('T')[0]}
@@ -517,7 +546,8 @@ const QuotesForm = ({ openModal, handleModal, editQuote, isEditing, autoRefresh 
                     <Col lg="6">
                       <FormGroup>
                         <label className="form-control-label" htmlFor="input-lname">
-                          <span style={{ color: 'red' }}>{quote.endDate ? '' : '*'}</span> {t('End Date')}
+                          <span style={{ color: 'red' }}>{quote.endDate ? '' : '*'}</span>{' '}
+                          {t('End Date')}
                         </label>
                         <DatePicker
                           // selected={trip.date ? trip.date : editTrip.date?.split('T')[0]}
@@ -536,12 +566,20 @@ const QuotesForm = ({ openModal, handleModal, editQuote, isEditing, autoRefresh 
                   <Row>
                     <Col lg="6">
                       <FormGroup>
-                        <AddressInput label="Start Address" address={startAddress} setAddress={setStartAddress} />
+                        <AddressInput
+                          label="Start Address"
+                          address={startAddress}
+                          setAddress={setStartAddress}
+                        />
                       </FormGroup>
                     </Col>
                     <Col lg="6">
                       <FormGroup>
-                        <AddressInput label="End Address" address={endAddress} setAddress={setEndAddress} />
+                        <AddressInput
+                          label="End Address"
+                          address={endAddress}
+                          setAddress={setEndAddress}
+                        />
                       </FormGroup>
                     </Col>
                   </Row>

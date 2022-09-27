@@ -23,6 +23,8 @@ i18n
           PASSENGERS: 'PASSENGERS',
           DRIVERS: 'DRIVERS',
           VEHICLES: 'VEHICLES',
+          confirmed: 'confirmed',
+          'Search Driver name': 'Search Driver name',
           //navbar
           'Mark as read': 'Mark as read',
           'No new notifications': 'No new notifications',
@@ -750,10 +752,11 @@ i18n
           'PickUp Address': 'Adresse de ramassage',
           'Destination Address': 'Adresse de destination',
           //qoutes
+          confirmed: 'confirme',
           rejected: 'rejeté',
           accepted: 'accepté',
           pending: 'en attendant',
-          qoutes: 'qoutes',
+          qoutes: 'devis',
           'All Qoutes': 'Tous les devis',
           'Pending Qoutes': 'Devis en attente',
           'Accepted Qoutes': 'Devis acceptés',
@@ -907,9 +910,11 @@ i18n
           'Vehicle information': 'Informations sur le véhicule',
           'Vehicle Name': 'Nom du véhicule',
           Brand: 'Marque',
+
           Model: 'Modèle',
           'Select Driver': 'Sélectionner le chauffeur',
           'Select Engine Type': 'Sélectionnez le type de moteur',
+          'Search Driver name': 'Rechercher le nom du Chauffeur',
           Thermal: 'Thermique',
           Hybrid: 'Hybride',
           Electric: 'Électrique',
