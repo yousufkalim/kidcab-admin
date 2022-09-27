@@ -20,9 +20,13 @@ import api from '../../api/index';
 import TripForm from './TripForm';
 import TripRow from './TripRow';
 import { useTranslation } from 'react-i18next';
-
+import fr from 'date-fns/locale/fr-CA';
+import 'moment/locale/fr';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 const TripList = () => {
   const { t, i18n } = useTranslation();
+  const { language } = i18n;
   const [openModal, setOpenModal] = useState(false);
   const pagination = useRef();
   const [trips, setTrips] = useState();
@@ -190,8 +194,8 @@ const TripList = () => {
     }
   };
 
-  const handleInputChange = (e) => {
-    setDates({ ...dates, [e.target.name]: e.target.value });
+  const handleInputChange = (name, e) => {
+    setDates({ ...dates, [name]: e });
   };
 
   const handelNameFilter = (e) => {
@@ -316,7 +320,9 @@ const TripList = () => {
                         {t('Delete Trips')}
                       </Button>
                     )}
-                    {selectedItems.length > 0 && <ExportTrips dropDownItem={filterdropDownItem} trips={selectedItems} />}
+                    {selectedItems.length > 0 && (
+                      <ExportTrips dropDownItem={filterdropDownItem} trips={selectedItems} />
+                    )}
                     <UncontrolledDropdown>
                       <DropdownToggle
                         color="danger"
@@ -399,7 +405,7 @@ const TripList = () => {
                             }}
                           >
                             {t(filterdropDownItem)}
-                            {console.log("filterdropDownItem",filterdropDownItem)}
+                            {console.log('filterdropDownItem', filterdropDownItem)}
                             &nbsp;{t('trips')}
                           </DropdownToggle>
                           <DropdownMenu>
@@ -451,16 +457,16 @@ const TripList = () => {
                         }}
                       >
                         <label className="form-control-label" htmlFor="input-date">
-                          <span style={{ color: 'red' }}>{dates?.start_date ? '' : '*'}</span> {t('Start Date')}
+                          <span style={{ color: 'red' }}>{dates?.start_date ? '' : '*'}</span>{' '}
+                          {t('Start Date')}
                         </label>
-                        <Input
-                          className="form-control-alternative"
-                          id="input-date"
-                          placeholder={'Select Start Date'}
-                          type="date"
+                        <DatePicker
+                          dateFormat="dd/MM/yyyy"
+                          placeholderText={t('dd/mm/yyyy')}
+                          locale={language === 'fr' && fr}
                           value={dates?.start_date}
-                          name="start_date"
-                          onChange={handleInputChange}
+                          selected={dates?.start_date || ''}
+                          onChange={(e) => handleInputChange('start_date', e)}
                         />
                       </div>
                       <div
@@ -470,16 +476,16 @@ const TripList = () => {
                         }}
                       >
                         <label className="form-control-label" htmlFor="input-date">
-                          <span style={{ color: 'red' }}>{dates?.end_date ? '' : '*'}</span> {t('End Date')}
+                          <span style={{ color: 'red' }}>{dates?.end_date ? '' : '*'}</span>{' '}
+                          {t('End Date')}
                         </label>
-                        <Input
-                          className="form-control-alternative"
-                          id="input-date"
-                          placeholder={'Select End Date'}
-                          type="date"
+                        <DatePicker
+                          dateFormat="dd/MM/yyyy"
+                          placeholderText={t('dd/mm/yyyy')}
+                          selected={dates?.end_date || ''}
                           value={dates?.end_date}
-                          name="end_date"
-                          onChange={handleInputChange}
+                          locale={language === 'fr' && fr}
+                          onChange={(e) => handleInputChange('end_date', e)}
                         />
                       </div>
                       <div>
@@ -514,7 +520,7 @@ const TripList = () => {
                         <Input
                           aria-label="Search"
                           className="form-control-rounded "
-                          placeholder="Search Driver name"
+                          placeholder={t('Search Driver name')}
                           type="search"
                           name="driver-search"
                           value={driverSearchfilter}

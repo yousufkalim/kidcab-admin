@@ -6,14 +6,24 @@ import AddressInputMultiple from 'components/Form/AddressInputMultiple';
 import TimePicker from 'react-time-picker';
 import '../Trips/app.css';
 import * as moment from 'moment';
-import { Modal, ModalBody, ModalHeader, ModalFooter, Button, FormGroup, Form, Input, Row, Col } from 'reactstrap';
+import {
+  Modal,
+  ModalBody,
+  ModalHeader,
+  ModalFooter,
+  Button,
+  FormGroup,
+  Form,
+  Input,
+  Row,
+  Col,
+} from 'reactstrap';
 // core components
 import Select from 'react-select';
 import DayPicker, { DateUtils } from 'react-day-picker';
 import DatePicker from 'react-datepicker';
-import MomentLocaleUtils from 'react-day-picker/moment';
-
 import 'react-datepicker/dist/react-datepicker.css';
+import MomentLocaleUtils from 'react-day-picker/moment';
 
 import fr from 'date-fns/locale/fr-CA';
 import 'moment/locale/fr';
@@ -323,7 +333,9 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
 
   const handleDayClick = (day, { selected }) => {
     if (selected) {
-      const selectedIndex = selectedDays.findIndex((selectedDay) => DateUtils.isSameDay(selectedDay, day));
+      const selectedIndex = selectedDays.findIndex((selectedDay) =>
+        DateUtils.isSameDay(selectedDay, day)
+      );
       let newis = selectedDays.filter((item, i) => i != selectedIndex);
       setSelectedDays(newis);
     } else {
@@ -353,7 +365,11 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
                   <Row>
                     <Col lg="4">
                       <FormGroup>
-                        <AddressInput label="Start Address" address={startAddress} setAddress={setStartAddress} />
+                        <AddressInput
+                          label="Start Address"
+                          address={startAddress}
+                          setAddress={setStartAddress}
+                        />
                       </FormGroup>
                     </Col>
                     <Col lg="4">
@@ -370,7 +386,11 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
                     </Col>
                     <Col lg="4">
                       <FormGroup>
-                        <AddressInput label="End Address" address={endAddress} setAddress={setEndAddress} />
+                        <AddressInput
+                          label="End Address"
+                          address={endAddress}
+                          setAddress={setEndAddress}
+                        />
                       </FormGroup>
                     </Col>
                   </Row>
@@ -380,7 +400,8 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
                     <Col lg="6">
                       <FormGroup>
                         <label className="form-control-label" htmlFor="input-status">
-                          <span style={{ color: 'red' }}>{trip.status ? '' : '*'}</span> {t('Status')}
+                          <span style={{ color: 'red' }}>{trip.status ? '' : '*'}</span>{' '}
+                          {t('Status')}
                         </label>
                         <Input
                           id="input-status"
@@ -424,7 +445,8 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
                       <Col lg="6">
                         <FormGroup>
                           <label className="form-control-label" htmlFor="input-date">
-                            <span style={{ color: 'red' }}>{trip.date ? '' : '*'}</span> {t('Trip Date')}
+                            <span style={{ color: 'red' }}>{trip.date ? '' : '*'}</span>{' '}
+                            {t('Trip Date')}
                           </label>
                           {isEditing ? (
                             // <Input
@@ -495,7 +517,8 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
                         <Col lg="4">
                           <FormGroup>
                             <label className="form-control-label" htmlFor="input-date">
-                              <span style={{ color: 'red' }}>{trip.startdate ? '' : '*'}</span> {t('Start Date')}
+                              <span style={{ color: 'red' }}>{trip.startdate ? '' : '*'}</span>{' '}
+                              {t('Start Date')}
                             </label>
 
                             <DatePicker
@@ -514,7 +537,8 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
                         <Col lg="4">
                           <FormGroup>
                             <label className="form-control-label" htmlFor="input-date">
-                              <span style={{ color: 'red' }}>{trip.enddate ? '' : '*'}</span> {t('End Date')}
+                              <span style={{ color: 'red' }}>{trip.enddate ? '' : '*'}</span>{' '}
+                              {t('End Date')}
                             </label>
 
                             <DatePicker
@@ -532,7 +556,10 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
                         <Col lg="4">
                           <FormGroup>
                             <label for="exampleSelect" className="form-control-label">
-                              <span style={{ color: 'red' }}>{trip?.Days?.length < 1 ? '' : '*'}</span> {t('Select Days')}
+                              <span style={{ color: 'red' }}>
+                                {trip?.Days?.length < 1 ? '' : '*'}
+                              </span>{' '}
+                              {t('Select Days')}
                             </label>
                             <Select
                               onChange={handleDayChange}
@@ -604,7 +631,8 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
                     <Col lg="6">
                       <FormGroup>
                         <label className="form-control-label" htmlFor="input-clientPrice">
-                          <span style={{ color: 'red' }}>{trip.client_price ? '' : '*'}</span> {t('Client Price')}
+                          <span style={{ color: 'red' }}>{trip.client_price ? '' : '*'}</span>{' '}
+                          {t('Client Price')}
                         </label>
                         <Input
                           className="form-control-alternative"
@@ -621,7 +649,8 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
                     <Col lg="6">
                       <FormGroup>
                         <label className="form-control-label" htmlFor="input-driverPrice">
-                          <span style={{ color: 'red' }}>{trip.driver_price ? '' : '*'}</span> {t('Driver Price')}
+                          <span style={{ color: 'red' }}>{trip.driver_price ? '' : '*'}</span>{' '}
+                          {t('Driver Price')}
                         </label>
                         <Input
                           className="form-control-alternative"
@@ -643,7 +672,9 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
                       <FormGroup>
                         <label className="form-control-label" htmlFor="input-fname">
                           <span style={{ color: 'red' }}>
-                            {trip.inviteddrivers.length > 0 || trip.assigned_drivers.length > 0 ? '' : '*'}
+                            {trip.inviteddrivers.length > 0 || trip.assigned_drivers.length > 0
+                              ? ''
+                              : '*'}
                           </span>{' '}
                           {t('Drivers Name')}
                         </label>
@@ -665,13 +696,20 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
                                 ? editTrip.status === 'pending'
                                   ? editTrip?.invited_drivers.map((i) => ({
                                       value: i?.driver?._id,
-                                      label: `${i?.driver?.first_name[0]?.toUpperCase() + i?.driver?.first_name?.substring(1)} ${
-                                        i?.driver?.last_name[0]?.toUpperCase() + i?.driver?.last_name.substring(1)
+                                      label: `${
+                                        i?.driver?.first_name[0]?.toUpperCase() +
+                                        i?.driver?.first_name?.substring(1)
+                                      } ${
+                                        i?.driver?.last_name[0]?.toUpperCase() +
+                                        i?.driver?.last_name.substring(1)
                                       }`,
                                     }))
                                   : editTrip?.assigned_drivers.map((i) => ({
                                       value: i?._id,
-                                      label: `${i?.first_name[0]?.toUpperCase() + i?.first_name?.substring(1)} ${
+                                      label: `${
+                                        i?.first_name[0]?.toUpperCase() +
+                                        i?.first_name?.substring(1)
+                                      } ${
                                         i?.last_name[0].toUpperCase() + i?.last_name.substring(1)
                                       }`,
                                     }))
@@ -679,8 +717,12 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
                             }
                             options={drivers.map((driver) => ({
                               value: driver?._id,
-                              label: `${driver?.first_name[0]?.toUpperCase() + driver?.first_name?.substring(1)} ${
-                                driver?.last_name[0]?.toUpperCase() + driver?.last_name?.substring(1)
+                              label: `${
+                                driver?.first_name[0]?.toUpperCase() +
+                                driver?.first_name?.substring(1)
+                              } ${
+                                driver?.last_name[0]?.toUpperCase() +
+                                driver?.last_name?.substring(1)
                               }`,
                             }))}
                           />
@@ -690,7 +732,8 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
                     <Col lg="4">
                       <FormGroup>
                         <label className="form-control-label" htmlFor="input-fname">
-                          <span style={{ color: 'red' }}>{trip.client ? '' : '*'}</span> {t('Client')}
+                          <span style={{ color: 'red' }}>{trip.client ? '' : '*'}</span>{' '}
+                          {t('Client')}
                         </label>
                         {clients && (
                           <Select
@@ -700,16 +743,24 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
                             defaultValue={
                               trip?.client?._id && {
                                 value: trip?.client?._id,
-                                label: `${trip?.client?.first_name[0]?.toUpperCase() + trip?.client?.first_name?.substring(1)} ${
-                                  trip?.client?.last_name[0]?.toUpperCase() + trip?.client?.last_name?.substring(1)
+                                label: `${
+                                  trip?.client?.first_name[0]?.toUpperCase() +
+                                  trip?.client?.first_name?.substring(1)
+                                } ${
+                                  trip?.client?.last_name[0]?.toUpperCase() +
+                                  trip?.client?.last_name?.substring(1)
                                 }`,
                               }
                             }
                             className="form-control-alternative"
                             options={clients.map((client) => ({
                               value: client?._id,
-                              label: `${client?.first_name[0]?.toUpperCase() + client?.first_name?.substring(1)} ${
-                                client?.last_name[0]?.toUpperCase() + client?.last_name?.substring(1)
+                              label: `${
+                                client?.first_name[0]?.toUpperCase() +
+                                client?.first_name?.substring(1)
+                              } ${
+                                client?.last_name[0]?.toUpperCase() +
+                                client?.last_name?.substring(1)
                               }`,
                             }))}
                           />
@@ -736,8 +787,12 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
                             options={passengers
                               .map((passenger) => ({
                                 value: passenger?._id,
-                                label: `${passenger?.first_name[0]?.toUpperCase() + passenger?.first_name?.substring(1)} ${
-                                  passenger?.last_name[0]?.toUpperCase() + passenger?.last_name?.substring(1)
+                                label: `${
+                                  passenger?.first_name[0]?.toUpperCase() +
+                                  passenger?.first_name?.substring(1)
+                                } ${
+                                  passenger?.last_name[0]?.toUpperCase() +
+                                  passenger?.last_name?.substring(1)
                                 }`,
                               }))
                               .filter((p) => passengerChange.findIndex((v) => v === p.label) < 0)}

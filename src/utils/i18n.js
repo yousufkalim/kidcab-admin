@@ -23,6 +23,9 @@ i18n
           PASSENGERS: 'PASSENGERS',
           DRIVERS: 'DRIVERS',
           VEHICLES: 'VEHICLES',
+          confirmed: 'confirmed',
+          'Search Driver name': 'Search Driver name',
+          'date-filter':  'date-filter',
           //navbar
           'Mark as read': 'Mark as read',
           'No new notifications': 'No new notifications',
@@ -134,8 +137,7 @@ i18n
           Comments: 'Comments',
           'Jessica Jones': 'Jessica Jones',
           'Bucharest, Romania': 'Bucharest, Romania',
-          'Solution Manager - Creative Tim Officer':
-            'Solution Manager - Creative Tim Officer',
+          'Solution Manager - Creative Tim Officer': 'Solution Manager - Creative Tim Officer',
           'University of Computer Science': 'University of Computer Science',
           'Ryan — the name taken by Melbourne-raised, Brooklyn-based Nick Murphy — writes, performs and records all of his own music.':
             'Ryan — the name taken by Melbourne-raised, Brooklyn-based Nick Murphy — writes, performs and records all of his own music.',
@@ -311,8 +313,7 @@ i18n
           'Add License Card Back Side': 'Add License Card Back Side',
           'Add Criminal Record': 'Add Criminal Record',
           'Valid Till': 'Valid Till',
-          'Add Restricted Information Statement':
-            'Add Restricted Information Statement',
+          'Add Restricted Information Statement': 'Add Restricted Information Statement',
           'Add KBIS': 'Add KBIS',
           'Drivers List': 'Drivers List',
           'Add Driver': 'Add Driver',
@@ -326,7 +327,7 @@ i18n
           Model: 'Model',
           'Select Driver': 'Select Driver',
           'Select Engine Type': 'Select Engine Type',
-          thermal: 'thermal',
+          Thermal: 'Thermal',
           Hybrid: 'Hybrid',
           Electric: 'Electric',
           Hydrogen: 'Hydrogen',
@@ -335,8 +336,7 @@ i18n
           'Number Plate': 'Number Plate',
           'Add Gray Card': 'Add Gray Card',
           'Gray Valid Till': 'Gray Valid Till',
-          'Add vehicle Insurance Certificate':
-            'Add vehicle Insurance Certificate',
+          'Add vehicle Insurance Certificate': 'Add vehicle Insurance Certificate',
           'Insurance Valid Till': 'Insurance Valid Till',
           'Add Registration Card': 'Add Registration Card',
           'Vehicles List': 'Vehicles List',
@@ -419,8 +419,7 @@ i18n
           'Enter Vehicle Brand': 'Enter Vehicle Brand',
           'Enter Vehicle Model': 'Enter Vehicle Model',
           'Enter Vehicle Color': 'Enter Vehicle Color',
-          'Enter last technical inspection date':
-            'Enter last technical inspection date',
+          'Enter last technical inspection date': 'Enter last technical inspection date',
           'Enter Number Plate': 'Enter Number Plate',
           'Enter validity date': 'Enter validity date',
           'Enter validity date': 'Enter validity date',
@@ -474,20 +473,16 @@ i18n
           'Please enter your car model': 'Please enter your car model',
           'Please enter your car color': 'Please enter your car color',
           'Please enter your engine type': 'Please enter your engine type',
-          'Please enter Last inspection_date':
-            'Please enter Last inspection_date',
-          'Please enter your vehicle insurance card':
-            'Please enter your vehicle insurance card',
-          'Please enter a valid insurance date':
-            'Please enter a valid insurance date',
+          'Please enter Last inspection_date': 'Please enter Last inspection_date',
+          'Please enter your vehicle insurance card': 'Please enter your vehicle insurance card',
+          'Please enter a valid insurance date': 'Please enter a valid insurance date',
           'Please enter number plate': 'Please enter number plate',
           'Please enter your first name': 'Please enter your first name',
           'Please enter your last name': 'Please enter your last name',
           'Please enter email': 'Please enter email',
           'Please enter a valid emai': 'Please enter a valid email',
           'Password is required': 'Password is required',
-          'Passwords should be of atleast 8 letters':
-            'Passwords should be of atleast 8 letters',
+          'Passwords should be of atleast 8 letters': 'Passwords should be of atleast 8 letters',
           'Please select your role': 'Please select your role',
           'Please enter phone number': 'Please enter phone number',
           'Please enter client name': 'Please enter client name',
@@ -497,11 +492,9 @@ i18n
           'invoice-type-filter': 'invoice-type-filter',
           'qoute-type-filter': 'qoute-type-filter',
           'Adresses are mandatory': 'Adresses are mandatory',
-          'Start and end address cant be same':
-            'Start and end address cant be same',
+          'Start and end address cant be same': 'Start and end address cant be same',
           'Dates are mandatory': 'Dates are mandatory',
-          'end date must be greater than start date':
-            'end date must be greater than start date',
+          'end date must be greater than start date': 'end date must be greater than start date',
           'Total Price should be greater  than total trips':
             'Total Price should be greater  than total trips',
           'Trips should be greater than 1': 'Trips should be greater than 1',
@@ -510,37 +503,31 @@ i18n
           'Please enter start address': 'Please enter start address',
           'Please enter vat': 'Please enter vat',
           'Please enter quote price': 'Please enter quote price',
-          'Please enter total number of trips':
-            'Please enter total number of trips',
+          'Please enter total number of trips': 'Please enter total number of trips',
           'Please enter quote status': 'Please enter quote status',
           'Please enter quote number': 'Please enter quote number',
           'Please enter quote title': 'Please enter quote title',
           'Internal server error': 'Internal server error',
-          'Request failed with status code 500':
-            'Request failed with status code 500',
+          'Request failed with status code 500': 'Request failed with status code 500',
           'company edited successfully': 'company edited successfully',
-          'Search Client name': 'Search Client name'
-        } //Passenger
+          'Search Client name': 'Search Client name',
+        }, //Passenger
       },
       fr: {
         translations: {
           'company edited successfully': 'société éditée avec succès',
-          'Request failed with status code 500':
-            "La demande a échoué avec le code d'état 500",
+          'Request failed with status code 500': "La demande a échoué avec le code d'état 500",
           'Internal server error': 'Erreur interne du serveur',
           'Please enter quote title': 'Veuillez entrer le titre du devis',
           'Please enter quote number': 'Veuillez entrer le numéro de devis',
           'Please enter quote status': 'Veuillez entrer le statut du devis',
-          'Please enter total number of trips':
-            'Veuillez entrer le nombre total de trajets',
+          'Please enter total number of trips': 'Veuillez entrer le nombre total de trajets',
           'Please enter quote price': 'Veuillez entrer le prix du devis',
           'Please enter vat': 'Veuillez saisir la TVA',
           'Please enter start address': "Veuillez saisir l'adresse de départ",
           'Please enter end address': "Veuillez entrer l'adresse de fin",
-          'Please Select Client or Driver':
-            'Veuillez sélectionner un client ou un chauffeur',
-          'Trips should be greater than 1':
-            'Les trajets doivent être supérieurs à 1',
+          'Please Select Client or Driver': 'Veuillez sélectionner un client ou un chauffeur',
+          'Trips should be greater than 1': 'Les trajets doivent être supérieurs à 1',
           'Total Price should be greater  than total trips':
             'Le prix total doit être supérieur au total des trajets',
           'end date must be greater than start date':
@@ -564,35 +551,27 @@ i18n
           'Please enter email': 'Veuillez saisir un e-mail',
           'Please enter your last name': 'Veuillez entrer votre nom de famille',
           'Please enter your first name': "Entrez votre prénom s'il vous plait",
-          'Please enter number plate':
-            "Veuillez entrer la plaque d'immatriculation",
-          'Please enter a valid insurance date':
-            "Veuillez entrer une date d'assurance valide",
+          'Please enter number plate': "Veuillez entrer la plaque d'immatriculation",
+          'Please enter a valid insurance date': "Veuillez entrer une date d'assurance valide",
           'Please enter your vehicle insurance card':
             "Veuillez entrer votre carte d'assurance automobile",
-          'Please enter Last inspection_date':
-            'Veuillez saisir la date de la dernière inspection',
-          'Please enter your engine type':
-            'Veuillez entrer votre type de moteur',
-          'Please enter your car color':
-            'Veuillez entrer la couleur de votre voiture',
-          'Please enter your car model':
-            'Veuillez entrer votre modèle de voiture',
+          'Please enter Last inspection_date': 'Veuillez saisir la date de la dernière inspection',
+          'Please enter your engine type': 'Veuillez entrer votre type de moteur',
+          'Please enter your car color': 'Veuillez entrer la couleur de votre voiture',
+          'Please enter your car model': 'Veuillez entrer votre modèle de voiture',
           'Please enter brand name': 'Veuillez saisir le nom de la marque',
           'Please enter vehicle name': 'Veuillez entrer le nom du véhicule',
           'Passenger is required': 'Le passager est requis',
           'Client price should be greater than driver price':
             'Le prix client doit être supérieur au prix conducteur',
-          'Please enter valid driver price':
-            'Veuillez entrer un prix de conducteur valide',
+          'Please enter valid driver price': 'Veuillez entrer un prix de conducteur valide',
           'Please enter drive price': 'Veuillez saisir le prix du trajet',
           'Invalid client price': 'Prix ​​client invalide',
           'For this trip please select one driver only':
             'Pour ce voyage, veuillez sélectionner un seul conducteur',
           'Please enter trip dates': 'Veuillez entrer les dates du voyage',
           'Please enter trip status': 'Veuillez entrer le statut du voyage',
-          'Adresses cant be same':
-            'Les adresses ne peuvent pas être identiques',
+          'Adresses cant be same': 'Les adresses ne peuvent pas être identiques',
           'Delete Successfully': 'Supprimer avec succès',
           Delete: 'Effacer',
           'Export Pdf': 'Exporter le pdf',
@@ -774,10 +753,11 @@ i18n
           'PickUp Address': 'Adresse de ramassage',
           'Destination Address': 'Adresse de destination',
           //qoutes
+          confirmed: 'confirme',
           rejected: 'rejeté',
           accepted: 'accepté',
           pending: 'en attendant',
-          qoutes: 'qoutes',
+          qoutes: 'devis',
           'All Qoutes': 'Tous les devis',
           'Pending Qoutes': 'Devis en attente',
           'Accepted Qoutes': 'Devis acceptés',
@@ -904,10 +884,8 @@ i18n
           'VAT Number': 'Numéro de TVA',
           'Enter Social Capital': 'Entrez dans le capital social',
           'Enter Legal Information': 'Saisir les informations légales',
-          'Add insurance civil liability':
-            'Ajouter une assurance responsabilité civile',
-          'Add Professional liability':
-            'Ajouter Responsabilité professionnelle',
+          'Add insurance civil liability': 'Ajouter une assurance responsabilité civile',
+          'Add Professional liability': 'Ajouter Responsabilité professionnelle',
           'Add RIB': 'Ajouter RIB',
           'Add Kbis extract': 'Ajouter un extrait Kbis',
           'Contact information': 'Informations de contact',
@@ -916,16 +894,13 @@ i18n
             "Ajouter carte d'identité/passeport/permis de séjour recto",
           'Add Identity Card/Passport/Residence Permit Back Side':
             "Ajouter le verso de la carte d'identité/passeport/permis de séjour",
-          'Add VTC Card Front Side': 'Ajouter une carte VTC recto',
+          'Add VTC Card Front Side': 'Ajouter le recto de la carte VTC',
           'Add VTC Card Back Side': 'Ajouter le verso de la carte VTC',
-          'Add License Card Front Side':
-            'Ajouter la face avant de la carte de licence',
-          'Add License Card Back Side':
-            'Ajouter le verso de la carte de licence',
+          'Add License Card Front Side': 'Ajouter le recto du permis de conduire',
+          'Add License Card Back Side': 'Ajouter le verso du permis de conduire',
           'Add Criminal Record': 'Ajouter un casier judiciaire',
           'Valid Till': 'Valide jusqu’à',
-          'Add Restricted Information Statement':
-            'Ajouter un Relevé d’Informations Restreintes',
+          'Add Restricted Information Statement': 'Ajouter un Relevé d’Informations Restreintes',
           'Add KBIS': 'Ajouter un KBIS',
           'Drivers List': 'Liste des chauffeurs',
           'Add Driver': 'Ajouter un chauffeur',
@@ -936,10 +911,12 @@ i18n
           'Vehicle information': 'Informations sur le véhicule',
           'Vehicle Name': 'Nom du véhicule',
           Brand: 'Marque',
+
           Model: 'Modèle',
           'Select Driver': 'Sélectionner le chauffeur',
           'Select Engine Type': 'Sélectionnez le type de moteur',
-          thermal: 'thermique',
+          'Search Driver name': 'Rechercher le nom du Chauffeur',
+          Thermal: 'Thermique',
           Hybrid: 'Hybride',
           Electric: 'Électrique',
           Hydrogen: 'Hydrogène',
@@ -948,8 +925,7 @@ i18n
           'Number Plate': "Plaque d'immatriculation",
           'Add Gray Card': 'Ajouter le dernier contrôle technique',
           'Gray Valid Till': 'Valide jusqu’à',
-          'Add vehicle Insurance Certificate':
-            "Ajouter le certificat d'assurance du véhicule",
+          'Add vehicle Insurance Certificate': "Ajouter le certificat d'assurance du véhicule",
           'Insurance Valid Till': 'Valide jusqu’à',
           'Add Registration Card': 'Ajouter une carte grise',
           'Vehicles List': 'Liste des véhicules',
@@ -1030,15 +1006,14 @@ i18n
           'Enter Vehicle Brand': 'Entrez la marque du véhicule',
           'Enter Vehicle Model': 'Entrez le modèle de véhicule',
           'Enter Vehicle Color': 'Entrer la couleur du véhicule',
-          'Enter last technical inspection date':
-            'Saisir la date du dernier contrôle technique',
+          'Enter last technical inspection date': 'Saisir la date du dernier contrôle technique',
           'Enter Number Plate': "Entrer la plaque d'immatriculation",
           'Enter validity date': 'Entrez la date de validité',
           'No File Added': 'Aucun fichier ajouté',
           individual: 'Chauffeur',
-          fleet_manager: 'Gestionnaire de flotte'
-        }
-      }
+          fleet_manager: 'Gestionnaire de flotte',
+        },
+      },
     },
     fallbackLng: 'fr',
     debug: true,
@@ -1047,7 +1022,7 @@ i18n
     defaultNS: 'translations',
     keySeparator: false, // we use content as keys
     interpolation: {
-      escapeValue: false
-    }
+      escapeValue: false,
+    },
   });
 export default i18n;
