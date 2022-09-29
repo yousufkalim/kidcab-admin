@@ -758,7 +758,7 @@ i18n
           confirmed: 'Confirmé',
           rejected: 'rejeté',
           accepted: 'accepté',
-          pending: 'En attendant',
+          pending: 'En attente',
           qoutes: 'devis',
           'All Qoutes': 'Tous les devis',
           'Pending Qoutes': 'Devis en attente',
@@ -792,7 +792,7 @@ i18n
           Duplicate: 'Dupliquer',
           Friends: 'Amis',
           //invoices
-          pending: 'En attendant',
+          pending: 'En attente',
           paid: 'Payée',
           late: 'en retard',
           cancelled: 'Annulé',
