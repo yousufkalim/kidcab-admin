@@ -3,7 +3,19 @@ import { toast } from 'react-toastify';
 import api from '../../api';
 import Select from 'react-select';
 import AddressInput from 'components/Form/AddressInput';
-import { Modal, ModalBody, ModalHeader, ModalFooter, Button, FormGroup, Form, Input, Row, Col, Label } from 'reactstrap';
+import {
+  Modal,
+  ModalBody,
+  ModalHeader,
+  ModalFooter,
+  Button,
+  FormGroup,
+  Form,
+  Input,
+  Row,
+  Col,
+  Label
+} from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import moment from 'moment';
 
@@ -32,7 +44,7 @@ const InvoiceForm = ({ openModal, handleModal, editUser, isEditing, autoRefresh 
     endDate: '',
     totalTrips: '',
     unitPrice: '',
-    vat: '',
+    vat: ''
   });
 
   const [users, setUsers] = useState([]);
@@ -43,7 +55,7 @@ const InvoiceForm = ({ openModal, handleModal, editUser, isEditing, autoRefresh 
     label: '',
     label2: '',
     city: '',
-    postal_code: '',
+    postal_code: ''
   });
   let [endAddress, setEndAddress] = useState({
     lat: '',
@@ -51,18 +63,17 @@ const InvoiceForm = ({ openModal, handleModal, editUser, isEditing, autoRefresh 
     label: '',
     label2: '',
     city: '',
-    postal_code: '',
+    postal_code: ''
   });
   useEffect(() => {
-    api('get', 'users').then((res) => {
+    api('get', 'users').then(res => {
       setUsers(res.data.users);
     });
-    api('get', 'drivers').then((res) => {
+    api('get', 'drivers').then(res => {
       setDrivers(res.data.drivers);
     });
 
     if (isEditing) {
-      
       setUser({
         invoice_title: editUser?.invoice_title,
         issue_date: new Date(editUser?.issue_date),
@@ -76,7 +87,7 @@ const InvoiceForm = ({ openModal, handleModal, editUser, isEditing, autoRefresh 
         client: editUser?.client,
         comments: editUser?.comments,
         startDate: new Date(editUser?.trip_info?.start_date),
-        endDate: new Date(editUser?.trip_info?.end_date),
+        endDate: new Date(editUser?.trip_info?.end_date)
       });
       setStartAddress(editUser?.trip_info?.start_address);
       setEndAddress(editUser?.trip_info?.end_address);
@@ -84,59 +95,60 @@ const InvoiceForm = ({ openModal, handleModal, editUser, isEditing, autoRefresh 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleDateChange2 = (e) => {
-    setUser((user) => ({
+  const handleDateChange2 = e => {
+    setUser(user => ({
       ...user,
-      issue_date: e,
+      issue_date: e
     }));
   };
-  const handleDateChange = (e) => {
-    setUser((user) => ({
+  const handleDateChange = e => {
+    setUser(user => ({
       ...user,
-      startDate: e,
+      startDate: e
     }));
   };
-  const handleDateChange1 = (e) => {
-    setUser((user) => ({
+  const handleDateChange1 = e => {
+    setUser(user => ({
       ...user,
-      endDate: e,
+      endDate: e
     }));
   };
 
-  const handleInputChange = (e) => {
+  const handleInputChange = e => {
     if (e.target.name === 'totalTrips') {
       if (parseInt(e.target.value) < 1) {
         return toast.error('Trips should be greater than 1');
       }
       if (isEditing) {
-        let UnitPrice = (parseInt(user?.totalPrice) - parseInt(user?.vat)) / parseInt(e.target.value);
-        setUser((user) => ({
+        let UnitPrice =
+          (parseInt(user?.totalPrice) - parseInt(user?.vat)) / parseInt(e.target.value);
+        setUser(user => ({
           ...user,
           [e.target.name]: e.target.value,
-          unitPrice: UnitPrice,
+          unitPrice: UnitPrice
         }));
         return;
       }
     }
     if (e.target.name == 'totalPrice') {
-      let Vat =  parseInt(e.target.value)- (parseInt(e.target.value) /1.2);
-      console.log("vat is ",Vat)
+      let Vat = parseInt(e.target.value) - parseInt(e.target.value) / 1.2;
+      console.log('vat is ', Vat);
       let UnitPrice = (parseInt(e.target.value) - parseInt(Vat)) / parseInt(user?.totalTrips);
-      setUser((user) => ({
+      setUser(user => ({
         ...user,
         [e.target.name]: e.target.value,
         vat: Vat,
-        unitPrice: UnitPrice,
+        unitPrice: UnitPrice
       }));
       return;
     }
     setUser({ ...user, [e.target.name]: e.target.value });
   };
 
-  const handleUserChange = (e) => {
+  const handleUserChange = e => {
     setUser({ ...user, client: e.value, driver: '' });
   };
-  const handleDriverChange = (e) => {
+  const handleDriverChange = e => {
     setUser({ ...user, driver: e.value, client: '' });
   };
 
@@ -147,7 +159,7 @@ const InvoiceForm = ({ openModal, handleModal, editUser, isEditing, autoRefresh 
       method = 'delete';
       uri = uri + `/${editUser._id}`;
     }
-    api(method, uri).then((res) => {
+    api(method, uri).then(res => {
       // eslint-disable-next-line eqeqeq
       if (res.status == 200) {
         toast.success(`${t('Delete Successfully')}`);
@@ -157,9 +169,8 @@ const InvoiceForm = ({ openModal, handleModal, editUser, isEditing, autoRefresh 
         toast.error(`${t('Delete Error')}`, `${t(res.data.message)}`);
       }
     });
-      
   };
-  const handleSubmit = (e) => {
+  const handleSubmit = e => {
     e.preventDefault();
     let method = 'post';
     let uri = 'invoices';
@@ -180,7 +191,7 @@ const InvoiceForm = ({ openModal, handleModal, editUser, isEditing, autoRefresh 
     if (new Date(user?.endDate) < new Date(user?.startDate)) {
       return toast.error(`${t('end date must be greater than start date')}`);
     }
-    console.log("user for new or for edit",user)
+    console.log('user for new or for edit', user);
 
     const tripInfo = {
       total_trips: user?.totalTrips,
@@ -188,7 +199,7 @@ const InvoiceForm = ({ openModal, handleModal, editUser, isEditing, autoRefresh 
       end_date: user.endDate,
       start_address: startAddress,
       end_address: endAddress,
-      unit_price: user?.unitPrice.toFixed(2),
+      unit_price: user?.unitPrice.toFixed(2)
     };
     const formData = {};
     if (user?.type === 'client') {
@@ -197,7 +208,7 @@ const InvoiceForm = ({ openModal, handleModal, editUser, isEditing, autoRefresh 
     if (user?.type === 'driver') {
       formData['driver'] = user?.driver;
     }
-    
+
     formData['invoice_title'] = user?.invoice_title;
     formData['total_price'] = user?.totalPrice;
     formData['issue_date'] = user?.issue_date;
@@ -219,7 +230,7 @@ const InvoiceForm = ({ openModal, handleModal, editUser, isEditing, autoRefresh 
       method = 'put';
       uri = uri + `/${editUser._id}`;
     }
-    api(method, uri, formData).then(async (res) => {
+    api(method, uri, formData).then(async res => {
       if (res.status === 200) {
         toast.success(`${t('Saved Successfully')}`);
         handleModal();
@@ -230,21 +241,21 @@ const InvoiceForm = ({ openModal, handleModal, editUser, isEditing, autoRefresh 
     });
   };
 
-  const handleDuplicate = (e) => { 
+  const handleDuplicate = e => {
     e.preventDefault();
     let method = 'post';
     let uri = 'invoices';
     if (user?.client?._id) {
       user['client'] = user.client._id;
     }
-    // console.log("user in duplicate",user) 
-    
+    // console.log("user in duplicate",user)
+
     // user['issue_date'] = moment(user.issue_date).format('YYYY-MM-DD');
-    user['issue_date'] = new Date(user.issue_date)
-    user['startDate'] = new Date(user.startDate)
-    user['endDate'] = new Date(user.endDate)
-  
-    console.log("user in duplicate2",user) 
+    user['issue_date'] = new Date(user.issue_date);
+    user['startDate'] = new Date(user.startDate);
+    user['endDate'] = new Date(user.endDate);
+
+    console.log('user in duplicate2', user);
     const formData = {};
     const tripInfo = {
       total_trips: user?.totalTrips,
@@ -252,16 +263,16 @@ const InvoiceForm = ({ openModal, handleModal, editUser, isEditing, autoRefresh 
       end_date: user?.endDate,
       start_address: startAddress,
       end_address: endAddress,
-      unit_price: user?.unitPrice.toFixed(2),
-    };  
-     
+      unit_price: user?.unitPrice.toFixed(2)
+    };
+
     formData['invoice_title'] = user?.invoice_title;
     formData['total_price'] = user?.totalPrice;
     formData['issue_date'] = user?.issue_date;
     formData['status'] = user?.status;
     formData['type'] = user?.type;
     formData['comments'] = user?.comments;
-    
+
     // formData['vat'] = user?.vat
     formData['vat'] = parseInt(user?.vat).toFixed(2);
     formData['trip_info'] = JSON.stringify(tripInfo);
@@ -271,10 +282,10 @@ const InvoiceForm = ({ openModal, handleModal, editUser, isEditing, autoRefresh 
     if (user?.type === 'driver') {
       formData['driver'] = user?.driver;
     }
-    
-    api(method, uri, formData).then((res) => {
+
+    api(method, uri, formData).then(res => {
       if (res.status === 200) {
-        console.log("response",res.status)
+        console.log('response', res.status);
         toast.success(`${t('Saved Successfully')}`);
         handleModal();
         autoRefresh();
@@ -289,7 +300,7 @@ const InvoiceForm = ({ openModal, handleModal, editUser, isEditing, autoRefresh 
       {/* {console.log(startAddress, endAddress)} */}
       <Modal isOpen={openModal} size="xl" centered>
         <ModalHeader charCode="X" toggle={handleModal}>
-          {isEditing ? t('Edit') : t('Add')} {t('Invoice')} 
+          {isEditing ? t('Edit') : t('Add')} {t('Invoice')}
         </ModalHeader>
         <ModalBody>
           <Row>
@@ -302,7 +313,8 @@ const InvoiceForm = ({ openModal, handleModal, editUser, isEditing, autoRefresh 
                     <Col lg="6">
                       <FormGroup>
                         <label className="form-control-label" htmlFor="input-fname">
-                          <span style={{ color: 'red' }}>{user?.invoice_title ? '' : '*'}</span> {t('Invoice Title')}
+                          <span style={{ color: 'red' }}>{user?.invoice_title ? '' : '*'}</span>{' '}
+                          {t('Invoice Title')}
                         </label>
                         <Input
                           className="form-control"
@@ -319,7 +331,8 @@ const InvoiceForm = ({ openModal, handleModal, editUser, isEditing, autoRefresh 
                     <Col lg="6">
                       <FormGroup>
                         <label className="form-control-label" htmlFor="input-lname">
-                          <span style={{ color: 'red' }}>{user?.issue_date ? '' : '*'}</span> {t('Issue Date')}
+                          <span style={{ color: 'red' }}>{user?.issue_date ? '' : '*'}</span>{' '}
+                          {t('Issue Date')}
                         </label>
                         {/* <Input
                           className="form-control"
@@ -355,8 +368,7 @@ const InvoiceForm = ({ openModal, handleModal, editUser, isEditing, autoRefresh 
                           type="select"
                           disabled={isEditing}
                           value={user.type}
-                          onChange={handleInputChange}
-                        >
+                          onChange={handleInputChange}>
                           <option value="client">Client</option>
                           <option value="driver">Driver</option>
                         </Input>
@@ -378,16 +390,22 @@ const InvoiceForm = ({ openModal, handleModal, editUser, isEditing, autoRefresh 
                                 editUser && {
                                   value: user?.client?._id,
                                   label: `${
-                                    editUser?.client?.first_name[0].toUpperCase() + editUser?.client?.first_name.substring(1)
-                                  } ${editUser?.client?.last_name[0].toUpperCase() + editUser?.client?.last_name.substring(1)}`,
+                                    editUser?.client?.first_name[0].toUpperCase() +
+                                    editUser?.client?.first_name.substring(1)
+                                  } ${
+                                    editUser?.client?.last_name[0].toUpperCase() +
+                                    editUser?.client?.last_name.substring(1)
+                                  }`
                                 }
                               }
                               className="form-control-alternative"
-                              options={users.map((user) => ({
+                              options={users.map(user => ({
                                 value: user?._id,
-                                label: `${user?.first_name[0].toUpperCase() + user?.first_name.substring(1)} ${
+                                label: `${
+                                  user?.first_name[0].toUpperCase() + user?.first_name.substring(1)
+                                } ${
                                   user?.last_name[0].toUpperCase() + user?.last_name.substring(1)
-                                }`,
+                                }`
                               }))}
                             />
                           )}
@@ -408,17 +426,25 @@ const InvoiceForm = ({ openModal, handleModal, editUser, isEditing, autoRefresh 
                               defaultValue={
                                 editUser && {
                                   value: drivers?._id,
-                                  label: `${user?.driver?.first_name[0].toUpperCase() + user?.driver?.first_name.substring(1)} ${
-                                    user?.driver?.last_name[0].toUpperCase() + user?.driver?.last_name.substring(1)
-                                  }`,
+                                  label: `${
+                                    user?.driver?.first_name[0].toUpperCase() +
+                                    user?.driver?.first_name.substring(1)
+                                  } ${
+                                    user?.driver?.last_name[0].toUpperCase() +
+                                    user?.driver?.last_name.substring(1)
+                                  }`
                                 }
                               }
                               className="form-control-alternative"
-                              options={drivers.map((driver) => ({
+                              options={drivers.map(driver => ({
                                 value: driver?._id,
-                                label: `${driver?.first_name[0].toUpperCase() + driver?.first_name.substring(1)} ${
-                                  driver?.last_name[0].toUpperCase() + driver?.last_name.substring(1)
-                                }`,
+                                label: `${
+                                  driver?.first_name[0].toUpperCase() +
+                                  driver?.first_name.substring(1)
+                                } ${
+                                  driver?.last_name[0].toUpperCase() +
+                                  driver?.last_name.substring(1)
+                                }`
                               }))}
                             />
                           )}
@@ -428,7 +454,8 @@ const InvoiceForm = ({ openModal, handleModal, editUser, isEditing, autoRefresh 
                     <Col lg="4">
                       <FormGroup>
                         <Label for="exampleSelect" className="form-control-label">
-                          <span style={{ color: 'red' }}>{user.status ? '' : '*'}</span> {t('Status')}
+                          <span style={{ color: 'red' }}>{user.status ? '' : '*'}</span>{' '}
+                          {t('Status')}
                         </Label>
                         <Input
                           id="exampleSelect"
@@ -436,8 +463,7 @@ const InvoiceForm = ({ openModal, handleModal, editUser, isEditing, autoRefresh 
                           value={user.status}
                           onChange={handleInputChange}
                           className="form-control"
-                          type="select"
-                        >
+                          type="select">
                           <option value="pending">{t('Pending')}</option>
                           <option value="paid">{t('Paid')}</option>
                           <option value="late">{t('Late')}</option>
@@ -452,7 +478,8 @@ const InvoiceForm = ({ openModal, handleModal, editUser, isEditing, autoRefresh 
                     <Col lg="4">
                       <FormGroup>
                         <label className="form-control-label" htmlFor="input-fname">
-                          <span style={{ color: 'red' }}>{user.totalTrips ? '' : '*'}</span> {t('No. of Trips')}
+                          <span style={{ color: 'red' }}>{user.totalTrips ? '' : '*'}</span>{' '}
+                          {t('No. of Trips')}
                         </label>
                         <Input
                           className="form-control-alternative"
@@ -469,7 +496,8 @@ const InvoiceForm = ({ openModal, handleModal, editUser, isEditing, autoRefresh 
                     <Col lg="4">
                       <FormGroup>
                         <label className="form-control-label" htmlFor="input-fname">
-                          <span style={{ color: 'red' }}>{user.totalPrice ? '' : '*'}</span> {t('Amount including Vat')}
+                          <span style={{ color: 'red' }}>{user.totalPrice ? '' : '*'}</span>{' '}
+                          {t('Amount including Vat')}
                         </label>
                         <Input
                           className="form-control-alternative"
@@ -487,9 +515,10 @@ const InvoiceForm = ({ openModal, handleModal, editUser, isEditing, autoRefresh 
                     <Col lg="4">
                       <FormGroup>
                         <label className="form-control-label" htmlFor="input-lname">
-                          <span style={{ color: 'red' }}>{user?.vat ? '' : '*'}</span> {t('Total Taxes')}
+                          <span style={{ color: 'red' }}>{user?.vat ? '' : '*'}</span>{' '}
+                          {t('Total Taxes')}
                         </label>
-                        
+
                         <Input
                           className="form-control-alternative"
                           id="input-lname"
@@ -508,7 +537,8 @@ const InvoiceForm = ({ openModal, handleModal, editUser, isEditing, autoRefresh 
                     <Col lg="6">
                       <FormGroup>
                         <label className="form-control-label" htmlFor="input-lname">
-                          <span style={{ color: 'red' }}>{user.startDate ? '' : '*'}</span> {t('Start Date')}
+                          <span style={{ color: 'red' }}>{user.startDate ? '' : '*'}</span>{' '}
+                          {t('Start Date')}
                         </label>
 
                         <DatePicker
@@ -524,7 +554,8 @@ const InvoiceForm = ({ openModal, handleModal, editUser, isEditing, autoRefresh 
                     <Col lg="6">
                       <FormGroup>
                         <label className="form-control-label" htmlFor="input-lname">
-                          <span style={{ color: 'red' }}>{user.endDate ? '' : '*'}</span> {t('End Date')}
+                          <span style={{ color: 'red' }}>{user.endDate ? '' : '*'}</span>{' '}
+                          {t('End Date')}
                         </label>
 
                         <DatePicker
@@ -541,12 +572,20 @@ const InvoiceForm = ({ openModal, handleModal, editUser, isEditing, autoRefresh 
                   <Row>
                     <Col lg="6">
                       <FormGroup>
-                        <AddressInput label="Start Address" address={startAddress} setAddress={setStartAddress} />
+                        <AddressInput
+                          label="Start Address"
+                          address={startAddress}
+                          setAddress={setStartAddress}
+                        />
                       </FormGroup>
                     </Col>
                     <Col lg="6">
                       <FormGroup>
-                        <AddressInput label="End Address" address={endAddress} setAddress={setEndAddress} />
+                        <AddressInput
+                          label="End Address"
+                          address={endAddress}
+                          setAddress={setEndAddress}
+                        />
                       </FormGroup>
                     </Col>
                   </Row>
