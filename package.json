@@ -69,7 +69,8 @@
     "reactstrap": "8.9.0",
     "sass": "^1.54.8",
     "socket.io-client": "^4.4.1",
-    "xlsx": "^0.18.0"
+    "xlsx": "^0.18.0",
+    "yarn": "^1.22.19"
   },
   "devDependencies": {
     "eslint-config-react-app": "^7.0.1",

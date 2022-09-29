@@ -24,8 +24,9 @@ i18n
           DRIVERS: 'DRIVERS',
           VEHICLES: 'VEHICLES',
           confirmed: 'confirmed',
+          Profile: 'Profile',
           'Search Driver name': 'Search Driver name',
-          'date-filter':  'date-filter',
+          'date-filter': 'date-filter',
           //navbar
           'Mark as read': 'Mark as read',
           'No new notifications': 'No new notifications',
@@ -510,8 +511,8 @@ i18n
           'Internal server error': 'Internal server error',
           'Request failed with status code 500': 'Request failed with status code 500',
           'company edited successfully': 'company edited successfully',
-          'Search Client name': 'Search Client name',
-        }, //Passenger
+          'Search Client name': 'Search Client name'
+        } //Passenger
       },
       fr: {
         translations: {
@@ -706,6 +707,7 @@ i18n
           Date: 'Date',
           'Start Address': 'Adresse de départ',
           'End Address': 'Adresse d’arrivée',
+          Profile: 'Profil',
           Actions: 'Actions',
           'No Trip Found': 'Aucun trajet trouvé',
           'Add Step': 'Ajouter une étape',
@@ -1011,9 +1013,9 @@ i18n
           'Enter validity date': 'Entrez la date de validité',
           'No File Added': 'Aucun fichier ajouté',
           individual: 'Chauffeur',
-          fleet_manager: 'Gestionnaire de flotte',
-        },
-      },
+          fleet_manager: 'Gestionnaire de flotte'
+        }
+      }
     },
     fallbackLng: 'fr',
     debug: true,
@@ -1022,7 +1024,7 @@ i18n
     defaultNS: 'translations',
     keySeparator: false, // we use content as keys
     interpolation: {
-      escapeValue: false,
-    },
+      escapeValue: false
+    }
   });
 export default i18n;
