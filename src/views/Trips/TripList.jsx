@@ -14,7 +14,7 @@ import {
   Input,
   Row,
   Table,
-  UncontrolledDropdown,
+  UncontrolledDropdown
 } from 'reactstrap';
 import api from '../../api/index';
 import TripForm from './TripForm';
@@ -46,12 +46,12 @@ const TripList = () => {
   const [clientpage, setClientPage] = useState(0);
   const [count, setCount] = useState(0);
 
-  const handleSelect = (trip) => {
-    const selected = selectedItems.filter((a) => a._id === trip._id);
+  const handleSelect = trip => {
+    const selected = selectedItems.filter(a => a._id === trip._id);
     if (selected.length > 0) {
-      setSelectedItems((prev) => prev.filter((a) => a._id !== trip._id));
+      setSelectedItems(prev => prev.filter(a => a._id !== trip._id));
     } else {
-      setSelectedItems((prev) => [...prev, trip]);
+      setSelectedItems(prev => [...prev, trip]);
     }
   };
   const selectAll = () => {
@@ -61,8 +61,8 @@ const TripList = () => {
     } else {
       setSelectBtn(true);
       setSelectedItems([]);
-      trips.map((e) => {
-        setSelectedItems((prev) => [...prev, e]);
+      trips.map(e => {
+        setSelectedItems(prev => [...prev, e]);
       });
     }
   };
@@ -80,7 +80,7 @@ const TripList = () => {
   };
 
   const handleDeleteMany = async () => {
-    const tripIds = selectedItems.map((a) => a._id);
+    const tripIds = selectedItems.map(a => a._id);
     api('delete', 'trips/deleteMany', { data: { tripIds } }).then(() => {
       toast.success('Trips deleted successfully');
       autoRefresh();
@@ -90,7 +90,7 @@ const TripList = () => {
   };
 
   const handleModal = () => {
-    setOpenModal((open) => !open);
+    setOpenModal(open => !open);
     return openModal;
   };
 
@@ -104,8 +104,8 @@ const TripList = () => {
     api(method, uri, {
       driver,
       pageNumber: page,
-      pageSize: 10,
-    }).then((res) => {
+      pageSize: 10
+    }).then(res => {
       // eslint-disable-next-line eqeqeq
       if (res.status == 200) {
         setTrips(res.data.trips);
@@ -127,8 +127,8 @@ const TripList = () => {
       client,
       status: filterdropDownItem,
       pageNumber: page,
-      pageSize: 10,
-    }).then((res) => {
+      pageSize: 10
+    }).then(res => {
       // eslint-disable-next-line eqeqeq
       if (res.status == 200) {
         setTrips(res.data.trips);
@@ -142,13 +142,13 @@ const TripList = () => {
   const autoRefresh = () => {
     api('post', `trips/status/${filterdropDownItem}`, {
       pageNumber: page,
-      pageSize: 10,
-    }).then((res) => {
+      pageSize: 10
+    }).then(res => {
       setTrips(res?.data?.trips);
       setCount(res?.data?.totalResults);
     });
   };
-  const filterCheck = (e) => {
+  const filterCheck = e => {
     e.preventDefault();
     setDropDownItem(e.target.name);
     if (e.target.name === 'all') {
@@ -172,7 +172,7 @@ const TripList = () => {
       setPage(0);
       setDriverSearchFilter('');
       setClientSearchFilter('');
-      setDateFilter((prevCheck) => !prevCheck);
+      setDateFilter(prevCheck => !prevCheck);
     } else if (e.target.name === 'trip-type-filter') {
       if (datefilter === true || driverfilter === true) {
         setDateFilter(false);
@@ -181,7 +181,7 @@ const TripList = () => {
       }
       setPage(0);
       setDriverSearchFilter('');
-      setTypeFilter((prevCheck) => !prevCheck);
+      setTypeFilter(prevCheck => !prevCheck);
     } else if (e.target.name === 'driver-filter') {
       if (datefilter === true || typefilter === true) {
         setTypeFilter(false);
@@ -190,7 +190,7 @@ const TripList = () => {
       }
       setPage(0);
       setClientSearchFilter('');
-      setDriverFilter((prevCheck) => !prevCheck);
+      setDriverFilter(prevCheck => !prevCheck);
     }
   };
 
@@ -198,12 +198,12 @@ const TripList = () => {
     setDates({ ...dates, [name]: e });
   };
 
-  const handelNameFilter = (e) => {
+  const handelNameFilter = e => {
     e.preventDefault();
     setFilterDropDownItem(e.target.name);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = e => {
     e.preventDefault();
     let method = 'post';
     let uri = 'trips/tripsByDate';
@@ -216,8 +216,8 @@ const TripList = () => {
     api(method, uri, {
       ...dates,
       pageNumber: datepage,
-      pageSize: 10,
-    }).then((res) => {
+      pageSize: 10
+    }).then(res => {
       // eslint-disable-next-line eqeqeq
       if (res.status == 200) {
         setTrips(res.data.trips);
@@ -242,8 +242,8 @@ const TripList = () => {
       api(method, uri, {
         ...dates,
         pageNumber: datepage,
-        pageSize: 10,
-      }).then((res) => {
+        pageSize: 10
+      }).then(res => {
         // eslint-disable-next-line eqeqeq
         if (res.status == 200) {
           setTrips(res.data.trips);
@@ -265,8 +265,8 @@ const TripList = () => {
       api(method, uri, {
         driver: driverSearchfilter,
         pageNumber: driverpage,
-        pageSize: 10,
-      }).then((res) => {
+        pageSize: 10
+      }).then(res => {
         // eslint-disable-next-line eqeqeq
         if (res.status == 200) {
           setTrips(res.data.trips);
@@ -289,8 +289,8 @@ const TripList = () => {
         client: clientSearchfilter,
         status: filterdropDownItem,
         pageNumber: driverpage,
-        pageSize: 10,
-      }).then((res) => {
+        pageSize: 10
+      }).then(res => {
         // eslint-disable-next-line eqeqeq
         if (res.status == 200) {
           setTrips(res.data.trips);
@@ -332,9 +332,8 @@ const TripList = () => {
                         caret
                         size="md"
                         style={{
-                          textTransform: 'capitalize',
-                        }}
-                      >
+                          textTransform: 'capitalize'
+                        }}>
                         {t(dropDownItem)}
                       </DropdownToggle>
                       <DropdownMenu>
@@ -368,9 +367,8 @@ const TripList = () => {
                         alignItems: 'center',
                         margin: '11px',
                         marginTop: '24px',
-                        position: 'relative',
-                      }}
-                    >
+                        position: 'relative'
+                      }}>
                       <div style={{ width: '60%' }}>
                         <Input
                           aria-label="Search"
@@ -380,7 +378,7 @@ const TripList = () => {
                           name="client-search"
                           value={clientSearchfilter}
                           style={{ border: 'none', backgroundColor: '#e8f7ff' }}
-                          onChange={(e) => {
+                          onChange={e => {
                             setClientSearchFilter(e.target.value.toLowerCase());
                           }}
                         />
@@ -390,9 +388,8 @@ const TripList = () => {
                           style={{
                             position: 'absolute',
                             top: '15%',
-                            right: '20%',
-                          }}
-                        >
+                            right: '20%'
+                          }}>
                           <DropdownToggle
                             color="primary"
                             name
@@ -401,9 +398,8 @@ const TripList = () => {
                             caret
                             size="sm"
                             style={{
-                              textTransform: 'capitalize',
-                            }}
-                          >
+                              textTransform: 'capitalize'
+                            }}>
                             {t(filterdropDownItem)}
                             {console.log('filterdropDownItem', filterdropDownItem)}
                             &nbsp;{t('trips')}
@@ -432,10 +428,9 @@ const TripList = () => {
                           style={{
                             position: 'absolute',
                             top: '15%',
-                            right: '10%',
+                            right: '10%'
                           }}
-                          onClick={handleClient}
-                        >
+                          onClick={handleClient}>
                           {t('Search')}
                         </Button>
                       </div>
@@ -448,14 +443,12 @@ const TripList = () => {
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        width: '100%',
-                      }}
-                    >
+                        width: '100%'
+                      }}>
                       <div
                         style={{
-                          width: '40%',
-                        }}
-                      >
+                          width: '40%'
+                        }}>
                         <label className="form-control-label" htmlFor="input-date">
                           <span style={{ color: 'red' }}>{dates?.start_date ? '' : '*'}</span>{' '}
                           {t('Start Date')}
@@ -466,15 +459,14 @@ const TripList = () => {
                           locale={language === 'fr' && fr}
                           value={dates?.start_date}
                           selected={dates?.start_date || ''}
-                          onChange={(e) => handleInputChange('start_date', e)}
+                          onChange={e => handleInputChange('start_date', e)}
                         />
                       </div>
                       <div
                         style={{
                           width: '40%',
-                          marginLeft: '20px',
-                        }}
-                      >
+                          marginLeft: '20px'
+                        }}>
                         <label className="form-control-label" htmlFor="input-date">
                           <span style={{ color: 'red' }}>{dates?.end_date ? '' : '*'}</span>{' '}
                           {t('End Date')}
@@ -485,7 +477,7 @@ const TripList = () => {
                           selected={dates?.end_date || ''}
                           value={dates?.end_date}
                           locale={language === 'fr' && fr}
-                          onChange={(e) => handleInputChange('end_date', e)}
+                          onChange={e => handleInputChange('end_date', e)}
                         />
                       </div>
                       <div>
@@ -495,9 +487,8 @@ const TripList = () => {
                           onClick={handleSubmit}
                           style={{
                             marginTop: '35px',
-                            marginLeft: '30px',
-                          }}
-                        >
+                            marginLeft: '30px'
+                          }}>
                           {t('Search')}
                         </Button>
                       </div>
@@ -513,9 +504,8 @@ const TripList = () => {
                         alignItems: 'center',
                         margin: '11px',
                         marginTop: '24px',
-                        position: 'relative',
-                      }}
-                    >
+                        position: 'relative'
+                      }}>
                       <div style={{ width: '60%' }}>
                         <Input
                           aria-label="Search"
@@ -525,7 +515,7 @@ const TripList = () => {
                           name="driver-search"
                           value={driverSearchfilter}
                           style={{ border: 'none', backgroundColor: '#e8f7ff' }}
-                          onChange={(e) => {
+                          onChange={e => {
                             setDriverSearchFilter(e.target.value.toLowerCase());
                           }}
                         />
@@ -538,9 +528,8 @@ const TripList = () => {
                           style={{
                             position: 'absolute',
                             top: '15%',
-                            right: '20%',
-                          }}
-                        >
+                            right: '20%'
+                          }}>
                           {t('Search')}
                         </Button>
                       </div>
@@ -580,7 +569,7 @@ const TripList = () => {
                 </thead>
                 <tbody>
                   {trips ? (
-                    trips?.map((trip) => (
+                    trips?.map(trip => (
                       <TripRow
                         key={trip._id}
                         trip={trip}

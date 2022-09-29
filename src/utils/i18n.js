@@ -755,10 +755,10 @@ i18n
           'PickUp Address': 'Adresse de ramassage',
           'Destination Address': 'Adresse de destination',
           //qoutes
-          confirmed: 'confirme',
+          confirmed: 'Confirmé',
           rejected: 'rejeté',
           accepted: 'accepté',
-          pending: 'en attendant',
+          pending: 'En attendant',
           qoutes: 'devis',
           'All Qoutes': 'Tous les devis',
           'Pending Qoutes': 'Devis en attente',
@@ -792,7 +792,7 @@ i18n
           Duplicate: 'Dupliquer',
           Friends: 'Amis',
           //invoices
-          pending: 'en attendant',
+          pending: 'En attendant',
           paid: 'Payée',
           late: 'en retard',
           cancelled: 'Annulé',
