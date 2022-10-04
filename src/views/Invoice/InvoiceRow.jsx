@@ -1,8 +1,16 @@
 import React, { useState } from 'react';
-import { Badge, DropdownMenu, DropdownItem, UncontrolledDropdown, DropdownToggle } from 'reactstrap';
+import {
+  Badge,
+  DropdownMenu,
+  DropdownItem,
+  UncontrolledDropdown,
+  DropdownToggle
+} from 'reactstrap';
 import InvoiceForm from './InvoiceForm';
-
+import { useTranslation } from 'react-i18next';
+import * as moment from 'moment';
 const InvoiceRow = ({ invoice, autoRefresh, handleSelect, selectedItems }) => {
+  const { t, i18n } = useTranslation();
   const [openModal, setOpenModal] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
 
@@ -11,8 +19,8 @@ const InvoiceRow = ({ invoice, autoRefresh, handleSelect, selectedItems }) => {
   };
 
   const handleModal = () => {
-    console.log("openModal",openModal)
-    setOpenModal((open) => !open);
+    console.log('openModal', openModal);
+    setOpenModal(open => !open);
     return openModal;
   };
 
@@ -25,14 +33,14 @@ const InvoiceRow = ({ invoice, autoRefresh, handleSelect, selectedItems }) => {
             id={`customCheck1${invoice._id}`}
             type="checkbox"
             value={invoice._id}
-            checked={selectedItems.filter((a) => a._id === invoice._id).length > 0}
+            checked={selectedItems.filter(a => a._id === invoice._id).length > 0}
             onClick={() => handleSelect(invoice)}
           />
           <label className="custom-control-label" htmlFor={`customCheck1${invoice._id}`}></label>
         </div>
       </td>
       <td>{invoice.invoice_title}</td>
-      <td>{new Date(invoice.issue_date).toLocaleDateString()}</td>
+      <td>{moment(invoice.issue_date).format('DD-MM-YYYY')}</td>
       <td>
         <Badge color="" className="badge-dot mr-4">
           {invoice.status === 'cancelled' ? (
@@ -44,8 +52,9 @@ const InvoiceRow = ({ invoice, autoRefresh, handleSelect, selectedItems }) => {
           ) : invoice.status === 'paid' ? (
             <i className="bg-success" />
           ) : null}
-          {invoice.status[0]?.toUpperCase() +
-            invoice.status?.substring(1)}
+          {/* {invoice.status[0]?.toUpperCase() +
+            invoice.status?.substring(1)} */}
+          {t(invoice.status[0]?.toUpperCase() + invoice.status?.substring(1))}
         </Badge>
       </td>
       <td>
@@ -76,7 +85,12 @@ const InvoiceRow = ({ invoice, autoRefresh, handleSelect, selectedItems }) => {
 
       <td className="text-right">
         <UncontrolledDropdown>
-          <DropdownToggle className="btn-icon-only text-dark" role="button" size="sm" color="" onClick={handleModal}>
+          <DropdownToggle
+            className="btn-icon-only text-dark"
+            role="button"
+            size="sm"
+            color=""
+            onClick={handleModal}>
             <i className="fas fa-edit" />
           </DropdownToggle>
         </UncontrolledDropdown>

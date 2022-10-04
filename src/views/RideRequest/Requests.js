@@ -34,13 +34,14 @@ import {
   Table,
   Container,
   Row,
-  Nav,
+  Nav
 } from 'reactstrap';
 
 // core components
 import Header from 'components/Headers/Header.js';
 import { useTranslation } from 'react-i18next';
 import ViewRequest from './ViewRequest';
+
 const Requests = () => {
   const { t, i18n } = useTranslation();
   const [requests, setRequests] = useState([]);
@@ -52,12 +53,12 @@ const Requests = () => {
   }, []);
 
   const getRequests = async () => {
-    await api('get', 'requests').then((res) => {
+    await api('get', 'requests').then(res => {
       setRequests(res?.data?.request);
     });
   };
 
-  const handleEditModal = (item) => {
+  const handleEditModal = item => {
     console.log('Hi');
     if (item) {
       setRequest({
@@ -76,11 +77,11 @@ const Requests = () => {
         total_children: item.total_children,
         total_adults: item.total_adults,
         baby: item.baby,
-        company_name: item.company_name,
+        company_name: item.company_name
       });
     }
 
-    setEditModal((open) => !open);
+    setEditModal(open => !open);
     return openModal;
   };
 
@@ -114,7 +115,7 @@ const Requests = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {requests?.map((item) => {
+                  {requests?.map(item => {
                     return (
                       <tr>
                         <th scope="row">
@@ -144,7 +145,7 @@ const Requests = () => {
                             ? 'Accepted'
                             : 'Decline'}
                         </td>
-                        <td>{new Date(item?.pickUp_date).toDateString()}</td>
+                        <td>{moment(item?.pickUp_date).format('DD-MM-YYYY')}</td>
                         <td className="text-right">
                           <UncontrolledDropdown>
                             <DropdownToggle
@@ -153,8 +154,7 @@ const Requests = () => {
                               role="button"
                               size="sm"
                               color=""
-                              onClick={(e) => e.preventDefault()}
-                            >
+                              onClick={e => e.preventDefault()}>
                               <i className="fas fa-ellipsis-v" />
                             </DropdownToggle>
                             <DropdownMenu className="dropdown-menu-arrow" right>
@@ -172,7 +172,9 @@ const Requests = () => {
             </Card>
           </div>
         </Row>
-        {editModal && <ViewRequest openModal={editModal} handleModal={handleEditModal} request={request} />}
+        {editModal && (
+          <ViewRequest openModal={editModal} handleModal={handleEditModal} request={request} />
+        )}
       </Container>
     </>
   );
