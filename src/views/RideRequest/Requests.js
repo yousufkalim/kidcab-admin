@@ -136,13 +136,15 @@ const Requests = () => {
                         <td>{item?.pickUp_address.label || '_'}</td>
                         <td>{item?.destination_address?.label || '_'}</td>
                         <td>
-                          {item?.status === 'not answer'
-                            ? 'Not Answer'
-                            : item?.status === 'pending'
-                            ? 'Pending'
-                            : item?.status === 'accepted'
-                            ? 'Accepted'
-                            : 'Decline'}
+                          {item?.status === 'not answer' ? (
+                            <>{t('Not Answer')}</>
+                          ) : item?.status === 'pending' ? (
+                            <>{t('Pending')}</>
+                          ) : item?.status === 'accepted' ? (
+                            <>{t('Accepted')}</>
+                          ) : (
+                            <>{t('Decline')}</>
+                          )}
                         </td>
                         <td>{moment(item?.pickUp_date).format('DD-MM-YYYY')}</td>
                         <td className="text-right">
