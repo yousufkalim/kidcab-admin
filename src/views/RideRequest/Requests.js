@@ -87,7 +87,6 @@ const Requests = () => {
 
   return (
     <>
-      {console.log(editModal, 'editModal')}
       <Header />
       {/* Page content */}
       <Container className="mt--7" fluid>

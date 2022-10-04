@@ -6,7 +6,7 @@ import {
   DropdownToggle,
   Badge
 } from 'reactstrap';
-
+import moment from 'moment';
 import TripForm from './TripForm';
 import ManagerAvatar from './ManagerAvatar';
 import { useTranslation } from 'react-i18next';
@@ -94,7 +94,9 @@ const TripRow = ({ trip, autoRefresh, selectedItems, handleSelect }) => {
         </>
       )}
 
-      <td className="text-center">{trip?.date ? trip?.date.split('T')[0] : 'Date not Found'}</td>
+      <td className="text-center">
+        {trip?.date ? moment(trip?.date).format('DD-MM-YYYY') : 'Date not Found'}
+      </td>
       <td className="text-center">{trip?.start_address?.city}</td>
       <td className="text-center">{trip?.end_address?.city}</td>
       <td className="text-right">
