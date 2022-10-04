@@ -511,11 +511,15 @@ i18n
           'Internal server error': 'Internal server error',
           'Request failed with status code 500': 'Request failed with status code 500',
           'company edited successfully': 'company edited successfully',
-          'Search Client name': 'Search Client name'
+          'Search Client name': 'Search Client name',
+          'Not Answer': 'Not Answer',
+          Decline: 'Decline'
         } //Passenger
       },
       fr: {
         translations: {
+          Decline: 'Déclin',
+          'Not Answer': 'Pas de réponse',
           'company edited successfully': 'société éditée avec succès',
           'Request failed with status code 500': "La demande a échoué avec le code d'état 500",
           'Internal server error': 'Erreur interne du serveur',
