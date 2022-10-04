@@ -1,12 +1,15 @@
-import React, { useState } from "react";
-import { Badge, UncontrolledDropdown, DropdownToggle, Media } from "reactstrap";
-import ClientAvatar from "./ClientAvatar";
-import QuotesForm from "./QuotesForm";
+import React, { useState } from 'react';
+import { Badge, UncontrolledDropdown, DropdownToggle, Media } from 'reactstrap';
+import ClientAvatar from './ClientAvatar';
+import QuotesForm from './QuotesForm';
+import { useTranslation } from 'react-i18next';
+import * as moment from 'moment';
 
 const QuotesRow = ({ quote, autoRefresh, selectedItems, handleSelect }) => {
+  const { t, i18n } = useTranslation();
   const [openModal, setOpenModal] = useState(false);
   const handleModal = () => {
-    setOpenModal((open) => !open);
+    setOpenModal(open => !open);
     return openModal;
   };
 
@@ -19,15 +22,10 @@ const QuotesRow = ({ quote, autoRefresh, selectedItems, handleSelect }) => {
             id={`customCheck1${quote._id}`}
             type="checkbox"
             value={quote._id}
-            checked={
-              selectedItems.filter((a) => a._id === quote._id).length > 0
-            }
+            checked={selectedItems.filter(a => a._id === quote._id).length > 0}
             onClick={() => handleSelect(quote)}
           />
-          <label
-            className="custom-control-label"
-            htmlFor={`customCheck1${quote._id}`}
-          ></label>
+          <label className="custom-control-label" htmlFor={`customCheck1${quote._id}`}></label>
         </div>
       </td>
       <th scope="row">
@@ -39,24 +37,24 @@ const QuotesRow = ({ quote, autoRefresh, selectedItems, handleSelect }) => {
       </th>
       <td>
         <div className="d-flex align-items-center">
-          {quote && new Date(quote?.issue_date).toLocaleDateString()}
+          {quote && moment(quote?.issue_date).format('DD-MM-YYYY')}
         </div>
       </td>
       <td>
         <Badge color="" className="badge-dot mr-4">
-          {quote.status === "accepted" ? (
+          {quote.status === 'accepted' ? (
             <i className="bg-success" />
           ) : (
             <i className="bg-warning" />
           )}
-          {quote.status}
+          {t(quote.status)}
         </Badge>
       </td>
 
       <td>
         {quote?.client?.first_name[0].toUpperCase() +
           quote?.client?.first_name.substring(1) +
-          " " +
+          ' ' +
           quote?.client?.last_name[0].toUpperCase() +
           quote?.client?.last_name.substring(1)}
       </td>
@@ -70,8 +68,7 @@ const QuotesRow = ({ quote, autoRefresh, selectedItems, handleSelect }) => {
             role="button"
             size="sm"
             color=""
-            onClick={handleModal}
-          >
+            onClick={handleModal}>
             <i className="fas fa-edit" />
           </DropdownToggle>
         </UncontrolledDropdown>
