@@ -16,7 +16,7 @@ import {
   Form,
   Input,
   Row,
-  Col,
+  Col
 } from 'reactstrap';
 // core components
 import Select from 'react-select';
@@ -54,7 +54,7 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
     { value: 4, label: `${t('Thrusday')}` },
     { value: 5, label: `${t('Friday')}` },
     { value: 6, label: `${t('Saturday')}` },
-    { value: 0, label: `${t('Sunday')}` },
+    { value: 0, label: `${t('Sunday')}` }
   ];
 
   const [trip, setTrip] = useState({
@@ -72,7 +72,7 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
     enddate: '',
     rides: null,
     client: '',
-    comment: '',
+    comment: ''
   });
   let [startAddress, setStartAddress] = useState({});
   let [endAddress, setEndAddress] = useState({});
@@ -90,13 +90,15 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
   let [allAddresses, setAllAddresses] = useState([]);
 
   useEffect(() => {
-    api('get', 'drivers').then((res) => {
-      setDrivers(res.data.drivers);
+    api('get', 'drivers').then(res => {
+      // setDrivers(res.data.drivers);
+      const tempD = res.data.drivers.filter(e => e.vehicles.length > 0);
+      setDrivers(tempD);
     });
-    api('get', 'users').then((res) => {
+    api('get', 'users').then(res => {
       setClients(res.data.users);
     });
-    api('get', `passengers`).then((res) => {
+    api('get', `passengers`).then(res => {
       setAllPassengers(res.data.passengers);
     });
   }, []);
@@ -116,22 +118,22 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
         client_price: editTrip.client_price,
         driver_price: editTrip.driver_price,
         assigned_drivers: editTrip.assigned_drivers,
-        inviteddrivers: editTrip.invited_drivers.map((driver) => driver?.driver?._id),
-        passengers: editTrip.passengers.map((passenger) => passenger._id),
+        inviteddrivers: editTrip.invited_drivers.map(driver => driver?.driver?._id),
+        passengers: editTrip.passengers.map(passenger => passenger._id),
         rides: editTrip.rides,
         client: editTrip.client,
         quote: editTrip?.quote,
         time: editTrip.time,
-        comment: editTrip?.comment,
+        comment: editTrip?.comment
       });
-      api('get', `passengers`).then((res) => {
-        setPassengers(res.data.passengers.filter((a) => a.client._id === editTrip?.client?._id));
+      api('get', `passengers`).then(res => {
+        setPassengers(res.data.passengers.filter(a => a.client._id === editTrip?.client?._id));
       });
 
-      let p = editTrip.passengers.map((passenger) => {
+      let p = editTrip.passengers.map(passenger => {
         return {
           label: passenger.first_name + ' ' + passenger.last_name,
-          value: passenger._id,
+          value: passenger._id
         };
       });
       setPassengerChange(p);
@@ -142,47 +144,47 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleInputChange = (e) => {
+  const handleInputChange = e => {
     setTrip({ ...trip, [e.target.name]: e.target.value });
     if (e.target.name === 'trip_type') {
       setTriptype(e.target.value);
     }
   };
 
-  const handleDateChange = (e) => {
+  const handleDateChange = e => {
     setTrip({ ...trip, enddate: e });
   };
 
-  const handleDateChange2 = (e) => {
+  const handleDateChange2 = e => {
     setTrip({ ...trip, date: e });
   };
 
-  const handleDateChange1 = (e) => {
+  const handleDateChange1 = e => {
     setTrip({ ...trip, startdate: e });
   };
 
-  const handleDayChange = (e) => {
+  const handleDayChange = e => {
     setTrip({ ...trip, Days: e.value });
     let data = [];
     let time = [];
-    e.map((i) => {
+    e.map(i => {
       data.push(i);
       time.push('10:00');
     });
     onChange(time);
     setDaysLength(data);
   };
-  const handleClientChange = (e) => {
-    setTrip((user) => ({ ...user, client: e.value, passengers: [] }));
-    setPassengers(allPassengers.filter((a) => a?.client?._id === e.value));
+  const handleClientChange = e => {
+    setTrip(user => ({ ...user, client: e.value, passengers: [] }));
+    setPassengers(allPassengers.filter(a => a?.client?._id === e.value));
     setPassengerChange([]);
   };
-  const handlePassengerChange = (e) => {
-    setTrip((user) => ({
+  const handlePassengerChange = e => {
+    setTrip(user => ({
       ...user,
-      passengers: e.map((passenger) => passenger.value),
+      passengers: e.map(passenger => passenger.value)
     }));
-    setPassengerChange(e.map((passenger) => passenger));
+    setPassengerChange(e.map(passenger => passenger));
   };
 
   const handleDelete = () => {
@@ -194,7 +196,7 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
     }
 
     api(method, uri)
-      .then((res) => {
+      .then(res => {
         // eslint-disable-next-line eqeqeq
         if (res.status == 200) {
           toast.success(`${t('Delete Successfully')}`);
@@ -204,12 +206,12 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
           toast.error(`${t('Delete Error')}`, `${t(res.data.message)}`);
         }
       })
-      .catch((error) => {
+      .catch(error => {
         console.log(error);
         toast.error(error.message);
       });
   };
-  const handleSubmit = (e) => {
+  const handleSubmit = e => {
     e.preventDefault();
     let method = 'post';
     let uri = 'trips';
@@ -291,8 +293,8 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
         start_address: startAddress,
         end_address: endAddress,
         dates: selectedDDays,
-        addresses: allAddresses,
-      }).then((res) => {
+        addresses: allAddresses
+      }).then(res => {
         // eslint-disable-next-line eqeqeq
         if (res.status == 200) {
           toast.success(`${t('Saved Successfully')}`);
@@ -303,7 +305,7 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
         }
       });
     } else {
-      let selectedDDays = selectedDays.map((date) => {
+      let selectedDDays = selectedDays.map(date => {
         const serverDate = new Date(date); //creating date for server
         var hours = value.split(':'); //split hours and minutes
         serverDate.setHours(parseInt(hours[0])); //setting time for server
@@ -317,8 +319,8 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
         tripType: tripType,
         end_address: endAddress,
         dates: selectedDDays,
-        addresses: allAddresses,
-      }).then((res) => {
+        addresses: allAddresses
+      }).then(res => {
         // eslint-disable-next-line eqeqeq
         if (res.status == 200) {
           toast.success(`${t('Saved Successfully')}`);
@@ -333,7 +335,7 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
 
   const handleDayClick = (day, { selected }) => {
     if (selected) {
-      const selectedIndex = selectedDays.findIndex((selectedDay) =>
+      const selectedIndex = selectedDays.findIndex(selectedDay =>
         DateUtils.isSameDay(selectedDay, day)
       );
       let newis = selectedDays.filter((item, i) => i != selectedIndex);
@@ -345,7 +347,7 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
   };
 
   const handleDateModal = () => {
-    setOpenDateModal((open) => !open);
+    setOpenDateModal(open => !open);
     return openDateModal;
   };
 
@@ -409,8 +411,7 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
                           className="form-control-alternative"
                           type="select"
                           value={trip.status}
-                          onChange={handleInputChange}
-                        >
+                          onChange={handleInputChange}>
                           <option value="pending">{t('Pending')}</option>
                           <option value="confirmed">{t('Confirmed')}</option>
                           <option value="cancelled">{t('Cancelled')}</option>
@@ -430,8 +431,7 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
                           className="form-control-alternative"
                           type="select"
                           value={trip.trip_type}
-                          onChange={handleInputChange}
-                        >
+                          onChange={handleInputChange}>
                           <option value="simple">{t('simple')}</option>
                           <option value="recurring">{t('recurring')}</option>
                         </Input>
@@ -480,7 +480,7 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
                             <Input
                               className="form-control-alternative"
                               id="input-date"
-                              value={selectedDays?.map((i) => moment(i).format('DD/MM/YYYY'))}
+                              value={selectedDays?.map(i => moment(i).format('DD/MM/YYYY'))}
                               min={disableDates()}
                               placeholder={t('Select Dates')}
                               readonly
@@ -590,8 +590,7 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
                                     name="input-Day"
                                     readOnly
                                     className="input-Day"
-                                    value={t(i.label)}
-                                  ></Input>
+                                    value={t(i.label)}></Input>
                                 </FormGroup>
                               </Col>
                               <Col lg="6">
@@ -602,15 +601,15 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
                                     </label>
                                     <TimePicker
                                       style={{
-                                        height: 'calc(1.5em + 1.25rem + 2px)',
+                                        height: 'calc(1.5em + 1.25rem + 2px)'
                                       }}
                                       name="time"
                                       disableClock={true}
                                       clockIcon={null}
                                       amPmAriaLabel={true}
                                       value={value[index]}
-                                      onChange={(value) => {
-                                        onChange((prev) => {
+                                      onChange={value => {
+                                        onChange(prev => {
                                           prev[index] = value;
                                           return [...prev];
                                         });
@@ -681,10 +680,10 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
                         {drivers && (
                           <Select
                             placeholder={t('Select...')}
-                            onChange={(e) =>
-                              setTrip((user) => ({
+                            onChange={e =>
+                              setTrip(user => ({
                                 ...user,
-                                inviteddrivers: e.map((driver) => driver.value),
+                                inviteddrivers: e.map(driver => driver.value)
                               }))
                             }
                             isDisabled={isEditing && editTrip?.status !== 'pending'}
@@ -694,7 +693,7 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
                             defaultValue={
                               isEditing
                                 ? editTrip.status === 'pending'
-                                  ? editTrip?.invited_drivers.map((i) => ({
+                                  ? editTrip?.invited_drivers.map(i => ({
                                       value: i?.driver?._id,
                                       label: `${
                                         i?.driver?.first_name[0]?.toUpperCase() +
@@ -702,20 +701,20 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
                                       } ${
                                         i?.driver?.last_name[0]?.toUpperCase() +
                                         i?.driver?.last_name.substring(1)
-                                      }`,
+                                      }`
                                     }))
-                                  : editTrip?.assigned_drivers.map((i) => ({
+                                  : editTrip?.assigned_drivers.map(i => ({
                                       value: i?._id,
                                       label: `${
                                         i?.first_name[0]?.toUpperCase() +
                                         i?.first_name?.substring(1)
                                       } ${
                                         i?.last_name[0].toUpperCase() + i?.last_name.substring(1)
-                                      }`,
+                                      }`
                                     }))
                                 : null
                             }
-                            options={drivers.map((driver) => ({
+                            options={drivers.map(driver => ({
                               value: driver?._id,
                               label: `${
                                 driver?.first_name[0]?.toUpperCase() +
@@ -723,7 +722,7 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
                               } ${
                                 driver?.last_name[0]?.toUpperCase() +
                                 driver?.last_name?.substring(1)
-                              }`,
+                              }`
                             }))}
                           />
                         )}
@@ -749,11 +748,11 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
                                 } ${
                                   trip?.client?.last_name[0]?.toUpperCase() +
                                   trip?.client?.last_name?.substring(1)
-                                }`,
+                                }`
                               }
                             }
                             className="form-control-alternative"
-                            options={clients.map((client) => ({
+                            options={clients.map(client => ({
                               value: client?._id,
                               label: `${
                                 client?.first_name[0]?.toUpperCase() +
@@ -761,7 +760,7 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
                               } ${
                                 client?.last_name[0]?.toUpperCase() +
                                 client?.last_name?.substring(1)
-                              }`,
+                              }`
                             }))}
                           />
                         )}
@@ -780,12 +779,12 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
                             name="passengers"
                             isMulti
                             className="form-control-alternative"
-                            value={passengerChange?.map((i) => ({
+                            value={passengerChange?.map(i => ({
                               value: i.value,
-                              label: i.label,
+                              label: i.label
                             }))}
                             options={passengers
-                              .map((passenger) => ({
+                              .map(passenger => ({
                                 value: passenger?._id,
                                 label: `${
                                   passenger?.first_name[0]?.toUpperCase() +
@@ -793,9 +792,9 @@ const TripForm = ({ openModal, handleModal, editUser: editTrip, isEditing, autoR
                                 } ${
                                   passenger?.last_name[0]?.toUpperCase() +
                                   passenger?.last_name?.substring(1)
-                                }`,
+                                }`
                               }))
-                              .filter((p) => passengerChange.findIndex((v) => v === p.label) < 0)}
+                              .filter(p => passengerChange.findIndex(v => v === p.label) < 0)}
                           />
                         )}
                       </FormGroup>
