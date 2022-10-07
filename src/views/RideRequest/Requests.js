@@ -59,7 +59,6 @@ const Requests = () => {
   };
 
   const handleEditModal = item => {
-    console.log('Hi');
     if (item) {
       setRequest({
         _id: item._id,

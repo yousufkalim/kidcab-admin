@@ -1,4 +1,4 @@
-let baseUrl = 'https://kidcab-api-dev.falconweb.app/';
+let baseUrl = 'http://localhost:5000/';
 let CAPTCHA_SITE_KEY = '6LdQNMAgAAAAAEM7_lQp7AffR2NiAPq_ZUVtVA6x';
 if (window.location.host === 'kidcab-admin-dev.falconweb.app') {
   baseUrl = 'https://kidcab-api-dev.falconweb.app/';

@@ -15,7 +15,7 @@ import {
   Input,
   Row,
   Col,
-  Label,
+  Label
 } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 // core components
@@ -35,7 +35,7 @@ const DriverForm = ({
   isEditing,
   isClose,
   autoRefresh,
-  setUserData,
+  setUserData
 }) => {
   const { t, i18n } = useTranslation();
   const { language } = i18n;
@@ -73,7 +73,7 @@ const DriverForm = ({
     legal_info: '',
     social_capital: '',
     vat_number: '',
-    city_of_rcs: '',
+    city_of_rcs: ''
   });
   const [docs, setDocs] = useState({});
 
@@ -83,12 +83,12 @@ const DriverForm = ({
     label: '',
     label2: '',
     city: '',
-    postal_code: '',
+    postal_code: ''
   });
   const [vehicles, setVehicles] = useState();
   useEffect(() => {
-    api('get', 'vehicles').then((res) => {
-      let filteredvehicles = res.data.vehicles.filter((e) => {
+    api('get', 'vehicles').then(res => {
+      let filteredvehicles = res.data.vehicles.filter(e => {
         return !e.driver;
       });
       setVehicles(filteredvehicles);
@@ -150,7 +150,7 @@ const DriverForm = ({
         role: editUser?.role,
         bankName: editUser?.bank_info?.bank_name,
         iban: editUser?.bank_info?.iban,
-        vehicles: editUser?.vehicles.map((i) => {
+        vehicles: editUser?.vehicles.map(i => {
           return i?._id;
         }),
         company_name: editUser?.company?.company_name,
@@ -162,7 +162,7 @@ const DriverForm = ({
         criminal_record_date: editUser?.criminal_record_date,
         kbis_date: editUser?.kbis_date,
         ris_date: editUser?.ris_date,
-        proRc_date: editUser?.proRc_date,
+        proRc_date: editUser?.proRc_date
       });
       setDocs({
         profile_pic: editUser.profile_pic,
@@ -179,44 +179,44 @@ const DriverForm = ({
         insurance_civil_liability: editUser.insurance_civil_liability,
         professional_liability: editUser.professional_liability,
         rib: editUser.rib,
-        kbis_extract: editUser.kbis_extract,
+        kbis_extract: editUser.kbis_extract
       });
 
       setAddress(editUser.address);
     }
   }, []);
 
-  const handleDateChange3 = (e) => {
+  const handleDateChange3 = e => {
     setUser({ ...user, ris_date: e });
   };
   //user?.criminal_record_date?
-  const handleDateChange2 = (e) => {
+  const handleDateChange2 = e => {
     setUser({ ...user, criminal_record_date: e });
   };
-  const handleDateChange1 = (e) => {
+  const handleDateChange1 = e => {
     setUser({ ...user, proRc_date: e });
   };
-  const handleDateChange = (e) => {
+  const handleDateChange = e => {
     setUser({ ...user, kbis_date: e });
   };
 
-  const handleFile1Change = (e) => {
+  const handleFile1Change = e => {
     setUser({ ...user, [e.target.name]: e.target.files[0] });
   };
 
-  const handleInput1Change = (e) => {
+  const handleInput1Change = e => {
     setUser({ ...user, [e.target.name]: e.target.value });
   };
 
-  const handleVehicle1Change = (e) => {
-    setUser((user) => ({
+  const handleVehicle1Change = e => {
+    setUser(user => ({
       ...user,
-      vehicles: e.map((vehicle) => vehicle.value),
+      vehicles: e.map(vehicle => vehicle.value)
     }));
   };
 
-  const handleRole1Change = (e) => {
-    setUser((user) => ({ ...user, role: e.value }));
+  const handleRole1Change = e => {
+    setUser(user => ({ ...user, role: e.value }));
   };
 
   const handleDelete = () => {
@@ -226,7 +226,7 @@ const DriverForm = ({
       method = 'delete';
       uri = uri + `/${editUser._id}`;
     }
-    api(method, uri).then((res) => {
+    api(method, uri).then(res => {
       if (res.status == 200) {
         toast.success(`${t('Delete Successfully')}`);
         handleModal();
@@ -236,16 +236,14 @@ const DriverForm = ({
       }
     });
   };
-  const handleSubmit = (e) => {
+  const handleSubmit = e => {
     e.preventDefault();
     let method = 'post';
     let uri = 'drivers';
-    if (user?.vehicles.length < 1) {
-      return toast.error('Vechicle is required');
-    }
+
     const bankInfo = {
       bank_name: user?.bankName,
-      iban: user?.iban,
+      iban: user?.iban
     };
 
     const formData = new FormData();
@@ -272,7 +270,7 @@ const DriverForm = ({
           legal_info: user.legal_info,
           social_capital: user.social_capital,
           vat_number: user.vat_number,
-          city_of_rcs: user.city_of_rcs,
+          city_of_rcs: user.city_of_rcs
         })
       );
       if (user.kbis_extract) {
@@ -396,7 +394,12 @@ const DriverForm = ({
       method = 'put';
       uri = uri + `/${editUser._id}`;
     }
-    api(method, uri, formData).then((res) => {
+    if (!isEditing) {
+      if (user?.vehicles.length < 1) {
+        return toast.error('Vechicle is required');
+      }
+    }
+    api(method, uri, formData).then(res => {
       if (res.status == 200) {
         toast.success(`${t('Saved Successfully')}`);
         // setUserData({
@@ -472,8 +475,7 @@ const DriverForm = ({
                           InputId="input-image"
                           InputName="profile_pic"
                           value={editUser.profile_pic ? editUser.profile_pic : user.profile_pic}
-                          onChange={handleFile1Change}
-                        ></FilePicker>
+                          onChange={handleFile1Change}></FilePicker>
                       </FormGroup>
                     </Col>
                   </Row>
@@ -593,19 +595,19 @@ const DriverForm = ({
                           defaultValue={
                             user?.role && {
                               value: user.role,
-                              label: user.role,
+                              label: user.role
                             }
                           }
                           className="form-control-alternative"
                           options={[
                             {
                               value: 'individual',
-                              label: t('individual'),
+                              label: t('individual')
                             },
                             {
                               value: 'fleet_manager',
-                              label: t('fleet_manager'),
-                            },
+                              label: t('fleet_manager')
+                            }
                           ]}
                         />
                       </FormGroup>
@@ -628,21 +630,17 @@ const DriverForm = ({
                               isDisabled={isEditing}
                               onChange={handleVehicle1Change}
                               defaultValue={
-                                isClose
-                                  ? editUser.vehicles?.map((i) => ({
-                                      value: i.value,
-                                      label: i.label,
-                                    }))
-                                  : user?.vehicles?.length > 0 &&
-                                    editUser.vehicles?.map((i) => ({
-                                      value: i?._id,
-                                      label: i?.vehicle_name,
-                                    }))
+                                isEditing &&
+                                user?.vehicles?.length > 0 &&
+                                editUser.vehicles?.map(i => ({
+                                  value: i?._id,
+                                  label: i?.vehicle_name
+                                }))
                               }
                               className="form-control-alternative"
-                              options={vehicles.map((vehicle) => ({
+                              options={vehicles.map(vehicle => ({
                                 value: vehicle?._id,
-                                label: `${vehicle?.vehicle_name}`,
+                                label: `${vehicle?.vehicle_name}`
                               }))}
                             />
                           )}
@@ -667,14 +665,14 @@ const DriverForm = ({
                               className="form-control-alternative"
                               defaultValue={
                                 user?.vehicles?.length > 0 &&
-                                user?.vehicles?.map((vehicle) => ({
+                                user?.vehicles?.map(vehicle => ({
                                   value: vehicle._id,
-                                  label: vehicle.vehicle_name,
+                                  label: vehicle.vehicle_name
                                 }))
                               }
-                              options={vehicles.map((vehicle) => ({
+                              options={vehicles.map(vehicle => ({
                                 value: vehicle?._id,
-                                label: `${vehicle?.vehicle_name}`,
+                                label: `${vehicle?.vehicle_name}`
                               }))}
                             />
                           )}
@@ -829,8 +827,7 @@ const DriverForm = ({
                                   ? editUser.insurance_civil_liability
                                   : user.insurance_civil_liability
                               }
-                              onChange={handleFile1Change}
-                            ></FilePicker>
+                              onChange={handleFile1Change}></FilePicker>
                           </FormGroup>
                         </Col>
                         <Col lg="6">
@@ -851,8 +848,7 @@ const DriverForm = ({
                                   ? editUser.professional_liability
                                   : user.professional_liability
                               }
-                              onChange={handleFile1Change}
-                            ></FilePicker>
+                              onChange={handleFile1Change}></FilePicker>
                           </FormGroup>
                         </Col>
                         <Col lg="6">
@@ -869,8 +865,7 @@ const DriverForm = ({
                               InputId="input-RIB"
                               InputName="rib"
                               value={editUser.rib ? editUser.rib : user.rib}
-                              onChange={handleFile1Change}
-                            ></FilePicker>
+                              onChange={handleFile1Change}></FilePicker>
                           </FormGroup>
                         </Col>
                         <Col lg="6">
@@ -889,8 +884,7 @@ const DriverForm = ({
                               value={
                                 editUser.kbis_extract ? editUser.kbis_extract : user.kbis_extract
                               }
-                              onChange={handleFile1Change}
-                            ></FilePicker>
+                              onChange={handleFile1Change}></FilePicker>
                           </FormGroup>
                         </Col>
                       </Row>{' '}
@@ -987,8 +981,7 @@ const DriverForm = ({
                           InputId="input-id-front"
                           InputName="id_front"
                           value={editUser.id_card_front ? editUser.id_card_front : user.id_front}
-                          onChange={handleFile1Change}
-                        ></FilePicker>
+                          onChange={handleFile1Change}></FilePicker>
                       </FormGroup>
                     </Col>
                     <Col lg="6">
@@ -1005,8 +998,7 @@ const DriverForm = ({
                           InputId="input-id-back"
                           InputName="id_back"
                           value={editUser.id_card_back ? editUser.id_card_back : user.id_back}
-                          onChange={handleFile1Change}
-                        ></FilePicker>
+                          onChange={handleFile1Change}></FilePicker>
                       </FormGroup>
                     </Col>
                   </Row>
@@ -1025,8 +1017,7 @@ const DriverForm = ({
                           InputId="input-vtc-front"
                           InputName="vtc_front"
                           value={editUser.vtc_card_front ? editUser.vtc_card_front : user.vtc_front}
-                          onChange={handleFile1Change}
-                        ></FilePicker>
+                          onChange={handleFile1Change}></FilePicker>
                       </FormGroup>
                     </Col>
                     <Col lg="6">
@@ -1042,8 +1033,7 @@ const DriverForm = ({
                           InputId="input-vtc-back"
                           InputName="vtc_back"
                           value={editUser.vtc_card_back ? editUser.vtc_card_back : user.vtc_back}
-                          onChange={handleFile1Change}
-                        ></FilePicker>
+                          onChange={handleFile1Change}></FilePicker>
                       </FormGroup>
                     </Col>
                   </Row>
@@ -1065,8 +1055,7 @@ const DriverForm = ({
                               ? editUser.license_card_front
                               : user.license_front
                           }
-                          onChange={handleFile1Change}
-                        ></FilePicker>
+                          onChange={handleFile1Change}></FilePicker>
                       </FormGroup>
                     </Col>
                     <Col lg="6">
@@ -1086,8 +1075,7 @@ const DriverForm = ({
                               ? editUser.license_card_back
                               : user.license_back
                           }
-                          onChange={handleFile1Change}
-                        ></FilePicker>
+                          onChange={handleFile1Change}></FilePicker>
                       </FormGroup>
                     </Col>
                   </Row>
@@ -1109,8 +1097,7 @@ const DriverForm = ({
                               ? editUser.criminal_record_image
                               : user.criminal_record_image
                           }
-                          onChange={handleFile1Change}
-                        ></FilePicker>
+                          onChange={handleFile1Change}></FilePicker>
                       </FormGroup>
                     </Col>
                     <Col lg="6">
@@ -1154,8 +1141,7 @@ const DriverForm = ({
                           InputId="input-restricted-information-statement"
                           InputName="ris_image"
                           value={editUser.ris_image ? editUser.ris_image : user.ris_image}
-                          onChange={handleFile1Change}
-                        ></FilePicker>
+                          onChange={handleFile1Change}></FilePicker>
                       </FormGroup>
                     </Col>
                     <Col lg="6">
@@ -1194,8 +1180,7 @@ const DriverForm = ({
                           InputId="input-kbis"
                           InputName="kbis_image"
                           value={editUser.kbis_image ? editUser.kbis_image : user.kbis_image}
-                          onChange={handleFile1Change}
-                        ></FilePicker>
+                          onChange={handleFile1Change}></FilePicker>
                       </FormGroup>
                     </Col>
 
@@ -1234,8 +1219,7 @@ const DriverForm = ({
                           InputId="input-pro_rc_insurance_certificate"
                           InputName="proRc_image"
                           value={editUser.proRc_image ? editUser.proRc_image : user.proRc_image}
-                          onChange={handleFile1Change}
-                        ></FilePicker>
+                          onChange={handleFile1Change}></FilePicker>
                       </FormGroup>
                     </Col>
                     <Col lg="6">
