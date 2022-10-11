@@ -13,7 +13,7 @@ import {
   Input,
   Row,
   Col,
-  Label,
+  Label
 } from 'reactstrap';
 import moment from 'moment';
 import View from '../../components/view';
@@ -49,12 +49,12 @@ const VehicleForm = ({ openModal, handleModal, editUser: editVehicle, isEditing,
     graycard_expiry_date: '',
     driver: '',
     number_plate: '',
-    registration_card: '',
+    registration_card: ''
   });
   const [docs, setDocs] = useState({});
 
   useEffect(() => {
-    api('get', 'drivers').then((res) => setDrivers(res.data.drivers));
+    api('get', 'drivers').then(res => setDrivers(res.data.drivers));
     if (isEditing) {
       setVehicle({
         vehicle_name: editVehicle.vehicle_name,
@@ -70,35 +70,35 @@ const VehicleForm = ({ openModal, handleModal, editUser: editVehicle, isEditing,
         inspection_expiry_date: new Date(editVehicle.inspection_expiry_date),
         insurance_certificate: editVehicle.insurance_certificate,
         insurance_expiry_date: new Date(editVehicle.insurance_expiry_date),
-        registration_card: editVehicle.registration_card,
+        registration_card: editVehicle.registration_card
       });
       setDocs({
         graycard: editVehicle.graycard,
         insurance_certificate: editVehicle.insurance_certificate,
-        registration_card: editVehicle.registration_card,
+        registration_card: editVehicle.registration_card
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  const handleDateChange = (e) => {
+  const handleDateChange = e => {
     setVehicle({ ...vehicle, inspection_date: e });
   };
-  const handleDateChange1 = (e) => {
+  const handleDateChange1 = e => {
     setVehicle({ ...vehicle, graycard_expiry_date: e });
   };
-  const handleDateChange2 = (e) => {
+  const handleDateChange2 = e => {
     setVehicle({ ...vehicle, insurance_expiry_date: e });
   };
-  const handleFileChange = (e) => {
+  const handleFileChange = e => {
     setVehicle({ ...vehicle, [e.target.name]: e.target.files[0] });
   };
 
-  const handleInputChange = (e) => {
+  const handleInputChange = e => {
     setVehicle({ ...vehicle, [e.target.name]: e.target.value });
   };
 
-  const handleDriverChange = (e) => {
-    setVehicle((vehicle) => ({ ...vehicle, driver: e.value }));
+  const handleDriverChange = e => {
+    setVehicle(vehicle => ({ ...vehicle, driver: e.value }));
   };
 
   const handleDelete = () => {
@@ -109,7 +109,7 @@ const VehicleForm = ({ openModal, handleModal, editUser: editVehicle, isEditing,
       uri = uri + `/${editVehicle._id}`;
     }
     api(method, uri)
-      .then((res) => {
+      .then(res => {
         // eslint-disable-next-line eqeqeq
         if (res.status == 200) {
           toast.success(`${t('Delete Successfully')}`);
@@ -119,10 +119,10 @@ const VehicleForm = ({ openModal, handleModal, editUser: editVehicle, isEditing,
           toast.error(`${t(res.data)}`);
         }
       })
-      .catch((error) => console.log(error));
+      .catch(error => console.log(error));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = e => {
     e.preventDefault();
     let method = 'post';
     let uri = 'vehicles';
@@ -192,7 +192,7 @@ const VehicleForm = ({ openModal, handleModal, editUser: editVehicle, isEditing,
     }
 
     api(method, uri, formData)
-      .then((res) => {
+      .then(res => {
         if (res.status === 200) {
           toast.success(`${t('Saved Successfully')}`);
           autoRefresh();
@@ -201,7 +201,7 @@ const VehicleForm = ({ openModal, handleModal, editUser: editVehicle, isEditing,
           toast.error(`${t('Save Error')}`, `${t(res)}`);
         }
       })
-      .catch((error) => {
+      .catch(error => {
         toast.error(`${t(error.message)}`);
       });
   };
@@ -295,18 +295,18 @@ const VehicleForm = ({ openModal, handleModal, editUser: editVehicle, isEditing,
                                 } ${
                                   editVehicle?.driver?.last_name[0].toUpperCase() +
                                   editVehicle?.driver?.last_name.substring(1)
-                                }`,
+                                }`
                               }
                             }
                             className="form-control-alternative"
-                            options={drivers.map((driver) => ({
+                            options={drivers.map(driver => ({
                               value: driver._id,
                               label: `${
                                 driver?.first_name[0].toUpperCase() +
                                 driver?.first_name.substring(1)
                               } ${
                                 driver?.last_name[0].toUpperCase() + driver?.last_name.substring(1)
-                              }`,
+                              }`
                             }))}
                           />
                         )}
@@ -322,8 +322,7 @@ const VehicleForm = ({ openModal, handleModal, editUser: editVehicle, isEditing,
                           name="engine_type"
                           value={vehicle.engine_type}
                           className="form-control-alternative"
-                          type="select"
-                        >
+                          type="select">
                           <option value="Thermal" selected>
                             {t('Thermal')}
                           </option>
@@ -401,9 +400,8 @@ const VehicleForm = ({ openModal, handleModal, editUser: editVehicle, isEditing,
                           InputClassName="form-control-file form"
                           InputId="input-graycard"
                           InputName="graycard"
-                          value={editVehicle?.graycard ? editVehicle?.graycard : vehicle?.graycard}
-                          onChange={handleFileChange}
-                        ></FilePicker>
+                          value={vehicle?.graycard || editVehicle?.graycard}
+                          onChange={handleFileChange}></FilePicker>
                       </FormGroup>
                     </Col>
                     <Col lg="6">
@@ -450,12 +448,9 @@ const VehicleForm = ({ openModal, handleModal, editUser: editVehicle, isEditing,
                           InputId="input-vehicle-insurance"
                           InputName="insurance_certificate"
                           value={
-                            editVehicle?.insurance_certificate
-                              ? editVehicle?.insurance_certificate
-                              : vehicle?.insurance_certificate
+                            vehicle?.insurance_certificate || editVehicle?.insurance_certificate
                           }
-                          onChange={handleFileChange}
-                        ></FilePicker>
+                          onChange={handleFileChange}></FilePicker>
                       </FormGroup>
                     </Col>
                     <Col lg="6">
@@ -490,13 +485,8 @@ const VehicleForm = ({ openModal, handleModal, editUser: editVehicle, isEditing,
                           InputClassName="form-control-file form"
                           InputId="input-number-plate"
                           InputName="registration_card"
-                          value={
-                            editVehicle?.registration_card
-                              ? editVehicle?.registration_card
-                              : vehicle?.registration_card
-                          }
-                          onChange={handleFileChange}
-                        ></FilePicker>
+                          value={vehicle?.registration_card || editVehicle?.registration_card}
+                          onChange={handleFileChange}></FilePicker>
                       </FormGroup>
                     </Col>
                   </Row>
